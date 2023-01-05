@@ -1,0 +1,63 @@
+name: oga_bliss
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.2
+
+  awesome_bottom_bar: ^1.2.1
+  get: ^4.6.5
+  http: ^0.13.5
+
+#  Testing
+  flutter_banner_swiper: ^0.1.4
+  scroll_page_view: ^1.0.2
+  flutter_swiper_tv: ^1.1.6-nullsafety
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^2.0.0
+
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Lobster
+      fonts:
+        - asset: assets/fonts/Lobster-Regular.ttf
+#        - asset: fonts/Schyler-Italic.ttf
+#          style: italic
+
+    - family: BlackOpsOne
+      fonts:
+        - asset: assets/fonts/BlackOpsOne-Regular.ttf
+#        - asset: fonts/TrajanPro_Bold.ttf
+#          weight: 700
+    - family: Passion One
+      fonts:
+        - asset: assets/fonts/PassionOne-Regular.ttf
+        - asset: assets/fonts/PassionOne-Bold.ttf
+        - asset: assets/fonts/PassionOne-Black.ttf
