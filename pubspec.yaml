@@ -20,6 +20,7 @@ dependencies:
   awesome_bottom_bar: ^1.2.1
   get: ^4.6.5
   http: ^0.13.5
+  flutter_awesome_select: ^6.5.0
 
 #  Testing
   flutter_banner_swiper: ^0.1.4

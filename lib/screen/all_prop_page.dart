@@ -44,7 +44,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                       const Text(
                         'Find Your Dream',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 25,
                           fontFamily: 'Passion One',
                         ),
@@ -69,7 +69,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                         margin: const EdgeInsets.only(left: 15, right: 15),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(3),
                         ),
                         child: const TextField(
                           decoration: InputDecoration(
@@ -91,13 +91,23 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                         height: 10,
                       ),
                       Card(
-                        elevation: 2,
-                        color: Colors.white,
+                        elevation: 5,
+                        color: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(45.0),
+                        ),
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10)),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(0),
+                          ),
                           child: const Padding(
-                            padding: EdgeInsets.all(18.0),
+                            padding: EdgeInsets.only(
+                              top: 15.0,
+                              bottom: 15,
+                              right: 25,
+                              left: 25,
+                            ),
                             child: Text('Find Now'),
                           ),
                         ),
@@ -111,13 +121,13 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
           Column(
             children: [
               const SizedBox(
-                height: 320,
+                height: 350,
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 8.0, right: 8.0, left: 8.0, bottom: 100),
+                    top: 8.0, right: 20.0, left: 20.0, bottom: 120),
                 child: ListView(
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   // itemExtent: 350,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -180,47 +190,65 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                                     //Rooms, toilet etc
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: const [
-                                            Icon(Icons.bed_sharp),
-                                            Text(
-                                              '4 Bedroom',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
+                                            Icon(
+                                              Icons.bed_sharp,
+                                              size: 14,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Row(
-                                          children: const [
-                                            Icon(Icons.bathtub_rounded),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Bathroom',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                          width: 10,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.bathtub_rounded,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Bathroom',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Row(
                                           children: const [
-                                            Icon(Icons.event_seat_outlined),
+                                            Icon(
+                                              Icons.event_seat_outlined,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Toilet',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -244,7 +272,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                           top: 10,
                           right: 10,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 5),
                             height: 40,
                             decoration: BoxDecoration(
@@ -336,47 +364,65 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                                     //Rooms, toilet etc
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: const [
-                                            Icon(Icons.bed_sharp),
-                                            Text(
-                                              '4 Bedroom',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
+                                            Icon(
+                                              Icons.bed_sharp,
+                                              size: 14,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Row(
-                                          children: const [
-                                            Icon(Icons.bathtub_rounded),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Bathroom',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                          width: 10,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.bathtub_rounded,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Bathroom',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Row(
                                           children: const [
-                                            Icon(Icons.event_seat_outlined),
+                                            Icon(
+                                              Icons.event_seat_outlined,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Toilet',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -400,7 +446,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                           top: 10,
                           right: 10,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 5),
                             height: 40,
                             decoration: BoxDecoration(
@@ -492,47 +538,65 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                                     //Rooms, toilet etc
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: const [
-                                            Icon(Icons.bed_sharp),
-                                            Text(
-                                              '4 Bedroom',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
+                                            Icon(
+                                              Icons.bed_sharp,
+                                              size: 14,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Row(
-                                          children: const [
-                                            Icon(Icons.bathtub_rounded),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Bathroom',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                          width: 10,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.bathtub_rounded,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Bathroom',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Row(
                                           children: const [
-                                            Icon(Icons.event_seat_outlined),
+                                            Icon(
+                                              Icons.event_seat_outlined,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Toilet',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -556,7 +620,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                           top: 10,
                           right: 10,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 5),
                             height: 40,
                             decoration: BoxDecoration(
@@ -648,47 +712,65 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                                     //Rooms, toilet etc
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: const [
-                                            Icon(Icons.bed_sharp),
-                                            Text(
-                                              '4 Bedroom',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
+                                            Icon(
+                                              Icons.bed_sharp,
+                                              size: 14,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Row(
-                                          children: const [
-                                            Icon(Icons.bathtub_rounded),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Bathroom',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                          width: 10,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.bathtub_rounded,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Bathroom',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Row(
                                           children: const [
-                                            Icon(Icons.event_seat_outlined),
+                                            Icon(
+                                              Icons.event_seat_outlined,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Toilet',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -712,7 +794,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                           top: 10,
                           right: 10,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 5),
                             height: 40,
                             decoration: BoxDecoration(
@@ -804,47 +886,65 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                                     //Rooms, toilet etc
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: const [
-                                            Icon(Icons.bed_sharp),
-                                            Text(
-                                              '4 Bedroom',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                              ),
+                                            Icon(
+                                              Icons.bed_sharp,
+                                              size: 14,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Row(
-                                          children: const [
-                                            Icon(Icons.bathtub_rounded),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Bathroom',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                          width: 10,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.bathtub_rounded,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Bathroom',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                         Row(
                                           children: const [
-                                            Icon(Icons.event_seat_outlined),
+                                            Icon(
+                                              Icons.event_seat_outlined,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             Text(
                                               '4 Toilet',
                                               style: TextStyle(
-                                                fontSize: 14,
+                                                fontSize: 8,
                                               ),
                                             ),
                                           ],
@@ -868,7 +968,181 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                           top: 10,
                           right: 10,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 5),
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomRight,
+                                stops: [0.1, 0.9],
+                                colors: [
+                                  Colors.black.withOpacity(.6),
+                                  Colors.black.withOpacity(.4)
+                                ],
+                              ),
+                            ),
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.camera_enhance_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                Text(
+                                  '/4',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        Card(
+                          elevation: 5,
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/images/a.jpeg',
+                                fit: BoxFit.cover,
+                                height: 150,
+                                width: double.infinity,
+                              ),
+                              ListTile(
+                                title: const Padding(
+                                  padding: EdgeInsets.only(top: 8.0),
+                                  child: Text(
+                                    'Property Name',
+                                    style: TextStyle(
+                                      fontFamily: 'Passion One',
+                                    ),
+                                  ),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      child: const Text(
+                                        'Buy',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    const Text(
+                                      'NGN 5,000',
+                                      style: TextStyle(
+                                        fontFamily: 'BlackOpsOne',
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+
+                                    //Rooms, toilet etc
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.bed_sharp,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Bathroom',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Icon(
+                                              Icons.bathtub_rounded,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Bathroom',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: const [
+                                            Icon(
+                                              Icons.event_seat_outlined,
+                                              size: 14,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '4 Toilet',
+                                              style: TextStyle(
+                                                fontSize: 8,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                  ],
+                                ),
+                                trailing: const Icon(
+                                  Icons.favorite_outlined,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 5),
                             height: 40,
                             decoration: BoxDecoration(

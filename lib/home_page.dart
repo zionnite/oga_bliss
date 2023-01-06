@@ -37,16 +37,16 @@ class _HomePageState extends State<HomePage> {
     ),
     const TabItem(
       icon: Icons.search_sharp,
-      title: 'Rent',
+      title: 'Search',
     ),
     const TabItem(
-      icon: Icons.add,
-      title: 'Add',
+      icon: Icons.favorite_outlined,
+      title: 'Favourite',
     ),
-    const TabItem(
-      icon: Icons.shopping_cart_outlined,
-      title: 'Buy',
-    ),
+    // const TabItem(
+    //   icon: Icons.shopping_cart_outlined,
+    //   title: 'Buy',
+    // ),
     const TabItem(
       icon: Icons.account_box,
       title: 'profile',
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
               AllPropertyPage(),
               BuyPropertyPage(),
               AddPropertyPage(),
-              RentPropertyPage(),
+              // RentPropertyPage(),
               ProfilePage()
             ],
           ),
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.maxFinite,
-              height: (Platform.isAndroid) ? 20 : 95,
+              height: (Platform.isAndroid) ? 90 : 95,
               padding:
                   const EdgeInsets.only(top: 0, bottom: 0, right: 0, left: 0),
               margin: (Platform.isAndroid)
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               child: BottomBarSalomon(
                 // titleStyle: TextStyle(fontSize: 20),
                 bottom: 0,
-                top: Platform.isAndroid ? 0 : 35,
+                top: Platform.isAndroid ? 10 : 35,
                 iconSize: 28,
                 items: items,
                 color: Colors.blue,
