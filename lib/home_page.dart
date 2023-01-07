@@ -5,6 +5,7 @@ import 'package:awesome_bottom_bar/tab_item.dart';
 import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_tv/flutter_swiper.dart';
+import 'package:oga_bliss/screen/favourite.dart';
 
 import 'screen/add_prop_page.dart';
 import 'screen/all_prop_page.dart';
@@ -76,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             children: const [
               AllPropertyPage(),
               SearchAlonePage(),
-              AddPropertyPage(),
+              FavouritePage(),
               // RentPropertyPage(),
               ProfilePage()
             ],

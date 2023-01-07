@@ -23,6 +23,8 @@ dependencies:
   flutter_awesome_select: ^6.5.0
   currency_symbols: ^0.0.1+2
   simple_currency_format: ^1.0.7
+  popup_banner: ^1.0.0
+  flutter_youtube_view: ^2.0.4 #come for this later
 
 #  another_xlider: ^1.1.2
 
