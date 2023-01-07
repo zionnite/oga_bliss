@@ -11,6 +11,7 @@ import 'screen/all_prop_page.dart';
 import 'screen/buy_prop_page.dart';
 import 'screen/profile_page.dart';
 import 'screen/rent_prop_page.dart';
+import 'screen/search_alone_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
             },
             children: const [
               AllPropertyPage(),
-              BuyPropertyPage(),
+              SearchAlonePage(),
               AddPropertyPage(),
               // RentPropertyPage(),
               ProfilePage()

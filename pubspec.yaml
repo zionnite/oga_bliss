@@ -21,11 +21,17 @@ dependencies:
   get: ^4.6.5
   http: ^0.13.5
   flutter_awesome_select: ^6.5.0
+  currency_symbols: ^0.0.1+2
+  simple_currency_format: ^1.0.7
+
+#  another_xlider: ^1.1.2
+
 
 #  Testing
   flutter_banner_swiper: ^0.1.4
   scroll_page_view: ^1.0.2
   flutter_swiper_tv: ^1.1.6-nullsafety
+  flutter_typeahead: ^4.1.1
 
 
 
@@ -62,3 +68,19 @@ flutter:
         - asset: assets/fonts/PassionOne-Regular.ttf
         - asset: assets/fonts/PassionOne-Bold.ttf
         - asset: assets/fonts/PassionOne-Black.ttf
+
+    - family: RubikMonoOne-Regular
+      fonts:
+        - asset: assets/fonts/RubikMonoOne-Regular.ttf
+
+    - family: Caveat-VariableFont_wght
+      fonts:
+        - asset: assets/fonts/Caveat-VariableFont_wght.ttf
+
+    - family: EastSeaDokdo-Regular
+      fonts:
+        - asset: assets/fonts/EastSeaDokdo-Regular.ttf
+
+    - family: HanaleiFill-Regular
+      fonts:
+        - asset: assets/fonts/HanaleiFill-Regular.ttf
