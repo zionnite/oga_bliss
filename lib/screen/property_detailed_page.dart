@@ -5,6 +5,7 @@ import 'package:oga_bliss/util/currency_formatter.dart';
 import 'package:oga_bliss/widget/header_title.dart';
 import 'package:popup_banner/popup_banner.dart';
 
+import '../widget/property_btn.dart';
 import '../widget/property_key_and_value.dart';
 
 class PropertyDetailPage extends StatefulWidget {
@@ -429,35 +430,35 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 alignment: Alignment.topLeft,
                 child: Column(
                   children: const [
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Type',
                       propsValue: 'Flat/Apartment',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Sub-Type',
                       propsValue: 'Workstation',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Purpose',
                       propsValue: 'Rent',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Status',
                       propsValue: 'Available',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Bedrooms',
                       propsValue: '3 Bedroms',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Bathrooms',
                       propsValue: '5 Bathroom',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Toilets',
                       propsValue: '5 Toilet',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Year Built',
                       propsValue: '2022',
                     ),
@@ -481,27 +482,27 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 alignment: Alignment.topLeft,
                 child: Column(
                   children: const [
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Air conditioning',
                       propsValue: '',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Cable TV',
                       propsValue: '',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Computer',
                       propsValue: '',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'DVD',
                       propsValue: '',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Grill',
                       propsValue: '',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Hi-fi',
                       propsValue: '',
                     ),
@@ -525,31 +526,31 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 alignment: Alignment.topLeft,
                 child: Column(
                   children: const [
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Shopping Mall',
                       propsValue: '30 KM',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Hospital',
                       propsValue: '30 KM',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'School',
                       propsValue: '20 mins',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Petrol Pump',
                       propsValue: '3hrs',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Airport',
                       propsValue: '2 Km',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Church ',
                       propsValue: '2 Km',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Mosque ',
                       propsValue: '200 Hrs',
                     ),
@@ -573,68 +574,34 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 alignment: Alignment.topLeft,
                 child: Column(
                   children: const [
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Crime',
                       propsValue: '10%',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Traffic',
                       propsValue: '30%',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Pollution',
                       propsValue: '3%',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Education',
                       propsValue: '76%',
                     ),
-                    propertyKeyAndValue(
+                    PropertyKey(
                       propsKey: 'Health',
                       propsValue: '51%',
                     ),
                   ],
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  print('Request for Inspection');
-                },
-                child: Card(
-                  color: Colors.blue,
-                  margin: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                    bottom: 40,
-                    top: 20,
-                  ),
-                  elevation: 10,
-                  child: Ink(
-                    color: Colors.blue,
-                    child: Container(
-                      margin: const EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        bottom: 10,
-                        top: 10,
-                      ),
-                      width: double.infinity,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Request For Inspection',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontFamily: 'Passion One',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              propertyBtn(
+                onTap: () {},
+                title: 'Request For Inspection',
+                bgColor: Colors.blue,
+              ),
             ],
           ),
         ),

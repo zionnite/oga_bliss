@@ -3,21 +3,18 @@ import 'package:flutter/material.dart';
 class PropertyKey extends StatelessWidget {
   const PropertyKey({
     required this.propsKey,
-    required this.propsValue,
-    this.check,
   });
 
-  final bool? check;
   final String propsKey;
-  final String propsValue;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       margin: const EdgeInsets.only(
         left: 15,
         right: 15,
-        bottom: 20,
+        bottom: 0,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,17 +23,6 @@ class PropertyKey extends StatelessWidget {
           Expanded(
             child: Text(
               propsKey,
-              style: const TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 150,
-          ),
-          Expanded(
-            child: Text(
-              propsValue,
               style: const TextStyle(
                 fontSize: 20,
               ),
