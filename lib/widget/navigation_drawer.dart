@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:oga_bliss/screen/favourite.dart';
+import 'package:oga_bliss/screen/profile_page.dart';
+
+import '../screen/dashboard.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
+
   @override
   Widget build(BuildContext context) {
     const name = 'Sarah Abs';
@@ -20,7 +25,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               name: name,
               email: email,
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => FavouritePage(),
+                builder: (context) => ProfilePage(),
               )),
             ),
             Container(
@@ -30,39 +35,42 @@ class NavigationDrawerWidget extends StatelessWidget {
                   const SizedBox(height: 12),
                   // buildSearchField(),
                   buildMenuItem(
-                    text: 'Dashboard',
-                    icon: Icons.people,
-                    onClicked: () => selectedItem(context, 0),
-                  ),
+                      text: 'Dashboard',
+                      icon: Icons.dashboard,
+                      onClicked: () {
+                        Get.to(
+                          () => DashboardPage(),
+                        );
+                      }),
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'Product',
-                    icon: Icons.people,
-                    onClicked: () => selectedItem(context, 0),
+                    icon: Icons.shopping_bag,
+                    onClicked: () => selectedItem(context, 1),
                   ),
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'Request',
-                    icon: Icons.people,
-                    onClicked: () => selectedItem(context, 0),
+                    icon: Icons.waving_hand_sharp,
+                    onClicked: () => selectedItem(context, 2),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Favourites',
                     icon: Icons.favorite_border,
-                    onClicked: () => selectedItem(context, 1),
+                    onClicked: () => selectedItem(context, 3),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Wallet',
                     icon: Icons.wallet,
-                    onClicked: () => selectedItem(context, 2),
+                    onClicked: () => selectedItem(context, 4),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Connection',
                     icon: Icons.account_tree_outlined,
-                    onClicked: () => selectedItem(context, 3),
+                    onClicked: () => selectedItem(context, 5),
                   ),
                   const SizedBox(height: 24),
                   const Divider(color: Colors.white70),
@@ -70,14 +78,15 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Message',
                     icon: Icons.message,
-                    onClicked: () => selectedItem(context, 4),
+                    onClicked: () => selectedItem(context, 6),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Alert',
                     icon: Icons.notifications_outlined,
-                    onClicked: () => selectedItem(context, 5),
+                    onClicked: () => selectedItem(context, 7),
                   ),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -176,8 +185,9 @@ class NavigationDrawerWidget extends StatelessWidget {
     switch (index) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FavouritePage(),
+          builder: (context) => const DashboardPage(),
         ));
+
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
