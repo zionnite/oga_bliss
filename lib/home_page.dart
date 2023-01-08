@@ -13,6 +13,7 @@ import 'screen/buy_prop_page.dart';
 import 'screen/profile_page.dart';
 import 'screen/rent_prop_page.dart';
 import 'screen/search_alone_page.dart';
+import 'widget/navigation_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -55,6 +56,8 @@ class _HomePageState extends State<HomePage> {
     ),
   ];
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -65,6 +68,8 @@ class _HomePageState extends State<HomePage> {
       // appBar: AppBar(
       //   backgroundColor: Colors.red,
       // ),
+      key: _key,
+      drawer: NavigationDrawerWidget(),
       body: Stack(
         children: [
           PageView(
@@ -74,12 +79,14 @@ class _HomePageState extends State<HomePage> {
                 _currentPage = newIndex;
               });
             },
-            children: const [
-              AllPropertyPage(),
-              SearchAlonePage(),
-              FavouritePage(),
+            children: [
+              AllPropertyPage(
+                s_key: _key,
+              ),
+              const SearchAlonePage(),
+              const FavouritePage(),
               // RentPropertyPage(),
-              ProfilePage()
+              const ProfilePage()
             ],
           ),
           Align(
