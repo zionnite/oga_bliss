@@ -31,15 +31,15 @@ class propertyCard extends StatelessWidget {
       ),
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(0.0),
       ),
       child: Container(
-        height: 140,
+        height: 100,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [bgColor1, bgColor2],
           ),
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(0.0),
         ),
         padding: const EdgeInsets.only(
           top: 15,
@@ -62,7 +62,7 @@ class propertyCard extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 23,
+                        fontSize: 15,
                         color: Colors.white,
                         fontFamily: 'Passion One',
                       ),
@@ -77,7 +77,7 @@ class propertyCard extends StatelessWidget {
                                 amount: value,
                               ),
                               style: const TextStyle(
-                                fontSize: 23,
+                                fontSize: 18,
                                 color: Colors.white,
                                 fontFamily: 'BlackOpsOne',
                               ),

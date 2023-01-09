@@ -24,7 +24,8 @@ dependencies:
   currency_symbols: ^0.0.1+2
   simple_currency_format: ^1.0.7
   popup_banner: ^1.0.0
-  flutter_youtube_view: ^2.0.4 #come for this later
+  flutter_youtube_view: ^2.0.4
+  cupertino_stepper: ^0.2.1
 
 #  another_xlider: ^1.1.2
 

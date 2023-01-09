@@ -4,6 +4,7 @@ import 'package:oga_bliss/screen/favourite.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
 
 import '../screen/dashboard.dart';
+import '../screen/product_property_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
@@ -35,18 +36,21 @@ class NavigationDrawerWidget extends StatelessWidget {
                   const SizedBox(height: 12),
                   // buildSearchField(),
                   buildMenuItem(
-                      text: 'Dashboard',
-                      icon: Icons.dashboard,
-                      onClicked: () {
-                        Get.to(
-                          () => DashboardPage(),
-                        );
-                      }),
+                    text: 'Dashboard',
+                    icon: Icons.dashboard,
+                    onClicked: () {
+                      Get.to(
+                        () => DashboardPage(),
+                      );
+                    },
+                  ),
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'Product',
                     icon: Icons.shopping_bag,
-                    onClicked: () => selectedItem(context, 1),
+                    onClicked: () => Get.to(
+                      () => const ProductPropertyPage(),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   buildMenuItem(
@@ -70,6 +74,12 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Connection',
                     icon: Icons.account_tree_outlined,
+                    onClicked: () => selectedItem(context, 5),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Transaction',
+                    icon: Icons.receipt_long,
                     onClicked: () => selectedItem(context, 5),
                   ),
                   const SizedBox(height: 24),
@@ -129,7 +139,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                 radius: 24,
                 backgroundColor: Colors.blue.shade300,
                 child: const Icon(
-                  Icons.add_comment_outlined,
+                  Icons.edit,
                   color: Colors.white,
                 ),
               )
