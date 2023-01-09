@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:oga_bliss/screen/add_prop_page.dart';
 import 'package:oga_bliss/util/currency_formatter.dart';
 
 import '../widget/notice_me.dart';
@@ -73,7 +75,10 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('fab button clicked');
+          Get.to(
+            () => AddPropertyPage(),
+            transition: Transition.upToDown,
+          );
         },
         child: const Icon(Icons.add),
       ),
