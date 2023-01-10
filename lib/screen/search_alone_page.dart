@@ -124,15 +124,12 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                                 decoration: const InputDecoration(
                                   labelText: 'State',
                                   enabledBorder: OutlineInputBorder(
-                                    //<-- SEE HERE
-
                                     borderSide: BorderSide(
                                       color: Colors.black12,
                                       width: 2,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    //<-- SEE HERE
                                     borderSide: BorderSide(
                                       color: Colors.black12,
                                       width: 2,
