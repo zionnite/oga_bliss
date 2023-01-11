@@ -2,8 +2,10 @@ import 'package:cupertino_stepper/cupertino_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:oga_bliss/widget/my_raidio_field.dart';
+import 'package:simple_chips_input/select_chips_input.dart';
 
 import '../widget/my_dropdown_field.dart';
+import '../widget/my_slide_checkbox.dart';
 import '../widget/my_text_field.dart';
 import '../widget/property_app_bar.dart';
 
@@ -25,31 +27,34 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   TextEditingController propsDesc = TextEditingController();
   TextEditingController propsYoutubeId = TextEditingController();
   TextEditingController propsYearBuilt = TextEditingController();
+  TextEditingController propsCondition = TextEditingController();
+  TextEditingController propsCautionFee = TextEditingController();
+  TextEditingController propsSpecialPref = TextEditingController();
 
-  bool? air_condition;
-  bool? balcony;
-  bool? bedding;
-  bool? cable_tv;
-  bool? cleaning_after_exist;
-  bool? coffet_pot;
-  bool? coffet_computer;
-  bool? cot;
-  bool? dishwasher;
-  bool? dvd;
-  bool? fan;
-  bool? fridge;
-  bool? grill;
-  bool? hairdryer;
-  bool? heater;
-  bool? hi_fi;
-  bool? internet;
-  bool? iron;
-  bool? juicer;
-  bool? lift;
-  bool? mirowave;
-  bool? gym;
-  bool? fireplace;
-  bool? hot_tub;
+  bool air_condition = false;
+  bool balcony = false;
+  bool bedding = false;
+  bool cable_tv = false;
+  bool cleaning_after_exist = false;
+  bool coffee_pot = false;
+  bool computer = false;
+  bool cot = false;
+  bool dishwasher = false;
+  bool dvd = false;
+  bool fan = false;
+  bool fridge = false;
+  bool grill = false;
+  bool hairdryer = false;
+  bool heater = false;
+  bool hi_fi = false;
+  bool internet = false;
+  bool iron = false;
+  bool juicer = false;
+  bool lift = false;
+  bool microwave = false;
+  bool gym = false;
+  bool fireplace = false;
+  bool hot_tub = false;
 
   propertyModeEnum? _props_mode;
 
@@ -62,6 +67,8 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
     {"value": "rent", "name": "Rent"},
   ];
   String? props_purpose;
+
+  String outputSelectChipsInput = '';
 
   List<Step> stepList() => [
         Step(
@@ -357,22 +364,378 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  TextField(
-                    controller: propsName,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Full House Address',
-                    ),
+                  const Text(
+                      'Kindly select the type that applies to your property'),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: air_condition,
+                        onChanged: (value) {
+                          setState(() {
+                            air_condition = value;
+                          });
+                        },
+                      ),
+                      const Text('Air Condition'),
+                    ],
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 10,
                   ),
-                  TextField(
-                    controller: propsDesc,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Pin Code',
-                    ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: balcony,
+                        onChanged: (value) {
+                          setState(() {
+                            balcony = value;
+                          });
+                        },
+                      ),
+                      const Text('Balcony'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: bedding,
+                        onChanged: (value) {
+                          setState(() {
+                            bedding = value;
+                          });
+                        },
+                      ),
+                      const Text('Bedding'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: cable_tv,
+                        onChanged: (value) {
+                          setState(() {
+                            cable_tv = value;
+                          });
+                        },
+                      ),
+                      const Text('Cable Tv'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: cleaning_after_exist,
+                        onChanged: (value) {
+                          setState(() {
+                            cleaning_after_exist = value;
+                          });
+                        },
+                      ),
+                      const Text('Cleaning After Exist'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: coffee_pot,
+                        onChanged: (value) {
+                          setState(() {
+                            coffee_pot = value;
+                          });
+                        },
+                      ),
+                      const Text('Coffee Pot'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: computer,
+                        onChanged: (value) {
+                          setState(() {
+                            computer = value;
+                          });
+                        },
+                      ),
+                      const Text('Computer'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: cot,
+                        onChanged: (value) {
+                          setState(() {
+                            cot = value;
+                          });
+                        },
+                      ),
+                      const Text('Cot'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: dishwasher,
+                        onChanged: (value) {
+                          setState(() {
+                            dishwasher = value;
+                          });
+                        },
+                      ),
+                      const Text('Dish Washer'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: dvd,
+                        onChanged: (value) {
+                          setState(() {
+                            dvd = value;
+                          });
+                        },
+                      ),
+                      const Text('DVD'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: fridge,
+                        onChanged: (value) {
+                          setState(() {
+                            fridge = value;
+                          });
+                        },
+                      ),
+                      const Text('Fridge'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: grill,
+                        onChanged: (value) {
+                          setState(() {
+                            grill = value;
+                          });
+                        },
+                      ),
+                      const Text('Grill'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: hairdryer,
+                        onChanged: (value) {
+                          setState(() {
+                            hairdryer = value;
+                          });
+                        },
+                      ),
+                      const Text('Hair Dryer'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: heater,
+                        onChanged: (value) {
+                          setState(() {
+                            heater = value;
+                          });
+                        },
+                      ),
+                      const Text('Heater'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: hi_fi,
+                        onChanged: (value) {
+                          setState(() {
+                            hi_fi = value;
+                          });
+                        },
+                      ),
+                      const Text('Hi-Fi'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: internet,
+                        onChanged: (value) {
+                          setState(() {
+                            internet = value;
+                          });
+                        },
+                      ),
+                      const Text('Internet'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: iron,
+                        onChanged: (value) {
+                          setState(() {
+                            iron = value;
+                          });
+                        },
+                      ),
+                      const Text('Iron'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: juicer,
+                        onChanged: (value) {
+                          setState(() {
+                            juicer = value;
+                          });
+                        },
+                      ),
+                      const Text('Juicer'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: lift,
+                        onChanged: (value) {
+                          setState(() {
+                            lift = value;
+                          });
+                        },
+                      ),
+                      const Text('Lift'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: microwave,
+                        onChanged: (value) {
+                          setState(() {
+                            microwave = value;
+                          });
+                        },
+                      ),
+                      const Text('Microwave'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: gym,
+                        onChanged: (value) {
+                          setState(() {
+                            gym = value;
+                          });
+                        },
+                      ),
+                      const Text('Gym'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: fireplace,
+                        onChanged: (value) {
+                          setState(() {
+                            fireplace = value;
+                          });
+                        },
+                      ),
+                      const Text('Fireplace'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      MySlideCheckBox(
+                        isSwitched: hot_tub,
+                        onChanged: (value) {
+                          setState(() {
+                            hot_tub = value;
+                          });
+                        },
+                      ),
+                      const Text('Hot Tub'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                 ],
               ),
@@ -388,22 +751,83 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  TextField(
-                    controller: propsName,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Full House Address',
-                    ),
+                  MyTextField(
+                    myTextFormController: propsCondition,
+                    fieldName: 'What are Your Condition',
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 10,
                   ),
-                  TextField(
-                    controller: propsDesc,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Pin Code',
-                    ),
+                  MyTextField(
+                    myTextFormController: propsCautionFee,
+                    fieldName: 'Caution / Damage Fee',
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Output: $outputSelectChipsInput',
+                        textAlign: TextAlign.center,
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.blue),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SelectChipsInput(
+                          chipsText: const ['lock', 'unlock'],
+                          separatorCharacter: ";",
+                          selectedChipTextStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                          unselectedChipTextStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                          onTap: (p0, p1) {
+                            setState(() {
+                              outputSelectChipsInput = p0;
+                            });
+                          },
+                          prefixIcons: const [
+                            Padding(
+                              padding: EdgeInsets.only(right: 5.0),
+                              child: Icon(
+                                Icons.lock,
+                                size: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(right: 5.0),
+                                child: Icon(
+                                  Icons.lock_open,
+                                  size: 16.0,
+                                  color: Colors.white,
+                                )),
+                          ],
+                          selectedPrefixIcon: const Padding(
+                            padding: EdgeInsets.only(right: 5.0),
+                            child: Icon(
+                              Icons.circle,
+                              size: 16.0,
+                              color: Colors.yellow,
+                            ),
+                          ),
+                          widgetContainerDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: Colors.green[100]!.withOpacity(0.5),
+                          ),
+                          unselectedChipDecoration: BoxDecoration(
+                            color: Colors.green[400],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          selectedChipDecoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -448,7 +872,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('Name: ${props_purpose}'),
+                Text('Name: ${air_condition}'),
                 Text('Email: ${propsDesc.text}'),
                 const Text('Password: *****'),
                 Text('Address : ${propsYearBuilt.text}'),
