@@ -1,8 +1,8 @@
-import 'package:cupertino_stepper/cupertino_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:oga_bliss/widget/my_raidio_field.dart';
-import 'package:simple_chips_input/select_chips_input.dart';
+import 'package:text_chip_field/text_chip_field.dart';
 
 import '../widget/my_dropdown_field.dart';
 import '../widget/my_slide_checkbox.dart';
@@ -69,6 +69,8 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   String? props_purpose;
 
   String outputSelectChipsInput = '';
+  List<String> specialPref = [];
+  String selectedPref = '';
 
   List<Step> stepList() => [
         Step(
@@ -753,7 +755,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   ),
                   MyTextField(
                     myTextFormController: propsCondition,
-                    fieldName: 'What are Your Condition',
+                    fieldName: 'What are your conditions',
                   ),
                   const SizedBox(
                     height: 10,
@@ -762,72 +764,53 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                     myTextFormController: propsCautionFee,
                     fieldName: 'Caution / Damage Fee',
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        'Output: $outputSelectChipsInput',
-                        textAlign: TextAlign.center,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.blue),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MyTextField(
+                    myTextFormController: propsCautionFee,
+                    fieldName: 'Special Preference',
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  FlutterInputChips(
+                    initialValue: const [],
+                    // maxChips: 5,
+                    onChanged: (v) {
+                      setState(() {
+                        specialPref = v;
+                        selectedPref = specialPref.join(',');
+                      });
+                    },
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    inputDecoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Special Preference",
+                    ),
+                    chipTextStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    chipSpacing: 8,
+                    chipDeleteIconColor: Colors.white,
+                    chipBackgroundColor: Colors.blue,
+                  ),
+                  const Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Enter Preference separated by comma (,)',
+                      style: TextStyle(
+                        color: Colors.red,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SelectChipsInput(
-                          chipsText: const ['lock', 'unlock'],
-                          separatorCharacter: ";",
-                          selectedChipTextStyle: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                          unselectedChipTextStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                          onTap: (p0, p1) {
-                            setState(() {
-                              outputSelectChipsInput = p0;
-                            });
-                          },
-                          prefixIcons: const [
-                            Padding(
-                              padding: EdgeInsets.only(right: 5.0),
-                              child: Icon(
-                                Icons.lock,
-                                size: 16.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(right: 5.0),
-                                child: Icon(
-                                  Icons.lock_open,
-                                  size: 16.0,
-                                  color: Colors.white,
-                                )),
-                          ],
-                          selectedPrefixIcon: const Padding(
-                            padding: EdgeInsets.only(right: 5.0),
-                            child: Icon(
-                              Icons.circle,
-                              size: 16.0,
-                              color: Colors.yellow,
-                            ),
-                          ),
-                          widgetContainerDecoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.0),
-                            color: Colors.green[100]!.withOpacity(0.5),
-                          ),
-                          unselectedChipDecoration: BoxDecoration(
-                            color: Colors.green[400],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          selectedChipDecoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                 ],
               ),
