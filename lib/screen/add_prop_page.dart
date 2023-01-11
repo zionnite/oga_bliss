@@ -1,12 +1,11 @@
 import 'package:cupertino_stepper/cupertino_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oga_bliss/widget/my_raidio_field.dart';
 
 import '../widget/my_dropdown_field.dart';
 import '../widget/my_text_field.dart';
 import '../widget/property_app_bar.dart';
-
-enum propertyMode { newly_built, furnished, serviced }
 
 class AddPropertyPage extends StatefulWidget {
   const AddPropertyPage({Key? key}) : super(key: key);
@@ -52,7 +51,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   bool? fireplace;
   bool? hot_tub;
 
-  propertyMode? _props_mode;
+  propertyModeEnum? _props_mode;
 
   final _propsTypeList = ["Edo", "Delta", "Lagos", "Bayelsa", "Port-Harcourt"];
   String? props_type;
@@ -172,36 +171,23 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  controller: propsBed,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Bedrooms',
-                  ),
+                MyTextField(
+                  myTextFormController: propsBed,
+                  fieldName: 'Bedrooms',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  controller: propsBath,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Bathrooms',
-                  ),
+                MyTextField(
+                  myTextFormController: propsBath,
+                  fieldName: 'Bathrooms',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  controller: propsToilet,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Toilets',
-                  ),
+                MyTextField(
+                  myTextFormController: propsToilet,
+                  fieldName: 'Toilets',
                 ),
                 const SizedBox(
                   height: 8,
@@ -280,38 +266,23 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [],
-                  controller: propsPrice,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Price',
-                  ),
+                MyTextField(
+                  myTextFormController: propsPrice,
+                  fieldName: 'Price',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                TextField(
-                  controller: propsDesc,
-                  maxLines: 5,
-                  minLines: 1,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Property Desc',
-                  ),
+                MyTextField(
+                  myTextFormController: propsDesc,
+                  fieldName: 'Property Desc',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                TextField(
-                  controller: propsYearBuilt,
-                  minLines: 1,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Year Built',
-                  ),
+                MyTextField(
+                  myTextFormController: propsYearBuilt,
+                  fieldName: 'Year Built',
                 ),
               ],
             ),
@@ -328,22 +299,49 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  TextField(
-                    controller: propsName,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Full House Address',
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text('What is the Property Mode?'),
+                      MyRadioBtnField(
+                        title: '${propertyModeEnum.New.name} Property',
+                        value: propertyModeEnum.New,
+                        selectedProperty: _props_mode,
+                        onChanged: (val) {
+                          setState(() {
+                            _props_mode = val;
+                          });
+                        },
+                      ),
+                      MyRadioBtnField(
+                        title: '${propertyModeEnum.Furnished.name} Property',
+                        value: propertyModeEnum.Furnished,
+                        selectedProperty: _props_mode,
+                        onChanged: (val) {
+                          setState(() {
+                            _props_mode = val;
+                          });
+                        },
+                      ),
+                      MyRadioBtnField(
+                        title: '${propertyModeEnum.Serviced.name} Property',
+                        value: propertyModeEnum.Serviced,
+                        selectedProperty: _props_mode,
+                        onChanged: (val) {
+                          setState(() {
+                            _props_mode = val;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 8,
                   ),
-                  TextField(
-                    controller: propsDesc,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Pin Code',
-                    ),
+                  MyTextField(
+                    myTextFormController: propsYoutubeId,
+                    fieldName: 'Youtube Video Id',
                   ),
                 ],
               ),
