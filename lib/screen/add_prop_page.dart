@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:oga_bliss/widget/my_raidio_field.dart';
-import 'package:text_chip_field/text_chip_field.dart';
 
 import '../widget/my_dropdown_field.dart';
 import '../widget/my_slide_checkbox.dart';
@@ -71,6 +74,24 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   String outputSelectChipsInput = '';
   List<String> specialPref = [];
   String selectedPref = '';
+
+  File? _image;
+
+  Future _pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      File? img = File(image.path);
+      //img = await _cropImage(imageFile: img);
+      setState(() {
+        _image = img;
+        // Navigator.of(context).pop();
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      // Navigator.of(context).pop();
+    }
+  }
 
   List<Step> stepList() => [
         Step(
@@ -826,22 +847,57 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  TextField(
-                    controller: propsName,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Full House Address',
+                  InkWell(
+                    onTap: () {
+                      _pickImage(ImageSource.gallery);
+                    },
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.image,
+                                color: Colors.blue,
+                              ),
+                              Text(
+                                'Select Image',
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      height: 200.0,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Colors.grey.shade200,
+                      ),
+                      child: Center(
+                        child: _image == null
+                            ? const Text(
+                                'No image selected',
+                                style: TextStyle(fontSize: 20),
+                              )
+                            : Image(
+                                width: double.infinity,
+                                height: 200,
+                                image: FileImage(_image!),
+                              ),
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 8,
-                  ),
-                  TextField(
-                    controller: propsDesc,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Pin Code',
-                    ),
                   ),
                 ],
               ),
