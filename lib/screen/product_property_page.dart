@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/add_prop_page.dart';
-import 'package:oga_bliss/util/currency_formatter.dart';
 
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
+
+enum SampleItem { itemOne, itemTwo, itemThree }
 
 class ProductPropertyPage extends StatefulWidget {
   const ProductPropertyPage({Key? key}) : super(key: key);
@@ -15,6 +16,9 @@ class ProductPropertyPage extends StatefulWidget {
 }
 
 class _ProductPropertyPageState extends State<ProductPropertyPage> {
+  final GlobalKey _menuKey = GlobalKey();
+
+  SampleItem? selectedMenu;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +37,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     border_color: Colors.red,
                     btnTitle: 'Verify Now',
                     btnColor: Colors.blue,
-                    onTap: () {
-                      print('click');
-                    },
+                    onTap: () {},
                   ),
                   PropertyTileWidget(
                     props_image_name:
@@ -49,7 +51,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     props_bathroom: '290',
                     props_toilet: '100',
                     onTap: () {
-                      print('am clicked');
+                      _popUpBUtton();
                     },
                   ),
                   PropertyTileWidget(
@@ -64,7 +66,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     props_bathroom: '290',
                     props_toilet: '100',
                     onTap: () {
-                      print('am clicked');
+                      _popUpBUtton();
                     },
                   ),
                 ],
@@ -84,4 +86,28 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
       ),
     );
   }
+
+  Widget _popUpBUtton() => PopupMenuButton<SampleItem>(
+        initialValue: selectedMenu,
+        key: _menuKey,
+        onSelected: (val) {
+          print('item ${val}');
+        },
+        itemBuilder: (context) {
+          return <PopupMenuEntry<SampleItem>>[
+            const PopupMenuItem(
+              child: Text('Submit'),
+              value: SampleItem.itemOne,
+            ),
+            const PopupMenuItem(
+              child: Text('Edit'),
+              value: SampleItem.itemTwo,
+            ),
+            const PopupMenuItem(
+              child: Text('Delete'),
+              value: SampleItem.itemThree,
+            ),
+          ];
+        },
+      );
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/favourite.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
+import 'package:oga_bliss/screen/request_page.dart';
+import 'package:oga_bliss/screen/wallet.dart';
 
 import '../screen/dashboard.dart';
 import '../screen/product_property_page.dart';
@@ -56,19 +58,18 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Request',
                     icon: Icons.waving_hand_sharp,
-                    onClicked: () => selectedItem(context, 2),
+                    onClicked: () => Get.to(
+                      () => const RequestPage(),
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Favourites',
-                    icon: Icons.favorite_border,
-                    onClicked: () => selectedItem(context, 3),
-                  ),
+
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Wallet',
                     icon: Icons.wallet,
-                    onClicked: () => selectedItem(context, 4),
+                    onClicked: () => Get.to(
+                      () => const WalletPage(),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
