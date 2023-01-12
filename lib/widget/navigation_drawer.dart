@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/screen/connection_page.dart';
 import 'package:oga_bliss/screen/favourite.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
 import 'package:oga_bliss/screen/request_page.dart';
@@ -75,7 +76,9 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Connection',
                     icon: Icons.account_tree_outlined,
-                    onClicked: () => selectedItem(context, 5),
+                    onClicked: () => Get.to(
+                      () => const ConnectionPage(),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(

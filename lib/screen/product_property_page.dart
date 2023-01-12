@@ -88,6 +88,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
   }
 
   Widget _popUpBUtton() => PopupMenuButton<SampleItem>(
+        enabled: true,
         initialValue: selectedMenu,
         key: _menuKey,
         onSelected: (val) {
