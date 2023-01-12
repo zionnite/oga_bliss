@@ -38,13 +38,8 @@ class _RequestPageState extends State<RequestPage> {
                     status: 'In-View',
                     image_name:
                         'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
-                    btnName: 'View Requester',
-                    btnColor: Colors.black,
                     onTap: () {
                       print('image just checking');
-                    },
-                    btnTap: () {
-                      print('btn Tap checking');
                     },
                   ),
                 ],

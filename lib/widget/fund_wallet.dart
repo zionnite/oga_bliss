@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:oga_bliss/widget/small_btn.dart';
 
-class requestWidget extends StatelessWidget {
-  requestWidget({
+import '../util/currency_formatter.dart';
+
+class fundWallet extends StatelessWidget {
+  fundWallet({
+    required this.image_name,
     required this.name,
     required this.time,
-    required this.status,
-    required this.image_name,
+    required this.amount,
     required this.onTap,
   });
 
   final String image_name;
   final String name;
   final String time;
-  final String status;
+  final String amount;
   final VoidCallback onTap;
 
   @override
@@ -59,6 +61,8 @@ class requestWidget extends StatelessWidget {
                             color: Colors.black,
                             fontFamily: 'RubikMonoOne-Regular',
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(
                           height: 5,
@@ -68,7 +72,9 @@ class requestWidget extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          'Status: ${status}',
+                          CurrencyFormatter.getCurrencyFormatter(
+                            amount: "${amount}",
+                          ),
                           style: const TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -86,35 +92,24 @@ class requestWidget extends StatelessWidget {
             Row(
               children: [
                 smallBtn(
-                  btnName: 'View Requester',
+                  btnName: 'Pull Out',
                   btnColor: Colors.black,
                   onTap: () {
-                    print('view Rquester');
+                    print('pull out');
                   },
                 ),
                 smallBtn(
-                  btnName: 'View Agent',
+                  btnName: 'Settled Aready',
                   btnColor: Colors.green,
                   onTap: () {
-                    print('view Agent');
+                    print('Settled out');
                   },
                 ),
                 smallBtn(
-                  btnName: 'Action',
+                  btnName: 'Already Pull out',
                   btnColor: Colors.red,
                   onTap: () {
-                    PopupMenuButton(
-                      itemBuilder: (BuildContext context) {
-                        return [
-                          const PopupMenuItem(
-                            value: 'connection',
-                            child: Text(
-                              'create conenction',
-                            ),
-                          ),
-                        ];
-                      },
-                    );
+                    print('pull out');
                   },
                 ),
               ],
