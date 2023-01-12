@@ -103,13 +103,13 @@ class requestWidget extends StatelessWidget {
                   btnName: 'Action',
                   btnColor: Colors.red,
                   onTap: () {
-                    PopupMenuButton(
-                      itemBuilder: (BuildContext context) {
+                    PopupMenuButton<String>(
+                      itemBuilder: (context) {
                         return [
-                          const PopupMenuItem(
+                          const PopupMenuItem<String>(
                             value: 'connection',
                             child: Text(
-                              'create conenction',
+                              'create connection',
                             ),
                           ),
                         ];

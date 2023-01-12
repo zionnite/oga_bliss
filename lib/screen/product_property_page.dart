@@ -50,9 +50,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     props_bedroom: '100',
                     props_bathroom: '290',
                     props_toilet: '100',
-                    onTap: () {
-                      _popUpBUtton();
-                    },
+                    onTap: _popUpButton(),
                   ),
                   PropertyTileWidget(
                     props_image_name:
@@ -65,9 +63,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     props_bedroom: '100',
                     props_bathroom: '290',
                     props_toilet: '100',
-                    onTap: () {
-                      _popUpBUtton();
-                    },
+                    onTap: _popUpButton(),
                   ),
                 ],
               ),
@@ -87,26 +83,27 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
     );
   }
 
-  Widget _popUpBUtton() => PopupMenuButton<SampleItem>(
+  Widget _popUpButton() => PopupMenuButton<String>(
         enabled: true,
-        initialValue: selectedMenu,
-        key: _menuKey,
+        icon: const Icon(
+          Icons.more_vert_rounded,
+        ),
         onSelected: (val) {
-          print('item ${val}');
+          print(val);
         },
         itemBuilder: (context) {
-          return <PopupMenuEntry<SampleItem>>[
+          return [
             const PopupMenuItem(
+              value: "One",
               child: Text('Submit'),
-              value: SampleItem.itemOne,
             ),
             const PopupMenuItem(
+              value: "Two",
               child: Text('Edit'),
-              value: SampleItem.itemTwo,
             ),
             const PopupMenuItem(
+              value: "Three",
               child: Text('Delete'),
-              value: SampleItem.itemThree,
             ),
           ];
         },

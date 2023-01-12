@@ -31,6 +31,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     btnColor: Colors.blue,
                     onTap: () {},
                   ),
+                  const Card(),
                 ],
               ),
             ),

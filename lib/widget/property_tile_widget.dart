@@ -23,7 +23,7 @@ class PropertyTileWidget extends StatefulWidget {
   final String props_bedroom;
   final String props_bathroom;
   final String props_toilet;
-  final VoidCallback onTap;
+  final Widget onTap;
 
   @override
   State<PropertyTileWidget> createState() => _PropertyTileWidgetState();
@@ -148,16 +148,7 @@ class _PropertyTileWidgetState extends State<PropertyTileWidget> {
                   ],
                 ),
               ),
-              InkWell(
-                onTap: widget.onTap,
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.more_vert_rounded,
-                    size: 17,
-                  ),
-                ),
-              ),
+              widget.onTap,
             ],
           ),
           Padding(
