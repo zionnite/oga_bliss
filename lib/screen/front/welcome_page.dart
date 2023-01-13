@@ -18,10 +18,10 @@ class _WelcomePageState extends State<WelcomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Image.asset(
-              'assets/images/family.jpg',
-              height: height * 0.5,
-            ),
+            // Image.asset(
+            //   'assets/images/family.jpg',
+            //   height: height * 0.5,
+            // ),
 
             //////
             // Container(
@@ -40,25 +40,24 @@ class _WelcomePageState extends State<WelcomePage> {
             //   radius: 50,
             //   backgroundImage: AssetImage('assets/images/family.jpg'),
             // ),
-            // Stack(
-            //   children: [
-            //     Container(
-            //       color: Colors.red,
-            //     ),
-            //     Container(
-            //       height: height * 0.5,
-            //       decoration: BoxDecoration(
-            //         image: DecorationImage(
-            //           colorFilter: ColorFilter.mode(
-            //               Colors.blue.withOpacity(0.5), BlendMode.darken),
-            //           fit: BoxFit.fitWidth,
-            //           image: AssetImage('assets/images/family.jpg'),
-            //         ),
-            //       ),
-            //       child: Image.asset('assets/images/family.jpg'),
-            //     ),
-            //   ],
-            // ),
+            Stack(
+              children: [
+                Container(
+                  color: Colors.red,
+                ),
+                Container(
+                  height: height * 0.6,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: ColorFilter.mode(
+                          Colors.blue.withOpacity(0.9), BlendMode.color),
+                      fit: BoxFit.fitWidth,
+                      image: const AssetImage('assets/images/connect_home.png'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
 
             Column(
               children: const [
