@@ -10,6 +10,7 @@ import 'package:oga_bliss/screen/transaction_page.dart';
 import 'package:oga_bliss/screen/wallet.dart';
 
 import '../screen/dashboard.dart';
+import '../screen/front/welcome_page.dart';
 import '../screen/product_property_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -98,7 +99,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Message',
                     icon: Icons.message,
                     onClicked: () => Get.to(
-                          () => const MessagePage(),
+                      () => const MessagePage(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -107,6 +108,30 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.notifications_outlined,
                     onClicked: () => Get.to(
                       () => const AlertPage(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Login Page',
+                    icon: Icons.notifications_outlined,
+                    onClicked: () => Get.to(
+                      () => const AlertPage(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Signup Page',
+                    icon: Icons.notifications_outlined,
+                    onClicked: () => Get.to(
+                      () => const AlertPage(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Welcome Page',
+                    icon: Icons.notifications_outlined,
+                    onClicked: () => Get.to(
+                      () => const WelcomePage(),
                     ),
                   ),
                   const SizedBox(height: 30),
