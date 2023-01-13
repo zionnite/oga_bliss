@@ -5,10 +5,13 @@ class smallBtn extends StatelessWidget {
     required this.btnName,
     required this.btnColor,
     required this.onTap,
+    this.font_size,
   });
   final String btnName;
   final Color btnColor;
   final VoidCallback onTap;
+  final double? font_size;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -27,8 +30,10 @@ class smallBtn extends StatelessWidget {
             child: Text(
               btnName,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
+                fontSize:
+                    (font_size != "null" && font_size != "") ? font_size : 15,
               ),
             ),
           ),

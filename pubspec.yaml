@@ -28,6 +28,7 @@ dependencies:
   text_chip_field: ^0.0.7
   flutter_input_chips: ^1.0.3
   image_picker: ^0.8.6
+  flutter_slidable: ^2.0.0
 
 #  another_xlider: ^1.1.2
 

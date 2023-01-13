@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/screen/alert_page.dart';
 import 'package:oga_bliss/screen/connection_page.dart';
 import 'package:oga_bliss/screen/favourite.dart';
+import 'package:oga_bliss/screen/message_page.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
 import 'package:oga_bliss/screen/request_page.dart';
+import 'package:oga_bliss/screen/transaction_page.dart';
 import 'package:oga_bliss/screen/wallet.dart';
 
 import '../screen/dashboard.dart';
@@ -84,7 +87,9 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Transaction',
                     icon: Icons.receipt_long,
-                    onClicked: () => selectedItem(context, 5),
+                    onClicked: () => Get.to(
+                      () => const TransactionPage(),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   const Divider(color: Colors.white70),
@@ -92,13 +97,17 @@ class NavigationDrawerWidget extends StatelessWidget {
                   buildMenuItem(
                     text: 'Message',
                     icon: Icons.message,
-                    onClicked: () => selectedItem(context, 6),
+                    onClicked: () => Get.to(
+                          () => const MessagePage(),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Alert',
                     icon: Icons.notifications_outlined,
-                    onClicked: () => selectedItem(context, 7),
+                    onClicked: () => Get.to(
+                      () => const AlertPage(),
+                    ),
                   ),
                   const SizedBox(height: 30),
                 ],
