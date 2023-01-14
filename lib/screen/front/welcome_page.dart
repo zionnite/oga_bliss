@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/home_page.dart';
 
+import '../../controller/splash_controller.dart';
+
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -10,9 +12,12 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  final SplashController splashController = Get.put(SplashController());
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    // splashController.startAnimation();
+
     return Scaffold(
       backgroundColor: Colors.blue,
       body: SingleChildScrollView(
@@ -21,48 +26,17 @@ class _WelcomePageState extends State<WelcomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // Image.asset(
-              //   'assets/images/family.jpg',
-              //   height: height * 0.5,
-              // ),
-
-              //////
-              // Container(
-              //   height: height * 0.5,
-              //   decoration: const BoxDecoration(
-              //     image: DecorationImage(
-              //       fit: BoxFit.fitWidth,
-              //       image: AssetImage(
-              //         'assets/images/family.jpg',
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              ////////////////
-              // const CircleAvatar(
-              //   radius: 50,
-              //   backgroundImage: AssetImage('assets/images/family.jpg'),
-              // ),
-              Stack(
-                children: [
-                  Container(
-                    color: Colors.red,
+              Container(
+                height: height * 0.6,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                        Colors.blue.withOpacity(0.9), BlendMode.color),
+                    fit: BoxFit.fitWidth,
+                    image: const AssetImage('assets/images/connect_home.png'),
                   ),
-                  Container(
-                    height: height * 0.4,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        colorFilter: ColorFilter.mode(
-                            Colors.blue.withOpacity(0.9), BlendMode.color),
-                        fit: BoxFit.fitWidth,
-                        image:
-                            const AssetImage('assets/images/connect_home.png'),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-
               Column(
                 children: const [
                   Text(
@@ -81,6 +55,9 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   )
                 ],
+              ),
+              const SizedBox(
+                height: 40,
               ),
               Column(
                 children: [
