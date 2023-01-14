@@ -10,8 +10,10 @@ import 'package:oga_bliss/screen/transaction_page.dart';
 import 'package:oga_bliss/screen/wallet.dart';
 
 import '../screen/dashboard.dart';
+import '../screen/front/onboarding_screen.dart';
 import '../screen/front/welcome_page.dart';
 import '../screen/product_property_page.dart';
+import '../screen/splash_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
@@ -132,6 +134,22 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.notifications_outlined,
                     onClicked: () => Get.to(
                       () => const WelcomePage(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Onboarding Screen',
+                    icon: Icons.notifications_outlined,
+                    onClicked: () => Get.to(
+                      () => const OnboardingPage(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'Splash Screen',
+                    icon: Icons.notifications_outlined,
+                    onClicked: () => Get.to(
+                      () => const SplashPage(),
                     ),
                   ),
                   const SizedBox(height: 30),
