@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/home_page.dart';
 
-import '../../controller/splash_controller.dart';
-
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -12,7 +10,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  final SplashController splashController = Get.put(SplashController());
+  // final SplashController splashController = Get.put(SplashController());
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

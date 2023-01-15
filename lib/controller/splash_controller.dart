@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
-
-import '../screen/front/welcome_page.dart';
+import 'package:oga_bliss/screen/front/onboarding_screen.dart';
 
 class SplashController extends GetxController {
   static SplashController get find => Get.find();
@@ -11,6 +10,6 @@ class SplashController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 500));
     animate.value = true;
     await Future.delayed(const Duration(milliseconds: 7000));
-    Get.to(() => const WelcomePage());
+    Get.to(() => const OnboardingPage());
   }
 }
