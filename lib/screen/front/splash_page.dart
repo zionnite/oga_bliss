@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controller/splash_controller.dart';
+import '../../controller/splash_controller.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+class SplashPage extends StatelessWidget {
+  SplashPage({Key? key}) : super(key: key);
 
-  @override
-  State<SplashPage> createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage> {
   final SplashController splashController = Get.put(SplashController());
 
   @override
@@ -54,12 +49,15 @@ class _SplashPageState extends State<SplashPage> {
                               ),
                             ),
                           ),
-                          const Text(
-                            'Bridging the Gap between Tenant and Landlord',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Text(
+                              'Bridging the Gap between Tenant and Landlord',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                // fontSize: 15,
+                                color: Colors.white,
+                              ),
                             ),
                           )
                         ],

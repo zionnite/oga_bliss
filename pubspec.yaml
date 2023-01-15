@@ -30,8 +30,10 @@ dependencies:
   image_picker: ^0.8.6
   flutter_slidable: ^2.0.0
   transparent_image: ^2.0.0
+  liquid_swipe: ^3.0.0
+  smooth_page_indicator: ^1.0.0+2
 
-#  another_xlider: ^1.1.2
+  #  another_xlider: ^1.1.2
 
 
 #  Testing
