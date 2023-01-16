@@ -179,7 +179,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
           ),
           Positioned(
             top: 10,
-            right: 10,
+            left: 10,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
               height: 40,
@@ -209,6 +209,42 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                     ),
                   )
                 ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: Container(
+              child: PopupMenuButton(
+                padding: const EdgeInsets.all(0),
+                color: Colors.black,
+                icon: const Icon(
+                  Icons.more_vert_outlined,
+                  color: Colors.white,
+                ),
+                itemBuilder: (BuildContext context) {
+                  return [
+                    const PopupMenuItem(
+                      value: 'spam',
+                      child: Text(
+                        'Spam & Fraud',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'spam',
+                      child: Text(
+                        'Inappropriate Content',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ];
+                },
               ),
             ),
           ),
