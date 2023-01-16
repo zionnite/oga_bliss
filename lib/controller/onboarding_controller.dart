@@ -14,35 +14,48 @@ class OnboardingCongroller extends GetxController {
   final pages = [
     onboardingWidget(
       model: OnboardingModel(
-        image_name: 'assets/images/a.jpeg',
+        image_name: 'assets/images/agent_and_ten.png',
         title: 'OgaBliss',
-        sub_title: 'Connect Users',
-        counter: '1/3',
+        sub_title:
+            'In here we connect you with the right Agents / Landlords  and Tenant ',
+        counter: '1/4',
         bgColor: Colors.blue,
       ),
     ),
     onboardingWidget(
       model: OnboardingModel(
-        image_name: 'assets/images/a.jpeg',
-        title: 'OgaBliss',
-        sub_title: 'Connect Users',
-        counter: '2/3',
-        bgColor: Colors.green,
+        image_name: 'assets/images/rent.png',
+        title: 'Rent Property',
+        sub_title:
+            'Getting the right apartment or comfort has never be easier, OgaBliss bring the right Agent to you',
+        counter: '2/4',
+        bgColor: Colors.blue,
       ),
     ),
     onboardingWidget(
       model: OnboardingModel(
-        image_name: 'assets/images/a.jpeg',
+        image_name: 'assets/images/build_connection.png',
+        title: 'Purchase Property',
+        sub_title:
+            'With OgaBliss, you don\'t have to worry about the hustle of settling community or paying double fees for property',
+        counter: '3/4',
+        bgColor: Colors.blue,
+      ),
+    ),
+    onboardingWidget(
+      model: OnboardingModel(
+        image_name: 'assets/images/connected.png',
         title: 'OgaBliss',
-        sub_title: 'Connect Users',
-        counter: '3/3',
-        bgColor: Colors.red,
+        sub_title:
+            'Click the Continue button below to a new door of celebration',
+        counter: '4/4',
+        bgColor: Colors.blue,
       ),
     ),
   ];
 
   onPageChanged(int activePageIndex) => currentPage.value = activePageIndex;
-  skip() => controller.jumpToPage(page: 2);
+  skip() => controller.jumpToPage(page: 3);
 
   animateToNextSlide() {
     int nextPage = controller.currentPage + 1;

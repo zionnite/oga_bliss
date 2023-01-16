@@ -22,22 +22,30 @@ class onboardingWidget extends StatelessWidget {
             image: AssetImage(
               model.image_name,
             ),
-
             height: height * 0.5,
             fit: BoxFit.contain,
-            // color: Colors.blue.withOpacity(1),
-            // colorBlendMode: BlendMode.color,
+            color: Colors.blue.withOpacity(1),
+            colorBlendMode: BlendMode.color,
           ),
           Column(
             children: [
               Text(
                 model.title,
                 style: const TextStyle(
-                  fontSize: 25,
+                  fontSize: 30,
+                  color: Colors.white,
+                  fontFamily: 'Passion One',
                 ),
+              ),
+              const SizedBox(
+                height: 5,
               ),
               Text(
                 model.sub_title,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 20,
