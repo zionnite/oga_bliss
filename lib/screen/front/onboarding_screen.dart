@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
@@ -9,8 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../controller/onboarding_controller.dart';
 
 class OnboardingPage extends StatefulWidget {
-  OnboardingPage({required this.timer1, required this.timer2});
-  final Timer timer1, timer2;
+  OnboardingPage();
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
@@ -19,12 +16,10 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
-    widget.timer1.cancel();
-    widget.timer2.cancel();
+    // widget.timer1.cancel();
+    // widget.timer2.cancel();
 
-    final OnboardingCongroller onboardingController =
-        Get.put(OnboardingCongroller());
-    // final onboardingController = OnboardingCongroller();
+    final onboardingController = OnboardingCongroller().getXID;
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,

@@ -24,7 +24,7 @@ class _MyTextFieldIconState extends State<MyTextFieldIcon> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: TextField(
+      child: TextFormField(
         onChanged: widget.onChange,
         controller: widget.myTextFormController,
         decoration: InputDecoration(
@@ -37,10 +37,10 @@ class _MyTextFieldIconState extends State<MyTextFieldIcon> {
           labelText: widget.fieldName,
           prefixIcon: (widget.prefix != '' && widget.prefix != null)
               ? Icon(widget.prefix)
-              : Container(),
+              : null,
           suffixIcon: (widget.suffix != '' && widget.suffix != null)
               ? Icon(widget.suffix)
-              : Container(),
+              : null,
         ),
       ),
     );

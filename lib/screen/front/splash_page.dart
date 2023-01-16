@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/home_page.dart';
 
 import '../../controller/splash_controller.dart';
 
@@ -11,12 +12,18 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final SplashController splashController = Get.put(SplashController());
+  // final SplashController splashController = Get.put(SplashController());
+  final splashController = SplashController().getXID;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Get.delete<SplashController>();
+  }
 
   @override
   void dispose() {
-    splashController.timer1.cancel();
-    splashController.timer2.cancel();
     super.dispose();
   }
 
@@ -24,6 +31,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     splashController.startAnimation();
+
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Stack(
@@ -36,13 +44,18 @@ class _SplashPageState extends State<SplashPage> {
               left: splashController.animate.value ? 0 : 0,
               child: Column(
                 children: [
-                  Image(
-                    fit: BoxFit.contain,
-                    image: const AssetImage('assets/images/happy_family.png'),
-                    height: height * 0.6,
-                    // width: 500,
-                    color: Colors.blue.withOpacity(1),
-                    colorBlendMode: BlendMode.color,
+                  InkWell(
+                    onTap: () {
+                      Get.to(() => const HomePage());
+                    },
+                    child: Image(
+                      fit: BoxFit.contain,
+                      image: const AssetImage('assets/images/happy_family.png'),
+                      height: height * 0.6,
+                      // width: 500,
+                      color: Colors.blue.withOpacity(1),
+                      colorBlendMode: BlendMode.color,
+                    ),
                   ),
                   Column(
                     children: [
@@ -50,7 +63,7 @@ class _SplashPageState extends State<SplashPage> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Get.back();
+                              Get.to(() => const HomePage());
                             },
                             child: const Text(
                               'OgaBliss',

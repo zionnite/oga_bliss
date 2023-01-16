@@ -6,7 +6,7 @@ import '../model/onboarding_model.dart';
 import '../widget/onboarding_widget.dart';
 
 class OnboardingCongroller extends GetxController {
-  static OnboardingCongroller get find => Get.find();
+  OnboardingCongroller get getXID => Get.find<OnboardingCongroller>();
 
   final controller = LiquidController();
   RxInt currentPage = 0.obs;

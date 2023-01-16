@@ -114,24 +114,6 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: TextButton(
-                onPressed: () {
-                  Get.to(() => LoginPage());
-                },
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Already have an account?, click here',
-                    style: TextStyle(
-                      color: Colors.red.shade300,
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

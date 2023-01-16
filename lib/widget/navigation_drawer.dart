@@ -212,7 +212,7 @@ class NavigationDrawerWidget extends StatelessWidget {
       style: TextStyle(color: color),
       decoration: InputDecoration(
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            const EdgeInsets.symmetric(horizontal: 21, vertical: 15),
         hintText: 'Search',
         hintStyle: TextStyle(color: color),
         prefixIcon: Icon(Icons.search, color: color),
