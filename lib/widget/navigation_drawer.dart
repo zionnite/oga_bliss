@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:oga_bliss/screen/alert_page.dart';
 import 'package:oga_bliss/screen/connection_page.dart';
 import 'package:oga_bliss/screen/favourite.dart';
+import 'package:oga_bliss/screen/front/login_page.dart';
 import 'package:oga_bliss/screen/message_page.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
 import 'package:oga_bliss/screen/request_page.dart';
@@ -10,7 +11,6 @@ import 'package:oga_bliss/screen/transaction_page.dart';
 import 'package:oga_bliss/screen/wallet.dart';
 
 import '../screen/dashboard.dart';
-import '../screen/front/onboarding_screen.dart';
 import '../screen/front/splash_page.dart';
 import '../screen/front/welcome_page.dart';
 import '../screen/product_property_page.dart';
@@ -117,7 +117,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Login Page',
                     icon: Icons.notifications_outlined,
                     onClicked: () => Get.to(
-                      () => const AlertPage(),
+                      () => const LoginPage(),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -141,7 +141,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Onboarding Screen',
                     icon: Icons.notifications_outlined,
                     onClicked: () => Get.to(
-                      () => const OnboardingPage(),
+                      () => const LoginPage(),
                     ),
                   ),
                   const SizedBox(height: 16),

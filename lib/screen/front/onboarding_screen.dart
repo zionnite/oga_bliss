@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
@@ -7,7 +9,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../controller/onboarding_controller.dart';
 
 class OnboardingPage extends StatefulWidget {
-  const OnboardingPage({Key? key}) : super(key: key);
+  OnboardingPage({required this.timer1, required this.timer2});
+  final Timer timer1, timer2;
 
   @override
   State<OnboardingPage> createState() => _OnboardingPageState();
@@ -16,14 +19,22 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
-    final onboardingController = OnboardingCongroller();
+    widget.timer1.cancel();
+    widget.timer2.cancel();
+
+    final OnboardingCongroller onboardingController =
+        Get.put(OnboardingCongroller());
+    // final onboardingController = OnboardingCongroller();
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
         children: [
           LiquidSwipe(
             enableSideReveal: true,
-            slideIconWidget: const Icon(Icons.arrow_back_ios),
+            slideIconWidget: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            ),
             liquidController: onboardingController.controller,
             onPageChangeCallback: onboardingController.onPageChanged,
             pages: onboardingController.pages,

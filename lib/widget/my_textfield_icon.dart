@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatefulWidget {
-  MyTextField({
+class MyTextFieldIcon extends StatefulWidget {
+  MyTextFieldIcon({
     required this.myTextFormController,
     required this.fieldName,
     this.onChange,
@@ -16,10 +16,10 @@ class MyTextField extends StatefulWidget {
   final IconData? suffix;
 
   @override
-  State<MyTextField> createState() => _MyTextFieldState();
+  State<MyTextFieldIcon> createState() => _MyTextFieldIconState();
 }
 
-class _MyTextFieldState extends State<MyTextField> {
+class _MyTextFieldIconState extends State<MyTextFieldIcon> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,6 +35,12 @@ class _MyTextFieldState extends State<MyTextField> {
             ),
           ),
           labelText: widget.fieldName,
+          prefixIcon: (widget.prefix != '' && widget.prefix != null)
+              ? Icon(widget.prefix)
+              : Container(),
+          suffixIcon: (widget.suffix != '' && widget.suffix != null)
+              ? Icon(widget.suffix)
+              : Container(),
         ),
       ),
     );

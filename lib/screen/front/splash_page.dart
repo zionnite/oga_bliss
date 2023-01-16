@@ -3,10 +3,22 @@ import 'package:get/get.dart';
 
 import '../../controller/splash_controller.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   SplashPage({Key? key}) : super(key: key);
 
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
   final SplashController splashController = Get.put(SplashController());
+
+  @override
+  void dispose() {
+    splashController.timer1.cancel();
+    splashController.timer2.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
