@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:oga_bliss/screen/front/signup_page.dart';
 
 import '../../widget/my_textfield_icon.dart';
-import 'foreget_password.dart';
+import 'login_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignupPage extends StatefulWidget {
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
+  final fullnameController = TextEditingController();
   final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
             const Padding(
               padding: EdgeInsets.only(left: 18.0),
               child: Text(
-                'Login',
+                'Create an Account!',
                 style: TextStyle(
                   fontSize: 30,
                   fontFamily: 'Passion One',
@@ -46,9 +47,25 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     MyTextFieldIcon(
+                      myTextFormController: fullnameController,
+                      fieldName: 'Full Name',
+                      prefix: Icons.person,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    MyTextFieldIcon(
                       myTextFormController: emailController,
                       fieldName: 'Email',
                       prefix: Icons.email,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    MyTextFieldIcon(
+                      myTextFormController: phoneController,
+                      fieldName: 'Phone No',
+                      prefix: Icons.phone_android_sharp,
                     ),
                     const SizedBox(
                       height: 15,
@@ -66,9 +83,9 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          Get.to(() => const ForgetPasswordPage());
+                          Get.to(() => const LoginPage());
                         },
-                        child: const Text('forget Password?'),
+                        child: const Text('Already have Account?'),
                       ),
                     ),
                     SizedBox(
@@ -86,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                           print('hey');
                         },
                         child: const Text(
-                          'Login',
+                          'SignUp',
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -102,12 +119,12 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(18.0),
               child: TextButton(
                 onPressed: () {
-                  Get.to(() => SignupPage());
+                  Get.to(() => LoginPage());
                 },
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'Don\'t have account?, click here',
+                    'Already have an account?, click here',
                     style: TextStyle(
                       color: Colors.red.shade300,
                     ),

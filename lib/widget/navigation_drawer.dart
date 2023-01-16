@@ -4,6 +4,7 @@ import 'package:oga_bliss/screen/alert_page.dart';
 import 'package:oga_bliss/screen/connection_page.dart';
 import 'package:oga_bliss/screen/favourite.dart';
 import 'package:oga_bliss/screen/front/login_page.dart';
+import 'package:oga_bliss/screen/front/signup_page.dart';
 import 'package:oga_bliss/screen/message_page.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
 import 'package:oga_bliss/screen/request_page.dart';
@@ -125,7 +126,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Signup Page',
                     icon: Icons.notifications_outlined,
                     onClicked: () => Get.to(
-                      () => const AlertPage(),
+                      () => const SignupPage(),
                     ),
                   ),
                   const SizedBox(height: 16),
