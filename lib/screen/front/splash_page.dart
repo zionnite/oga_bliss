@@ -12,14 +12,11 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  // final SplashController splashController = Get.put(SplashController());
   final splashController = SplashController().getXID;
 
   @override
   void initState() {
     super.initState();
-
-    Get.delete<SplashController>();
   }
 
   @override
