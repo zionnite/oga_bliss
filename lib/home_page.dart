@@ -2,16 +2,12 @@ import 'dart:io';
 
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/tab_item.dart';
-import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper_tv/flutter_swiper.dart';
 import 'package:oga_bliss/screen/favourite.dart';
 
-import 'screen/add_prop_page.dart';
+import 'controller/property_controller.dart';
 import 'screen/all_prop_page.dart';
-import 'screen/buy_prop_page.dart';
 import 'screen/profile_page.dart';
-import 'screen/rent_prop_page.dart';
 import 'screen/search_alone_page.dart';
 import 'widget/navigation_drawer.dart';
 
@@ -23,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final propsController = PropertyController();
   int _currentPage = 0;
   double height = 30;
   Color colorSelect = const Color(0XFF0686F8);
@@ -32,6 +29,12 @@ class _HomePageState extends State<HomePage> {
 
   int android = 30;
   int ios = 30;
+
+  @override
+  void initState() {
+    super.initState();
+    propsController.getDetails(1);
+  }
 
   List<TabItem> items = [
     const TabItem(
@@ -46,10 +49,6 @@ class _HomePageState extends State<HomePage> {
       icon: Icons.favorite_outlined,
       title: 'Favourite',
     ),
-    // const TabItem(
-    //   icon: Icons.shopping_cart_outlined,
-    //   title: 'Buy',
-    // ),
     const TabItem(
       icon: Icons.account_box,
       title: 'profile',
@@ -60,14 +59,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     PageController _pageController = PageController(initialPage: 0);
 
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.red,
-      // ),
       key: _key,
       drawer: NavigationDrawerWidget(),
       body: Stack(

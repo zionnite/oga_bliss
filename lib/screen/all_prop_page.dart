@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../widget/navigation_drawer.dart';
+import '../controller/property_controller.dart';
 import '../widget/property_widget.dart';
 import '../widget/search_widget.dart';
 
@@ -13,6 +14,13 @@ class AllPropertyPage extends StatefulWidget {
 
 class _AllPropertyPageState extends State<AllPropertyPage> {
   // final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final propsController = PropertyController();
+
+  @override
+  void initState() {
+    super.initState();
+    propsController.getDetails(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,37 +97,28 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                 Padding(
                   padding: const EdgeInsets.only(
                       top: 8.0, right: 20.0, left: 20.0, bottom: 120),
-                  child: ListView(
-                    physics: const ClampingScrollPhysics(),
-                    // itemExtent: 350,
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    children: [
-                      PropertyWidget(
-                        props_image:
-                            'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
-                        props_name: 'Newly Built House',
-                        props_type: 'buy',
-                        props_price: '10000000',
-                        isFav: false,
-                        props_bedroom: '1',
-                        props_bathroom: '3',
-                        props_toilet: '5',
-                        props_image_counter: '10',
-                      ),
-                      PropertyWidget(
-                        props_image:
-                            'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
-                        props_name: 'Newly Renovated Home of Asernals',
-                        props_type: 'rent',
-                        props_price: '10000000',
-                        isFav: true,
-                        props_bedroom: '1',
-                        props_bathroom: '3',
-                        props_toilet: '5',
-                        props_image_counter: '1',
-                      ),
-                    ],
+                  child: Obx(
+                    () => ListView.builder(
+                      physics: const ClampingScrollPhysics(),
+                      // itemExtent: 350,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: propsController.propertyList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var props = propsController.propertyList[index];
+                        return PropertyWidget(
+                          props_image: props.propsImgName!,
+                          props_name: props.propsName!,
+                          props_type: 'buy',
+                          props_price: props.propsPrice!,
+                          isFav: props.favourite!,
+                          props_bedroom: '1',
+                          props_bathroom: '3',
+                          props_toilet: '5',
+                          props_image_counter: '10',
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
