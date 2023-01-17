@@ -23,8 +23,6 @@ class PropertyController extends GetxController {
     if (seeker != null) {
       isDataProcessing(true);
       propertyList.value = seeker.cast<PropertyModel>();
-
-      print(seeker.toString());
     } else {}
   }
 }

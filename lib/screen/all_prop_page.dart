@@ -111,7 +111,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                           props_name: props.propsName!,
                           props_type: 'buy',
                           props_price: props.propsPrice!,
-                          isFav: props.favourite!,
+                          isFav: (props.favourite! == 'true') ? true : false,
                           props_bedroom: '1',
                           props_bathroom: '3',
                           props_toilet: '5',
