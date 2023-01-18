@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final propsController = PropertyController();
+  final PropertyController propsController = PropertyController();
   int _currentPage = 0;
   double height = 30;
   Color colorSelect = const Color(0XFF0686F8);
@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    propsController.getDetails(1);
   }
 
   List<TabItem> items = [

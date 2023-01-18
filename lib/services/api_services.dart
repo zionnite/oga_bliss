@@ -13,9 +13,9 @@ class ApiServices {
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
     try {
-      final result =
-          await client.get(Uri.parse('$_mybaseUrl$_all_product/$userId'));
-      print(result.body);
+      final result = await client
+          .get(Uri.parse('$_mybaseUrl$_all_product/$page_num/$userId'));
+      // print(result.body);
       if (result.statusCode == 200) {
         final data = propertyModelFromJson(result.body);
         return data;
@@ -27,7 +27,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex);
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
