@@ -4,10 +4,11 @@ import 'package:get/get.dart';
 import 'package:oga_bliss/model/property_model.dart';
 import 'package:oga_bliss/util/currency_formatter.dart';
 import 'package:oga_bliss/widget/header_title.dart';
+import 'package:oga_bliss/widget/property_key_and_value.dart';
 import 'package:popup_banner/popup_banner.dart';
 
+import '../widget/amenities_widget.dart';
 import '../widget/property_btn.dart';
-import '../widget/property_key_and_value.dart';
 
 class PropertyDetailPage extends StatefulWidget {
   PropertyDetailPage({this.propertyModel});
@@ -128,6 +129,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    var props = widget.propertyModel;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -137,7 +139,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 child: Stack(
                   children: [
                     Image.network(
-                      'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
+                      props!.propsImgName.toString(),
                       width: double.infinity,
                       height: 350,
                       fit: BoxFit.cover,
@@ -309,38 +311,65 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                             right: 5,
                           ),
                           padding: const EdgeInsets.only(
-                            left: 25,
-                            right: 25,
+                            left: 5,
+                            right: 5,
                             top: 5,
                             bottom: 5,
                           ),
                           color: Colors.red[900],
-                          child: const Text(
-                            'Buy',
-                            style: TextStyle(
+                          child: Text(
+                            props.propsPurpose.toString().toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
                               color: Colors.white,
+                              fontSize: 12,
                             ),
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(
-                            left: 5,
-                            right: 15,
+                            left: 1,
+                            right: 1,
                           ),
                           padding: const EdgeInsets.only(
-                            left: 25,
-                            right: 25,
+                            left: 5,
+                            right: 5,
                             top: 5,
                             bottom: 5,
                           ),
-                          color: Colors.lightGreen[900],
+                          color: Colors.red[900],
                           child: Text(
-                            CurrencyFormatter.getCurrencyFormatter(
-                              amount: "${400000000}",
-                            ),
+                            props.propsStatus.toString().toUpperCase(),
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontFamily: 'BlackOpsOne',
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              left: 5,
+                              right: 5,
+                            ),
+                            padding: const EdgeInsets.only(
+                              left: 5,
+                              right: 5,
+                              top: 5,
+                              bottom: 5,
+                            ),
+                            color: Colors.lightGreen[900],
+                            child: Text(
+                              CurrencyFormatter.getCurrencyFormatter(
+                                amount: "${props.propsPrice}",
+                              ),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'BlackOpsOne',
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         ),
@@ -359,10 +388,10 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                     left: 15,
                     right: 15,
                   ),
-                  child: const Text(
-                    'Property Name',
-                    style: TextStyle(
-                      fontSize: 25,
+                  child: Text(
+                    'Property Name - ${props.propsName}',
+                    style: const TextStyle(
+                      fontSize: 17,
                       fontFamily: 'Passion One',
                     ),
                   ),
@@ -378,10 +407,10 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                     left: 15,
                     right: 15,
                   ),
-                  child: const Text(
-                    'Property Description',
-                    style: TextStyle(
-                      fontSize: 20,
+                  child: Text(
+                    props.propsDescription.toString(),
+                    style: const TextStyle(
+                      fontSize: 17,
                     ),
                   ),
                 ),
@@ -399,7 +428,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   child: const Text(
                     '-CONDITION-',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 17,
                       fontFamily: 'Passion One',
                     ),
                   ),
@@ -412,10 +441,10 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                     left: 15,
                     right: 15,
                   ),
-                  child: const Text(
-                    'Property Description',
-                    style: TextStyle(
-                      fontSize: 20,
+                  child: Text(
+                    props.propsCondition.toString(),
+                    style: const TextStyle(
+                      fontSize: 17,
                     ),
                   ),
                 ),
@@ -433,7 +462,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   child: const Text(
                     '-SPECIAL PREFERENCE-',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 17,
                       fontFamily: 'Passion One',
                     ),
                   ),
@@ -446,9 +475,45 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                     left: 15,
                     right: 15,
                   ),
+                  child: Text(
+                    props.propsSpecialPref.toString(),
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    left: 15,
+                    right: 15,
+                  ),
                   child: const Text(
-                    'Property Description',
+                    '-Caution Fee-',
                     style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'Passion One',
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    left: 15,
+                    right: 15,
+                  ),
+                  child: Text(
+                    CurrencyFormatter.getCurrencyFormatter(
+                      amount: props.propsCautionFee.toString(),
+                    ),
+                    style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
@@ -473,38 +538,38 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Column(
-                  children: const [
-                    PropertyKey(
+                  children: [
+                    PropertyKeyAndValue(
                       propsKey: 'Type',
-                      propsValue: 'Flat/Apartment',
+                      propsValue: props.typeName,
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Sub-Type',
-                      propsValue: 'Workstation',
+                      propsValue: props.subTypeName,
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Purpose',
-                      propsValue: 'Rent',
+                      propsValue: props.propsPurpose.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Status',
-                      propsValue: 'Available',
+                      propsValue: props.propsStatus.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Bedrooms',
-                      propsValue: '3 Bedroms',
+                      propsValue: props.propsBedrom.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Bathrooms',
-                      propsValue: '5 Bathroom',
+                      propsValue: props.propsBathroom.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Toilets',
-                      propsValue: '5 Toilet',
+                      propsValue: props.propsToilet.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Year Built',
-                      propsValue: '2022',
+                      propsValue: props.propsYearBuilt.toString(),
                     ),
                   ],
                 ),
@@ -524,33 +589,108 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               ),
               Align(
                 alignment: Alignment.topLeft,
-                child: Column(
-                  children: const [
-                    PropertyKey(
-                      propsKey: 'Air conditioning',
-                      propsValue: '',
-                    ),
-                    PropertyKey(
-                      propsKey: 'Cable TV',
-                      propsValue: '',
-                    ),
-                    PropertyKey(
-                      propsKey: 'Computer',
-                      propsValue: '',
-                    ),
-                    PropertyKey(
-                      propsKey: 'DVD',
-                      propsValue: '',
-                    ),
-                    PropertyKey(
-                      propsKey: 'Grill',
-                      propsValue: '',
-                    ),
-                    PropertyKey(
-                      propsKey: 'Hi-fi',
-                      propsValue: '',
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0, right: 8.0),
+                  child: Column(
+                    children: [
+                      AmenitiesWidget(
+                        isYes: props.propsAirCondition.toString(),
+                        name: 'Air Conditioning',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsCableTv.toString(),
+                        name: 'Cable Tv',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsComputer.toString(),
+                        name: 'Computer',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsDvd.toString(),
+                        name: 'DVD',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsGrill.toString(),
+                        name: 'Grill',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsHiFi.toString(),
+                        name: 'Hi-Fi',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsJuicer.toString(),
+                        name: 'Juicer',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsGym.toString(),
+                        name: 'Gym',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsBalcony.toString(),
+                        name: 'Balcony',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsCleaningAfterExit.toString(),
+                        name: 'Cleaning after exit',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsCot.toString(),
+                        name: 'Cot',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsFan.toString(),
+                        name: 'Fan',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsHairdryer.toString(),
+                        name: 'Hairdryer',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsInternet.toString(),
+                        name: 'Internet',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsLift.toString(),
+                        name: 'Lift',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsFireplace.toString(),
+                        name: 'Fireplace',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsBedding.toString(),
+                        name: 'Bedding',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsCofeePot.toString(),
+                        name: 'Cofee pot',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsDishwasher.toString(),
+                        name: 'Dishwasher',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsFridge.toString(),
+                        name: 'Fridge',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsHeater.toString(),
+                        name: 'Heater',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsIron.toString(),
+                        name: 'Iron',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsMicrowave.toString(),
+                        name: 'Microwave',
+                      ),
+                      AmenitiesWidget(
+                        isYes: props.propsHotTub.toString(),
+                        name: 'Hot Tub',
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const Padding(
@@ -569,34 +709,34 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Column(
-                  children: const [
-                    PropertyKey(
+                  children: [
+                    PropertyKeyAndValue(
                       propsKey: 'Shopping Mall',
-                      propsValue: '30 KM',
+                      propsValue: props.propsShoppingMall.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Hospital',
-                      propsValue: '30 KM',
+                      propsValue: props.propsHospital.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'School',
-                      propsValue: '20 mins',
+                      propsValue: props.propsSchool.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Petrol Pump',
-                      propsValue: '3hrs',
+                      propsValue: props.propsPetrolPump.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Airport',
-                      propsValue: '2 Km',
+                      propsValue: props.propsAirport.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Church ',
-                      propsValue: '2 Km',
+                      propsValue: props.propsChurch.toString(),
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Mosque ',
-                      propsValue: '200 Hrs',
+                      propsValue: props.propsMosque.toString(),
                     ),
                   ],
                 ),
@@ -617,26 +757,26 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Column(
-                  children: const [
-                    PropertyKey(
+                  children: [
+                    PropertyKeyAndValue(
                       propsKey: 'Crime',
-                      propsValue: '10%',
+                      propsValue: '${props.propsCrime.toString()}%',
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Traffic',
-                      propsValue: '30%',
+                      propsValue: '${props.propsTraffic.toString()}%',
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Pollution',
-                      propsValue: '3%',
+                      propsValue: '${props.propsPollution.toString()}%',
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Education',
-                      propsValue: '76%',
+                      propsValue: '${props.propsEducation.toString()}%',
                     ),
-                    PropertyKey(
+                    PropertyKeyAndValue(
                       propsKey: 'Health',
-                      propsValue: '51%',
+                      propsValue: '${props.propsHealth.toString()}%',
                     ),
                   ],
                 ),

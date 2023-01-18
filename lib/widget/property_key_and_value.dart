@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PropertyKey extends StatelessWidget {
-  const PropertyKey({
+class PropertyKeyAndValue extends StatelessWidget {
+  const PropertyKeyAndValue({
     required this.propsKey,
     required this.propsValue,
     this.check,

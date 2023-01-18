@@ -20,12 +20,10 @@ class PropertyKey extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Text(
-              propsKey,
-              style: const TextStyle(
-                fontSize: 20,
-              ),
+          Text(
+            propsKey,
+            style: const TextStyle(
+              fontSize: 20,
             ),
           ),
         ],
