@@ -21,24 +21,66 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   late FlutterYoutubeViewController _controller;
   YoutubeScaleMode _mode = YoutubeScaleMode.none;
 
-  List<String> images = [
-    "https://tinyurl.com/popup-banner-image",
-    "https://tinyurl.com/popup-banner-image2",
-    "https://tinyurl.com/popup-banner-image3",
-    "https://tinyurl.com/popup-banner-image4"
-  ];
+  // List<String> images = [
+  //   "https://tinyurl.com/popup-banner-image",
+  //   "https://tinyurl.com/popup-banner-image2",
+  //   "https://tinyurl.com/popup-banner-image3",
+  //   "https://tinyurl.com/popup-banner-image4"
+  // ];
+  List<String> images = [];
+
+  loopSlider() {
+    images.clear();
+    var props = widget.propertyModel!.getAllPropsImage;
+    for (var i = 0; i < props!.length; i++) {
+      images.add(props[i]!.imageName.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loopSlider();
+  }
 
   void showPropertyImage() {
-    PopupBanner(
-      context: context,
-      images: images,
-      dotsAlignment: Alignment.bottomCenter,
-      dotsColorActive: Colors.blue,
-      dotsColorInactive: Colors.grey.withOpacity(0.5),
-      onClick: (index) {
-        debugPrint("CLICKED $index");
-      },
-    ).show();
+    (images.isEmpty)
+        ? Get.defaultDialog(
+            title: 'Oops!',
+            radius: 2,
+            content: const Center(
+              child: Text('Photos is not available'),
+            ),
+            cancel: InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                color: Colors.blue,
+                width: double.infinity,
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Ok',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        : PopupBanner(
+            context: context,
+            images: images,
+            dotsAlignment: Alignment.bottomCenter,
+            dotsColorActive: Colors.blue,
+            dotsColorInactive: Colors.grey.withOpacity(0.5),
+            onClick: (index) {
+              debugPrint("CLICKED $index");
+            },
+          ).show();
   }
 
   void _onYoutubeCreated(FlutterYoutubeViewController controller) {
