@@ -191,7 +191,9 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                                   props_bedroom: '1',
                                   props_bathroom: '3',
                                   props_toilet: '5',
-                                  props_image_counter: '10',
+                                  props_image_counter:
+                                      '${props.countPropsImage!}',
+                                  propertyModel: props,
                                 );
                               },
                             ),

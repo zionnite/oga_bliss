@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_youtube_view/flutter_youtube_view.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/model/property_model.dart';
 import 'package:oga_bliss/util/currency_formatter.dart';
 import 'package:oga_bliss/widget/header_title.dart';
 import 'package:popup_banner/popup_banner.dart';
@@ -9,8 +10,9 @@ import '../widget/property_btn.dart';
 import '../widget/property_key_and_value.dart';
 
 class PropertyDetailPage extends StatefulWidget {
-  const PropertyDetailPage({Key? key}) : super(key: key);
+  PropertyDetailPage({this.propertyModel});
 
+  PropertyModel? propertyModel;
   @override
   State<PropertyDetailPage> createState() => _PropertyDetailPageState();
 }

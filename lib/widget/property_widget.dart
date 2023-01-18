@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/model/property_model.dart';
 
 import '../screen/property_detailed_page.dart';
 import '../util/currency_formatter.dart';
@@ -15,6 +16,7 @@ class PropertyWidget extends StatefulWidget {
     required this.props_bathroom,
     required this.props_toilet,
     required this.props_image_counter,
+    this.propertyModel,
   });
 
   String props_image;
@@ -26,6 +28,7 @@ class PropertyWidget extends StatefulWidget {
   String props_bathroom;
   String props_toilet;
   String props_image_counter;
+  PropertyModel? propertyModel;
 
   @override
   State<PropertyWidget> createState() => _PropertyWidgetState();
@@ -36,7 +39,11 @@ class _PropertyWidgetState extends State<PropertyWidget> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const PropertyDetailPage());
+        Get.to(
+          () => PropertyDetailPage(
+            propertyModel: widget.propertyModel,
+          ),
+        );
       },
       child: Stack(
         children: [
