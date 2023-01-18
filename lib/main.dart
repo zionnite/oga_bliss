@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:oga_bliss/screen/front/splash_page.dart';
 
+import 'controller/favourite_controller.dart';
 import 'controller/onboarding_controller.dart';
 import 'controller/property_controller.dart';
 import 'controller/splash_controller.dart';
@@ -13,6 +14,7 @@ void main() {
   Get.put(SplashController());
   Get.put(OnboardingCongroller());
   Get.put(PropertyController());
+  Get.put(FavouriteController());
   runApp(
     const GetMaterialApp(
       debugShowCheckedModeBanner: false,

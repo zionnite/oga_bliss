@@ -42,4 +42,8 @@ class PropertyController extends GetxController {
       isMoreDataAvailable(false);
     }
   }
+
+  Future<bool> toggleLike(var userId, var propsId, bool status) async {
+    return await !status;
+  }
 }

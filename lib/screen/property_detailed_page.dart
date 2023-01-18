@@ -7,6 +7,9 @@ import 'package:oga_bliss/widget/header_title.dart';
 import 'package:oga_bliss/widget/property_key_and_value.dart';
 import 'package:popup_banner/popup_banner.dart';
 
+import '../controller/favourite_controller.dart';
+import '../controller/property_controller.dart';
+import '../util/common.dart';
 import '../widget/amenities_widget.dart';
 import '../widget/property_btn.dart';
 
@@ -21,13 +24,10 @@ class PropertyDetailPage extends StatefulWidget {
 class _PropertyDetailPageState extends State<PropertyDetailPage> {
   late FlutterYoutubeViewController _controller;
   YoutubeScaleMode _mode = YoutubeScaleMode.none;
+  final propsController = PropertyController().getXID;
+  final favController = FavouriteController().getXID;
 
-  // List<String> images = [
-  //   "https://tinyurl.com/popup-banner-image",
-  //   "https://tinyurl.com/popup-banner-image2",
-  //   "https://tinyurl.com/popup-banner-image3",
-  //   "https://tinyurl.com/popup-banner-image4"
-  // ];
+  String user_id = '1';
   List<String> images = [];
 
   loopSlider() {
@@ -184,8 +184,11 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            onTap: () {
-                              Get.back();
+                            onTap: () async {
+                              await callToggle(
+                                  user_id,
+                                  widget.propertyModel!.propsId,
+                                  widget.propertyModel!.favourite!);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -791,5 +794,34 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
         ),
       ),
     );
+  }
+
+  callToggle(var userId, var propsId, var fav) async {
+    bool status = await propsController.toggleLike(userId, propsId, fav);
+    if (status) {
+      int index = propsController.propertyList.indexOf(widget.propertyModel);
+
+      setState(() {
+        propsController.propertyList[index].favourite = status;
+      });
+
+      showSnackBar(
+        title: 'Liked',
+        msg: 'now in ur favourite list',
+        backgroundColor: Colors.green,
+      );
+    } else {
+      int index = propsController.propertyList.indexOf(widget.propertyModel);
+
+      setState(() {
+        propsController.propertyList[index].favourite = status;
+      });
+
+      showSnackBar(
+        title: 'Oops!',
+        msg: 'failed',
+        backgroundColor: Colors.green,
+      );
+    }
   }
 }
