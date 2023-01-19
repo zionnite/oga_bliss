@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/util/common.dart';
 
 import '../model/property_model.dart';
 import '../services/api_services.dart';
@@ -43,7 +45,28 @@ class PropertyController extends GetxController {
     }
   }
 
-  Future<bool> toggleLike(var userId, var propsId, bool status) async {
-    return await !status;
+  Future<bool> toggleLike(var userId, var propsId, PropertyModel model) async {
+    //return await !status;
+    String status = await ApiServices.toggleLike(userId, propsId);
+
+    if (status == 'liked') {
+      int index = propertyList.indexOf(model);
+
+      propertyList[index].favourite = true;
+
+      return true;
+    } else if (status == 'unliked') {
+      int index = propertyList.indexOf(model);
+      propertyList[index].favourite = false;
+
+      return false;
+    }
+    return false;
+  }
+
+  Future<void> requestInspection(var userId, var propsId, var agent_id) async {
+    String status =
+        await ApiServices.requestInspection(userId, propsId, agent_id);
+    showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
   }
 }

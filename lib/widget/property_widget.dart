@@ -5,7 +5,6 @@ import 'package:oga_bliss/model/property_model.dart';
 import '../controller/favourite_controller.dart';
 import '../controller/property_controller.dart';
 import '../screen/property_detailed_page.dart';
-import '../util/common.dart';
 import '../util/currency_formatter.dart';
 
 class PropertyWidget extends StatefulWidget {
@@ -191,8 +190,12 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                 ),
                 trailing: InkWell(
                   onTap: () async {
-                    await callToggle(user_id, widget.propertyModel!.propsId,
-                        widget.propertyModel!.favourite!);
+                    var status = await propsController.toggleLike(user_id,
+                        widget.propertyModel!.propsId, widget.propertyModel!);
+
+                    setState(() {
+                      widget.propertyModel!.favourite = status;
+                    });
                   },
                   child: (widget.propertyModel!.favourite == true)
                       ? const Icon(
@@ -281,34 +284,5 @@ class _PropertyWidgetState extends State<PropertyWidget> {
         ),
       ],
     );
-  }
-
-  callToggle(var userId, var propsId, var fav) async {
-    bool status = await propsController.toggleLike(userId, propsId, fav);
-    if (status) {
-      int index = propsController.propertyList.indexOf(widget.propertyModel);
-
-      setState(() {
-        propsController.propertyList[index].favourite = status;
-      });
-
-      showSnackBar(
-        title: 'Liked',
-        msg: 'now in ur favourite list',
-        backgroundColor: Colors.green,
-      );
-    } else {
-      int index = propsController.propertyList.indexOf(widget.propertyModel);
-
-      setState(() {
-        propsController.propertyList[index].favourite = status;
-      });
-
-      showSnackBar(
-        title: 'Oops!',
-        msg: 'failed',
-        backgroundColor: Colors.green,
-      );
-    }
   }
 }

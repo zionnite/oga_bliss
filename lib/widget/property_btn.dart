@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class propertyBtn extends StatefulWidget {
-  const propertyBtn({
-    required this.onTap,
-    required this.title,
-    required this.bgColor,
-  });
+  propertyBtn(
+      {required this.onTap,
+      required this.title,
+      required this.bgColor,
+      this.isLoading});
 
   final VoidCallback onTap;
   final String title;
   final Color bgColor;
+  final bool? isLoading;
 
   @override
   State<propertyBtn> createState() => _propertyBtnState();
@@ -40,15 +41,21 @@ class _propertyBtnState extends State<propertyBtn> {
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontFamily: 'Passion One',
-                ),
-              ),
+              child: (widget.isLoading == true)
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : Text(
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontFamily: 'Passion One',
+                      ),
+                    ),
             ),
           ),
         ),

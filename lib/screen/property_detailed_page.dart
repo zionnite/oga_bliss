@@ -9,7 +9,6 @@ import 'package:popup_banner/popup_banner.dart';
 
 import '../controller/favourite_controller.dart';
 import '../controller/property_controller.dart';
-import '../util/common.dart';
 import '../widget/amenities_widget.dart';
 import '../widget/property_btn.dart';
 
@@ -28,6 +27,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   final favController = FavouriteController().getXID;
 
   String user_id = '1';
+  bool isLoading = false;
   List<String> images = [];
 
   loopSlider() {
@@ -112,8 +112,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   // listener: this,
                   scaleMode:
                       YoutubeScaleMode.none, // <option> fitWidth, fitHeight
-                  params: const YoutubeParam(
-                    videoId: 'gcj2RUWQZ60',
+                  params: YoutubeParam(
+                    videoId: widget.propertyModel!.propsVidId.toString(),
                     showUI: false,
                     startSeconds: 0.0, // <option>
                     autoPlay: true,
@@ -178,17 +178,21 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       ),
                     ),
                     Positioned(
-                      top: 60,
+                      top: 57,
                       right: 15,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
                             onTap: () async {
-                              await callToggle(
+                              bool status = await propsController.toggleLike(
                                   user_id,
                                   widget.propertyModel!.propsId,
-                                  widget.propertyModel!.favourite!);
+                                  widget.propertyModel!);
+
+                              setState(() {
+                                widget.propertyModel!.favourite = status;
+                              });
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -200,13 +204,19 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                                   color: Colors.blue.shade100,
                                 ),
                               ),
-                              child: const Padding(
+                              child: Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.favorite_outline,
-                                  color: Colors.black54,
-                                  size: 30,
-                                ),
+                                child: (props.favourite == true)
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        color: Colors.blue,
+                                        size: 30,
+                                      )
+                                    : const Icon(
+                                        Icons.favorite_outline,
+                                        color: Colors.black54,
+                                        size: 30,
+                                      ),
                               ),
                             ),
                           ),
@@ -785,43 +795,29 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 ),
               ),
               propertyBtn(
-                onTap: () {},
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await propsController.requestInspection(
+                      user_id, props.propsId, props.propsAgentId);
+
+                  Future.delayed(const Duration(seconds: 2), () {
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                  });
+                },
                 title: 'Request For Inspection',
                 bgColor: Colors.blue,
+                isLoading: isLoading,
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  callToggle(var userId, var propsId, var fav) async {
-    bool status = await propsController.toggleLike(userId, propsId, fav);
-    if (status) {
-      int index = propsController.propertyList.indexOf(widget.propertyModel);
-
-      setState(() {
-        propsController.propertyList[index].favourite = status;
-      });
-
-      showSnackBar(
-        title: 'Liked',
-        msg: 'now in ur favourite list',
-        backgroundColor: Colors.green,
-      );
-    } else {
-      int index = propsController.propertyList.indexOf(widget.propertyModel);
-
-      setState(() {
-        propsController.propertyList[index].favourite = status;
-      });
-
-      showSnackBar(
-        title: 'Oops!',
-        msg: 'failed',
-        backgroundColor: Colors.green,
-      );
-    }
   }
 }
