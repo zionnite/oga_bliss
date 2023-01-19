@@ -3,11 +3,15 @@ import 'package:simple_currency_format/simple_currency_format.dart';
 
 class CurrencyFormatter {
   static getCurrencyFormatter({required String amount}) {
-    if (amount.toString() == null && amount.toString() == '') {
-      return '';
-    }
     final String NGN = cSymbol("NGN");
-    return '$NGN ' +
-        currencyFormat(int.parse(amount), locale: 'en_US', symbol: "");
+    if (amount.toString() == null ||
+        amount.toString() == '' ||
+        amount.toString() == 'false') {
+      return '$NGN ' +
+          currencyFormat(int.parse('0'), locale: 'en_US', symbol: "");
+    } else {
+      return '$NGN ' +
+          currencyFormat(int.parse(amount), locale: 'en_US', symbol: "");
+    }
   }
 }

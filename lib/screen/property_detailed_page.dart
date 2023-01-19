@@ -130,7 +130,6 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   @override
   Widget build(BuildContext context) {
     var props = widget.propertyModel;
-    print(props!.typeName);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -529,12 +528,9 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                     right: 15,
                   ),
                   child: Text(
-                    (props.propsCautionFee.toString() == null &&
-                            props.propsCautionFee.toString() == '')
-                        ? ""
-                        : CurrencyFormatter.getCurrencyFormatter(
-                            amount: props.propsCautionFee.toString(),
-                          ),
+                    CurrencyFormatter.getCurrencyFormatter(
+                      amount: props.propsCautionFee.toString(),
+                    ),
                     style: const TextStyle(
                       fontSize: 20,
                     ),
