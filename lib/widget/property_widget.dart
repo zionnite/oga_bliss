@@ -193,8 +193,12 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                     var status = await propsController.toggleLike(user_id,
                         widget.propertyModel!.propsId, widget.propertyModel!);
 
+                    int index = propsController.propertyList
+                        .indexOf(widget.propertyModel);
+
                     setState(() {
                       widget.propertyModel!.favourite = status;
+                      propsController.propertyList[index].favourite = status;
                     });
                   },
                   child: (widget.propertyModel!.favourite == true)

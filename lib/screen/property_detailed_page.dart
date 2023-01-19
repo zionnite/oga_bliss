@@ -130,6 +130,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   @override
   Widget build(BuildContext context) {
     var props = widget.propertyModel;
+    print(props!.typeName);
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -190,8 +191,13 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                                   widget.propertyModel!.propsId,
                                   widget.propertyModel!);
 
+                              int index = propsController.propertyList
+                                  .indexOf(widget.propertyModel);
+
                               setState(() {
                                 widget.propertyModel!.favourite = status;
+                                propsController.propertyList[index].favourite =
+                                    status;
                               });
                             },
                             child: Container(
@@ -523,9 +529,12 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                     right: 15,
                   ),
                   child: Text(
-                    CurrencyFormatter.getCurrencyFormatter(
-                      amount: props.propsCautionFee.toString(),
-                    ),
+                    (props.propsCautionFee.toString() == null &&
+                            props.propsCautionFee.toString() == '')
+                        ? ""
+                        : CurrencyFormatter.getCurrencyFormatter(
+                            amount: props.propsCautionFee.toString(),
+                          ),
                     style: const TextStyle(
                       fontSize: 20,
                     ),
@@ -554,11 +563,11 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   children: [
                     PropertyKeyAndValue(
                       propsKey: 'Type',
-                      propsValue: props.typeName,
+                      propsValue: props.typeName.toString(),
                     ),
                     PropertyKeyAndValue(
                       propsKey: 'Sub-Type',
-                      propsValue: props.subTypeName,
+                      propsValue: props.subTypeName.toString(),
                     ),
                     PropertyKeyAndValue(
                       propsKey: 'Purpose',
