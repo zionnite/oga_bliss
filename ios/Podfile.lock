@@ -7,6 +7,9 @@ PODS:
     - YoutubeKit
   - image_picker_ios (0.0.1):
     - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - YoutubeKit (0.8.0)
 
 DEPENDENCIES:
@@ -14,6 +17,7 @@ DEPENDENCIES:
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_youtube_view (from `.symlinks/plugins/flutter_youtube_view/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
 
 SPEC REPOS:
   trunk:
@@ -28,12 +32,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_youtube_view/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_youtube_view: ea93f139b374c5e2b869b3e84190c4ba9668601b
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
+  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
   YoutubeKit: 22d35bb9f52bf403cecf37424c67e3399ca4d412
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d

@@ -41,34 +41,96 @@ class ApiServices {
   }
 
   static Future<String> toggleLike(var userId, var propsId) async {
-    final uri = Uri.parse('$_mybaseUrl$_toggle_product');
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_toggle_product');
 
-    var response = await http.post(uri, body: {
-      'user_id': userId,
-      'props_id': propsId,
-    });
+      var response = await http.post(uri, body: {
+        'user_id': userId,
+        'props_id': propsId,
+      });
 
-    var body = response.body;
+      if (response.statusCode == 200) {
+        var body = response.body;
 
-    final j = json.decode(body) as Map<String, dynamic>;
-    String status = j['status'];
-    return status;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
   }
 
   static Future<String> requestInspection(
       var userId, var propsId, var agentId) async {
-    final uri = Uri.parse('$_mybaseUrl$_request_inspection');
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_request_inspection');
 
-    var response = await http.post(uri, body: {
-      'user_id': userId,
-      'props_id': propsId,
-      'agent_id': agentId,
-    });
+      var response = await http.post(uri, body: {
+        'user_id': userId,
+        'props_id': propsId,
+        'agent_id': agentId,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
 
-    var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
 
-    final j = json.decode(body) as Map<String, dynamic>;
-    String status = j['status'];
-    return status;
+  static Future<List<PropertyModel?>?> getSearchProduct(
+      var page_num, var userId, var search_term) async {
+    try {
+      final uri =
+          Uri.parse('$_mybaseUrl$_request_inspection/$page_num/$userId');
+
+      var response = await http.post(uri, body: {
+        'search_term': search_term,
+      });
+
+      if (response.statusCode == 200) {
+        final data = propertyModelFromJson(response.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
   }
 }

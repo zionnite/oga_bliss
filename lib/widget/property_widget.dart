@@ -94,7 +94,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 3),
                       decoration: BoxDecoration(
-                        color: (widget.props_type == "buy")
+                        color: (widget.props_type.toLowerCase() == "buy")
                             ? Colors.red
                             : Colors.green,
                         borderRadius: BorderRadius.circular(3),
@@ -201,7 +201,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                       propsController.propertyList[index].favourite = status;
                     });
                   },
-                  child: (widget.propertyModel!.favourite == true)
+                  child: (widget.propertyModel?.favourite == true)
                       ? const Icon(
                           Icons.favorite_outlined,
                           color: Colors.blue,

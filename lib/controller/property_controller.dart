@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/util/common.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/property_model.dart';
 import '../services/api_services.dart';
@@ -15,11 +16,13 @@ class PropertyController extends GetxController {
   var isMoreDataAvailable = true.obs;
 
   var propertyList = <PropertyModel>[].obs;
-  var user_id = 1;
+  var searchPropertyList = <PropertyModel>[].obs;
 
   @override
   void onInit() async {
     super.onInit();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user_id = prefs.getString('user_id');
     await getDetails(user_id);
   }
 
@@ -39,6 +42,7 @@ class PropertyController extends GetxController {
     if (seeker != null) {
       isMoreDataAvailable(true);
       propertyList.addAll(seeker.cast<PropertyModel>());
+      // propertyList.refresh();
       isMoreDataAvailable(false);
     } else {
       isMoreDataAvailable(false);
@@ -51,13 +55,15 @@ class PropertyController extends GetxController {
 
     if (status == 'liked') {
       int index = propertyList.indexOf(model);
-
       propertyList[index].favourite = true;
+      propertyList.refresh();
+      searchPropertyList.refresh();
 
       return true;
     } else if (status == 'unliked') {
       int index = propertyList.indexOf(model);
       propertyList[index].favourite = false;
+      propertyList.refresh();
 
       return false;
     }
@@ -68,5 +74,26 @@ class PropertyController extends GetxController {
     String status =
         await ApiServices.requestInspection(userId, propsId, agent_id);
     showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
+  }
+
+  void fetch_search_page(var page_num, var search_term, var user_id) async {
+    var seeker =
+        await ApiServices.getSearchProduct(page_num, search_term, user_id);
+
+    if (seeker != null) {
+      searchPropertyList.clear();
+      isSearchDataProcessing(true);
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
+
+  void fetch_search_page_by_pagination(
+      var page_num, var search_term, var user_id) async {
+    var seeker =
+        await ApiServices.getSearchProduct(page_num, search_term, user_id);
+
+    if (seeker != null) {
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
   }
 }

@@ -11,6 +11,10 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
+  TextEditingController searchTermContr = TextEditingController();
+  String? searchTerm;
+  bool showError = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,8 +26,9 @@ class _SearchWidgetState extends State<SearchWidget> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(3),
           ),
-          child: const TextField(
-            decoration: InputDecoration(
+          child: TextField(
+            controller: searchTermContr,
+            decoration: const InputDecoration(
               contentPadding: EdgeInsets.only(left: 5, top: 15),
               border: InputBorder.none,
               suffixIcon: Icon(
@@ -36,17 +41,37 @@ class _SearchWidgetState extends State<SearchWidget> {
                 fontSize: 15,
               ),
             ),
+            onChanged: (val) {
+              setState(() {
+                searchTerm = searchTermContr.text;
+                showError = false;
+              });
+            },
           ),
         ),
         const SizedBox(
           height: 10,
         ),
+        (showError)
+            ? const Text(
+                'Search Field is empty',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              )
+            : Container(),
         InkWell(
           onTap: () {
-            Get.to(
-              () => const SearchPage(),
-              transition: Transition.leftToRightWithFade,
-            );
+            if (searchTerm == null || searchTerm == '') {
+              setState(() {
+                showError = true;
+              });
+            } else {
+              Get.to(
+                () => SearchPage(searchTerm: searchTerm!),
+                transition: Transition.leftToRightWithFade,
+              );
+            }
           },
           child: Card(
             elevation: 5,
