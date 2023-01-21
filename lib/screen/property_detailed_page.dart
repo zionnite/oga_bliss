@@ -13,9 +13,10 @@ import '../widget/amenities_widget.dart';
 import '../widget/property_btn.dart';
 
 class PropertyDetailPage extends StatefulWidget {
-  PropertyDetailPage({this.propertyModel});
+  PropertyDetailPage({this.propertyModel, required this.route});
 
   PropertyModel? propertyModel;
+  String route;
   @override
   State<PropertyDetailPage> createState() => _PropertyDetailPageState();
 }
@@ -186,17 +187,25 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                           InkWell(
                             onTap: () async {
                               bool status = await propsController.toggleLike(
-                                  user_id,
-                                  widget.propertyModel!.propsId,
-                                  widget.propertyModel!);
-
-                              int index = propsController.propertyList
-                                  .indexOf(widget.propertyModel);
+                                user_id,
+                                widget.propertyModel!.propsId,
+                                widget.propertyModel!,
+                                widget.route,
+                              );
 
                               setState(() {
                                 widget.propertyModel!.favourite = status;
-                                propsController.propertyList[index].favourite =
-                                    status;
+                                if (widget.route == 'default') {
+                                  int index = propsController.propertyList
+                                      .indexOf(widget.propertyModel);
+                                  propsController
+                                      .propertyList[index].favourite = status;
+                                } else if (widget.route == 'search') {
+                                  int index = propsController.searchPropertyList
+                                      .indexOf(widget.propertyModel);
+                                  propsController.searchPropertyList[index]
+                                      .favourite = status;
+                                }
                               });
                             },
                             child: Container(

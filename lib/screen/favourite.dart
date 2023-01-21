@@ -38,6 +38,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -50,6 +51,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -62,6 +64,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -74,6 +77,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -86,6 +90,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -98,6 +103,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -110,6 +116,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -122,6 +129,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
               PropertyWidget(
                 props_image:
@@ -134,6 +142,7 @@ class _FavouritePageState extends State<FavouritePage> {
                 props_bathroom: '3',
                 props_toilet: '5',
                 props_image_counter: '10',
+                route: 'favourite',
               ),
             ]),
       ),

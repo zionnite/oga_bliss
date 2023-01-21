@@ -19,6 +19,7 @@ class PropertyWidget extends StatefulWidget {
     required this.props_toilet,
     required this.props_image_counter,
     this.propertyModel,
+    required this.route,
   });
 
   String props_image;
@@ -31,6 +32,7 @@ class PropertyWidget extends StatefulWidget {
   String props_toilet;
   String props_image_counter;
   PropertyModel? propertyModel;
+  String route;
 
   @override
   State<PropertyWidget> createState() => _PropertyWidgetState();
@@ -55,6 +57,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                   Get.to(
                     () => PropertyDetailPage(
                       propertyModel: widget.propertyModel,
+                      route: widget.route,
                     ),
                   );
                 },
@@ -73,6 +76,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                       Get.to(
                         () => PropertyDetailPage(
                           propertyModel: widget.propertyModel,
+                          route: widget.route,
                         ),
                       );
                     },
@@ -190,15 +194,24 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                 ),
                 trailing: InkWell(
                   onTap: () async {
-                    var status = await propsController.toggleLike(user_id,
-                        widget.propertyModel!.propsId, widget.propertyModel!);
-
-                    int index = propsController.propertyList
-                        .indexOf(widget.propertyModel);
+                    var status = await propsController.toggleLike(
+                        user_id,
+                        widget.propertyModel!.propsId,
+                        widget.propertyModel!,
+                        widget.route);
 
                     setState(() {
                       widget.propertyModel!.favourite = status;
-                      propsController.propertyList[index].favourite = status;
+                      if (widget.route == 'default') {
+                        int index = propsController.propertyList
+                            .indexOf(widget.propertyModel);
+                        propsController.propertyList[index].favourite = status;
+                      } else if (widget.route == 'search') {
+                        int index = propsController.searchPropertyList
+                            .indexOf(widget.propertyModel);
+                        propsController.searchPropertyList[index].favourite =
+                            status;
+                      }
                     });
                   },
                   child: (widget.propertyModel?.favourite == true)

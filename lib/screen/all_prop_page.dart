@@ -183,17 +183,18 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                                 return PropertyWidget(
                                   props_image: props.propsImgName!,
                                   props_name: props.propsName!,
-                                  props_type: 'buy',
+                                  props_type: props.propsPurpose!,
                                   props_price: props.propsPrice!,
                                   isFav: (props.favourite! == 'true')
                                       ? true
                                       : false,
-                                  props_bedroom: '1',
-                                  props_bathroom: '3',
-                                  props_toilet: '5',
+                                  props_bedroom: props.propsBedrom!,
+                                  props_bathroom: props.propsBathroom!,
+                                  props_toilet: props.propsToilet!,
                                   props_image_counter:
                                       '${props.countPropsImage!}',
                                   propertyModel: props,
+                                  route: 'default',
                                 );
                               },
                             ),

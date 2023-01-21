@@ -49,21 +49,34 @@ class PropertyController extends GetxController {
     }
   }
 
-  Future<bool> toggleLike(var userId, var propsId, PropertyModel model) async {
+  Future<bool> toggleLike(
+      var userId, var propsId, PropertyModel model, var route) async {
     //return await !status;
     String status = await ApiServices.toggleLike(userId, propsId);
 
     if (status == 'liked') {
-      int index = propertyList.indexOf(model);
-      propertyList[index].favourite = true;
+      if (route == 'default') {
+        int index = propertyList.indexOf(model);
+        propertyList[index].favourite = true;
+      } else if (route == 'search') {
+        int index = searchPropertyList.indexOf(model);
+        searchPropertyList[index].favourite = true;
+      }
+
       propertyList.refresh();
       searchPropertyList.refresh();
 
       return true;
     } else if (status == 'unliked') {
-      int index = propertyList.indexOf(model);
-      propertyList[index].favourite = false;
+      if (route == 'default') {
+        int index = propertyList.indexOf(model);
+        propertyList[index].favourite = false;
+      } else if (route == 'search') {
+        int index = searchPropertyList.indexOf(model);
+        searchPropertyList[index].favourite = false;
+      }
       propertyList.refresh();
+      searchPropertyList.refresh();
 
       return false;
     }
@@ -77,11 +90,11 @@ class PropertyController extends GetxController {
   }
 
   void fetch_search_page(var page_num, var search_term, var user_id) async {
+    searchPropertyList.clear();
     var seeker =
-        await ApiServices.getSearchProduct(page_num, search_term, user_id);
+        await ApiServices.getSearchProduct(page_num, user_id, search_term);
 
     if (seeker != null) {
-      searchPropertyList.clear();
       isSearchDataProcessing(true);
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
@@ -90,7 +103,7 @@ class PropertyController extends GetxController {
   void fetch_search_page_by_pagination(
       var page_num, var search_term, var user_id) async {
     var seeker =
-        await ApiServices.getSearchProduct(page_num, search_term, user_id);
+        await ApiServices.getSearchProduct(page_num, user_id, search_term);
 
     if (seeker != null) {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());

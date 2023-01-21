@@ -13,6 +13,7 @@ class ApiServices {
   static const String _all_product = 'get_all_product';
   static const String _toggle_product = 'toggle_product';
   static const String _request_inspection = 'request_inspection';
+  static const String _search_product = 'search_product';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -105,15 +106,15 @@ class ApiServices {
     }
   }
 
-  static Future<List<PropertyModel?>?> getSearchProduct(
-      var page_num, var userId, var search_term) async {
+  static getSearchProduct(var page_num, var userId, var search_term) async {
     try {
-      final uri =
-          Uri.parse('$_mybaseUrl$_request_inspection/$page_num/$userId');
+      final uri = Uri.parse('$_mybaseUrl$_search_product/$page_num/$userId');
 
       var response = await http.post(uri, body: {
         'search_term': search_term,
       });
+
+      print(response.body);
 
       if (response.statusCode == 200) {
         final data = propertyModelFromJson(response.body);
