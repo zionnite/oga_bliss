@@ -114,8 +114,6 @@ class ApiServices {
         'search_term': search_term,
       });
 
-      print(response.body);
-
       if (response.statusCode == 200) {
         final data = propertyModelFromJson(response.body);
         return data;
