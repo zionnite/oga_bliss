@@ -1,8 +1,12 @@
 import 'package:currency_symbols/currency_symbols.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/services/api_services.dart';
+import 'package:oga_bliss/widget/my_dropdown_field.dart';
 import 'package:simple_currency_format/simple_currency_format.dart';
 
+import '../controller/property_controller.dart';
+import '../model/state_model.dart';
 import '../widget/search_widget.dart';
 
 class SearchAlonePage extends StatefulWidget {
@@ -13,19 +17,31 @@ class SearchAlonePage extends StatefulWidget {
 }
 
 class _SearchAlonePageState extends State<SearchAlonePage> {
-  _SearchAlonePageState() {
-    _selectedVal = _regionStateList[0];
-  }
-  final _regionStateList = [
-    "Edo",
-    "Delta",
-    "Lagos",
-    "Bayelsa",
-    "Port-Harcourt"
-  ];
-  String? _selectedVal = "";
-  late RangeValues _rangeValues = const RangeValues(100000, 70000000);
+  final propsController = PropertyController().getXID;
 
+  List<States> stateList = [];
+  List<Area> areaList = [];
+  List<Area> areaTempList = [];
+  List<Area> areaTempList_2 = [];
+
+  String? states_id, states_id_2;
+  String? area_id, area_id_2;
+
+  populateDropDown() async {
+    LocationModel data = await ApiServices.getStateRegion();
+    setState(() {
+      stateList = data.states;
+      areaList = data.area;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    populateDropDown();
+  }
+
+  late RangeValues _rangeValues = const RangeValues(100000, 70000000);
   String NGN = cSymbol("NGN");
 
   @override
@@ -120,35 +136,26 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: DropdownButtonFormField(
-                                decoration: const InputDecoration(
-                                  labelText: 'State',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black12,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black12,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white30,
-                                ),
-                                isExpanded: true,
-                                value: _selectedVal,
-                                items: _regionStateList
-                                    .map((e) => DropdownMenuItem(
-                                          child: Text(e),
-                                          value: e,
-                                        ))
-                                    .toList(),
-                                onChanged: (val) {
+                              child: MyDropDownField(
+                                labelText: 'State',
+                                value: states_id,
+                                dropDownList: stateList.map((e) {
+                                  return DropdownMenuItem(
+                                    value: e.id,
+                                    child: Text(e.name),
+                                  );
+                                }).toList(),
+                                onChanged: (Object? value) {
                                   setState(() {
-                                    _selectedVal = val.toString();
+                                    area_id = null;
+                                    states_id = value.toString();
+                                    areaTempList = areaList
+                                        .where(
+                                          (element) =>
+                                              element.stateId.toString() ==
+                                              states_id.toString(),
+                                        )
+                                        .toList();
                                   });
                                 },
                               ),
@@ -157,37 +164,18 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                               width: 10,
                             ),
                             Expanded(
-                              child: DropdownButtonFormField(
-                                decoration: const InputDecoration(
-                                  labelText: 'Area',
-                                  enabledBorder: OutlineInputBorder(
-                                    //<-- SEE HERE
-                                    borderSide: BorderSide(
-                                      color: Colors.black12,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    //<-- SEE HERE
-                                    borderSide: BorderSide(
-                                      color: Colors.black12,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white30,
-                                ),
-                                isExpanded: true,
-                                value: _selectedVal,
-                                items: _regionStateList
-                                    .map((e) => DropdownMenuItem(
-                                          child: Text(e),
-                                          value: e,
-                                        ))
-                                    .toList(),
-                                onChanged: (val) {
+                              child: MyDropDownField(
+                                labelText: 'Area',
+                                value: area_id,
+                                dropDownList: areaTempList.map((e) {
+                                  return DropdownMenuItem(
+                                    value: e.id,
+                                    child: Text(e.name),
+                                  );
+                                }).toList(),
+                                onChanged: (Object? value) {
                                   setState(() {
-                                    _selectedVal = val.toString();
+                                    area_id = value.toString();
                                   });
                                 },
                               ),
@@ -224,7 +212,8 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         ),
                         color: Colors.white,
                         child: ListView(
-                          padding: EdgeInsets.only(top: 10, left: 0, right: 0),
+                          padding:
+                              const EdgeInsets.only(top: 10, left: 0, right: 0),
                           physics: const ClampingScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -368,38 +357,27 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: DropdownButtonFormField(
-                                            decoration: const InputDecoration(
-                                              labelText: 'State',
-                                              enabledBorder: OutlineInputBorder(
-                                                //<-- SEE HERE
-
-                                                borderSide: BorderSide(
-                                                  color: Colors.black12,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                //<-- SEE HERE
-                                                borderSide: BorderSide(
-                                                  color: Colors.black12,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                              filled: true,
-                                              fillColor: Colors.white30,
-                                            ),
-                                            isExpanded: true,
-                                            value: _selectedVal,
-                                            items: _regionStateList
-                                                .map((e) => DropdownMenuItem(
-                                                      child: Text(e),
-                                                      value: e,
-                                                    ))
-                                                .toList(),
-                                            onChanged: (val) {
+                                          child: MyDropDownField(
+                                            labelText: 'State',
+                                            value: states_id,
+                                            dropDownList: stateList.map((e) {
+                                              return DropdownMenuItem(
+                                                value: e.id,
+                                                child: Text(e.name),
+                                              );
+                                            }).toList(),
+                                            onChanged: (Object? value) {
                                               setState(() {
-                                                _selectedVal = val.toString();
+                                                area_id = null;
+                                                states_id = value.toString();
+                                                areaTempList_2 = areaList
+                                                    .where(
+                                                      (element) =>
+                                                          element.stateId
+                                                              .toString() ==
+                                                          states_id.toString(),
+                                                    )
+                                                    .toList();
                                               });
                                             },
                                           ),
@@ -408,37 +386,19 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                                           width: 10,
                                         ),
                                         Expanded(
-                                          child: DropdownButtonFormField(
-                                            decoration: const InputDecoration(
-                                              labelText: 'Area',
-                                              enabledBorder: OutlineInputBorder(
-                                                //<-- SEE HERE
-                                                borderSide: BorderSide(
-                                                  color: Colors.black12,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                //<-- SEE HERE
-                                                borderSide: BorderSide(
-                                                  color: Colors.black12,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                              filled: true,
-                                              fillColor: Colors.white30,
-                                            ),
-                                            isExpanded: true,
-                                            value: _selectedVal,
-                                            items: _regionStateList
-                                                .map((e) => DropdownMenuItem(
-                                                      child: Text(e),
-                                                      value: e,
-                                                    ))
-                                                .toList(),
-                                            onChanged: (val) {
+                                          child: MyDropDownField(
+                                            labelText: 'Area',
+                                            value: area_id,
+                                            dropDownList:
+                                                areaTempList_2.map((e) {
+                                              return DropdownMenuItem(
+                                                value: e.id,
+                                                child: Text(e.name),
+                                              );
+                                            }).toList(),
+                                            onChanged: (Object? value) {
                                               setState(() {
-                                                _selectedVal = val.toString();
+                                                area_id = value.toString();
                                               });
                                             },
                                           ),
@@ -522,5 +482,15 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
         ),
       ),
     );
+  }
+
+  void onStateChange(state) {
+    setState(() {});
+    // String endpoint = "$baseURL/api/pin/${selectedState.state}";
+    // listState(endpoint).then((List<PostOffice> value) {
+    //   setState(() {
+    //     districts = value;
+    //   });
+    // });
   }
 }

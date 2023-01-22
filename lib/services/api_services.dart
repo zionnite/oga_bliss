@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/property_model.dart';
+import '../model/state_model.dart';
 import '../util/common.dart';
 
 class ApiServices {
@@ -14,6 +15,7 @@ class ApiServices {
   static const String _toggle_product = 'toggle_product';
   static const String _request_inspection = 'request_inspection';
   static const String _search_product = 'search_product';
+  static const String _get_state = 'get_state_and_area';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -125,6 +127,29 @@ class ApiServices {
         );
       }
     } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static getStateRegion() async {
+    try {
+      final result = await client.get(Uri.parse('$_mybaseUrl$_get_state'));
+      if (result.statusCode == 200) {
+        LocationModel data = locationModelFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

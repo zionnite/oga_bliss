@@ -17,6 +17,7 @@ class PropertyController extends GetxController {
 
   var propertyList = <PropertyModel>[].obs;
   var searchPropertyList = <PropertyModel>[].obs;
+  // var stateRegionList = <StateModel>[].obs;
 
   @override
   void onInit() async {
@@ -24,6 +25,8 @@ class PropertyController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
     await getDetails(user_id);
+
+    // fetchStateRegion();
   }
 
   getDetails(var user_id) async {
@@ -109,4 +112,16 @@ class PropertyController extends GetxController {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
+
+  // Future<List<StateModel>> fetchStateRegion() async {
+  // var seeker = await ApiServices.getStateRegion();
+  // if (seeker != null) {
+  //   isDataProcessing(true);
+  //   stateRegionList.value = seeker.cast<StateModel>();
+  //   return stateRegionList;
+  // } else {
+  //   isDataProcessing(false);
+  //   return stateRegionList;
+  // }
+  // }
 }

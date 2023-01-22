@@ -1,42 +1,37 @@
 // To parse this JSON data, do
 //
-//     final stateModel = stateModelFromJson(jsonString);
+//     final locationModel = locationModelFromJson(jsonString);
 
 import 'dart:convert';
 
-List<StateModel> stateModelFromJson(String str) =>
-    List<StateModel>.from(json.decode(str).map((x) => StateModel.fromJson(x)));
+LocationModel locationModelFromJson(String str) =>
+    LocationModel.fromJson(json.decode(str));
 
-String stateModelToJson(List<StateModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String locationModelToJson(LocationModel data) => json.encode(data.toJson());
 
-class StateModel {
-  StateModel({
-    required this.stateId,
-    required this.stateName,
-    required this.subState,
+class LocationModel {
+  LocationModel({
+    required this.states,
+    required this.area,
   });
 
-  String stateId;
-  String stateName;
-  List<SubState> subState;
+  List<States> states;
+  List<Area> area;
 
-  factory StateModel.fromJson(Map<String, dynamic> json) => StateModel(
-        stateId: json["state_id"],
-        stateName: json["state_name"],
-        subState: List<SubState>.from(
-            json["sub_state"].map((x) => SubState.fromJson(x))),
+  factory LocationModel.fromJson(Map<String, dynamic> json) => LocationModel(
+        states:
+            List<States>.from(json["states"].map((x) => States.fromJson(x))),
+        area: List<Area>.from(json["area"].map((x) => Area.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "state_id": stateId,
-        "state_name": stateName,
-        "sub_state": List<dynamic>.from(subState.map((x) => x.toJson())),
+        "states": List<dynamic>.from(states.map((x) => x.toJson())),
+        "area": List<dynamic>.from(area.map((x) => x.toJson())),
       };
 }
 
-class SubState {
-  SubState({
+class Area {
+  Area({
     required this.id,
     required this.stateId,
     required this.name,
@@ -46,7 +41,7 @@ class SubState {
   String stateId;
   String name;
 
-  factory SubState.fromJson(Map<String, dynamic> json) => SubState(
+  factory Area.fromJson(Map<String, dynamic> json) => Area(
         id: json["id"],
         stateId: json["state_id"],
         name: json["name"],
@@ -55,6 +50,26 @@ class SubState {
   Map<String, dynamic> toJson() => {
         "id": id,
         "state_id": stateId,
+        "name": name,
+      };
+}
+
+class States {
+  States({
+    required this.id,
+    required this.name,
+  });
+
+  String id;
+  String name;
+
+  factory States.fromJson(Map<String, dynamic> json) => States(
+        id: json["id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
       };
 }
