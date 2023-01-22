@@ -4,6 +4,7 @@ import 'package:oga_bliss/util/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/property_model.dart';
+import '../model/types_property_model.dart';
 import '../services/api_services.dart';
 
 class PropertyController extends GetxController {
@@ -17,7 +18,7 @@ class PropertyController extends GetxController {
 
   var propertyList = <PropertyModel>[].obs;
   var searchPropertyList = <PropertyModel>[].obs;
-  // var stateRegionList = <StateModel>[].obs;
+  var typesPropertyList = <TypesPropertyModel>[].obs;
 
   @override
   void onInit() async {
@@ -25,6 +26,7 @@ class PropertyController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
     await getDetails(user_id);
+    await fetchTypesProps();
 
     // fetchStateRegion();
   }
@@ -113,15 +115,34 @@ class PropertyController extends GetxController {
     }
   }
 
-  // Future<List<StateModel>> fetchStateRegion() async {
-  // var seeker = await ApiServices.getStateRegion();
-  // if (seeker != null) {
-  //   isDataProcessing(true);
-  //   stateRegionList.value = seeker.cast<StateModel>();
-  //   return stateRegionList;
-  // } else {
-  //   isDataProcessing(false);
-  //   return stateRegionList;
-  // }
-  // }
+  fetchTypesProps() async {
+    var seeker = await ApiServices.getTypesProperty();
+    if (seeker != null) {
+      typesPropertyList.value = seeker.cast<TypesPropertyModel>();
+    } else {
+      isDataProcessing(false);
+    }
+  }
+
+  void filter_search_page_location(
+      var page_num, var state_id, var area_id, var user_id) async {
+    searchPropertyList.clear();
+    var seeker = await ApiServices.getFilterProductLocation(
+        page_num, user_id, state_id, area_id);
+
+    if (seeker != null) {
+      isSearchDataProcessing(true);
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
+
+  void filter_search_page_location_by_pagination(
+      var page_num, var state_id, var area_id, var user_id) async {
+    var seeker = await ApiServices.getFilterProductLocation(
+        page_num, user_id, state_id, area_id);
+
+    if (seeker != null) {
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
 }

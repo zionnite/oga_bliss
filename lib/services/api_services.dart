@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../model/property_model.dart';
 import '../model/state_model.dart';
+import '../model/types_property_model.dart';
 import '../util/common.dart';
 
 class ApiServices {
@@ -16,6 +17,8 @@ class ApiServices {
   static const String _request_inspection = 'request_inspection';
   static const String _search_product = 'search_product';
   static const String _get_state = 'get_state_and_area';
+  static const String _type_property = 'get_types_property';
+  static const String _filter_location = 'filter_location';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -150,6 +153,58 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<TypesPropertyModel>> getTypesProperty() async {
+    try {
+      final result = await client.get(Uri.parse('$_mybaseUrl$_type_property'));
+      if (result.statusCode == 200) {
+        final data = typesPropertyModelFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static getFilterProductLocation(
+      var page_num, var userId, var stateId, var areaId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_filter_location/$page_num/$userId');
+
+      var response = await http.post(uri, body: {
+        'state_id': stateId,
+        'area_id': areaId,
+      });
+
+      if (response.statusCode == 200) {
+        final data = propertyModelFromJson(response.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

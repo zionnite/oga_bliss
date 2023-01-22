@@ -8,6 +8,7 @@ import 'package:simple_currency_format/simple_currency_format.dart';
 import '../controller/property_controller.dart';
 import '../model/state_model.dart';
 import '../widget/search_widget.dart';
+import 'filter_by_location.dart';
 
 class SearchAlonePage extends StatefulWidget {
   const SearchAlonePage({Key? key}) : super(key: key);
@@ -22,10 +23,9 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
   List<States> stateList = [];
   List<Area> areaList = [];
   List<Area> areaTempList = [];
-  List<Area> areaTempList_2 = [];
 
-  String? states_id, states_id_2;
-  String? area_id, area_id_2;
+  String? states_id;
+  String? area_id;
 
   populateDropDown() async {
     LocationModel data = await ApiServices.getStateRegion();
@@ -180,12 +180,22 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                                 },
                               ),
                             ),
-                            Card(
-                              color: Colors.white70,
-                              child: Container(
-                                margin: const EdgeInsets.only(),
-                                padding: const EdgeInsets.all(22.8),
-                                child: const Text('Go'),
+                            InkWell(
+                              onTap: () {
+                                if (states_id != null && area_id != null) {
+                                  Get.to(() => FilterByLocation(
+                                        state_id: states_id!,
+                                        area_id: area_id!,
+                                      ));
+                                }
+                              },
+                              child: Card(
+                                color: Colors.white70,
+                                child: Container(
+                                  margin: const EdgeInsets.only(),
+                                  padding: const EdgeInsets.all(22.8),
+                                  child: const Text('Go'),
+                                ),
                               ),
                             )
                           ],
@@ -211,56 +221,39 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                           top: 15,
                         ),
                         color: Colors.white,
-                        child: ListView(
-                          padding:
-                              const EdgeInsets.only(top: 10, left: 0, right: 0),
-                          physics: const ClampingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          children: const [
-                            ListTile(
-                              title: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('House'),
-                              ),
-                              trailing: Icon(Icons.send),
-                            ),
-                            Divider(
-                              height: 1,
-                              color: Colors.black38,
-                            ),
-                            ListTile(
-                              title: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Land'),
-                              ),
-                              trailing: Icon(Icons.send),
-                            ),
-                            Divider(
-                              height: 1,
-                              color: Colors.black38,
-                            ),
-                            ListTile(
-                              title: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Land'),
-                              ),
-                            ),
-                            Divider(
-                              height: 1,
-                              color: Colors.black38,
-                            ),
-                            ListTile(
-                              title: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text('Land'),
-                              ),
-                            ),
-                            Divider(
-                              height: 1,
-                              color: Colors.black38,
-                            ),
-                          ],
+                        child: Obx(
+                          () => ListView.builder(
+                            itemCount: propsController.typesPropertyList.length,
+                            padding: const EdgeInsets.only(
+                                top: 10, left: 0, right: 0),
+                            physics: const ClampingScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              var type =
+                                  propsController.typesPropertyList[index];
+                              return Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      print(type.id);
+                                    },
+                                    child: ListTile(
+                                      title: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(type.name),
+                                      ),
+                                      trailing: const Icon(Icons.send),
+                                    ),
+                                  ),
+                                  const Divider(
+                                    height: 1,
+                                    color: Colors.black38,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -341,122 +334,12 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.bottomSheet(
-                            barrierColor: Colors.blue[40],
-                            isDismissible: true,
-                            enableDrag: false,
-                            Container(
-                              margin: const EdgeInsets.only(top: 10),
-                              color: Colors.white,
-                              height: 250,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 25.0, right: 25, top: 30),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: MyDropDownField(
-                                            labelText: 'State',
-                                            value: states_id,
-                                            dropDownList: stateList.map((e) {
-                                              return DropdownMenuItem(
-                                                value: e.id,
-                                                child: Text(e.name),
-                                              );
-                                            }).toList(),
-                                            onChanged: (Object? value) {
-                                              setState(() {
-                                                area_id = null;
-                                                states_id = value.toString();
-                                                areaTempList_2 = areaList
-                                                    .where(
-                                                      (element) =>
-                                                          element.stateId
-                                                              .toString() ==
-                                                          states_id.toString(),
-                                                    )
-                                                    .toList();
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: MyDropDownField(
-                                            labelText: 'Area',
-                                            value: area_id,
-                                            dropDownList:
-                                                areaTempList_2.map((e) {
-                                              return DropdownMenuItem(
-                                                value: e.id,
-                                                child: Text(e.name),
-                                              );
-                                            }).toList(),
-                                            onChanged: (Object? value) {
-                                              setState(() {
-                                                area_id = value.toString();
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        Card(
-                                          color: Colors.white70,
-                                          child: Container(
-                                            margin: const EdgeInsets.only(),
-                                            padding: const EdgeInsets.all(22.8),
-                                            child: const Text('Go'),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    child: Card(
-                                      color: Colors.red,
-                                      margin: const EdgeInsets.only(
-                                        top: 10.0,
-                                        left: 30,
-                                        right: 30,
-                                        bottom: 10,
-                                      ),
-                                      elevation: 3,
-                                      child: Container(
-                                        width: double.infinity,
-                                        child: const Padding(
-                                          padding: EdgeInsets.only(
-                                            top: 20.0,
-                                            left: 40,
-                                            right: 40,
-                                            bottom: 20,
-                                          ),
-                                          child: Text(
-                                            'Close',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 15,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
+                          print('${_rangeValues.start} ${_rangeValues.end}');
                         },
                         child: Align(
                           alignment: Alignment.center,
                           child: Card(
-                            margin: EdgeInsets.only(top: 15, bottom: 15),
+                            margin: const EdgeInsets.only(top: 15, bottom: 15),
                             elevation: 5,
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -467,7 +350,7 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                               ),
                               child: Ink(
                                 color: Colors.white,
-                                child: Text('Filter by Price'),
+                                child: const Text('Filter by Price'),
                               ),
                             ),
                           ),
