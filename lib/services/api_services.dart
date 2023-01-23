@@ -19,6 +19,9 @@ class ApiServices {
   static const String _get_state = 'get_state_and_area';
   static const String _type_property = 'get_types_property';
   static const String _filter_location = 'filter_location';
+  static const String _filter_type = 'filter_type';
+  static const String _filter_price = 'filter_price';
+  static const String _get_favourite = 'get_favourite';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -205,6 +208,90 @@ class ApiServices {
         );
       }
     } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static getFilterProductType(var page_num, var userId, var typeId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_filter_type/$page_num/$userId');
+
+      var response = await http.post(uri, body: {
+        'type_id': typeId,
+      });
+
+      if (response.statusCode == 200) {
+        final data = propertyModelFromJson(response.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static getFilterProductPrice(
+      var page_num, var userId, var start_price, var end_price) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_filter_price/$page_num/$userId');
+
+      var response = await http.post(uri, body: {
+        'start_price': start_price,
+        'end_price': end_price,
+      });
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        final data = propertyModelFromJson(response.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<PropertyModel?>?> getAllFav(
+      var page_num, var userId) async {
+    try {
+      final result = await client
+          .get(Uri.parse('$_mybaseUrl$_get_favourite/$page_num/$userId'));
+      // print(result.body);
+      if (result.statusCode == 200) {
+        final data = propertyModelFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

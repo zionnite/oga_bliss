@@ -145,4 +145,47 @@ class PropertyController extends GetxController {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
+
+  void filter_search_page_type(var page_num, var type_id, var user_id) async {
+    searchPropertyList.clear();
+    var seeker =
+        await ApiServices.getFilterProductType(page_num, user_id, type_id);
+
+    if (seeker != null) {
+      isSearchDataProcessing(true);
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
+
+  void filter_search_page_type_by_pagination(
+      var page_num, var type_id, var user_id) async {
+    var seeker =
+        await ApiServices.getFilterProductType(page_num, user_id, type_id);
+
+    if (seeker != null) {
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
+
+  void filter_search_page_price(
+      var page_num, var start_price, end_price, var user_id) async {
+    searchPropertyList.clear();
+    var seeker = await ApiServices.getFilterProductPrice(
+        page_num, user_id, start_price, end_price);
+
+    if (seeker != null) {
+      isSearchDataProcessing(true);
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
+
+  void filter_search_page_price_by_pagination(
+      var page_num, var start_price, end_price, var user_id) async {
+    var seeker = await ApiServices.getFilterProductPrice(
+        page_num, user_id, start_price, end_price);
+
+    if (seeker != null) {
+      searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
 }

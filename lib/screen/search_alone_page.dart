@@ -9,6 +9,8 @@ import '../controller/property_controller.dart';
 import '../model/state_model.dart';
 import '../widget/search_widget.dart';
 import 'filter_by_location.dart';
+import 'filter_by_price.dart';
+import 'filter_by_type.dart';
 
 class SearchAlonePage extends StatefulWidget {
   const SearchAlonePage({Key? key}) : super(key: key);
@@ -41,7 +43,7 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
     populateDropDown();
   }
 
-  late RangeValues _rangeValues = const RangeValues(100000, 70000000);
+  late RangeValues _rangeValues = const RangeValues(5000, 70000000);
   String NGN = cSymbol("NGN");
 
   @override
@@ -183,10 +185,12 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                             InkWell(
                               onTap: () {
                                 if (states_id != null && area_id != null) {
-                                  Get.to(() => FilterByLocation(
-                                        state_id: states_id!,
-                                        area_id: area_id!,
-                                      ));
+                                  Get.to(
+                                    () => FilterByLocation(
+                                      state_id: states_id!,
+                                      area_id: area_id!,
+                                    ),
+                                  );
                                 }
                               },
                               child: Card(
@@ -236,7 +240,11 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      print(type.id);
+                                      Get.to(
+                                        () => FilterByType(
+                                          typeId: type.id,
+                                        ),
+                                      );
                                     },
                                     child: ListTile(
                                       title: Padding(
@@ -270,10 +278,10 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         ),
                       ),
                       RangeSlider(
-                        min: 10000,
+                        min: 5000,
                         max: 90000000,
-                        divisions: 10,
-                        labels: _rangeLabels,
+                        divisions: 100000,
+                        // labels: _rangeLabels,
                         values: _rangeValues,
                         onChanged: (val) {
                           setState(() {
@@ -334,6 +342,12 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                       ),
                       InkWell(
                         onTap: () {
+                          Get.to(
+                            () => FilterByPrice(
+                              startPrice: _rangeValues.start.toString(),
+                              endPrice: _rangeValues.end.toString(),
+                            ),
+                          );
                           print('${_rangeValues.start} ${_rangeValues.end}');
                         },
                         child: Align(
