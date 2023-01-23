@@ -205,6 +205,27 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                                       .indexOf(widget.propertyModel);
                                   propsController.searchPropertyList[index]
                                       .favourite = status;
+                                } else if (widget.route == 'fav') {
+                                  int index = propsController.favPropertyList
+                                      .indexOf(widget.propertyModel);
+                                  propsController.favPropertyList[index]
+                                      .favourite = status;
+
+                                  if (status == false) {
+                                    var propsId = propsController
+                                        .favPropertyList[index].propsId;
+
+                                    var newPropId = propsController.propertyList
+                                        .indexWhere(
+                                            ((p) => p.propsId == propsId));
+
+                                    propsController.propertyList[newPropId]
+                                        .favourite = status;
+
+                                    //remove from favPropertyList
+                                    propsController.favPropertyList
+                                        .removeAt(index);
+                                  }
                                 }
                               });
                             },

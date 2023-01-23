@@ -18,6 +18,7 @@ class PropertyController extends GetxController {
 
   var propertyList = <PropertyModel>[].obs;
   var searchPropertyList = <PropertyModel>[].obs;
+  var favPropertyList = <PropertyModel>[].obs;
   var typesPropertyList = <TypesPropertyModel>[].obs;
 
   @override
@@ -27,6 +28,8 @@ class PropertyController extends GetxController {
     String? user_id = prefs.getString('user_id');
     await getDetails(user_id);
     await fetchTypesProps();
+
+    fetch_favourite(page_num, user_id);
 
     // fetchStateRegion();
   }
@@ -66,10 +69,14 @@ class PropertyController extends GetxController {
       } else if (route == 'search') {
         int index = searchPropertyList.indexOf(model);
         searchPropertyList[index].favourite = true;
+      } else if (route == 'fav') {
+        int index = favPropertyList.indexOf(model);
+        favPropertyList[index].favourite = false;
       }
 
       propertyList.refresh();
       searchPropertyList.refresh();
+      favPropertyList.refresh();
 
       return true;
     } else if (status == 'unliked') {
@@ -79,9 +86,13 @@ class PropertyController extends GetxController {
       } else if (route == 'search') {
         int index = searchPropertyList.indexOf(model);
         searchPropertyList[index].favourite = false;
+      } else if (route == 'fav') {
+        int index = favPropertyList.indexOf(model);
+        favPropertyList[index].favourite = true;
       }
       propertyList.refresh();
       searchPropertyList.refresh();
+      favPropertyList.refresh();
 
       return false;
     }
@@ -186,6 +197,25 @@ class PropertyController extends GetxController {
 
     if (seeker != null) {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
+
+  void fetch_favourite(var page_num, var user_id) async {
+    favPropertyList.clear();
+    var seeker = await ApiServices.getAllFav(page_num, user_id);
+
+    if (seeker != null) {
+      isSearchDataProcessing(true);
+      favPropertyList.addAll(seeker.cast<PropertyModel>());
+    }
+  }
+
+  void fetch_more_favourite(var page_num, var user_id) async {
+    var seeker = await ApiServices.getAllFav(page_num, user_id);
+
+    if (seeker != null) {
+      isSearchDataProcessing(true);
+      favPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
 }
