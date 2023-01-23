@@ -38,6 +38,7 @@ class _FilterByLocationState extends State<FilterByLocation> {
   @override
   void initState() {
     super.initState();
+    print(propsController.searchPropertyList.length);
 
     _controller = ScrollController()..addListener(_scrollListener);
 
