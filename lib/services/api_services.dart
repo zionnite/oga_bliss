@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/property_model.dart';
+import '../model/request_model.dart';
 import '../model/state_model.dart';
 import '../model/types_property_model.dart';
 import '../util/common.dart';
@@ -22,6 +23,7 @@ class ApiServices {
   static const String _filter_type = 'filter_type';
   static const String _filter_price = 'filter_price';
   static const String _get_favourite = 'get_favourite';
+  static const String _get_requeest = 'get_request';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -292,6 +294,35 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<RequestModel>> getRequest(
+      var pageNum, var userId, var adminStatus) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_get_requeest/$pageNum/$userId');
+
+      var response = await http.post(uri, body: {
+        'admin_status': adminStatus.toString(),
+      });
+
+      if (response.statusCode == 200) {
+        final data = requestModelFromJson(response.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

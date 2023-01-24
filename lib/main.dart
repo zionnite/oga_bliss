@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'controller/favourite_controller.dart';
 import 'controller/onboarding_controller.dart';
 import 'controller/property_controller.dart';
+import 'controller/request_controller.dart';
 import 'controller/splash_controller.dart';
 
 void main() {
@@ -16,6 +17,7 @@ void main() {
   Get.put(OnboardingCongroller());
   Get.put(PropertyController());
   Get.put(FavouriteController());
+  Get.put(RequestController());
   runApp(
     const GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -35,6 +37,16 @@ class _MyAppState extends State<MyApp> {
   addStringToSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user_id', "1");
+    prefs.setString('phone_no', "090");
+    prefs.setString('user_name', "doe");
+    prefs.setString('user_img', "https://");
+    prefs.setString('email', "email@email.com");
+    prefs.setString('full_name', "Jone");
+    prefs.setBool('status', true);
+    prefs.setBool('validation', true);
+    prefs.setString('user_status', "user");
+    prefs.setString('online_status', "online");
+    prefs.setBool('admin_status', false);
   }
 
   @override

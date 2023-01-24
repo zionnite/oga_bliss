@@ -219,8 +219,11 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                                         .indexWhere(
                                             ((p) => p.propsId == propsId));
 
-                                    propsController.propertyList[newPropId]
-                                        .favourite = status;
+
+                                    if (newPropId != -1) {
+                                      propsController.propertyList[newPropId].favourite =
+                                          status;
+                                    }
 
                                     //remove from favPropertyList
                                     propsController.favPropertyList

@@ -226,8 +226,10 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                           var newPropId = propsController.propertyList
                               .indexWhere(((p) => p.propsId == propsId));
 
-                          propsController.propertyList[newPropId].favourite =
-                              status;
+                          if (newPropId != -1) {
+                            propsController.propertyList[newPropId].favourite =
+                                status;
+                          }
 
                           //remove from favPropertyList
                           propsController.favPropertyList.removeAt(index);
