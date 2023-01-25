@@ -31,6 +31,7 @@ class RequestModel {
     this.getStateName,
     this.getPropsSubStateId,
     this.getSubStateName,
+    this.openConnection,
   });
 
   String? id;
@@ -52,6 +53,7 @@ class RequestModel {
   String? getStateName;
   String? getPropsSubStateId;
   String? getSubStateName;
+  bool? openConnection;
 
   factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
         id: json["id"],
@@ -75,6 +77,7 @@ class RequestModel {
         getStateName: json["get_state_name"],
         getPropsSubStateId: json["get_props_sub_state_id"],
         getSubStateName: json["get_sub_state_name"],
+        openConnection: json["open_connection"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -97,5 +100,6 @@ class RequestModel {
         "get_state_name": getStateName,
         "get_props_sub_state_id": getPropsSubStateId,
         "get_sub_state_name": getSubStateName,
+        "open_connection": openConnection,
       };
 }

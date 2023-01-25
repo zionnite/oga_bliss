@@ -217,8 +217,10 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                       } else if (widget.route == 'fav') {
                         int index = propsController.favPropertyList
                             .indexOf(widget.propertyModel);
+
                         propsController.favPropertyList[index].favourite =
                             status;
+
                         if (status == false) {
                           var propsId =
                               propsController.favPropertyList[index].propsId;

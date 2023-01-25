@@ -43,4 +43,18 @@ class RequestController extends GetxController {
       isDataProcessing(false);
     }
   }
+
+  makeRequest({required String id, required String usersType}) {
+    return true;
+  }
+
+  setRequestStatus({
+    required String id,
+    required String statusType,
+    required String disUserId,
+    required String agentId,
+    required String propsId,
+  }) {
+    return true;
+  }
 }

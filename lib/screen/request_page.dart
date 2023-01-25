@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
 
 import '../controller/request_controller.dart';
 import '../widget/notice_me.dart';
@@ -17,6 +19,10 @@ class RequestPage extends StatefulWidget {
 class _RequestPageState extends State<RequestPage> {
   final requestController = RequestController().getXID;
   late ScrollController _controller;
+
+  String user_id = '1';
+  String user_status = 'user';
+  bool admin_status = true;
 
   var current_page = 1;
   bool isLoading = false;
@@ -87,36 +93,40 @@ class _RequestPageState extends State<RequestPage> {
                       btnColor: Colors.blue,
                       onTap: () {},
                     ),
-                    ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 120),
-                      key: const PageStorageKey<String>('allRequest'),
-                      physics: const ClampingScrollPhysics(),
-                      // itemExtent: 350,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: requestController.requestList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var req = requestController.requestList[index];
-                        if (index == requestController.requestList.length + 1 &&
-                            isLoading == true) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
+                    Obx(
+                      () => ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 120),
+                        key: const PageStorageKey<String>('allRequest'),
+                        physics: const ClampingScrollPhysics(),
+                        // itemExtent: 350,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: requestController.requestList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var req = requestController.requestList[index];
+                          if (index ==
+                                  requestController.requestList.length + 1 &&
+                              isLoading == true) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (requestController.requestList[index].id == null) {
+                            requestController.isMoreDataAvailable.value = false;
+                            return Container();
+                          }
+                          return requestWidget(
+                            user_id: user_id,
+                            onTap: () {
+                              Get.to(() => ViewPropertyDetailedDashboard(
+                                  propsId: req.propsId!));
+                            },
+                            user_status: user_status,
+                            admin_status: admin_status,
+                            requestModel: req,
                           );
-                        }
-                        if (requestController.requestList[index].id == null) {
-                          requestController.isMoreDataAvailable.value = false;
-                          return Container();
-                        }
-                        return requestWidget(
-                          name: req.propsName2!,
-                          time: req.time!,
-                          status: req.requestStatus!,
-                          image_name: req.propsImage!,
-                          onTap: () {
-                            print('image just checking');
-                          },
-                        );
-                      },
+                        },
+                      ),
                     ),
                   ],
                 ),
