@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/request_model.dart';
 import '../services/api_services.dart';
+import '../util/common.dart';
 
 class RequestController extends GetxController {
   RequestController get getXID => Get.find<RequestController>();
@@ -44,8 +46,9 @@ class RequestController extends GetxController {
     }
   }
 
-  makeRequest({required String id, required String usersType}) {
-    return true;
+  makeRequest({required String id, required String usersType}) async {
+    String status = await ApiServices.makeRequest(id: id, usersType: usersType);
+    showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
   }
 
   setRequestStatus({
@@ -54,7 +57,14 @@ class RequestController extends GetxController {
     required String disUserId,
     required String agentId,
     required String propsId,
-  }) {
-    return true;
+  }) async {
+    String status = await ApiServices.setRequestSetup(
+      id: id,
+      statusType: statusType,
+      disUserId: disUserId,
+      agentId: agentId,
+      propsId: propsId,
+    );
+    showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
   }
 }

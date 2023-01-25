@@ -24,6 +24,8 @@ class ApiServices {
   static const String _filter_price = 'filter_price';
   static const String _get_favourite = 'get_favourite';
   static const String _get_requeest = 'get_request';
+  static const String _make_request = 'make_request';
+  static const String _set_request_status = 'set_request_type';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -255,8 +257,6 @@ class ApiServices {
         'end_price': end_price,
       });
 
-      print(response.body);
-
       if (response.statusCode == 200) {
         final data = propertyModelFromJson(response.body);
         return data;
@@ -323,6 +323,78 @@ class ApiServices {
       }
     } catch (ex) {
       print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> makeRequest(
+      {required String id, required String usersType}) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_make_request');
+
+      var response = await http.post(uri, body: {
+        'id': id,
+        'users_type': usersType,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> setRequestSetup({
+    required String id,
+    required String statusType,
+    required String disUserId,
+    required String agentId,
+    required String propsId,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_set_request_status');
+
+      var response = await http.post(uri, body: {
+        'id': id,
+        'status_type': statusType,
+        'dis_user_id': disUserId,
+        'agent_id': agentId,
+        'props_id': propsId,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
