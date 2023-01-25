@@ -48,7 +48,8 @@ class RequestController extends GetxController {
 
   makeRequest({required String id, required String usersType}) async {
     String status = await ApiServices.makeRequest(id: id, usersType: usersType);
-    showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
+    showSnackBar(
+        title: 'Make Request', msg: status, backgroundColor: Colors.blue);
   }
 
   setRequestStatus({
@@ -65,6 +66,7 @@ class RequestController extends GetxController {
       agentId: agentId,
       propsId: propsId,
     );
-    showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
+    showSnackBar(
+        title: 'Request Status', msg: status, backgroundColor: Colors.blue);
   }
 }
