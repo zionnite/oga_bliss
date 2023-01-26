@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../model/connection_model.dart';
 import '../model/property_model.dart';
 import '../model/request_model.dart';
 import '../model/state_model.dart';
@@ -26,6 +27,7 @@ class ApiServices {
   static const String _get_requeest = 'get_request';
   static const String _make_request = 'make_request';
   static const String _set_request_status = 'set_request_type';
+  static const String _get_connection = 'get_connection';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -388,6 +390,32 @@ class ApiServices {
         final j = json.decode(body) as Map<String, dynamic>;
         String status = j['status'];
         return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<ConnectionModel?>?> getConnection(
+      var page_num, var userId) async {
+    try {
+      final result = await client
+          .get(Uri.parse('$_mybaseUrl$_get_connection/$page_num/$userId'));
+      // print(result.body);
+      if (result.statusCode == 200) {
+        final data = connectionModelFromJson(result.body);
+        return data;
       } else {
         return showSnackBar(
           title: 'Oops!',

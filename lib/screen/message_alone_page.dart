@@ -4,7 +4,15 @@ import 'package:get/get.dart';
 import '../model/chat_message_model.dart';
 
 class MessageAlonePage extends StatefulWidget {
-  const MessageAlonePage({Key? key}) : super(key: key);
+  MessageAlonePage({
+    required this.sender,
+    required this.receiver,
+    required this.propsId,
+  });
+
+  final String sender;
+  final String receiver;
+  final String propsId;
 
   @override
   State<MessageAlonePage> createState() => _MessageAlonePageState();

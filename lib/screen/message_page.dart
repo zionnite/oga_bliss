@@ -40,7 +40,11 @@ class _MessagePageState extends State<MessagePage> {
                     name: 'Nosakhare Atekha Endurance zionnite',
                     status: 'Landlord',
                     onTap: () {
-                      Get.to(() => const MessageAlonePage());
+                      Get.to(() => MessageAlonePage(
+                            sender: '',
+                            receiver: '',
+                            propsId: '',
+                          ));
                     },
                     time: '3hrs ago',
                   ),
