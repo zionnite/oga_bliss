@@ -7,6 +7,7 @@ import '../model/connection_model.dart';
 import '../model/property_model.dart';
 import '../model/request_model.dart';
 import '../model/state_model.dart';
+import '../model/transaction_model.dart';
 import '../model/types_property_model.dart';
 import '../util/common.dart';
 
@@ -28,6 +29,7 @@ class ApiServices {
   static const String _make_request = 'make_request';
   static const String _set_request_status = 'set_request_type';
   static const String _get_connection = 'get_connection';
+  static const String _get_transaction = 'get_transaction';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -425,6 +427,35 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<TransactionModel>> getTransaction(
+      var pageNum, var userId, var adminStatus) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_get_transaction/$pageNum/$userId');
+
+      var response = await http.post(uri, body: {
+        'admin_status': adminStatus.toString(),
+      });
+
+      if (response.statusCode == 200) {
+        final data = transactionModelFromJson(response.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

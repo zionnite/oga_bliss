@@ -10,6 +10,7 @@ import 'controller/onboarding_controller.dart';
 import 'controller/property_controller.dart';
 import 'controller/request_controller.dart';
 import 'controller/splash_controller.dart';
+import 'controller/transaction_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,7 @@ void main() {
   Get.put(FavouriteController());
   Get.put(RequestController());
   Get.put(ConnectionController());
+  Get.put(TransactionController());
   runApp(
     const GetMaterialApp(
       debugShowCheckedModeBanner: false,
