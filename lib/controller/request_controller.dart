@@ -82,7 +82,7 @@ class RequestController extends GetxController {
     bool? status_type;
     String? msg;
 
-    if (status == 'true') {
+    if (status == 'done') {
       msg = 'Connection Created between User and Agent';
       status_type = true;
     } else if (status == 'false') {
@@ -91,6 +91,15 @@ class RequestController extends GetxController {
     } else if (status == 'existed') {
       msg = 'Connection already existed between user and Agent';
       status_type = false;
+    } else if (status == 'rejected') {
+      msg = 'Request rejected';
+      status_type = true;
+    } else if (status == 'review') {
+      msg = 'Request in Review';
+      status_type = true;
+    } else if (status == 'confirm') {
+      msg = 'Request is set to Confirm status';
+      status_type = true;
     }
 
     showSnackBar(

@@ -265,7 +265,7 @@ class _requestWidgetState extends State<requestWidget> {
           });
           bool status = await requestController.makeRequest(
             id: widget.requestModel.id.toString(),
-            usersType: 'agent',
+            usersType: 'admin',
           );
 
           if (status == true || status == false) {
@@ -395,7 +395,7 @@ class _requestWidgetState extends State<requestWidget> {
       } else if (widget.requestModel.requestStatus == 'confirm') {
         if (widget.requestModel.openConnection == false) {
           return PopupMenuButton(onSelected: (val) async {
-            if (val == "confirm_review") {
+            if (val == "open_connection") {
               bool status = await requestController.setRequestStatus(
                   id: model.id!,
                   statusType: 'done',
