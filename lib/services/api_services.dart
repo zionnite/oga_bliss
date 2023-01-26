@@ -369,6 +369,7 @@ class ApiServices {
     required String disUserId,
     required String agentId,
     required String propsId,
+    required String user_id,
   }) async {
     try {
       final uri = Uri.parse('$_mybaseUrl$_set_request_status');
@@ -379,6 +380,7 @@ class ApiServices {
         'dis_user_id': disUserId,
         'agent_id': agentId,
         'props_id': propsId,
+        'user_id': user_id,
       });
       if (response.statusCode == 200) {
         var body = response.body;

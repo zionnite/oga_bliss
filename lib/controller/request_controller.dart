@@ -48,8 +48,19 @@ class RequestController extends GetxController {
 
   makeRequest({required String id, required String usersType}) async {
     String status = await ApiServices.makeRequest(id: id, usersType: usersType);
-    showSnackBar(
-        title: 'Make Request', msg: status, backgroundColor: Colors.blue);
+
+    bool status_type;
+    String? msg;
+    if (status == 'true') {
+      msg = 'Request Marked';
+      status_type = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      status_type = true;
+    }
+    showSnackBar(title: 'Make Request', msg: msg, backgroundColor: Colors.blue);
+
+    return status_type;
   }
 
   setRequestStatus({
@@ -65,8 +76,26 @@ class RequestController extends GetxController {
       disUserId: disUserId,
       agentId: agentId,
       propsId: propsId,
+      user_id: user_id!,
     );
+
+    bool? status_type;
+    String? msg;
+
+    if (status == 'true') {
+      msg = 'Connection Created between User and Agent';
+      status_type = true;
+    } else if (status == 'false') {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      status_type = false;
+    } else if (status == 'existed') {
+      msg = 'Connection already existed between user and Agent';
+      status_type = false;
+    }
+
     showSnackBar(
-        title: 'Request Status', msg: status, backgroundColor: Colors.blue);
+        title: 'Request Status', msg: msg!, backgroundColor: Colors.blue);
+
+    return status_type;
   }
 }
