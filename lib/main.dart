@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:oga_bliss/screen/front/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'controller/alert_controller.dart';
 import 'controller/connection_controller.dart';
 import 'controller/favourite_controller.dart';
 import 'controller/onboarding_controller.dart';
@@ -22,6 +23,7 @@ void main() {
   Get.put(RequestController());
   Get.put(ConnectionController());
   Get.put(TransactionController());
+  Get.put(AlertController());
   runApp(
     const GetMaterialApp(
       debugShowCheckedModeBanner: false,
