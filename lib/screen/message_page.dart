@@ -112,7 +112,7 @@ class _MessagePageState extends State<MessagePage> {
                                 ),
                               );
                             },
-                            time: '3hrs ago',
+                            time: '',
                           );
                         }
                         return Container();
