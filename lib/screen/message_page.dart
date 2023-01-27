@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/chat_head_controller.dart';
 import '../widget/message_widget.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
@@ -14,6 +15,58 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
+  final chController = ChatHeadController().getXID;
+  late ScrollController _controller;
+
+  String user_id = '1';
+  String user_status = 'user';
+  bool admin_status = true;
+
+  var current_page = 1;
+  bool isLoading = false;
+  bool widgetLoading = true;
+
+  checkIfListLoaded() {
+    var loading = chController.isDataProcessing.value;
+    if (loading) {
+      setState(() {
+        widgetLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = ScrollController()..addListener(_scrollListener);
+
+    Future.delayed(new Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() {
+          checkIfListLoaded();
+        });
+      }
+    });
+  }
+
+  void _scrollListener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      setState(() {
+        isLoading = true;
+        current_page++;
+      });
+
+      chController.fetchChatHeadMore(current_page);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,19 +87,37 @@ class _MessagePageState extends State<MessagePage> {
                     btnColor: Colors.blue,
                     onTap: () {},
                   ),
-                  messageWidget(
-                    image_name:
-                        'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
-                    name: 'Nosakhare Atekha Endurance zionnite',
-                    status: 'Landlord',
-                    onTap: () {
-                      Get.to(() => MessageAlonePage(
-                            sender: '',
-                            receiver: '',
-                            propsId: '',
-                          ));
-                    },
-                    time: '3hrs ago',
+                  Obx(
+                    () => ListView.builder(
+                      controller: _controller,
+                      padding: const EdgeInsets.only(bottom: 120),
+                      key: const PageStorageKey<String>('allChatHead'),
+                      physics: const ClampingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: chController.chatHeadList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        var chat = chController.chatHeadList[index];
+                        if (user_id != chat.disUserId) {
+                          return messageWidget(
+                            image_name: chat.disUserImageName!,
+                            name: chat.disUserFullName!,
+                            status: chat.disUserUserStatus!,
+                            onTap: () {
+                              Get.to(
+                                () => MessageAlonePage(
+                                  sender: chat.disUserId!,
+                                  receiver: chat.disMyId!,
+                                  propsId: chat.propsId!,
+                                ),
+                              );
+                            },
+                            time: '3hrs ago',
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
                   ),
                 ],
               ),

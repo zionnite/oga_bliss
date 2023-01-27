@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/alert_model.dart';
+import '../model/chat_head_model.dart';
 import '../model/connection_model.dart';
 import '../model/property_model.dart';
 import '../model/request_model.dart';
@@ -33,6 +34,7 @@ class ApiServices {
   static const String _get_transaction = 'get_transaction';
   static const String _get_alert = 'get_alert';
   static const String _delete_alert = 'delete_alert';
+  static const String _get_chat_head = 'get_message_head';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -507,6 +509,32 @@ class ApiServices {
         String status = j['status'];
         // print(status);
         return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<ChatHeadModel?>?> getChatHead(
+      var page_num, var userId) async {
+    try {
+      final result = await client
+          .get(Uri.parse('$_mybaseUrl$_get_chat_head/$page_num/$userId'));
+      // print(result.body);
+      if (result.statusCode == 200) {
+        final data = chatHeadModelFromJson(result.body);
+        return data;
       } else {
         return showSnackBar(
           title: 'Oops!',
