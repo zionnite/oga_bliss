@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
 
 import '../controller/wallet_controller.dart';
 import '../widget/fund_wallet.dart';
@@ -114,7 +115,8 @@ class _WalletPageState extends State<WalletPage> {
                             time: wallet.time!,
                             amount: wallet.amount!,
                             onTap: () {
-                              print('images cliceked');
+                              Get.to(() => ViewPropertyDetailedDashboard(
+                                  propsId: wallet.propsId!));
                             },
                           );
                         },
