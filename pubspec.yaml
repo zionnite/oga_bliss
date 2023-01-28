@@ -33,6 +33,7 @@ dependencies:
   liquid_swipe: ^3.0.0
   smooth_page_indicator: ^1.0.0+2
   shared_preferences: ^2.0.16
+  emoji_picker_flutter: ^1.5.2
 
   #  another_xlider: ^1.1.2
 

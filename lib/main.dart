@@ -13,6 +13,7 @@ import 'controller/property_controller.dart';
 import 'controller/request_controller.dart';
 import 'controller/splash_controller.dart';
 import 'controller/transaction_controller.dart';
+import 'controller/wallet_controller.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ void main() {
   Get.put(TransactionController());
   Get.put(AlertController());
   Get.put(ChatHeadController());
+  Get.put(WalletController());
   runApp(
     const GetMaterialApp(
       debugShowCheckedModeBanner: false,

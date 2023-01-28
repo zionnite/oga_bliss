@@ -11,6 +11,7 @@ import '../model/request_model.dart';
 import '../model/state_model.dart';
 import '../model/transaction_model.dart';
 import '../model/types_property_model.dart';
+import '../model/wallet_model.dart';
 import '../util/common.dart';
 
 class ApiServices {
@@ -35,6 +36,8 @@ class ApiServices {
   static const String _get_alert = 'get_alert';
   static const String _delete_alert = 'delete_alert';
   static const String _get_chat_head = 'get_message_head';
+  static const String _get_wallet = 'get_wallet';
+  static const String _pull_out = 'pull_out_payment';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -535,6 +538,67 @@ class ApiServices {
       if (result.statusCode == 200) {
         final data = chatHeadModelFromJson(result.body);
         return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<WalletModel>> getWallet(
+      var pageNum, var userId, var userStatus) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_get_wallet/$pageNum/$userId');
+
+      var response = await http.post(uri, body: {
+        'user_status': userStatus.toString(),
+      });
+
+      if (response.statusCode == 200) {
+        final data = walletModelFromJson(response.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> pullOut({
+    required String propsId,
+    required String agentId,
+    required String userId,
+  }) async {
+    try {
+      final response = await client
+          .get(Uri.parse('$_mybaseUrl$_pull_out/$propsId/$agentId/$userId'));
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
       } else {
         return showSnackBar(
           title: 'Oops!',

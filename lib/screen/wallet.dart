@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../controller/wallet_controller.dart';
 import '../widget/fund_wallet.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
@@ -13,6 +15,58 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
+  final walletController = WalletController().getXID;
+  late ScrollController _controller;
+
+  String user_id = '1';
+  String user_status = 'user';
+  bool admin_status = true;
+
+  var current_page = 1;
+  bool isLoading = false;
+  bool widgetLoading = true;
+
+  checkIfListLoaded() {
+    var loading = walletController.isDataProcessing.value;
+    if (loading) {
+      setState(() {
+        widgetLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = ScrollController()..addListener(_scrollListener);
+
+    Future.delayed(new Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() {
+          checkIfListLoaded();
+        });
+      }
+    });
+  }
+
+  void _scrollListener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      setState(() {
+        isLoading = true;
+        current_page++;
+      });
+
+      walletController.fetchWalletMore(current_page);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,16 +95,30 @@ class _WalletPageState extends State<WalletPage> {
                     icon_color: Colors.white,
                     icon_size: 20,
                   ),
-                  fundWallet(
-                    image_name:
-                        'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
-                    name: 'Property name',
-                    time: '5mins Ago',
-                    amount: '30000',
-                    onTap: () {
-                      print('images cliceked');
-                    },
-                  ),
+                  Obx(() => ListView.builder(
+                        controller: _controller,
+                        padding: const EdgeInsets.only(bottom: 120),
+                        key: const PageStorageKey<String>('allWallet'),
+                        physics: const ClampingScrollPhysics(),
+                        // itemExtent: 350,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: walletController.walletList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var wallet = walletController.walletList[index];
+
+                          return fundWallet(
+                            walletModel: wallet,
+                            image_name: wallet.propsImage!,
+                            name: wallet.propsName!,
+                            time: wallet.time!,
+                            amount: wallet.amount!,
+                            onTap: () {
+                              print('images cliceked');
+                            },
+                          );
+                        },
+                      )),
                 ],
               ),
             ),

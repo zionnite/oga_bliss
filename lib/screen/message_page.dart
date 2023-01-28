@@ -109,6 +109,9 @@ class _MessagePageState extends State<MessagePage> {
                                   sender: chat.disUserId!,
                                   receiver: chat.disMyId!,
                                   propsId: chat.propsId!,
+                                  image_name: chat.disUserImageName!,
+                                  status: chat.disUserUserStatus!,
+                                  name: chat.disUserFullName!,
                                 ),
                               );
                             },

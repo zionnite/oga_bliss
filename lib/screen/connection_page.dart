@@ -115,6 +115,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
                                   sender: con.disUserId.toString(),
                                   receiver: con.agentId.toString(),
                                   propsId: con.propsId.toString(),
+                                  image_name: con.getUserImage.toString(),
+                                  status: con.getUserStatus.toString(),
+                                  name: con.getUserFullName.toString(),
                                 ),
                               );
                             },
@@ -130,7 +133,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
                                 () => MessageAlonePage(
                                   sender: con.agentId.toString(),
                                   receiver: con.disUserId.toString(),
-                                  propsId: con.propsId,
+                                  propsId: con.propsId.toString(),
+                                  image_name: con.getAgentImage.toString(),
+                                  status: con.getAgentStatus.toString(),
+                                  name: con.getAgentFullName.toString(),
                                 ),
                               );
                             },
