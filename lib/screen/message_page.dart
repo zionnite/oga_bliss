@@ -112,7 +112,9 @@ class _MessagePageState extends State<MessagePage> {
                                 ),
                               );
                             },
-                            time: '',
+                            time: chat.lastTimeMsg.toString(),
+                            last_msg: chat.lastMsg.toString(),
+                            counter: chat.countUnreadMsg.toString(),
                           );
                         }
                         return Container();

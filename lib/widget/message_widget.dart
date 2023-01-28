@@ -7,12 +7,16 @@ class messageWidget extends StatelessWidget {
     required this.status,
     required this.onTap,
     required this.time,
+    required this.last_msg,
+    required this.counter,
   });
   final String image_name;
   final String name;
   final String status;
   final VoidCallback onTap;
   final String time;
+  final String last_msg;
+  final String counter;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +33,36 @@ class messageWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 40,
-                child: CircleAvatar(
-                  radius: 38,
-                  backgroundImage: NetworkImage(
-                    image_name,
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    child: CircleAvatar(
+                      radius: 38,
+                      backgroundImage: NetworkImage(
+                        image_name,
+                      ),
+                    ),
                   ),
-                ),
+                  (int.parse(counter) > 0)
+                      ? Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 8),
+                            child: Text(
+                              counter,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        )
+                      : Container(),
+                ],
               ),
               const SizedBox(
                 width: 5,
@@ -62,6 +88,13 @@ class messageWidget extends StatelessWidget {
                       Text(status),
                       const SizedBox(
                         height: 5,
+                      ),
+                      Text(
+                        last_msg,
+                        style: const TextStyle(
+                          fontFamily: 'Lobster',
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),

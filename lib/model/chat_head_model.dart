@@ -27,7 +27,9 @@ class ChatHeadModel {
     this.disUserEmail,
     this.disUserUserName,
     this.disUserUserStatus,
-    this.lastUnreadMsg,
+    this.lastMsg,
+    this.lastTimeMsg,
+    this.countUnreadMsg,
   });
 
   String? id;
@@ -44,7 +46,9 @@ class ChatHeadModel {
   String? disUserEmail;
   String? disUserUserName;
   String? disUserUserStatus;
-  bool? lastUnreadMsg;
+  dynamic? lastMsg;
+  dynamic? lastTimeMsg;
+  dynamic? countUnreadMsg;
 
   factory ChatHeadModel.fromJson(Map<String, dynamic> json) => ChatHeadModel(
         id: json["id"],
@@ -61,7 +65,9 @@ class ChatHeadModel {
         disUserEmail: json["dis_user_email"],
         disUserUserName: json["dis_user_user_name"],
         disUserUserStatus: json["dis_user_user_status"],
-        lastUnreadMsg: json["last_unread_msg"],
+        lastMsg: json["last_msg"],
+        lastTimeMsg: json["last_time_msg"],
+        countUnreadMsg: json["count_unread_msg"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -79,6 +85,8 @@ class ChatHeadModel {
         "dis_user_email": disUserEmail,
         "dis_user_user_name": disUserUserName,
         "dis_user_user_status": disUserUserStatus,
-        "last_unread_msg": lastUnreadMsg,
+        "last_msg": lastMsg,
+        "last_time_msg": lastTimeMsg,
+        "count_unread_msg": countUnreadMsg,
       };
 }
