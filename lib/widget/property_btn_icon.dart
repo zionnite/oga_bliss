@@ -30,8 +30,8 @@ class _PropertyBtnIconState extends State<PropertyBtnIcon> {
         margin: const EdgeInsets.only(
           left: 15,
           right: 15,
-          bottom: 40,
-          top: 20,
+          bottom: 10,
+          top: 10,
         ),
         elevation: 10,
         child: Ink(

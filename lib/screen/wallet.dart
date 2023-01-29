@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controller/wallet_controller.dart';
 import '../widget/fund_wallet.dart';
@@ -26,6 +27,8 @@ class _WalletPageState extends State<WalletPage> {
   var current_page = 1;
   bool isLoading = false;
   bool widgetLoading = true;
+
+  String link = 'https://ogabliss.com/Wallet/auth_user';
 
   checkIfListLoaded() {
     var loading = walletController.isDataProcessing.value;
@@ -89,12 +92,17 @@ class _WalletPageState extends State<WalletPage> {
                     onTap: () {},
                   ),
                   PropertyBtnIcon(
-                    onTap: () {},
+                    onTap: () {
+                      _launchInBrowser(Uri.parse(link));
+                    },
                     title: 'Fund Wallet',
                     bgColor: Colors.blue,
                     icon: Icons.wallet_sharp,
                     icon_color: Colors.white,
                     icon_size: 20,
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                   Obx(() => ListView.builder(
                         controller: _controller,
@@ -129,4 +137,14 @@ class _WalletPageState extends State<WalletPage> {
       ),
     );
   }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
 }

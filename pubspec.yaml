@@ -34,6 +34,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   shared_preferences: ^2.0.16
   emoji_picker_flutter: ^1.5.2
+  url_launcher: ^6.1.8
 
   #  another_xlider: ^1.1.2
 

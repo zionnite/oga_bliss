@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+    	<string>https</string>
+    	<string>http</string>
+    </array>
+
     <key>NSPhotoLibraryUsageDescription</key>
     <string>OgaBliss App require access to your photo Library, so you can be able to upload file to the server</string>
     <key>NSCameraUsageDescription</key>
