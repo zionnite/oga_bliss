@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/util/common.dart';
@@ -6,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../model/property_model.dart';
 import '../model/types_property_model.dart';
 import '../services/api_services.dart';
+import '../widget/my_raidio_field.dart';
 
 class PropertyController extends GetxController {
   PropertyController get getXID => Get.find<PropertyController>();
@@ -217,5 +220,106 @@ class PropertyController extends GetxController {
       isSearchDataProcessing(true);
       favPropertyList.addAll(seeker.cast<PropertyModel>());
     }
+  }
+
+  addProduct(
+      {required String propsName,
+      required String props_purpose,
+      required String props_type,
+      required String sub_props_type,
+      required String propsBed,
+      required String propsBath,
+      required String propsToilet,
+      required String state_id,
+      required String area_id,
+      required String propsPrice,
+      required String propsDesc,
+      required String propsYearBuilt,
+      required propertyModeEnum props_mode,
+      required String propsYoutubeId,
+      required bool air_condition,
+      required bool balcony,
+      required bool bedding,
+      required bool cable_tv,
+      required bool cleaning_after_exist,
+      required bool coffee_pot,
+      required bool computer,
+      required bool cot,
+      required bool dishwasher,
+      required bool dvd,
+      required bool fan,
+      required bool fridge,
+      required bool grill,
+      required bool hairdryer,
+      required bool heater,
+      required bool hi_fi,
+      required bool internet,
+      required bool iron,
+      required bool juicer,
+      required bool lift,
+      required bool microwave,
+      required bool gym,
+      required bool fireplace,
+      required bool hot_tub,
+      required String propsCondition,
+      required String propsCautionFee,
+      required String selectedPref,
+      required File image}) async {
+    String status = await ApiServices.addProduct(
+        propsName: propsName,
+        props_purpose: props_purpose,
+        props_type: props_type,
+        sub_props_type: sub_props_type,
+        propsBed: propsBed,
+        propsBath: propsBath,
+        propsToilet: propsToilet,
+        state_id: state_id,
+        area_id: area_id,
+        propsPrice: propsPrice,
+        propsDesc: propsDesc,
+        propsYearBuilt: propsYearBuilt,
+        props_mode: props_mode,
+        propsYoutubeId: propsYoutubeId,
+        air_condition: air_condition,
+        balcony: balcony,
+        bedding: bedding,
+        cable_tv: cable_tv,
+        cleaning_after_exist: cleaning_after_exist,
+        coffee_pot: coffee_pot,
+        computer: computer,
+        cot: cot,
+        dishwasher: dishwasher,
+        dvd: dvd,
+        fan: fan,
+        fridge: fridge,
+        grill: grill,
+        hairdryer: hairdryer,
+        heater: heater,
+        hi_fi: hi_fi,
+        internet: internet,
+        iron: iron,
+        juicer: juicer,
+        lift: lift,
+        microwave: microwave,
+        gym: gym,
+        fireplace: fireplace,
+        hot_tub: hot_tub,
+        propsCondition: propsCondition,
+        propsCautionFee: propsCautionFee,
+        selectedPref: selectedPref,
+        image: image);
+
+    bool status_type;
+    String? msg;
+    if (status == 'true') {
+      msg = 'Request Marked';
+      status_type = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      status_type = true;
+    }
+    showSnackBar(title: 'Make Request', msg: msg, backgroundColor: Colors.blue);
+
+    return status_type;
   }
 }

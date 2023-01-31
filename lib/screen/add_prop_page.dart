@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:oga_bliss/controller/property_controller.dart';
 import 'package:oga_bliss/widget/my_raidio_field.dart';
 
+import '../model/property_type_model.dart';
+import '../model/state_model.dart';
+import '../services/api_services.dart';
 import '../widget/my_dropdown_field.dart';
 import '../widget/my_slide_checkbox.dart';
 import '../widget/my_text_field.dart';
@@ -20,6 +24,8 @@ class AddPropertyPage extends StatefulWidget {
 }
 
 class _AddPropertyPageState extends State<AddPropertyPage> {
+  final propsController = PropertyController().getXID;
+
   int _activeStepIndex = 0;
 
   TextEditingController propsName = TextEditingController();
@@ -61,8 +67,35 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
 
   propertyModeEnum? _props_mode;
 
-  final _propsTypeList = ["Edo", "Delta", "Lagos", "Bayelsa", "Port-Harcourt"];
-  String? props_type;
+  List<States> stateList = [];
+  List<Area> areaList = [];
+  List<Area> areaListTemp = [];
+
+  List<Property> propertyList = [];
+  List<SubProperty> subPropertyList = [];
+  List<SubProperty> subPropertyListTemp = [];
+
+  String? states_id, area_id;
+
+  String? props_type, sub_props_type;
+
+  @override
+  void initState() {
+    super.initState();
+    populateDropDown();
+  }
+
+  populateDropDown() async {
+    LocationModel data = await ApiServices.getStateRegion();
+    PropertyAndSubTypesModel rata = await ApiServices.getPropertyAndSubTypes();
+    setState(() {
+      stateList = data.states;
+      areaList = data.area;
+      //
+      propertyList = rata.property!;
+      subPropertyList = rata.subProperty!;
+    });
+  }
 
   // final _propsPurposeList = ["Buy", "Rent"];
   final _propsPurposeList = [
@@ -128,70 +161,50 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Property Type',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white30,
-                  ),
-                  isExpanded: true,
+                MyDropDownField(
+                  labelText: 'Property Type',
                   value: props_type,
-                  items: _propsTypeList
-                      .map((e) => DropdownMenuItem(
-                            child: Text(e),
-                            value: e,
-                          ))
-                      .toList(),
-                  onChanged: (val) {
+                  dropDownList: propertyList.map(
+                    (e) {
+                      return DropdownMenuItem(
+                        value: e.id,
+                        child: Text(
+                          e.name.toString(),
+                        ),
+                      );
+                    },
+                  ).toList(),
+                  onChanged: (Object? val) {
                     setState(() {
+                      sub_props_type = null;
                       props_type = val.toString();
+                      subPropertyListTemp = subPropertyList
+                          .where(
+                            (element) =>
+                                element.typeId.toString() ==
+                                props_type.toString(),
+                          )
+                          .toList();
                     });
                   },
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                DropdownButtonFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Sub Property Type',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black12,
-                        width: 2,
-                      ),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white30,
-                  ),
-                  isExpanded: true,
-                  value: props_type,
-                  items: _propsTypeList
-                      .map((e) => DropdownMenuItem(
-                            child: Text(e),
-                            value: e,
-                          ))
+                MyDropDownField(
+                  labelText: 'Sub Property Type',
+                  value: sub_props_type,
+                  dropDownList: subPropertyListTemp
+                      .map(
+                        (e) => DropdownMenuItem(
+                          value: e.id,
+                          child: Text(e.name!),
+                        ),
+                      )
                       .toList(),
-                  onChanged: (val) {
+                  onChanged: (Object? val) {
                     setState(() {
-                      props_type = val.toString();
+                      sub_props_type = val.toString();
                     });
                   },
                 ),
@@ -222,7 +235,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                Text('State & Area, Price'),
+                const Text('State & Area, Price'),
                 const SizedBox(
                   height: 8,
                 ),
@@ -245,16 +258,24 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                     fillColor: Colors.white30,
                   ),
                   isExpanded: true,
-                  value: props_type,
-                  items: _propsTypeList
+                  value: states_id,
+                  items: stateList
                       .map((e) => DropdownMenuItem(
-                            child: Text(e),
-                            value: e,
+                            value: e.id,
+                            child: Text(e.name.toString()),
                           ))
                       .toList(),
-                  onChanged: (val) {
+                  onChanged: (Object? val) {
                     setState(() {
-                      props_type = val.toString();
+                      area_id = null;
+                      states_id = val.toString();
+                      areaListTemp = areaList
+                          .where(
+                            (element) =>
+                                element.stateId.toString() ==
+                                states_id.toString(),
+                          )
+                          .toList();
                     });
                   },
                 ),
@@ -280,16 +301,16 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                     fillColor: Colors.white30,
                   ),
                   isExpanded: true,
-                  value: props_type,
-                  items: _propsTypeList
+                  value: area_id,
+                  items: areaListTemp
                       .map((e) => DropdownMenuItem(
-                            child: Text(e),
-                            value: e,
+                            value: e.id,
+                            child: Text(e.name),
                           ))
                       .toList(),
-                  onChanged: (val) {
+                  onChanged: (Object? val) {
                     setState(() {
-                      props_type = val.toString();
+                      area_id = val.toString();
                     });
                   },
                 ),
@@ -788,13 +809,6 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  MyTextField(
-                    myTextFormController: propsCautionFee,
-                    fieldName: 'Special Preference',
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   FlutterInputChips(
                     initialValue: const [],
                     // maxChips: 5,
@@ -824,7 +838,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   const Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      'Enter Preference separated by comma (,)',
+                      'use comma (,) to enter list of preference',
                       style: TextStyle(
                         color: Colors.red,
                       ),
@@ -903,11 +917,11 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               ),
             )),
         Step(
-            state: StepState.complete,
-            isActive: _activeStepIndex >= 5,
-            title: const Text('Confirm'),
-            content: Container(
-                child: Column(
+          state: StepState.complete,
+          isActive: _activeStepIndex >= 5,
+          title: const Text('Confirm'),
+          content: Container(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -917,13 +931,10 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 Text('Address : ${propsYearBuilt.text}'),
                 Text('PinCode : ${propsPrice.text}'),
               ],
-            )))
+            ),
+          ),
+        ),
       ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -956,12 +967,146 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       type: StepperType.vertical,
       currentStep: _activeStepIndex,
       steps: stepList(),
-      onStepContinue: () {
+      onStepContinue: () async {
         if (_activeStepIndex < (stepList().length - 1)) {
           setState(() {
             _activeStepIndex += 1;
           });
         } else {
+          // print(
+          // propsName,
+          // props_purpose,
+          // props_type,
+          // sub_props_type,
+          // propsBed,
+          // propsBath,
+          // propsToilet,
+          // state,
+          // area,
+          // propsPrice,
+          // propsDesc,
+          // propsYearBuilt,
+          // _props_mode,
+          // propsYoutubeId,
+          // air_condition,
+          // balcony,
+          // bedding,
+          // cable_tv,
+          // cleaning_after_exist,
+          // coffee_pot,
+          // computer,
+          // cot,
+          // dishwasher,
+          // dvd,
+          // fan,
+          // fridge,
+          // grill,
+          // hairdryer,
+          // heater,
+          // hi_fi,
+          // internet,
+          // iron,
+          // juicer,
+          // lift,
+          // microwave,
+          // gym,
+          // fireplace,
+          // hot_tub,
+          // propsCondition,
+          // propsCautionFee,
+          // selectedPref,
+          // );
+          if (propsName != '' &&
+              props_purpose != '' &&
+              props_type != '' &&
+              sub_props_type != '' &&
+              propsBed != '' &&
+              propsBath != '' &&
+              propsToilet != '' &&
+              states_id != '' &&
+              area_id != '' &&
+              propsPrice != '' &&
+              propsDesc != '' &&
+              propsYearBuilt != '' &&
+              _props_mode != '' &&
+              propsYoutubeId != '' &&
+              air_condition != '' &&
+              balcony != '' &&
+              bedding != '' &&
+              cable_tv != '' &&
+              cleaning_after_exist != '' &&
+              coffee_pot != '' &&
+              computer != '' &&
+              cot != '' &&
+              dishwasher != '' &&
+              dvd != '' &&
+              fan != '' &&
+              fridge != '' &&
+              grill != '' &&
+              hairdryer != '' &&
+              heater != '' &&
+              hi_fi != '' &&
+              internet != '' &&
+              iron != '' &&
+              juicer != '' &&
+              lift != '' &&
+              microwave != '' &&
+              gym != '' &&
+              fireplace != '' &&
+              hot_tub != '' &&
+              propsCondition != '' &&
+              propsCautionFee != '' &&
+              selectedPref != '' &&
+              _image != null) {
+            print('form its filled');
+            bool status = await propsController.addProduct(
+                propsName: propsName.text,
+                props_purpose: props_purpose!,
+                props_type: props_type!,
+                sub_props_type: sub_props_type!,
+                propsBed: propsBed.text,
+                propsBath: propsBath.text,
+                propsToilet: propsToilet.text,
+                state_id: states_id!,
+                area_id: area_id!,
+                propsPrice: propsPrice.text,
+                propsDesc: propsDesc.text,
+                propsYearBuilt: propsYearBuilt.text,
+                props_mode: _props_mode!,
+                propsYoutubeId: propsYoutubeId.text,
+                air_condition: air_condition,
+                balcony: balcony,
+                bedding: bedding,
+                cable_tv: cable_tv,
+                cleaning_after_exist: cleaning_after_exist,
+                coffee_pot: coffee_pot,
+                computer: computer,
+                cot: cot,
+                dishwasher: dishwasher,
+                dvd: dvd,
+                fan: fan,
+                fridge: fridge,
+                grill: grill,
+                hairdryer: hairdryer,
+                heater: heater,
+                hi_fi: hi_fi,
+                internet: internet,
+                iron: iron,
+                juicer: juicer,
+                lift: lift,
+                microwave: microwave,
+                gym: gym,
+                fireplace: fireplace,
+                hot_tub: hot_tub,
+                propsCondition: propsCondition.text,
+                propsCautionFee: propsCautionFee.text,
+                selectedPref: selectedPref,
+                image: _image!);
+          } else {
+            print('form not filled');
+          }
+
+          print('form selected == ${selectedPref}');
           print('Submited');
         }
       },

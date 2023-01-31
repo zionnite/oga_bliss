@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:oga_bliss/model/property_type_model.dart';
 
 import '../model/alert_model.dart';
 import '../model/chat_head_model.dart';
@@ -13,6 +15,7 @@ import '../model/transaction_model.dart';
 import '../model/types_property_model.dart';
 import '../model/wallet_model.dart';
 import '../util/common.dart';
+import '../widget/my_raidio_field.dart';
 
 class ApiServices {
   static var client = http.Client();
@@ -38,6 +41,8 @@ class ApiServices {
   static const String _get_chat_head = 'get_message_head';
   static const String _get_wallet = 'get_wallet';
   static const String _pull_out = 'pull_out_payment';
+  static const String _props_and_sub = 'get_props_type_and_sub_type';
+  static const String _add_product = 'add_product';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -608,6 +613,158 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static getPropertyAndSubTypes() async {
+    try {
+      final result = await client.get(Uri.parse('$_mybaseUrl$_props_and_sub'));
+      if (result.statusCode == 200) {
+        PropertyAndSubTypesModel data =
+            propertyAndSubTypesModelFromJson(result.body);
+
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> addProduct(
+      {required String propsName,
+      required String props_purpose,
+      required String props_type,
+      required String sub_props_type,
+      required String propsBed,
+      required String propsBath,
+      required String propsToilet,
+      required String state_id,
+      required String area_id,
+      required String propsPrice,
+      required String propsDesc,
+      required String propsYearBuilt,
+      required propertyModeEnum props_mode,
+      required String propsYoutubeId,
+      required bool air_condition,
+      required bool balcony,
+      required bool bedding,
+      required bool cable_tv,
+      required bool cleaning_after_exist,
+      required bool coffee_pot,
+      required bool computer,
+      required bool cot,
+      required bool dishwasher,
+      required bool dvd,
+      required bool fan,
+      required bool fridge,
+      required bool grill,
+      required bool hairdryer,
+      required bool heater,
+      required bool hi_fi,
+      required bool internet,
+      required bool iron,
+      required bool juicer,
+      required bool lift,
+      required bool microwave,
+      required bool gym,
+      required bool fireplace,
+      required bool hot_tub,
+      required String propsCondition,
+      required String propsCautionFee,
+      required String selectedPref,
+      required File image}) async {
+    String? newMode;
+    if (props_mode == 'propertyModeEnum.New') {
+      newMode = 'New';
+    } else if (props_mode == 'propertyModeEnum.Furnished') {
+      newMode = 'Furnished';
+    } else {
+      newMode = 'Serviced';
+    }
+
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_add_product');
+      var request = http.MultipartRequest('POST', uri);
+      request.fields['propsName'] = propsName;
+      request.fields['props_purpose'] = props_purpose;
+      request.fields['props_type'] = props_type;
+      request.fields['sub_props_type'] = sub_props_type;
+      request.fields['propsBed'] = propsBed;
+      request.fields['propsBath'] = propsBath;
+      request.fields['propsToilet'] = propsToilet;
+      request.fields['state_id'] = state_id;
+      request.fields['area_id'] = area_id;
+      request.fields['propsPrice'] = propsPrice;
+      request.fields['propsDesc'] = propsDesc;
+      request.fields['propsYearBuilt'] = propsYearBuilt;
+      request.fields['props_mode'] = newMode;
+      request.fields['propsYoutubeId'] = propsYoutubeId;
+      request.fields['air_condition'] = air_condition.toString();
+      request.fields['balcony'] = balcony.toString();
+      request.fields['bedding'] = bedding.toString();
+      request.fields['cable_tv'] = cable_tv.toString();
+      request.fields['cleaning_after_exist'] = cleaning_after_exist.toString();
+      request.fields['coffee_pot'] = coffee_pot.toString();
+      request.fields['computer'] = computer.toString();
+      request.fields['cot'] = cot.toString();
+      request.fields['dishwasher'] = dishwasher.toString();
+      request.fields['dvd'] = dvd.toString();
+      request.fields['fan'] = fan.toString();
+      request.fields['fridge'] = fridge.toString();
+      request.fields['grill'] = grill.toString();
+      request.fields['hairdryer'] = hairdryer.toString();
+      request.fields['heater'] = heater.toString();
+      request.fields['hi_fi'] = hi_fi.toString();
+      request.fields['internet'] = internet.toString();
+      request.fields['iron'] = iron.toString();
+      request.fields['juicer'] = juicer.toString();
+      request.fields['lift'] = lift.toString();
+      request.fields['microwave'] = microwave.toString();
+      request.fields['gym'] = gym.toString();
+      request.fields['fireplace'] = fireplace.toString();
+      request.fields['hot_tub'] = hot_tub.toString();
+      request.fields['propsCondition'] = propsCondition;
+      request.fields['propsCautionFee'] = propsCautionFee;
+      request.fields['selectedPref'] = selectedPref;
+
+      var productImage =
+          await http.MultipartFile.fromPath('property_image', image.path);
+      request.files.add(productImage);
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        respond.stream.transform(utf8.decoder).listen((value) {
+          final j = json.decode(value) as Map<String, dynamic>;
+          var status = j['status'];
+
+          return status;
+        });
+        return "status";
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
