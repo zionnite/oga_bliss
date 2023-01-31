@@ -24,11 +24,13 @@ class PropertyController extends GetxController {
   var favPropertyList = <PropertyModel>[].obs;
   var typesPropertyList = <TypesPropertyModel>[].obs;
 
+  String? user_id;
+
   @override
   void onInit() async {
     super.onInit();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? user_id = prefs.getString('user_id');
+    user_id = prefs.getString('user_id');
     await getDetails(user_id);
     await fetchTypesProps();
 
@@ -37,8 +39,8 @@ class PropertyController extends GetxController {
     // fetchStateRegion();
   }
 
-  getDetails(var user_id) async {
-    var seeker = await ApiServices.getAllProducts(page_num, user_id);
+  getDetails(var userId) async {
+    var seeker = await ApiServices.getAllProducts(page_num, userId);
     if (seeker != null) {
       isDataProcessing(true);
       propertyList.value = seeker.cast<PropertyModel>();
@@ -47,8 +49,8 @@ class PropertyController extends GetxController {
     }
   }
 
-  void getMoreDetail(var page_num, var user_id) async {
-    var seeker = await ApiServices.getAllProducts(page_num, user_id);
+  void getMoreDetail(var pageNum, var userId) async {
+    var seeker = await ApiServices.getAllProducts(pageNum, userId);
 
     if (seeker != null) {
       isMoreDataAvailable(true);
@@ -102,16 +104,16 @@ class PropertyController extends GetxController {
     return false;
   }
 
-  Future<void> requestInspection(var userId, var propsId, var agent_id) async {
+  Future<void> requestInspection(var userId, var propsId, var agentId) async {
     String status =
-        await ApiServices.requestInspection(userId, propsId, agent_id);
+        await ApiServices.requestInspection(userId, propsId, agentId);
     showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
   }
 
-  void fetch_search_page(var page_num, var search_term, var user_id) async {
+  void fetch_search_page(var pageNum, var searchTerm, var userId) async {
     searchPropertyList.clear();
     var seeker =
-        await ApiServices.getSearchProduct(page_num, user_id, search_term);
+        await ApiServices.getSearchProduct(pageNum, userId, searchTerm);
 
     if (seeker != null) {
       isSearchDataProcessing(true);
@@ -120,9 +122,9 @@ class PropertyController extends GetxController {
   }
 
   void fetch_search_page_by_pagination(
-      var page_num, var search_term, var user_id) async {
+      var pageNum, var searchTerm, var userId) async {
     var seeker =
-        await ApiServices.getSearchProduct(page_num, user_id, search_term);
+        await ApiServices.getSearchProduct(pageNum, userId, searchTerm);
 
     if (seeker != null) {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
@@ -139,10 +141,10 @@ class PropertyController extends GetxController {
   }
 
   void filter_search_page_location(
-      var page_num, var state_id, var area_id, var user_id) async {
+      var pageNum, var stateId, var areaId, var userId) async {
     searchPropertyList.clear();
     var seeker = await ApiServices.getFilterProductLocation(
-        page_num, user_id, state_id, area_id);
+        pageNum, userId, stateId, areaId);
 
     if (seeker != null) {
       isSearchDataProcessing(true);
@@ -151,19 +153,19 @@ class PropertyController extends GetxController {
   }
 
   void filter_search_page_location_by_pagination(
-      var page_num, var state_id, var area_id, var user_id) async {
+      var pageNum, var stateId, var areaId, var userId) async {
     var seeker = await ApiServices.getFilterProductLocation(
-        page_num, user_id, state_id, area_id);
+        pageNum, userId, stateId, areaId);
 
     if (seeker != null) {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
 
-  void filter_search_page_type(var page_num, var type_id, var user_id) async {
+  void filter_search_page_type(var pageNum, var typeId, var userId) async {
     searchPropertyList.clear();
     var seeker =
-        await ApiServices.getFilterProductType(page_num, user_id, type_id);
+        await ApiServices.getFilterProductType(pageNum, userId, typeId);
 
     if (seeker != null) {
       isSearchDataProcessing(true);
@@ -172,9 +174,9 @@ class PropertyController extends GetxController {
   }
 
   void filter_search_page_type_by_pagination(
-      var page_num, var type_id, var user_id) async {
+      var pageNum, var typeId, var userId) async {
     var seeker =
-        await ApiServices.getFilterProductType(page_num, user_id, type_id);
+        await ApiServices.getFilterProductType(pageNum, userId, typeId);
 
     if (seeker != null) {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
@@ -182,10 +184,10 @@ class PropertyController extends GetxController {
   }
 
   void filter_search_page_price(
-      var page_num, var start_price, end_price, var user_id) async {
+      var pageNum, var startPrice, endPrice, var userId) async {
     searchPropertyList.clear();
     var seeker = await ApiServices.getFilterProductPrice(
-        page_num, user_id, start_price, end_price);
+        pageNum, userId, startPrice, endPrice);
 
     if (seeker != null) {
       isSearchDataProcessing(true);
@@ -194,18 +196,18 @@ class PropertyController extends GetxController {
   }
 
   void filter_search_page_price_by_pagination(
-      var page_num, var start_price, end_price, var user_id) async {
+      var pageNum, var startPrice, endPrice, var userId) async {
     var seeker = await ApiServices.getFilterProductPrice(
-        page_num, user_id, start_price, end_price);
+        pageNum, userId, startPrice, endPrice);
 
     if (seeker != null) {
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
 
-  void fetch_favourite(var page_num, var user_id) async {
+  void fetch_favourite(var pageNum, var userId) async {
     favPropertyList.clear();
-    var seeker = await ApiServices.getAllFav(page_num, user_id);
+    var seeker = await ApiServices.getAllFav(pageNum, userId);
 
     if (seeker != null) {
       isSearchDataProcessing(true);
@@ -213,8 +215,8 @@ class PropertyController extends GetxController {
     }
   }
 
-  void fetch_more_favourite(var page_num, var user_id) async {
-    var seeker = await ApiServices.getAllFav(page_num, user_id);
+  void fetch_more_favourite(var pageNum, var userId) async {
+    var seeker = await ApiServices.getAllFav(pageNum, userId);
 
     if (seeker != null) {
       isSearchDataProcessing(true);
@@ -222,104 +224,136 @@ class PropertyController extends GetxController {
     }
   }
 
-  addProduct(
-      {required String propsName,
-      required String props_purpose,
-      required String props_type,
-      required String sub_props_type,
-      required String propsBed,
-      required String propsBath,
-      required String propsToilet,
-      required String state_id,
-      required String area_id,
-      required String propsPrice,
-      required String propsDesc,
-      required String propsYearBuilt,
-      required propertyModeEnum props_mode,
-      required String propsYoutubeId,
-      required bool air_condition,
-      required bool balcony,
-      required bool bedding,
-      required bool cable_tv,
-      required bool cleaning_after_exist,
-      required bool coffee_pot,
-      required bool computer,
-      required bool cot,
-      required bool dishwasher,
-      required bool dvd,
-      required bool fan,
-      required bool fridge,
-      required bool grill,
-      required bool hairdryer,
-      required bool heater,
-      required bool hi_fi,
-      required bool internet,
-      required bool iron,
-      required bool juicer,
-      required bool lift,
-      required bool microwave,
-      required bool gym,
-      required bool fireplace,
-      required bool hot_tub,
-      required String propsCondition,
-      required String propsCautionFee,
-      required String selectedPref,
-      required File image}) async {
-    String status = await ApiServices.addProduct(
-        propsName: propsName,
-        props_purpose: props_purpose,
-        props_type: props_type,
-        sub_props_type: sub_props_type,
-        propsBed: propsBed,
-        propsBath: propsBath,
-        propsToilet: propsToilet,
-        state_id: state_id,
-        area_id: area_id,
-        propsPrice: propsPrice,
-        propsDesc: propsDesc,
-        propsYearBuilt: propsYearBuilt,
-        props_mode: props_mode,
-        propsYoutubeId: propsYoutubeId,
-        air_condition: air_condition,
-        balcony: balcony,
-        bedding: bedding,
-        cable_tv: cable_tv,
-        cleaning_after_exist: cleaning_after_exist,
-        coffee_pot: coffee_pot,
-        computer: computer,
-        cot: cot,
-        dishwasher: dishwasher,
-        dvd: dvd,
-        fan: fan,
-        fridge: fridge,
-        grill: grill,
-        hairdryer: hairdryer,
-        heater: heater,
-        hi_fi: hi_fi,
-        internet: internet,
-        iron: iron,
-        juicer: juicer,
-        lift: lift,
-        microwave: microwave,
-        gym: gym,
-        fireplace: fireplace,
-        hot_tub: hot_tub,
-        propsCondition: propsCondition,
-        propsCautionFee: propsCautionFee,
-        selectedPref: selectedPref,
-        image: image);
+  addProduct({
+    required String propsName,
+    required String props_purpose,
+    required String props_type,
+    required String sub_props_type,
+    required String propsBed,
+    required String propsBath,
+    required String propsToilet,
+    required String state_id,
+    required String area_id,
+    required String propsPrice,
+    required String propsDesc,
+    required String propsYearBuilt,
+    required propertyModeEnum props_mode,
+    required String propsYoutubeId,
+    required bool air_condition,
+    required bool balcony,
+    required bool bedding,
+    required bool cable_tv,
+    required bool cleaning_after_exist,
+    required bool coffee_pot,
+    required bool computer,
+    required bool cot,
+    required bool dishwasher,
+    required bool dvd,
+    required bool fan,
+    required bool fridge,
+    required bool grill,
+    required bool hairdryer,
+    required bool heater,
+    required bool hi_fi,
+    required bool internet,
+    required bool iron,
+    required bool juicer,
+    required bool lift,
+    required bool microwave,
+    required bool gym,
+    required bool fireplace,
+    required bool hot_tub,
+    required String propsCondition,
+    required String propsCautionFee,
+    required String selectedPref,
+    required File image,
+    //
+    required String shopping,
+    required String hospital,
+    required String petrol,
+    required String airport,
+    required String church,
+    required String mosque,
+    required String school,
+    //
+    required String crime,
+    required String traffic,
+    required String pollution,
+    required String education,
+    required String health,
+  }) async {
+    bool status = await ApiServices.addProduct(
+      propsName: propsName,
+      props_purpose: props_purpose,
+      props_type: props_type,
+      sub_props_type: sub_props_type,
+      propsBed: propsBed,
+      propsBath: propsBath,
+      propsToilet: propsToilet,
+      state_id: state_id,
+      area_id: area_id,
+      propsPrice: propsPrice,
+      propsDesc: propsDesc,
+      propsYearBuilt: propsYearBuilt,
+      props_mode: props_mode,
+      propsYoutubeId: propsYoutubeId,
+      air_condition: air_condition,
+      balcony: balcony,
+      bedding: bedding,
+      cable_tv: cable_tv,
+      cleaning_after_exist: cleaning_after_exist,
+      coffee_pot: coffee_pot,
+      computer: computer,
+      cot: cot,
+      dishwasher: dishwasher,
+      dvd: dvd,
+      fan: fan,
+      fridge: fridge,
+      grill: grill,
+      hairdryer: hairdryer,
+      heater: heater,
+      hi_fi: hi_fi,
+      internet: internet,
+      iron: iron,
+      juicer: juicer,
+      lift: lift,
+      microwave: microwave,
+      gym: gym,
+      fireplace: fireplace,
+      hot_tub: hot_tub,
+      propsCondition: propsCondition,
+      propsCautionFee: propsCautionFee,
+      selectedPref: selectedPref,
+      image: image,
+      //
+      shopping: shopping,
+      hospital: hospital,
+      petrol: petrol,
+      airport: airport,
+      church: church,
+      mosque: mosque,
+      school: school,
+      //
+      crime: crime,
+      traffic: traffic,
+      pollution: pollution,
+      education: education,
+      health: health,
+      user_id: user_id!,
+    );
 
-    bool status_type;
+    bool statusType;
     String? msg;
-    if (status == 'true') {
-      msg = 'Request Marked';
-      status_type = true;
+    if (status == true) {
+      msg = 'Product Created';
+      statusType = true;
     } else {
       msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
-      status_type = true;
+      statusType = false;
     }
-    showSnackBar(title: 'Make Request', msg: msg, backgroundColor: Colors.blue);
+    showSnackBar(
+        title: 'Create Product', msg: msg, backgroundColor: Colors.blue);
 
-    return status_type;
+    return statusType;
   }
 }

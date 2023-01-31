@@ -646,49 +646,65 @@ class ApiServices {
     }
   }
 
-  static Future<String> addProduct(
-      {required String propsName,
-      required String props_purpose,
-      required String props_type,
-      required String sub_props_type,
-      required String propsBed,
-      required String propsBath,
-      required String propsToilet,
-      required String state_id,
-      required String area_id,
-      required String propsPrice,
-      required String propsDesc,
-      required String propsYearBuilt,
-      required propertyModeEnum props_mode,
-      required String propsYoutubeId,
-      required bool air_condition,
-      required bool balcony,
-      required bool bedding,
-      required bool cable_tv,
-      required bool cleaning_after_exist,
-      required bool coffee_pot,
-      required bool computer,
-      required bool cot,
-      required bool dishwasher,
-      required bool dvd,
-      required bool fan,
-      required bool fridge,
-      required bool grill,
-      required bool hairdryer,
-      required bool heater,
-      required bool hi_fi,
-      required bool internet,
-      required bool iron,
-      required bool juicer,
-      required bool lift,
-      required bool microwave,
-      required bool gym,
-      required bool fireplace,
-      required bool hot_tub,
-      required String propsCondition,
-      required String propsCautionFee,
-      required String selectedPref,
-      required File image}) async {
+  static Future<bool> addProduct({
+    required String propsName,
+    required String props_purpose,
+    required String props_type,
+    required String sub_props_type,
+    required String propsBed,
+    required String propsBath,
+    required String propsToilet,
+    required String state_id,
+    required String area_id,
+    required String propsPrice,
+    required String propsDesc,
+    required String propsYearBuilt,
+    required propertyModeEnum props_mode,
+    required String propsYoutubeId,
+    required bool air_condition,
+    required bool balcony,
+    required bool bedding,
+    required bool cable_tv,
+    required bool cleaning_after_exist,
+    required bool coffee_pot,
+    required bool computer,
+    required bool cot,
+    required bool dishwasher,
+    required bool dvd,
+    required bool fan,
+    required bool fridge,
+    required bool grill,
+    required bool hairdryer,
+    required bool heater,
+    required bool hi_fi,
+    required bool internet,
+    required bool iron,
+    required bool juicer,
+    required bool lift,
+    required bool microwave,
+    required bool gym,
+    required bool fireplace,
+    required bool hot_tub,
+    required String propsCondition,
+    required String propsCautionFee,
+    required String selectedPref,
+    required File image,
+    //
+    required String shopping,
+    required String hospital,
+    required String petrol,
+    required String airport,
+    required String church,
+    required String mosque,
+    required String school,
+    //
+    required String crime,
+    required String traffic,
+    required String pollution,
+    required String education,
+    required String health,
+    required String user_id,
+  }) async {
     String? newMode;
     if (props_mode == 'propertyModeEnum.New') {
       newMode = 'New';
@@ -698,8 +714,9 @@ class ApiServices {
       newMode = 'Serviced';
     }
 
+    print(airport.toString());
     try {
-      final uri = Uri.parse('$_mybaseUrl$_add_product');
+      final uri = Uri.parse('$_mybaseUrl$_add_product/$user_id');
       var request = http.MultipartRequest('POST', uri);
       request.fields['propsName'] = propsName;
       request.fields['props_purpose'] = props_purpose;
@@ -742,6 +759,21 @@ class ApiServices {
       request.fields['propsCondition'] = propsCondition;
       request.fields['propsCautionFee'] = propsCautionFee;
       request.fields['selectedPref'] = selectedPref;
+      //
+      request.fields['shopping_mall'] = shopping.toString();
+      request.fields['hospital'] = hospital.toString();
+      request.fields['petrol_pump'] = petrol.toString();
+      request.fields['airport'] = airport.toString();
+      request.fields['church'] = church.toString();
+      request.fields['mosque'] = mosque.toString();
+      request.fields['school'] = school.toString();
+
+      //
+      request.fields['crime'] = crime.toString();
+      request.fields['traffic'] = traffic.toString();
+      request.fields['pollution'] = pollution.toString();
+      request.fields['education'] = education.toString();
+      request.fields['health'] = health.toString();
 
       var productImage =
           await http.MultipartFile.fromPath('property_image', image.path);
@@ -750,13 +782,13 @@ class ApiServices {
       var respond = await request.send();
 
       if (respond.statusCode == 200) {
-        respond.stream.transform(utf8.decoder).listen((value) {
-          final j = json.decode(value) as Map<String, dynamic>;
-          var status = j['status'];
-
-          return status;
-        });
-        return "status";
+        // respond.stream.transform(utf8.decoder).listen((value) {
+        //   final j = json.decode(value) as Map<String, dynamic>;
+        //   var status = j['status'];
+        //
+        //   return status;
+        // });
+        return true;
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -765,6 +797,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
+      print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

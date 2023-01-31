@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatefulWidget {
-  MyTextField({
+class MyNumField extends StatefulWidget {
+  MyNumField({
     required this.myTextFormController,
     required this.fieldName,
     this.onChange,
     this.prefix,
     this.suffix,
-    this.hintName,
+    this.hintText,
   });
 
   final TextEditingController myTextFormController;
@@ -15,18 +15,19 @@ class MyTextField extends StatefulWidget {
   final ValueChanged<String>? onChange;
   final IconData? prefix;
   final IconData? suffix;
-  final String? hintName;
+  final String? hintText;
 
   @override
-  State<MyTextField> createState() => _MyTextFieldState();
+  State<MyNumField> createState() => _MyNumFieldState();
 }
 
-class _MyTextFieldState extends State<MyTextField> {
+class _MyNumFieldState extends State<MyNumField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: TextField(
+        keyboardType: TextInputType.number,
         onChanged: widget.onChange,
         controller: widget.myTextFormController,
         decoration: InputDecoration(
@@ -37,7 +38,7 @@ class _MyTextFieldState extends State<MyTextField> {
             ),
           ),
           labelText: widget.fieldName,
-          hintText: widget.hintName,
+          hintText: widget.hintText,
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/property_controller.dart';
 import 'package:oga_bliss/widget/my_raidio_field.dart';
 
@@ -14,6 +15,7 @@ import '../services/api_services.dart';
 import '../widget/my_dropdown_field.dart';
 import '../widget/my_slide_checkbox.dart';
 import '../widget/my_text_field.dart';
+import '../widget/my_text_field_num.dart';
 import '../widget/property_app_bar.dart';
 
 class AddPropertyPage extends StatefulWidget {
@@ -39,6 +41,20 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   TextEditingController propsCondition = TextEditingController();
   TextEditingController propsCautionFee = TextEditingController();
   TextEditingController propsSpecialPref = TextEditingController();
+  //
+  TextEditingController shoppingController = TextEditingController();
+  TextEditingController hospitalController = TextEditingController();
+  TextEditingController petrolController = TextEditingController();
+  TextEditingController airportController = TextEditingController();
+  TextEditingController churchController = TextEditingController();
+  TextEditingController mosqueController = TextEditingController();
+  TextEditingController schoolController = TextEditingController();
+  //
+  TextEditingController crimeController = TextEditingController();
+  TextEditingController trafficController = TextEditingController();
+  TextEditingController pollutionController = TextEditingController();
+  TextEditingController educationController = TextEditingController();
+  TextEditingController healthController = TextEditingController();
 
   bool air_condition = false;
   bool balcony = false;
@@ -78,6 +94,8 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   String? states_id, area_id;
 
   String? props_type, sub_props_type;
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -785,140 +803,264 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               ),
             )),
         Step(
-            state:
-                _activeStepIndex <= 3 ? StepState.editing : StepState.complete,
-            isActive: _activeStepIndex >= 3,
-            title: const Text('Property Extra Details'),
-            content: Container(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
+          state: _activeStepIndex <= 3 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 3,
+          title: const Text('Property Extra Details'),
+          content: Container(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                MyTextField(
+                  myTextFormController: propsCondition,
+                  fieldName: 'What are your conditions',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                  myTextFormController: propsCautionFee,
+                  fieldName: 'Caution / Damage Fee',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                FlutterInputChips(
+                  initialValue: const [],
+                  // maxChips: 5,
+                  onChanged: (v) {
+                    setState(() {
+                      specialPref = v;
+                      selectedPref = specialPref.join(',');
+                    });
+                  },
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(3),
                   ),
-                  MyTextField(
-                    myTextFormController: propsCondition,
-                    fieldName: 'What are your conditions',
+                  inputDecoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Special Preference",
                   ),
-                  const SizedBox(
-                    height: 10,
+                  chipTextStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  MyTextField(
-                    myTextFormController: propsCautionFee,
-                    fieldName: 'Caution / Damage Fee',
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  FlutterInputChips(
-                    initialValue: const [],
-                    // maxChips: 5,
-                    onChanged: (v) {
-                      setState(() {
-                        specialPref = v;
-                        selectedPref = specialPref.join(',');
-                      });
-                    },
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    inputDecoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Special Preference",
-                    ),
-                    chipTextStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    chipSpacing: 8,
-                    chipDeleteIconColor: Colors.white,
-                    chipBackgroundColor: Colors.blue,
-                  ),
-                  const Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      'use comma (,) to enter list of preference',
-                      style: TextStyle(
-                        color: Colors.red,
-                      ),
+                  chipSpacing: 8,
+                  chipDeleteIconColor: Colors.white,
+                  chipBackgroundColor: Colors.blue,
+                ),
+                const Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'use comma (,) to enter list of preference',
+                    style: TextStyle(
+                      color: Colors.red,
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-            )),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
         Step(
-            state:
-                _activeStepIndex <= 4 ? StepState.editing : StepState.complete,
-            isActive: _activeStepIndex >= 4,
-            title: const Text('Add Image'),
-            content: Container(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _pickImage(ImageSource.gallery);
-                    },
-                    child: Card(
-                      child: Container(
-                        width: double.infinity,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.image,
-                                color: Colors.blue,
-                              ),
-                              Text(
-                                'Select Image',
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
+          state: _activeStepIndex <= 4 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 4,
+          title: const Text('Property Facilities'),
+          content: Container(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                MyTextField(
+                  myTextFormController: shoppingController,
+                  fieldName: 'Shopping Mall',
+                  hintName: 'e.g 5km Or 20min',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                  myTextFormController: hospitalController,
+                  fieldName: 'Hospital',
+                  hintName: 'e.g 5km Or 20min',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                  myTextFormController: schoolController,
+                  fieldName: 'School',
+                  hintName: 'e.g 5km Or 20min',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                  myTextFormController: petrolController,
+                  fieldName: 'Petrol Pump',
+                  hintName: 'e.g 5km Or 20min',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                  myTextFormController: airportController,
+                  fieldName: 'Airport',
+                  hintName: 'e.g 5km Or 20min',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                  myTextFormController: churchController,
+                  fieldName: 'Church',
+                  hintName: 'e.g 5km Or 20min',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                  myTextFormController: mosqueController,
+                  fieldName: 'Mosque',
+                  hintName: 'e.g 5km Or 20min',
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Step(
+          state: _activeStepIndex <= 5 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 5,
+          title: const Text('Property Valuation'),
+          content: Container(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                MyNumField(
+                  myTextFormController: crimeController,
+                  fieldName: 'Crime',
+                  hintText: 'e.g 10%',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyNumField(
+                  myTextFormController: trafficController,
+                  fieldName: 'Traffic',
+                  hintText: 'e.g 60%',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyNumField(
+                  myTextFormController: pollutionController,
+                  fieldName: 'Pollution',
+                  hintText: 'e.g 10%',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyNumField(
+                  myTextFormController: educationController,
+                  fieldName: 'Education',
+                  hintText: 'e.g 80%',
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyNumField(
+                  myTextFormController: healthController,
+                  fieldName: 'Health',
+                  hintText: 'e.g 90%',
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Step(
+          state: _activeStepIndex <= 6 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 6,
+          title: const Text('Add Image'),
+          content: Container(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                InkWell(
+                  onTap: () {
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Card(
+                    child: Container(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.image,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Select Image',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  Center(
-                    child: Container(
-                      height: 200.0,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.grey.shade200,
-                      ),
-                      child: Center(
-                        child: _image == null
-                            ? const Text(
-                                'No image selected',
-                                style: TextStyle(fontSize: 20),
-                              )
-                            : Image(
-                                width: double.infinity,
-                                height: 200,
-                                image: FileImage(_image!),
-                              ),
-                      ),
+                ),
+                Center(
+                  child: Container(
+                    height: 200.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Center(
+                      child: _image == null
+                          ? const Text(
+                              'No image selected',
+                              style: TextStyle(fontSize: 20),
+                            )
+                          : Image(
+                              width: double.infinity,
+                              height: 200,
+                              image: FileImage(_image!),
+                            ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                ],
-              ),
-            )),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+              ],
+            ),
+          ),
+        ),
         Step(
           state: StepState.complete,
-          isActive: _activeStepIndex >= 5,
+          isActive: _activeStepIndex >= 7,
           title: const Text('Confirm'),
           content: Container(
             child: Column(
@@ -973,49 +1115,10 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
             _activeStepIndex += 1;
           });
         } else {
-          // print(
-          // propsName,
-          // props_purpose,
-          // props_type,
-          // sub_props_type,
-          // propsBed,
-          // propsBath,
-          // propsToilet,
-          // state,
-          // area,
-          // propsPrice,
-          // propsDesc,
-          // propsYearBuilt,
-          // _props_mode,
-          // propsYoutubeId,
-          // air_condition,
-          // balcony,
-          // bedding,
-          // cable_tv,
-          // cleaning_after_exist,
-          // coffee_pot,
-          // computer,
-          // cot,
-          // dishwasher,
-          // dvd,
-          // fan,
-          // fridge,
-          // grill,
-          // hairdryer,
-          // heater,
-          // hi_fi,
-          // internet,
-          // iron,
-          // juicer,
-          // lift,
-          // microwave,
-          // gym,
-          // fireplace,
-          // hot_tub,
-          // propsCondition,
-          // propsCautionFee,
-          // selectedPref,
-          // );
+          setState(() {
+            isLoading = true;
+          });
+
           if (propsName != '' &&
               props_purpose != '' &&
               props_type != '' &&
@@ -1057,51 +1160,87 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               propsCondition != '' &&
               propsCautionFee != '' &&
               selectedPref != '' &&
-              _image != null) {
+              _image != null &&
+              //
+              shoppingController != '' &&
+              hospitalController != '' &&
+              petrolController != '' &&
+              airportController != '' &&
+              churchController != '' &&
+              mosqueController != '' &&
+              schoolController != '' &&
+              //
+              crimeController != '' &&
+              trafficController != '' &&
+              pollutionController != '' &&
+              educationController != '' &&
+              healthController != '') {
             print('form its filled');
             bool status = await propsController.addProduct(
-                propsName: propsName.text,
-                props_purpose: props_purpose!,
-                props_type: props_type!,
-                sub_props_type: sub_props_type!,
-                propsBed: propsBed.text,
-                propsBath: propsBath.text,
-                propsToilet: propsToilet.text,
-                state_id: states_id!,
-                area_id: area_id!,
-                propsPrice: propsPrice.text,
-                propsDesc: propsDesc.text,
-                propsYearBuilt: propsYearBuilt.text,
-                props_mode: _props_mode!,
-                propsYoutubeId: propsYoutubeId.text,
-                air_condition: air_condition,
-                balcony: balcony,
-                bedding: bedding,
-                cable_tv: cable_tv,
-                cleaning_after_exist: cleaning_after_exist,
-                coffee_pot: coffee_pot,
-                computer: computer,
-                cot: cot,
-                dishwasher: dishwasher,
-                dvd: dvd,
-                fan: fan,
-                fridge: fridge,
-                grill: grill,
-                hairdryer: hairdryer,
-                heater: heater,
-                hi_fi: hi_fi,
-                internet: internet,
-                iron: iron,
-                juicer: juicer,
-                lift: lift,
-                microwave: microwave,
-                gym: gym,
-                fireplace: fireplace,
-                hot_tub: hot_tub,
-                propsCondition: propsCondition.text,
-                propsCautionFee: propsCautionFee.text,
-                selectedPref: selectedPref,
-                image: _image!);
+              propsName: propsName.text,
+              props_purpose: props_purpose!,
+              props_type: props_type!,
+              sub_props_type: sub_props_type!,
+              propsBed: propsBed.text,
+              propsBath: propsBath.text,
+              propsToilet: propsToilet.text,
+              state_id: states_id!,
+              area_id: area_id!,
+              propsPrice: propsPrice.text,
+              propsDesc: propsDesc.text,
+              propsYearBuilt: propsYearBuilt.text,
+              props_mode: _props_mode!,
+              propsYoutubeId: propsYoutubeId.text,
+              air_condition: air_condition,
+              balcony: balcony,
+              bedding: bedding,
+              cable_tv: cable_tv,
+              cleaning_after_exist: cleaning_after_exist,
+              coffee_pot: coffee_pot,
+              computer: computer,
+              cot: cot,
+              dishwasher: dishwasher,
+              dvd: dvd,
+              fan: fan,
+              fridge: fridge,
+              grill: grill,
+              hairdryer: hairdryer,
+              heater: heater,
+              hi_fi: hi_fi,
+              internet: internet,
+              iron: iron,
+              juicer: juicer,
+              lift: lift,
+              microwave: microwave,
+              gym: gym,
+              fireplace: fireplace,
+              hot_tub: hot_tub,
+              propsCondition: propsCondition.text,
+              propsCautionFee: propsCautionFee.text,
+              selectedPref: selectedPref,
+              image: _image!,
+              //
+              shopping: shoppingController.text,
+              hospital: hospitalController.text,
+              petrol: petrolController.text,
+              airport: airportController.text,
+              church: churchController.text,
+              mosque: mosqueController.text,
+              school: schoolController.text,
+              //
+
+              crime: crimeController.text,
+              traffic: trafficController.text,
+              pollution: pollutionController.text,
+              education: educationController.text,
+              health: healthController.text,
+            );
+
+            // if (status) {
+            setState(() {
+              isLoading = false;
+            });
+            // }
           } else {
             print('form not filled');
           }
@@ -1126,29 +1265,39 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       },
       controlsBuilder: (context, ControlsDetails) {
         final isLastStep = _activeStepIndex == stepList().length - 1;
-        return Container(
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: ControlsDetails.onStepContinue,
-                  child:
-                      (isLastStep) ? const Text('Submit') : const Text('Next'),
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              if (_activeStepIndex > 0)
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: ControlsDetails.onStepCancel,
-                    child: const Text('Back'),
+        return (isLoading)
+            ? Center(
+                child: Container(
+                  child: LoadingAnimationWidget.inkDrop(
+                    size: 200,
+                    color: Colors.blue,
                   ),
-                )
-            ],
-          ),
-        );
+                ),
+              )
+            : Container(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: ControlsDetails.onStepContinue,
+                        child: (isLastStep)
+                            ? const Text('Submit')
+                            : const Text('Next'),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    if (_activeStepIndex > 0)
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: ControlsDetails.onStepCancel,
+                          child: const Text('Back'),
+                        ),
+                      )
+                  ],
+                ),
+              );
       },
     );
   }
