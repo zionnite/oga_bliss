@@ -124,7 +124,9 @@ class _WalletPageState extends State<WalletPage> {
                             amount: wallet.amount!,
                             onTap: () {
                               Get.to(() => ViewPropertyDetailedDashboard(
-                                  propsId: wallet.propsId!));
+                                    propsId: wallet.propsId!,
+                                    route: 'default',
+                                  ));
                             },
                           );
                         },
@@ -146,5 +148,4 @@ class _WalletPageState extends State<WalletPage> {
       throw Exception('Could not launch $url');
     }
   }
-
 }

@@ -21,6 +21,7 @@ class PropertyController extends GetxController {
 
   var propertyList = <PropertyModel>[].obs;
   var myPropertyList = <PropertyModel>[].obs;
+  var disPropertyList = <PropertyModel>[].obs;
   var searchPropertyList = <PropertyModel>[].obs;
   var favPropertyList = <PropertyModel>[].obs;
   var typesPropertyList = <TypesPropertyModel>[].obs;
@@ -379,6 +380,16 @@ class PropertyController extends GetxController {
       isMoreDataAvailable(false);
     } else {
       isMoreDataAvailable(false);
+    }
+  }
+
+  getDisProduct(var prodId) async {
+    var seeker = await ApiServices.getDisProduct(page_num, user_id, prodId);
+    if (seeker != null) {
+      isDataProcessing(true);
+      disPropertyList.value = seeker.cast<PropertyModel>();
+    } else {
+      isDataProcessing(false);
     }
   }
 }

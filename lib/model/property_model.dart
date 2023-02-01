@@ -78,6 +78,7 @@ class PropertyModel {
     this.propsCondition,
     this.propsCautionFee,
     this.propsSpecialPref,
+    this.sliderImg,
     this.getAllPropsImage,
     this.getAllPropsVideo,
     this.getStateName,
@@ -158,6 +159,7 @@ class PropertyModel {
   dynamic? propsCondition;
   dynamic? propsCautionFee;
   dynamic? propsSpecialPref;
+  String? sliderImg;
   List<GetAllPropsImage?>? getAllPropsImage;
   bool? getAllPropsVideo;
   dynamic getStateName;
@@ -238,6 +240,7 @@ class PropertyModel {
         propsCondition: json["props_condition"],
         propsCautionFee: json["props_caution_fee"],
         propsSpecialPref: json["props_special_pref"],
+        sliderImg: json["slider_img"],
         getAllPropsImage: json["get_all_props_image"] == null
             ? []
             : List<GetAllPropsImage?>.from(json["get_all_props_image"]!
@@ -322,6 +325,7 @@ class PropertyModel {
         "props_condition": propsCondition,
         "props_caution_fee": propsCautionFee,
         "props_special_pref": propsSpecialPref,
+        "slider_img": sliderImg,
         "get_all_props_image": getAllPropsImage == null
             ? []
             : List<dynamic>.from(getAllPropsImage!.map((x) => x!.toJson())),

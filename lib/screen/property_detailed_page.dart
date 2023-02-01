@@ -75,6 +75,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
           )
         : PopupBanner(
             context: context,
+            fit: BoxFit.cover,
             images: images,
             dotsAlignment: Alignment.bottomCenter,
             dotsColorActive: Colors.blue,
@@ -219,10 +220,9 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                                         .indexWhere(
                                             ((p) => p.propsId == propsId));
 
-
                                     if (newPropId != -1) {
-                                      propsController.propertyList[newPropId].favourite =
-                                          status;
+                                      propsController.propertyList[newPropId]
+                                          .favourite = status;
                                     }
 
                                     //remove from favPropertyList
