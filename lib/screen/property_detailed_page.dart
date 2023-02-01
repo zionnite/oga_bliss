@@ -141,7 +141,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 child: Stack(
                   children: [
                     Image.network(
-                      props!.propsImgName.toString(),
+                      props!.sliderImg.toString(),
                       width: double.infinity,
                       height: 350,
                       fit: BoxFit.cover,

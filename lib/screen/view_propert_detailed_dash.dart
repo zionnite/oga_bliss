@@ -146,7 +146,9 @@ class _ViewPropertyDetailedDashboardState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Property Detail'),
+        automaticallyImplyLeading: false,
+          elevation: 1,
+
       ),
       body: Obx(() => ListView.builder(
             itemCount: propsController.disPropertyList.length,
@@ -179,7 +181,7 @@ class _ViewPropertyDetailedDashboardState
                       child: Stack(
                         children: [
                           Image.network(
-                            props!.propsImgName.toString(),
+                            props.sliderImg.toString(),
                             width: double.infinity,
                             height: 350,
                             fit: BoxFit.cover,
