@@ -101,6 +101,10 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   void initState() {
     super.initState();
     populateDropDown();
+    setState(() {
+      propsCautionFee.text = '0';
+      propsCondition.text = 'none';
+    });
   }
 
   populateDropDown() async {
@@ -827,7 +831,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   height: 10,
                 ),
                 FlutterInputChips(
-                  initialValue: const [],
+                  initialValue: const ['none'],
                   // maxChips: 5,
                   onChanged: (v) {
                     setState(() {
@@ -1067,11 +1071,11 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text('Name: ${air_condition}'),
-                Text('Email: ${propsDesc.text}'),
-                const Text('Password: *****'),
-                Text('Address : ${propsYearBuilt.text}'),
-                Text('PinCode : ${propsPrice.text}'),
+                // Text('Name: ${air_condition}'),
+                // Text('Email: ${propsDesc.text}'),
+                // const Text('Password: *****'),
+                // Text('Address : ${propsYearBuilt.text}'),
+                // Text('PinCode : ${propsPrice.text}'),
               ],
             ),
           ),
@@ -1115,10 +1119,6 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
             _activeStepIndex += 1;
           });
         } else {
-          setState(() {
-            isLoading = true;
-          });
-
           if (propsName != '' &&
               props_purpose != '' &&
               props_type != '' &&
@@ -1175,6 +1175,9 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               pollutionController != '' &&
               educationController != '' &&
               healthController != '') {
+            setState(() {
+              isLoading = true;
+            });
             print('form its filled');
             bool status = await propsController.addProduct(
               propsName: propsName.text,
