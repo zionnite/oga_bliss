@@ -79,12 +79,16 @@ class PropertyController extends GetxController {
         searchPropertyList[index].favourite = true;
       } else if (route == 'fav') {
         int index = favPropertyList.indexOf(model);
-        favPropertyList[index].favourite = false;
+        favPropertyList[index].favourite = true;
+      } else if (route == 'dashboard') {
+        int index = disPropertyList.indexOf(model);
+        disPropertyList[index].favourite = true;
       }
 
       propertyList.refresh();
       searchPropertyList.refresh();
       favPropertyList.refresh();
+      disPropertyList.refresh();
 
       return true;
     } else if (status == 'unliked') {
@@ -96,11 +100,15 @@ class PropertyController extends GetxController {
         searchPropertyList[index].favourite = false;
       } else if (route == 'fav') {
         int index = favPropertyList.indexOf(model);
-        favPropertyList[index].favourite = true;
+        favPropertyList[index].favourite = false;
+      } else if (route == 'dashboard') {
+        int index = disPropertyList.indexOf(model);
+        disPropertyList[index].favourite = false;
       }
       propertyList.refresh();
       searchPropertyList.refresh();
       favPropertyList.refresh();
+      myPropertyList.refresh();
 
       return false;
     }

@@ -74,27 +74,29 @@ class ApiServices {
 
   static Future<String> toggleLike(var userId, var propsId) async {
     try {
-      final uri = Uri.parse('$_mybaseUrl$_toggle_product');
+    final uri = Uri.parse('$_mybaseUrl$_toggle_product');
 
-      var response = await http.post(uri, body: {
-        'user_id': userId,
-        'props_id': propsId,
-      });
+    var response = await http.post(uri, body: {
+      'user_id': userId.toString(),
+      'props_id': propsId.toString(),
+    });
 
-      if (response.statusCode == 200) {
-        var body = response.body;
+    if (response.statusCode == 200) {
+      var body = response.body;
+      // print('body $body');
 
-        final j = json.decode(body) as Map<String, dynamic>;
-        String status = j['status'];
-        return status;
-      } else {
-        return showSnackBar(
-          title: 'Oops!',
-          msg: 'could not connect to server',
-          backgroundColor: Colors.red,
-        );
-      }
-    } catch (ex) {
+      final j = json.decode(body) as Map<String, dynamic>;
+      String status = j['status'];
+      return status;
+    } else {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: 'could not connect to server',
+        backgroundColor: Colors.red,
+      );
+    }
+    }
+    catch (ex) {
       // print(ex);
       return showSnackBar(
         title: 'Oops!',

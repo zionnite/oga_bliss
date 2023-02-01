@@ -120,7 +120,7 @@ class _RequestPageState extends State<RequestPage> {
                             onTap: () {
                               Get.to(() => ViewPropertyDetailedDashboard(
                                     propsId: req.propsId!,
-                                    route: 'default',
+                                    route: 'dashboard',
                                   ));
                             },
                             user_status: user_status,

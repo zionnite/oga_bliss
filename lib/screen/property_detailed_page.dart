@@ -195,20 +195,20 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                               );
 
                               setState(() {
-                                widget.propertyModel!.favourite = status;
+                                props!.favourite = status;
                                 if (widget.route == 'default') {
                                   int index = propsController.propertyList
-                                      .indexOf(widget.propertyModel);
+                                      .indexOf(props);
                                   propsController
                                       .propertyList[index].favourite = status;
                                 } else if (widget.route == 'search') {
                                   int index = propsController.searchPropertyList
-                                      .indexOf(widget.propertyModel);
+                                      .indexOf(props);
                                   propsController.searchPropertyList[index]
                                       .favourite = status;
                                 } else if (widget.route == 'fav') {
                                   int index = propsController.favPropertyList
-                                      .indexOf(widget.propertyModel);
+                                      .indexOf(props);
                                   propsController.favPropertyList[index]
                                       .favourite = status;
 
@@ -228,6 +228,27 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                                     //remove from favPropertyList
                                     propsController.favPropertyList
                                         .removeAt(index);
+                                  }
+                                } else if (widget.route == 'dashboard') {
+                                  int index = propsController.disPropertyList
+                                      .indexOf(props);
+                                  propsController.disPropertyList[index]
+                                      .favourite = status;
+
+                                  if (status == false || status == true) {
+                                    var propsId = propsController
+                                        .disPropertyList[index].propsId;
+
+                                    var newPropId = propsController.propertyList
+                                        .indexWhere(
+                                            ((p) => p.propsId == propsId));
+
+                                    if (newPropId != -1) {
+                                      propsController.propertyList[newPropId]
+                                          .favourite = status;
+                                    }
+
+                                    //update myPropertyList
                                   }
                                 }
                               });

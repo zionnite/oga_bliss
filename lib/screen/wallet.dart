@@ -125,7 +125,7 @@ class _WalletPageState extends State<WalletPage> {
                             onTap: () {
                               Get.to(() => ViewPropertyDetailedDashboard(
                                     propsId: wallet.propsId!,
-                                    route: 'default',
+                                    route: 'dashboard',
                                   ));
                             },
                           );

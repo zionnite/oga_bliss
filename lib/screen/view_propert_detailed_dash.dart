@@ -147,8 +147,7 @@ class _ViewPropertyDetailedDashboardState
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-          elevation: 1,
-
+        elevation: 1,
       ),
       body: Obx(() => ListView.builder(
             itemCount: propsController.disPropertyList.length,
@@ -230,13 +229,13 @@ class _ViewPropertyDetailedDashboardState
                                     bool status =
                                         await propsController.toggleLike(
                                       user_id,
-                                      props.propsId,
+                                      props.propsId.toString(),
                                       props,
                                       widget.route,
                                     );
 
                                     setState(() {
-                                      props!.favourite = status;
+                                      props.favourite = status;
                                       if (widget.route == 'default') {
                                         int index = propsController.propertyList
                                             .indexOf(props);
@@ -274,6 +273,38 @@ class _ViewPropertyDetailedDashboardState
                                           //remove from favPropertyList
                                           propsController.favPropertyList
                                               .removeAt(index);
+                                        }
+                                      } else if (widget.route == 'dashboard') {
+                                        int index = propsController
+                                            .disPropertyList
+                                            .indexOf(props);
+                                        propsController.disPropertyList[index]
+                                            .favourite = status;
+
+                                        if (status == false || status == true) {
+                                          var propsId = propsController
+                                              .disPropertyList[index].propsId;
+
+                                          var newPropId = propsController
+                                              .propertyList
+                                              .indexWhere(((p) =>
+                                                  p.propsId == propsId));
+
+                                          if (newPropId != -1) {
+
+
+                                            propsController
+                                                .propertyList[newPropId]
+                                                .favourite = status;
+                                          }
+
+                                          // if (newestPropId != -1) {
+                                          //   propsController
+                                          //       .propertyList[newPropId]
+                                          //       .favourite = status;
+                                          // }
+
+                                          //update myPropertyList
                                         }
                                       }
                                     });
