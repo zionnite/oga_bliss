@@ -85,7 +85,6 @@ class _FavouritePageState extends State<FavouritePage> {
             controller: _controller,
             key: const PageStorageKey<String>('allFilter'),
             physics: const ClampingScrollPhysics(),
-            // itemExtent: 350,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemCount: propsController.favPropertyList.length,

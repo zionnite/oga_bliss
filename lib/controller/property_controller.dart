@@ -20,6 +20,7 @@ class PropertyController extends GetxController {
   var isMoreDataAvailable = true.obs;
 
   var propertyList = <PropertyModel>[].obs;
+  var myPropertyList = <PropertyModel>[].obs;
   var searchPropertyList = <PropertyModel>[].obs;
   var favPropertyList = <PropertyModel>[].obs;
   var typesPropertyList = <TypesPropertyModel>[].obs;
@@ -35,6 +36,7 @@ class PropertyController extends GetxController {
     await fetchTypesProps();
 
     fetch_favourite(page_num, user_id);
+    getMyProduct(user_id);
 
     // fetchStateRegion();
   }
@@ -355,5 +357,28 @@ class PropertyController extends GetxController {
         title: 'Create Product', msg: msg, backgroundColor: Colors.blue);
 
     return statusType;
+  }
+
+  getMyProduct(var userId) async {
+    var seeker = await ApiServices.getAllProducts(page_num, userId);
+    if (seeker != null) {
+      isDataProcessing(true);
+      myPropertyList.value = seeker.cast<PropertyModel>();
+    } else {
+      isDataProcessing(false);
+    }
+  }
+
+  void getMyProductMore(var pageNum, var userId) async {
+    var seeker = await ApiServices.getAllProducts(pageNum, userId);
+
+    if (seeker != null) {
+      isMoreDataAvailable(true);
+      myPropertyList.addAll(seeker.cast<PropertyModel>());
+      // propertyList.refresh();
+      isMoreDataAvailable(false);
+    } else {
+      isMoreDataAvailable(false);
+    }
   }
 }

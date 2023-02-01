@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/add_prop_page.dart';
+import 'package:oga_bliss/screen/view_my_product.dart';
 
+import '../controller/property_controller.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
@@ -16,9 +18,60 @@ class ProductPropertyPage extends StatefulWidget {
 }
 
 class _ProductPropertyPageState extends State<ProductPropertyPage> {
+  final propsController = PropertyController().getXID;
+  late ScrollController _controller;
+
   final GlobalKey _menuKey = GlobalKey();
 
   SampleItem? selectedMenu;
+
+  var user_id = 1;
+  var current_page = 1;
+  bool isLoading = false;
+  bool widgetLoading = true;
+
+  checkIfListLoaded() {
+    var loading = propsController.isDataProcessing.value;
+    if (loading) {
+      setState(() {
+        widgetLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ScrollController()..addListener(_scrollListener);
+
+    Future.delayed(new Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() {
+          checkIfListLoaded();
+        });
+      }
+    });
+
+    // propsController.getDetails(1);
+  }
+
+  void _scrollListener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      setState(() {
+        isLoading = true;
+        current_page++;
+      });
+
+      propsController.getMoreDetail(current_page, user_id);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,32 +92,36 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     btnColor: Colors.blue,
                     onTap: () {},
                   ),
-                  PropertyTileWidget(
-                    props_image_name:
-                        'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
-                    props_name: 'Newly Built 3 Bedroom flat',
-                    props_desc:
-                        'this newly built bedroom flat its covered with the latest and later type of euqipment that will keep your day going well',
-                    props_price: '90000000000000',
-                    props_type: 'Buy',
-                    props_bedroom: '100',
-                    props_bathroom: '290',
-                    props_toilet: '100',
-                    onTap: _popUpButton(),
-                  ),
-                  PropertyTileWidget(
-                    props_image_name:
-                        'https://ogabliss.com/project_dir/property/45164d94bc96f243362af5468841cd44.jpg',
-                    props_name: 'Newly Built 3 Bedroom flat',
-                    props_desc:
-                        'this newly built bedroom flat its covered with the latest and later type of euqipment that will keep your day going well',
-                    props_price: '90000000000000',
-                    props_type: 'Rent',
-                    props_bedroom: '100',
-                    props_bathroom: '290',
-                    props_toilet: '100',
-                    onTap: _popUpButton(),
-                  ),
+                  Obx(
+                    () => ListView.builder(
+                      key: const PageStorageKey<String>('myProperty'),
+                      physics: const ClampingScrollPhysics(),
+                      // itemExtent: 350,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: propsController.myPropertyList.length,
+
+                      itemBuilder: (BuildContext context, int index) {
+                        var props = propsController.myPropertyList[index];
+                        return InkWell(
+                          onTap: () {
+                            Get.to(() => ViewMyProduct(model: props));
+                          },
+                          child: PropertyTileWidget(
+                            props_image_name: props.propsImgName!,
+                            props_name: props.propsName!,
+                            props_desc: props.propsDescription!,
+                            props_price: '${props.propsPrice}',
+                            props_type: props.propsPurpose!,
+                            props_bedroom: props.propsBedrom!,
+                            props_bathroom: props.propsBathroom!,
+                            props_toilet: props.propsToilet!,
+                            onTap: _popUpButton(),
+                          ),
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
             ),

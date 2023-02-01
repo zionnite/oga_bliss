@@ -43,6 +43,7 @@ class ApiServices {
   static const String _pull_out = 'pull_out_payment';
   static const String _props_and_sub = 'get_props_type_and_sub_type';
   static const String _add_product = 'add_product';
+  static const String _my_product = 'get_my_product';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -798,6 +799,32 @@ class ApiServices {
       }
     } catch (ex) {
       print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<PropertyModel?>?> getMyProducts(
+      var page_num, var userId) async {
+    try {
+      final result = await client
+          .get(Uri.parse('$_mybaseUrl$_my_product/$page_num/$userId'));
+      // print(result.body);
+      if (result.statusCode == 200) {
+        final data = propertyModelFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
