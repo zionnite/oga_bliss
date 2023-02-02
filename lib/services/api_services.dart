@@ -51,6 +51,7 @@ class ApiServices {
   static const String _edit_facilities = 'edit_facilities';
   static const String _edit_valuation = 'edit_valuation';
   static const String _delete_props = 'delete_props';
+  static const String _update_image = 'update_image';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1191,6 +1192,60 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future uploadImage({
+    required String userId,
+    required String propsId,
+    required File image,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_update_image/$userId');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['user_id'] = userId.toString();
+      request.fields['propsId'] = propsId.toString();
+
+      var productImage =
+          await http.MultipartFile.fromPath('property_image', image.path);
+      request.files.add(productImage);
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        var result = await respond.stream.bytesToString();
+        final j = json.decode(result) as Map<String, dynamic>;
+        bool status = j['status'];
+        print('dis status $status');
+
+        var imageList = <GetAllPropsImage>[];
+        if (status) {
+          String imgId = j['img_id'].toString();
+          String imgName = j['image_name'].toString();
+          String propsId = j['prod_id'].toString();
+          GetAllPropsImage disImage =
+              GetAllPropsImage(id: imgId, imageName: imgName, propId: propsId);
+
+          imageList.add(disImage);
+          return imageList;
+        }
+        print('fallout');
+        return false;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

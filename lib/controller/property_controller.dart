@@ -25,6 +25,7 @@ class PropertyController extends GetxController {
   var searchPropertyList = <PropertyModel>[].obs;
   var favPropertyList = <PropertyModel>[].obs;
   var typesPropertyList = <TypesPropertyModel>[].obs;
+  var imageList = <GetAllPropsImage>[].obs;
 
   String? user_id;
 
@@ -641,5 +642,23 @@ class PropertyController extends GetxController {
     showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
 
     return statusType;
+  }
+
+  uploadImage(var userId, var propsId, File imageName, var model) async {
+    var status = await ApiServices.uploadImage(
+        userId: userId, propsId: propsId, image: imageName);
+
+    String? msg;
+
+    if (status != false) {
+      msg = 'Image Uploaded';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+      return status;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
   }
 }
