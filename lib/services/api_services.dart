@@ -48,6 +48,8 @@ class ApiServices {
   static const String _edit_basic = 'edit_basic';
   static const String _edit_extra = 'edit_extra_detail';
   static const String _edit_amenities = 'edit_amenities';
+  static const String _edit_facilities = 'edit_facilities';
+  static const String _edit_valuation = 'edit_valuation';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1037,6 +1039,104 @@ class ApiServices {
       request.fields['gym'] = gym.toString();
       request.fields['fireplace'] = fireplace.toString();
       request.fields['hot_tub'] = hot_tub.toString();
+      request.fields['propsId'] = propsId.toString();
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        // respond.stream.transform(utf8.decoder).listen((value) {
+        //   final j = json.decode(value) as Map<String, dynamic>;
+        //   var status = j['status'];
+        //
+        //   return status;
+        // });
+        return true;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> editFacilities({
+    required String shopping,
+    required String hospital,
+    required String petrol,
+    required String airport,
+    required String church,
+    required String mosque,
+    required String school,
+    required String propsId,
+    required String user_id,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_edit_facilities/$user_id');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['shopping_mall'] = shopping.toString();
+      request.fields['hospital'] = hospital.toString();
+      request.fields['petrol_pump'] = petrol.toString();
+      request.fields['airport'] = airport.toString();
+      request.fields['church'] = church.toString();
+      request.fields['mosque'] = mosque.toString();
+      request.fields['school'] = school.toString();
+      request.fields['propsId'] = propsId.toString();
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        // respond.stream.transform(utf8.decoder).listen((value) {
+        //   final j = json.decode(value) as Map<String, dynamic>;
+        //   var status = j['status'];
+        //
+        //   return status;
+        // });
+        return true;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> editValuation({
+    required String crime,
+    required String traffic,
+    required String pollution,
+    required String education,
+    required String health,
+    required String propsId,
+    required String user_id,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_edit_valuation/$user_id');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['crime'] = crime.toString();
+      request.fields['traffic'] = traffic.toString();
+      request.fields['pollution'] = pollution.toString();
+      request.fields['education'] = education.toString();
+      request.fields['health'] = health.toString();
       request.fields['propsId'] = propsId.toString();
 
       var respond = await request.send();

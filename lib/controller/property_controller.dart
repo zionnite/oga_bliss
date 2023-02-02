@@ -541,14 +541,87 @@ class PropertyController extends GetxController {
     bool statusType;
     String? msg;
     if (status == true) {
-      msg = 'Product Created';
+      msg =
+          'Product Information Updated..., Changes will take effect in the next few min.';
       statusType = true;
     } else {
       msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
       statusType = false;
     }
-    showSnackBar(
-        title: 'Create Product', msg: msg, backgroundColor: Colors.blue);
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
+  }
+
+  editFacilities({
+    required String shopping,
+    required String hospital,
+    required String petrol,
+    required String airport,
+    required String church,
+    required String mosque,
+    required String school,
+    required String propsId,
+  }) async {
+    print('here');
+    bool? status = await ApiServices.editFacilities(
+      shopping: shopping,
+      hospital: hospital,
+      petrol: petrol,
+      airport: airport,
+      church: church,
+      mosque: mosque,
+      school: school,
+      propsId: propsId,
+      user_id: user_id!,
+    );
+
+    bool statusType;
+    String? msg;
+    print('this status $status');
+    if (status == true) {
+      msg =
+          'Product Information Updated..., Changes will take effect in the next few min.';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
+  }
+
+  editValuation({
+    required String crime,
+    required String traffic,
+    required String pollution,
+    required String education,
+    required String health,
+    required String propsId,
+  }) async {
+    bool status = await ApiServices.editValuation(
+      crime: crime,
+      traffic: traffic,
+      pollution: pollution,
+      education: education,
+      health: health,
+      propsId: propsId,
+      user_id: user_id!,
+    );
+
+    bool statusType;
+    String? msg;
+    print('this status $status');
+    if (status == true) {
+      msg =
+          'Product Information Updated..., Changes will take effect in the next few min.';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
 
     return statusType;
   }

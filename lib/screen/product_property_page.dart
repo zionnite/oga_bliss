@@ -13,6 +13,8 @@ import '../widget/property_tile_widget.dart';
 import 'edit_amenities.dart';
 import 'edit_basic_detail.dart';
 import 'edit_extra_detail.dart';
+import 'edit_facilities.dart';
+import 'edit_valuation.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
@@ -209,14 +211,18 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     container_margin: const EdgeInsets.all(10),
                   ),
                   propertyBtn(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => EditFacilities(model: props));
+                    },
                     title: 'Edit Facilities',
                     bgColor: Colors.black,
                     card_margin: const EdgeInsets.all(10),
                     container_margin: const EdgeInsets.all(10),
                   ),
                   propertyBtn(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => EditValuation(model: props));
+                    },
                     title: 'Edit Valuation',
                     bgColor: Colors.red,
                     card_margin: const EdgeInsets.all(10),
