@@ -11,6 +11,7 @@ import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
 import 'edit_basic_detail.dart';
+import 'edit_extra_detail.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
@@ -189,7 +190,9 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     container_margin: const EdgeInsets.all(10),
                   ),
                   propertyBtn(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => EditExtraDetail(model: props));
+                    },
                     title: 'Edit Extra Details',
                     bgColor: Colors.blue,
                     card_margin: const EdgeInsets.all(10),

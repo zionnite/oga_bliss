@@ -452,4 +452,33 @@ class PropertyController extends GetxController {
 
     return statusType;
   }
+
+  editExtraDetail({
+    required String propsCondition,
+    required String propsCautionFee,
+    required String selectedPref,
+    required String propsId,
+  }) async {
+    bool status = await ApiServices.editExtraDetail(
+      propsCondition: propsCondition,
+      propsCautionFee: propsCautionFee,
+      selectedPref: selectedPref,
+      propsId: propsId,
+      user_id: user_id!,
+    );
+
+    bool statusType;
+    String? msg;
+    if (status == true) {
+      msg =
+          'Product Information Updated..., Changes will take effect in the next few min.';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
+  }
 }

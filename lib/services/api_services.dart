@@ -46,6 +46,7 @@ class ApiServices {
   static const String _my_product = 'get_my_product';
   static const String _dis_product = 'get_dis_product';
   static const String _edit_basic = 'edit_basic';
+  static const String _edit_extra = 'edit_extra_detail';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -911,13 +912,56 @@ class ApiServices {
       var respond = await request.send();
 
       if (respond.statusCode == 200) {
-        respond.stream.transform(utf8.decoder).listen((value) {
-          final j = json.decode(value) as Map<String, dynamic>;
-          var status = j['status'];
-          print(status);
+        // respond.stream.transform(utf8.decoder).listen((value) {
+        //   final j = json.decode(value) as Map<String, dynamic>;
+        //   var status = j['status'];
+        //   print(status);
+        //
+        //   // return status;
+        // });
+        return true;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
 
-          // return status;
-        });
+  static Future<bool> editExtraDetail({
+    required String propsCondition,
+    required String propsCautionFee,
+    required String selectedPref,
+    required String propsId,
+    required String user_id,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_edit_extra/$user_id');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['propsCondition'] = propsCondition;
+      request.fields['propsCautionFee'] = propsCautionFee;
+      request.fields['selectedPref'] = selectedPref;
+      request.fields['propsId'] = propsId;
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        // respond.stream.transform(utf8.decoder).listen((value) {
+        //   final j = json.decode(value) as Map<String, dynamic>;
+        //   var status = j['status'];
+        //
+        //   return status;
+        // });
         return true;
       } else {
         return showSnackBar(
