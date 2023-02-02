@@ -369,7 +369,7 @@ class PropertyController extends GetxController {
   }
 
   getMyProduct(var userId) async {
-    var seeker = await ApiServices.getAllProducts(page_num, userId);
+    var seeker = await ApiServices.getMyProducts(page_num, userId);
     if (seeker != null) {
       isDataProcessing(true);
       myPropertyList.value = seeker.cast<PropertyModel>();
@@ -379,7 +379,7 @@ class PropertyController extends GetxController {
   }
 
   void getMyProductMore(var pageNum, var userId) async {
-    var seeker = await ApiServices.getAllProducts(pageNum, userId);
+    var seeker = await ApiServices.getMyProducts(pageNum, userId);
 
     if (seeker != null) {
       isMoreDataAvailable(true);
@@ -399,5 +399,57 @@ class PropertyController extends GetxController {
     } else {
       isDataProcessing(false);
     }
+  }
+
+  editBasicDetail({
+    required String propsName,
+    required String props_purpose,
+    required String props_type,
+    required String sub_props_type,
+    required String propsBed,
+    required String propsBath,
+    required String propsToilet,
+    required String state_id,
+    required String area_id,
+    required String propsPrice,
+    required String propsDesc,
+    required String propsYearBuilt,
+    required propertyModeEnum props_mode,
+    required String propsYoutubeId,
+    required String propsId,
+    required PropertyModel model,
+  }) async {
+    bool status = await ApiServices.editBasicDetail(
+      propsName: propsName,
+      props_purpose: props_purpose,
+      props_type: props_type,
+      sub_props_type: sub_props_type,
+      propsBed: propsBed,
+      propsBath: propsBath,
+      propsToilet: propsToilet,
+      state_id: state_id,
+      area_id: area_id,
+      propsPrice: propsPrice,
+      propsDesc: propsDesc,
+      propsYearBuilt: propsYearBuilt,
+      props_mode: props_mode,
+      propsYoutubeId: propsYoutubeId,
+      propsId: propsId,
+      user_id: user_id!,
+    );
+
+    bool statusType;
+    String? msg;
+    if (status == true) {
+      msg =
+          'Product Information Updated..., Changes will take effect in the next few min.';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
   }
 }

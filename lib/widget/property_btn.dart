@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
 class propertyBtn extends StatefulWidget {
-  propertyBtn(
-      {required this.onTap,
-      required this.title,
-      required this.bgColor,
-      this.isLoading});
+  propertyBtn({
+    required this.onTap,
+    required this.title,
+    required this.bgColor,
+    this.isLoading,
+    this.card_margin,
+    this.container_margin,
+  });
 
   final VoidCallback onTap;
   final String title;
   final Color bgColor;
   final bool? isLoading;
+  final EdgeInsets? card_margin;
+  final EdgeInsets? container_margin;
 
   @override
   State<propertyBtn> createState() => _propertyBtnState();
@@ -22,22 +27,26 @@ class _propertyBtnState extends State<propertyBtn> {
     return InkWell(
       onTap: widget.onTap,
       child: Card(
-        margin: const EdgeInsets.only(
-          left: 15,
-          right: 15,
-          bottom: 40,
-          top: 20,
-        ),
+        margin: (widget.card_margin == null)
+            ? const EdgeInsets.only(
+                left: 15,
+                right: 15,
+                bottom: 40,
+                top: 20,
+              )
+            : widget.card_margin,
         elevation: 10,
         child: Ink(
           color: widget.bgColor,
           child: Container(
-            margin: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              bottom: 10,
-              top: 10,
-            ),
+            margin: (widget.container_margin == null)
+                ? const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    bottom: 10,
+                    top: 10,
+                  )
+                : widget.container_margin,
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(8.0),

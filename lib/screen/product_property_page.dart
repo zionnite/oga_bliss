@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/add_prop_page.dart';
 import 'package:oga_bliss/screen/view_my_product.dart';
+import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
+import 'package:oga_bliss/widget/property_btn.dart';
 
 import '../controller/property_controller.dart';
+import '../model/property_model.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
+import 'edit_basic_detail.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
@@ -105,7 +109,12 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                         var props = propsController.myPropertyList[index];
                         return InkWell(
                           onTap: () {
-                            Get.to(() => ViewMyProduct(model: props));
+                            Get.to(
+                              () => ViewPropertyDetailedDashboard(
+                                propsId: props.propsId!,
+                                route: 'dashboard',
+                              ),
+                            );
                           },
                           child: PropertyTileWidget(
                             props_image_name: props.propsImgName!,
@@ -116,7 +125,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                             props_bedroom: props.propsBedrom!,
                             props_bathroom: props.propsBathroom!,
                             props_toilet: props.propsToilet!,
-                            onTap: _popUpButton(),
+                            onTap: _popUpButton(props),
                           ),
                         );
                       },
@@ -140,29 +149,104 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
     );
   }
 
-  Widget _popUpButton() => PopupMenuButton<String>(
-        enabled: true,
-        icon: const Icon(
-          Icons.more_vert_rounded,
-        ),
-        onSelected: (val) {
-          print(val);
-        },
-        itemBuilder: (context) {
-          return [
-            const PopupMenuItem(
-              value: "One",
-              child: Text('Submit'),
+  Widget _popUpButton(PropertyModel props) {
+    return PopupMenuButton<String>(
+      enabled: true,
+      icon: const Icon(
+        Icons.more_vert_rounded,
+      ),
+      onSelected: (val) {
+        if (val == 'submit') {
+          print('submit enable');
+        } else if (val == 'edit') {
+          Get.bottomSheet(
+            Container(
+              height: 520,
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    'Edit Property',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontFamily: 'Passion One',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  propertyBtn(
+                    onTap: () {
+                      Get.to(() => EditBasicDetail(model: props));
+                    },
+                    title: 'Edit Basic Detail',
+                    bgColor: Colors.green,
+                    card_margin: const EdgeInsets.all(10),
+                    container_margin: const EdgeInsets.all(10),
+                  ),
+                  propertyBtn(
+                    onTap: () {},
+                    title: 'Edit Extra Details',
+                    bgColor: Colors.blue,
+                    card_margin: const EdgeInsets.all(10),
+                    container_margin: const EdgeInsets.all(10),
+                  ),
+                  propertyBtn(
+                    onTap: () {},
+                    title: 'Edit Amenities',
+                    bgColor: Colors.orange,
+                    card_margin: const EdgeInsets.all(10),
+                    container_margin: const EdgeInsets.all(10),
+                  ),
+                  propertyBtn(
+                    onTap: () {},
+                    title: 'Edit Facilities',
+                    bgColor: Colors.black,
+                    card_margin: const EdgeInsets.all(10),
+                    container_margin: const EdgeInsets.all(10),
+                  ),
+                  propertyBtn(
+                    onTap: () {},
+                    title: 'Edit Valuation',
+                    bgColor: Colors.red,
+                    card_margin: const EdgeInsets.all(10),
+                    container_margin: const EdgeInsets.all(10),
+                  ),
+                ],
+              ),
             ),
-            const PopupMenuItem(
-              value: "Two",
-              child: Text('Edit'),
-            ),
-            const PopupMenuItem(
-              value: "Three",
-              child: Text('Delete'),
-            ),
-          ];
-        },
-      );
+          );
+          print('edit');
+        } else if (val == 'delete') {
+          print('delete');
+        } else if (val == 'image') {
+          Get.to(() => ViewMyProduct(model: props));
+        }
+      },
+      itemBuilder: (context) {
+        return [
+          const PopupMenuItem(
+            value: "submit",
+            child: Text('Submit'),
+          ),
+          const PopupMenuItem(
+            value: "image",
+            child: Text('View Image'),
+          ),
+          const PopupMenuItem(
+            value: "edit",
+            child: Text('Edit'),
+          ),
+          const PopupMenuItem(
+            value: "delete",
+            child: Text('Delete'),
+          ),
+        ];
+      },
+    );
+  }
 }

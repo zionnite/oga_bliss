@@ -123,10 +123,12 @@ class _WalletPageState extends State<WalletPage> {
                             time: wallet.time!,
                             amount: wallet.amount!,
                             onTap: () {
-                              Get.to(() => ViewPropertyDetailedDashboard(
-                                    propsId: wallet.propsId!,
-                                    route: 'dashboard',
-                                  ));
+                              Get.to(
+                                () => ViewPropertyDetailedDashboard(
+                                  propsId: wallet.propsId!,
+                                  route: 'dashboard',
+                                ),
+                              );
                             },
                           );
                         },

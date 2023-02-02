@@ -45,6 +45,7 @@ class ApiServices {
   static const String _add_product = 'add_product';
   static const String _my_product = 'get_my_product';
   static const String _dis_product = 'get_dis_product';
+  static const String _edit_basic = 'edit_basic';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -74,29 +75,28 @@ class ApiServices {
 
   static Future<String> toggleLike(var userId, var propsId) async {
     try {
-    final uri = Uri.parse('$_mybaseUrl$_toggle_product');
+      final uri = Uri.parse('$_mybaseUrl$_toggle_product');
 
-    var response = await http.post(uri, body: {
-      'user_id': userId.toString(),
-      'props_id': propsId.toString(),
-    });
+      var response = await http.post(uri, body: {
+        'user_id': userId.toString(),
+        'props_id': propsId.toString(),
+      });
 
-    if (response.statusCode == 200) {
-      var body = response.body;
-      // print('body $body');
+      if (response.statusCode == 200) {
+        var body = response.body;
+        // print('body $body');
 
-      final j = json.decode(body) as Map<String, dynamic>;
-      String status = j['status'];
-      return status;
-    } else {
-      return showSnackBar(
-        title: 'Oops!',
-        msg: 'could not connect to server',
-        backgroundColor: Colors.red,
-      );
-    }
-    }
-    catch (ex) {
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
       // print(ex);
       return showSnackBar(
         title: 'Oops!',
@@ -854,6 +854,80 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> editBasicDetail({
+    required String propsName,
+    required String props_purpose,
+    required String props_type,
+    required String sub_props_type,
+    required String propsBed,
+    required String propsBath,
+    required String propsToilet,
+    required String state_id,
+    required String area_id,
+    required String propsPrice,
+    required String propsDesc,
+    required String propsYearBuilt,
+    required propertyModeEnum props_mode,
+    required String propsYoutubeId,
+    required String propsId,
+    required String user_id,
+  }) async {
+    String? newMode;
+    if (props_mode == 'propertyModeEnum.New') {
+      newMode = 'New';
+    } else if (props_mode == 'propertyModeEnum.Furnished') {
+      newMode = 'Furnished';
+    } else {
+      newMode = 'Serviced';
+    }
+
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_edit_basic/$user_id');
+      var request = http.MultipartRequest('POST', uri);
+      request.fields['propsName'] = propsName;
+      request.fields['props_purpose'] = props_purpose;
+      request.fields['props_type'] = props_type;
+      request.fields['sub_props_type'] = sub_props_type;
+      request.fields['propsBed'] = propsBed;
+      request.fields['propsBath'] = propsBath;
+      request.fields['propsToilet'] = propsToilet;
+      request.fields['state_id'] = state_id;
+      request.fields['area_id'] = area_id;
+      request.fields['propsPrice'] = propsPrice;
+      request.fields['propsDesc'] = propsDesc;
+      request.fields['propsYearBuilt'] = propsYearBuilt;
+      request.fields['props_mode'] = newMode;
+      request.fields['propsYoutubeId'] = propsYoutubeId;
+      request.fields['propsId'] = propsId;
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        respond.stream.transform(utf8.decoder).listen((value) {
+          final j = json.decode(value) as Map<String, dynamic>;
+          var status = j['status'];
+          print(status);
+
+          // return status;
+        });
+        return true;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

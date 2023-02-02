@@ -291,18 +291,10 @@ class _ViewPropertyDetailedDashboardState
                                                   p.propsId == propsId));
 
                                           if (newPropId != -1) {
-
-
                                             propsController
                                                 .propertyList[newPropId]
                                                 .favourite = status;
                                           }
-
-                                          // if (newestPropId != -1) {
-                                          //   propsController
-                                          //       .propertyList[newPropId]
-                                          //       .favourite = status;
-                                          // }
 
                                           //update myPropertyList
                                         }
