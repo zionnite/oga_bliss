@@ -47,6 +47,7 @@ class ApiServices {
   static const String _dis_product = 'get_dis_product';
   static const String _edit_basic = 'edit_basic';
   static const String _edit_extra = 'edit_extra_detail';
+  static const String _edit_amenities = 'edit_amenities';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -952,6 +953,91 @@ class ApiServices {
       request.fields['propsCautionFee'] = propsCautionFee;
       request.fields['selectedPref'] = selectedPref;
       request.fields['propsId'] = propsId;
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        // respond.stream.transform(utf8.decoder).listen((value) {
+        //   final j = json.decode(value) as Map<String, dynamic>;
+        //   var status = j['status'];
+        //
+        //   return status;
+        // });
+        return true;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> editAmenties({
+    required bool air_condition,
+    required bool balcony,
+    required bool bedding,
+    required bool cable_tv,
+    required bool cleaning_after_exist,
+    required bool coffee_pot,
+    required bool computer,
+    required bool cot,
+    required bool dishwasher,
+    required bool dvd,
+    required bool fan,
+    required bool fridge,
+    required bool grill,
+    required bool hairdryer,
+    required bool heater,
+    required bool hi_fi,
+    required bool internet,
+    required bool iron,
+    required bool juicer,
+    required bool lift,
+    required bool microwave,
+    required bool gym,
+    required bool fireplace,
+    required bool hot_tub,
+    required String propsId,
+    required String user_id,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_edit_amenities/$user_id');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['air_condition'] = air_condition.toString();
+      request.fields['balcony'] = balcony.toString();
+      request.fields['bedding'] = bedding.toString();
+      request.fields['cable_tv'] = cable_tv.toString();
+      request.fields['cleaning_after_exist'] = cleaning_after_exist.toString();
+      request.fields['coffee_pot'] = coffee_pot.toString();
+      request.fields['computer'] = computer.toString();
+      request.fields['cot'] = cot.toString();
+      request.fields['dishwasher'] = dishwasher.toString();
+      request.fields['dvd'] = dvd.toString();
+      request.fields['fan'] = fan.toString();
+      request.fields['fridge'] = fridge.toString();
+      request.fields['grill'] = grill.toString();
+      request.fields['hairdryer'] = hairdryer.toString();
+      request.fields['heater'] = heater.toString();
+      request.fields['hi_fi'] = hi_fi.toString();
+      request.fields['internet'] = internet.toString();
+      request.fields['iron'] = iron.toString();
+      request.fields['juicer'] = juicer.toString();
+      request.fields['lift'] = lift.toString();
+      request.fields['microwave'] = microwave.toString();
+      request.fields['gym'] = gym.toString();
+      request.fields['fireplace'] = fireplace.toString();
+      request.fields['hot_tub'] = hot_tub.toString();
+      request.fields['propsId'] = propsId.toString();
 
       var respond = await request.send();
 

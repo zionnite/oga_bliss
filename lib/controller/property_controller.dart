@@ -481,4 +481,75 @@ class PropertyController extends GetxController {
 
     return statusType;
   }
+
+  editAmenities({
+    required bool air_condition,
+    required bool balcony,
+    required bool bedding,
+    required bool cable_tv,
+    required bool cleaning_after_exist,
+    required bool coffee_pot,
+    required bool computer,
+    required bool cot,
+    required bool dishwasher,
+    required bool dvd,
+    required bool fan,
+    required bool fridge,
+    required bool grill,
+    required bool hairdryer,
+    required bool heater,
+    required bool hi_fi,
+    required bool internet,
+    required bool iron,
+    required bool juicer,
+    required bool lift,
+    required bool microwave,
+    required bool gym,
+    required bool fireplace,
+    required bool hot_tub,
+    required String propsId,
+  }) async {
+    bool status = await ApiServices.editAmenties(
+      air_condition: air_condition,
+      balcony: balcony,
+      bedding: bedding,
+      cable_tv: cable_tv,
+      cleaning_after_exist: cleaning_after_exist,
+      coffee_pot: coffee_pot,
+      computer: computer,
+      cot: cot,
+      dishwasher: dishwasher,
+      dvd: dvd,
+      fan: fan,
+      fridge: fridge,
+      grill: grill,
+      hairdryer: hairdryer,
+      heater: heater,
+      hi_fi: hi_fi,
+      internet: internet,
+      iron: iron,
+      juicer: juicer,
+      lift: lift,
+      microwave: microwave,
+      gym: gym,
+      fireplace: fireplace,
+      hot_tub: hot_tub,
+      propsId: propsId,
+      user_id: user_id!,
+    );
+
+    bool statusType;
+    String? msg;
+    if (status == true) {
+      msg = 'Product Created';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(
+        title: 'Create Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
+  }
 }

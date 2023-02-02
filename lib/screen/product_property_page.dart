@@ -10,6 +10,7 @@ import '../model/property_model.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
+import 'edit_amenities.dart';
 import 'edit_basic_detail.dart';
 import 'edit_extra_detail.dart';
 
@@ -199,7 +200,9 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     container_margin: const EdgeInsets.all(10),
                   ),
                   propertyBtn(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(() => EditAmenities(model: props));
+                    },
                     title: 'Edit Amenities',
                     bgColor: Colors.orange,
                     card_margin: const EdgeInsets.all(10),
