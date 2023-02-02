@@ -13,6 +13,7 @@ class PropertyTileWidget extends StatefulWidget {
     required this.props_bathroom,
     required this.props_toilet,
     required this.onTap,
+    required this.live_status,
   });
 
   final String props_image_name;
@@ -24,6 +25,7 @@ class PropertyTileWidget extends StatefulWidget {
   final String props_bathroom;
   final String props_toilet;
   final Widget onTap;
+  final String live_status;
 
   @override
   State<PropertyTileWidget> createState() => _PropertyTileWidgetState();
@@ -144,6 +146,15 @@ class _PropertyTileWidgetState extends State<PropertyTileWidget> {
                           ),
                         ),
                       ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Status - ${widget.live_status}',
+                        style: const TextStyle(
+                          fontSize: 13,
+                        ),
+                      ),
                     ),
                   ],
                 ),

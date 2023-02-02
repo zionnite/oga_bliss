@@ -53,6 +53,8 @@ class ApiServices {
   static const String _delete_props = 'delete_props';
   static const String _update_image = 'update_image';
   static const String _update_feature_image = 'update_feature_image';
+  static const String _submit_property = 'submit_property';
+  static const String _delete_property = 'delete_property';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1294,6 +1296,63 @@ class ApiServices {
       }
     } catch (ex) {
       print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> submitProperty(var propsId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_submit_property/$propsId');
+
+      final response = await client.get(uri);
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> deleteProperty(var propsId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_delete_property/$propsId');
+
+      final response = await client.get(uri);
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

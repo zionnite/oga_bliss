@@ -679,4 +679,34 @@ class PropertyController extends GetxController {
       return false;
     }
   }
+
+  Future<bool> submitProperty(var propsId) async {
+    bool status = await ApiServices.submitProperty(propsId);
+
+    String? msg;
+    if (status) {
+      msg = 'Awaiting Admin to Review Property,\nthis may take awhile';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
+
+  Future<bool> deleteProperty(var propsId) async {
+    bool status = await ApiServices.deleteProperty(propsId);
+
+    String? msg;
+    if (status) {
+      msg = 'Property Removed From List';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
 }

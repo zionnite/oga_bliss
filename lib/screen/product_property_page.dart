@@ -7,6 +7,7 @@ import 'package:oga_bliss/widget/property_btn.dart';
 
 import '../controller/property_controller.dart';
 import '../model/property_model.dart';
+import '../util/common.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
@@ -130,6 +131,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                             props_bathroom: props.propsBathroom!,
                             props_toilet: props.propsToilet!,
                             onTap: _popUpButton(props),
+                            live_status: props.propsLiveStatus.toString(),
                           ),
                         );
                       },
@@ -159,9 +161,17 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
       icon: const Icon(
         Icons.more_vert_rounded,
       ),
-      onSelected: (val) {
+      onSelected: (val) async {
         if (val == 'submit') {
-          print('submit enable');
+          if (props.propsLiveStatus == 'new' ||
+              props.propsLiveStatus == 'rejected') {
+            bool status = await propsController.submitProperty(props.propsId);
+            setState(() {
+              int index = propsController.myPropertyList.indexOf(props);
+              propsController.myPropertyList[index].propsLiveStatus = 'pending';
+              propsController.myPropertyList.refresh();
+            });
+          }
         } else if (val == 'edit') {
           Get.bottomSheet(
             Container(
@@ -232,20 +242,37 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
               ),
             ),
           );
-          print('edit');
         } else if (val == 'delete') {
-          print('delete');
+          bool status = await propsController.deleteProperty(props.propsId);
+          if (status) {
+            setState(() {
+              int rootIndex = propsController.myPropertyList.indexOf(props);
+              propsController.myPropertyList.removeAt(rootIndex);
+            });
+          }
         } else if (val == 'image') {
           Get.to(
               () => ViewMyProduct(model: props, user_id: user_id.toString()));
+        } else if (val == 'already') {
+          showSnackBar(
+            title: 'Property',
+            msg: 'Your Property status its ${props.propsLiveStatus}',
+            backgroundColor: Colors.blue,
+          );
         }
       },
       itemBuilder: (context) {
         return [
-          const PopupMenuItem(
-            value: "submit",
-            child: Text('Submit'),
-          ),
+          (props.propsLiveStatus == 'new' ||
+                  props.propsLiveStatus == 'rejected')
+              ? const PopupMenuItem(
+                  value: "submit",
+                  child: Text('Submit'),
+                )
+              : const PopupMenuItem(
+                  value: "already",
+                  child: Text('Already Submitted'),
+                ),
           const PopupMenuItem(
             value: "image",
             child: Text('View Image'),
