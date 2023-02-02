@@ -50,6 +50,7 @@ class ApiServices {
   static const String _edit_amenities = 'edit_amenities';
   static const String _edit_facilities = 'edit_facilities';
   static const String _edit_valuation = 'edit_valuation';
+  static const String _delete_props = 'delete_props';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1158,6 +1159,38 @@ class ApiServices {
       }
     } catch (ex) {
       print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> deleteProps(var userId, var propsId, var imageId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_delete_props');
+
+      var response = await http.post(uri, body: {
+        'user_id': userId.toString(),
+        'props_id': propsId.toString(),
+        'image_id': imageId.toString(),
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../controller/property_controller.dart';
 import '../model/property_model.dart';
 import '../widget/property_app_bar.dart';
 
 class ViewMyProduct extends StatefulWidget {
-  const ViewMyProduct({required this.model});
+  const ViewMyProduct({required this.model, required this.user_id});
 
   final PropertyModel model;
+  final String user_id;
 
   @override
   State<ViewMyProduct> createState() => _ViewMyProductState();
 }
 
 class _ViewMyProductState extends State<ViewMyProduct> {
+  final propsController = PropertyController().getXID;
+
   @override
   Widget build(BuildContext context) {
+    var model = widget.model;
+    var imgList = widget.model.getAllPropsImage;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -122,7 +130,7 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: Image.asset(
-                    'assets/images/a.jpeg',
+                    '${widget.model.sliderImg}',
                     width: double.infinity,
                   ),
                 ),
@@ -154,7 +162,7 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                       crossAxisCount: 3,
                       childAspectRatio: 2 / 3,
                     ),
-                    itemCount: 300,
+                    itemCount: imgList!.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         margin: const EdgeInsets.all(8),
@@ -166,27 +174,56 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                           children: [
                             Flexible(
                               child: Container(
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                            'https://t3.ftcdn.net/jpg/03/15/59/88/360_F_315598844_WbT1Ix5HL17KN6sDzTBhu1zE4nb7Ry3o.jpg'))),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      '${imgList[index]!.imageName}',
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(8, 10, 0, 0),
-                              child: Text(
-                                'Nike',
+                            TextButton(
+                              onPressed: () {
+                                Get.defaultDialog(
+                                  radius: 5,
+                                  title: 'Delete',
+                                  middleText:
+                                      'Are you sure you want to Delete this Image',
+                                  textConfirm: 'Yes',
+                                  onConfirm: () async {
+                                    print('confirm');
+                                    bool status =
+                                        await propsController.deleteProps(
+                                      widget.user_id,
+                                      model.propsId,
+                                      imgList[index]!.id,
+                                    );
+
+                                    if (status) {
+                                      setState(() {
+                                        int rootIndex =
+                                            imgList.indexOf(imgList[index]);
+                                        imgList.removeAt(rootIndex);
+                                      });
+                                    }
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                  },
+                                  textCancel: 'No',
+                                  onCancel: () {},
+                                );
+                              },
+                              child: const Text(
+                                'Delete',
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w900),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text("Just Do It",
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey)),
-                            )
                           ],
                         ),
                       );

@@ -612,10 +612,27 @@ class PropertyController extends GetxController {
 
     bool statusType;
     String? msg;
-    print('this status $status');
+
     if (status == true) {
       msg =
           'Product Information Updated..., Changes will take effect in the next few min.';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
+  }
+
+  Future<bool> deleteProps(var userId, var propsId, var imageId) async {
+    bool status = await ApiServices.deleteProps(userId, propsId, imageId);
+    bool statusType;
+    String? msg;
+
+    if (status == true) {
+      msg = 'Image Deleted from List';
       statusType = true;
     } else {
       msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';

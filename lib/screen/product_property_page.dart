@@ -236,7 +236,8 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         } else if (val == 'delete') {
           print('delete');
         } else if (val == 'image') {
-          Get.to(() => ViewMyProduct(model: props));
+          Get.to(
+              () => ViewMyProduct(model: props, user_id: user_id.toString()));
         }
       },
       itemBuilder: (context) {
