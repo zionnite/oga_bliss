@@ -52,6 +52,7 @@ class ApiServices {
   static const String _edit_valuation = 'edit_valuation';
   static const String _delete_props = 'delete_props';
   static const String _update_image = 'update_image';
+  static const String _update_feature_image = 'update_feature_image';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1236,6 +1237,53 @@ class ApiServices {
           return imageList;
         }
         print('fallout');
+        return false;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future uploadFeatureImage({
+    required String userId,
+    required String propsId,
+    required File image,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_update_feature_image/$userId');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['user_id'] = userId.toString();
+      request.fields['propsId'] = propsId.toString();
+
+      var productImage =
+          await http.MultipartFile.fromPath('property_image', image.path);
+      request.files.add(productImage);
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        var result = await respond.stream.bytesToString();
+        final j = json.decode(result) as Map<String, dynamic>;
+        bool status = j['status'];
+
+        if (status) {
+          String imgName = j['slider_img'].toString();
+          String propsId = j['prod_id'].toString();
+
+          return imgName;
+        }
         return false;
       } else {
         return showSnackBar(

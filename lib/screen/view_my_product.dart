@@ -75,35 +75,82 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                           bottom: 10,
                           top: 10,
                         ),
-                        child: Card(
-                          elevation: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blue[800],
-                              border: Border.all(
-                                color: Colors.blue,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            Get.defaultDialog(
+                              radius: 5,
+                              title: 'Upload Feature Image',
+                              content: Column(
                                 children: const [
-                                  Icon(
-                                    Icons.image,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
                                   Text(
-                                    'Add Feature Image',
+                                    'We recommend image to be in the following dimension for your property to be approve on our platform.\n\nwidth=1300px By height=450px respectively',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ],
+                              ),
+                              textConfirm: 'Upload Image',
+                              onConfirm: () async {
+                                await _pickSliderImage(
+                                  ImageSource.gallery,
+                                );
+
+                                var status =
+                                    await propsController.uploadFeatureImage(
+                                  widget.user_id,
+                                  model.propsId,
+                                  _sliderImg!,
+                                  widget.model,
+                                );
+
+                                if (status != false) {
+                                  setState(() {
+                                    int index = propsController.myPropertyList
+                                        .indexOf(model);
+                                    propsController.myPropertyList[index]
+                                        .sliderImg = status;
+                                    propsController.myPropertyList.refresh();
+                                  });
+                                }
+
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              },
+                              textCancel: 'No, later',
+                              onCancel: () {},
+                            );
+                          },
+                          child: Card(
+                            elevation: 2,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue[800],
+                                border: Border.all(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.image,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      'Add Feature Image',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -121,115 +168,106 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                           bottom: 10,
                           top: 10,
                         ),
-                        child: Card(
-                          elevation: 2,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blue[800],
-                              border: Border.all(
-                                color: Colors.blue,
+                        child: InkWell(
+                          onTap: () {
+                            Get.defaultDialog(
+                              radius: 5,
+                              title: 'Upload Image',
+                              content: Column(
+                                children: const [
+                                  Text(
+                                    'We recommend image to be in the following dimension for your property to be approve on our platform.\n\nwidth=800px By height=500px respectively',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.image,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.defaultDialog(
-                                          radius: 5,
-                                          title: 'Upload Image',
-                                          content: Column(
-                                            children: const [
-                                              Text(
-                                                'We recommend image to be in the following dimension for your property to be approve on our platform.\n\nwidth=800px By height=500px respectively',
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          textConfirm: 'Upload Image',
-                                          onConfirm: () async {
-                                            await _pickImage(
-                                              ImageSource.gallery,
-                                            );
+                              textConfirm: 'Upload Image',
+                              onConfirm: () async {
+                                await _pickImage(
+                                  ImageSource.gallery,
+                                );
 
-                                            var status = await propsController
-                                                .uploadImage(
-                                              widget.user_id,
-                                              model.propsId,
-                                              _image!,
-                                              widget.model,
-                                            );
+                                var status = await propsController.uploadImage(
+                                  widget.user_id,
+                                  model.propsId,
+                                  _image!,
+                                  widget.model,
+                                );
 
-                                            if (status != false) {
-                                              setState(() {
-                                                propsController
-                                                        .imageList.value =
-                                                    status.cast<
-                                                        GetAllPropsImage>();
+                                if (status != false) {
+                                  setState(() {
+                                    propsController.imageList.value =
+                                        status.cast<GetAllPropsImage>();
 
-                                                int index = propsController
-                                                    .myPropertyList
-                                                    .indexOf(model);
-                                                propsController
-                                                    .myPropertyList[index]
-                                                    .getAllPropsImage!
-                                                    .addAll(propsController
-                                                        .imageList);
-                                                propsController.myPropertyList
-                                                    .refresh();
-                                              });
-                                            }
+                                    int index = propsController.myPropertyList
+                                        .indexOf(model);
+                                    propsController
+                                        .myPropertyList[index].getAllPropsImage!
+                                        .addAll(propsController.imageList);
+                                    propsController.myPropertyList.refresh();
+                                  });
+                                }
 
-                                            // int rootIndex = imgList!.indexOf(imgList[]);
-                                            // imgList.removeAt(rootIndex);
+                                // int rootIndex = imgList!.indexOf(imgList[]);
+                                // imgList.removeAt(rootIndex);
 
-                                            final rootIndex = imgList!
-                                                .indexWhere((element) =>
-                                                    element!.propId ==
-                                                    model.propsId);
-                                            if (rootIndex != -1) {
-                                              // imgList.add(imageName);
-                                              // print("Index $index1: ${people[index1]}");
-                                            }
+                                final rootIndex = imgList!.indexWhere(
+                                    (element) =>
+                                        element!.propId == model.propsId);
+                                if (rootIndex != -1) {
+                                  // imgList.add(imageName);
+                                  // print("Index $index1: ${people[index1]}");
+                                }
 
-                                            print('refresh');
-                                            Navigator.of(context,
-                                                    rootNavigator: true)
-                                                .pop();
+                                print('refresh');
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
 
-                                            // Get.off(
-                                            //   () => ViewMyProduct(
-                                            //     model: model,
-                                            //     user_id: widget.user_id,
-                                            //   ),
-                                            // );
-                                          },
-                                          textCancel: 'No, later',
-                                          onCancel: () {},
-                                        );
-                                      },
-                                      child: const Text(
+                                // Get.off(
+                                //   () => ViewMyProduct(
+                                //     model: model,
+                                //     user_id: widget.user_id,
+                                //   ),
+                                // );
+                              },
+                              textCancel: 'No, later',
+                              onCancel: () {},
+                            );
+                          },
+                          child: Card(
+                            elevation: 2,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue[800],
+                                border: Border.all(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.image,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Expanded(
+                                      child: Text(
                                         'Add Image',
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),

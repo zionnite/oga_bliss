@@ -661,4 +661,22 @@ class PropertyController extends GetxController {
       return false;
     }
   }
+
+  uploadFeatureImage(var userId, var propsId, File imageName, var model) async {
+    var status = await ApiServices.uploadFeatureImage(
+        userId: userId, propsId: propsId, image: imageName);
+
+    String? msg;
+
+    if (status != false) {
+      msg = 'Feature Image Uploaded';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+      return status;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
 }
