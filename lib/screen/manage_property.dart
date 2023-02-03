@@ -199,7 +199,7 @@ class _ManagePropertyState extends State<ManageProperty> {
                   SizedBox(
                     height: 5,
                   ),
-                  Text('All'),
+                  // Text('All'),
                   ManageAllProperty(),
                 ],
               ),
@@ -211,7 +211,7 @@ class _ManagePropertyState extends State<ManageProperty> {
                   SizedBox(
                     height: 5,
                   ),
-                  Text('Pending'),
+                  // Text('Pending'),
                   ManageAllPendingProperty(),
                 ],
               ),
@@ -223,7 +223,7 @@ class _ManagePropertyState extends State<ManageProperty> {
                   SizedBox(
                     height: 5,
                   ),
-                  Text('Approved'),
+                  // Text('Approved'),
                   ManageAllApprovedProperty(),
                 ],
               ),
@@ -235,7 +235,7 @@ class _ManagePropertyState extends State<ManageProperty> {
                   SizedBox(
                     height: 5,
                   ),
-                  Text('Rejected'),
+                  // Text('Rejected'),
                   ManageAllRejectedProperty(),
                 ],
               ),
