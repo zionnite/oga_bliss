@@ -727,7 +727,6 @@ class PropertyController extends GetxController {
       if (type == 'all') {
         allPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'pending') {
-        print('here pending');
         pendingPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'approved') {
         approvedPropertyList.addAll(seeker.cast<PropertyModel>());
@@ -742,13 +741,11 @@ class PropertyController extends GetxController {
   manageProductMore(var pageNum, var userId, var type) async {
     var seeker = await ApiServices.manageProducts(pageNum, userId, type);
 
-    print('dis type === $type');
     if (seeker != null) {
       isDataProcessing(true);
       if (type == 'all') {
         allPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'pending') {
-        print('here pending');
         pendingPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'approved') {
         approvedPropertyList.addAll(seeker.cast<PropertyModel>());
