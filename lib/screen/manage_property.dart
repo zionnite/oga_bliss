@@ -17,9 +17,14 @@ class _ManagePropertyState extends State<ManageProperty> {
   final propsController = PropertyController().getXID;
   late ScrollController _controller;
   late ScrollController _controller_2;
+  late ScrollController _controller_3;
+  late ScrollController _controller_4;
 
   var user_id = 1;
   var current_page = 1;
+  var current_page_pending = 1;
+  var current_page_approved = 1;
+  var current_page_rejected = 1;
   bool isLoading = false;
   bool widgetLoading = true;
 
@@ -37,6 +42,8 @@ class _ManagePropertyState extends State<ManageProperty> {
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
     _controller_2 = ScrollController()..addListener(_scrollListener_2);
+    _controller_3 = ScrollController()..addListener(_scrollListener_3);
+    _controller_4 = ScrollController()..addListener(_scrollListener_4);
 
     Future.delayed(new Duration(seconds: 4), () {
       if (mounted) {
@@ -67,13 +74,66 @@ class _ManagePropertyState extends State<ManageProperty> {
   }
 
   void _scrollListener_2() {
-    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+    if (_controller_2.position.pixels ==
+        _controller_2.position.maxScrollExtent) {
       setState(() {
         isLoading = true;
-        current_page++;
+        current_page_pending++;
       });
 
-      propsController.getMoreDetail(current_page, user_id);
+      print('current page pending $current_page_pending');
+      propsController.manageProductMore(
+        current_page_pending,
+        user_id,
+        'pending',
+      );
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
+  void _scrollListener_3() {
+    if (_controller_3.position.pixels ==
+        _controller_3.position.maxScrollExtent) {
+      setState(() {
+        isLoading = true;
+        current_page_approved++;
+      });
+
+      print('current page approved $current_page_approved');
+      propsController.manageProductMore(
+        current_page_approved,
+        user_id,
+        'approved',
+      );
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
+  void _scrollListener_4() {
+    if (_controller_4.position.pixels ==
+        _controller_4.position.maxScrollExtent) {
+      setState(() {
+        isLoading = true;
+        current_page_rejected++;
+      });
+
+      print('current page rejected $current_page_rejected');
+
+      propsController.manageProductMore(
+        current_page_rejected,
+        user_id,
+        'rejected',
+      );
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
@@ -139,7 +199,7 @@ class _ManagePropertyState extends State<ManageProperty> {
                   SizedBox(
                     height: 5,
                   ),
-                  // Text('Weekly Prayer Chart'),
+                  Text('All'),
                   ManageAllProperty(),
                 ],
               ),
@@ -151,29 +211,31 @@ class _ManagePropertyState extends State<ManageProperty> {
                   SizedBox(
                     height: 5,
                   ),
-                  Text('Monthly Prayer Chart'),
+                  Text('Pending'),
                   ManageAllPendingProperty(),
                 ],
               ),
             ),
             SingleChildScrollView(
+              controller: _controller_3,
               child: Column(
                 children: const [
                   SizedBox(
                     height: 5,
                   ),
-                  Text('Total Prayer Chart'),
+                  Text('Approved'),
                   ManageAllApprovedProperty(),
                 ],
               ),
             ),
             SingleChildScrollView(
+              controller: _controller_4,
               child: Column(
                 children: const [
                   SizedBox(
                     height: 5,
                   ),
-                  Text('Total Prayer Chart'),
+                  Text('Rejected'),
                   ManageAllRejectedProperty(),
                 ],
               ),

@@ -55,6 +55,7 @@ class ApiServices {
   static const String _update_feature_image = 'update_feature_image';
   static const String _submit_property = 'submit_property';
   static const String _delete_property = 'delete_property';
+  static const String _manage_property = 'manage_product';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1344,6 +1345,32 @@ class ApiServices {
         final j = json.decode(body) as Map<String, dynamic>;
         bool status = j['status'];
         return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<PropertyModel?>?> manageProducts(
+      var page_num, var userId, var type) async {
+    try {
+      final result = await client.get(
+          Uri.parse('$_mybaseUrl$_manage_property/$page_num/$userId/$type'));
+      // print(result.body);
+      if (result.statusCode == 200) {
+        final data = propertyModelFromJson(result.body);
+        return data;
       } else {
         return showSnackBar(
           title: 'Oops!',

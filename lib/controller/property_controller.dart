@@ -20,6 +20,10 @@ class PropertyController extends GetxController {
   var isMoreDataAvailable = true.obs;
 
   var propertyList = <PropertyModel>[].obs;
+  var allPropertyList = <PropertyModel>[].obs;
+  var pendingPropertyList = <PropertyModel>[].obs;
+  var approvedPropertyList = <PropertyModel>[].obs;
+  var rejectedPropertyList = <PropertyModel>[].obs;
   var myPropertyList = <PropertyModel>[].obs;
   var disPropertyList = <PropertyModel>[].obs;
   var searchPropertyList = <PropertyModel>[].obs;
@@ -39,6 +43,10 @@ class PropertyController extends GetxController {
 
     fetch_favourite(page_num, user_id);
     getMyProduct(user_id);
+    manageProduct(user_id, 'all');
+    manageProduct(user_id, 'pending');
+    manageProduct(user_id, 'approved');
+    manageProduct(user_id, 'rejected');
 
     // fetchStateRegion();
   }
@@ -48,6 +56,7 @@ class PropertyController extends GetxController {
     if (seeker != null) {
       isDataProcessing(true);
       propertyList.value = seeker.cast<PropertyModel>();
+      allPropertyList.value = seeker.cast<PropertyModel>();
     } else {
       isDataProcessing(false);
     }
@@ -59,6 +68,7 @@ class PropertyController extends GetxController {
     if (seeker != null) {
       isMoreDataAvailable(true);
       propertyList.addAll(seeker.cast<PropertyModel>());
+      allPropertyList.addAll(seeker.cast<PropertyModel>());
       // propertyList.refresh();
       isMoreDataAvailable(false);
     } else {
@@ -707,6 +717,46 @@ class PropertyController extends GetxController {
       msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
       showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
       return false;
+    }
+  }
+
+  manageProduct(var userId, var type) async {
+    var seeker = await ApiServices.manageProducts(page_num, userId, type);
+    if (seeker != null) {
+      isDataProcessing(true);
+      if (type == 'all') {
+        allPropertyList.addAll(seeker.cast<PropertyModel>());
+      } else if (type == 'pending') {
+        print('here pending');
+        pendingPropertyList.addAll(seeker.cast<PropertyModel>());
+      } else if (type == 'approved') {
+        approvedPropertyList.addAll(seeker.cast<PropertyModel>());
+      } else if (type == 'rejected') {
+        rejectedPropertyList.addAll(seeker.cast<PropertyModel>());
+      }
+    } else {
+      isDataProcessing(false);
+    }
+  }
+
+  manageProductMore(var pageNum, var userId, var type) async {
+    var seeker = await ApiServices.manageProducts(pageNum, userId, type);
+
+    print('dis type === $type');
+    if (seeker != null) {
+      isDataProcessing(true);
+      if (type == 'all') {
+        allPropertyList.addAll(seeker.cast<PropertyModel>());
+      } else if (type == 'pending') {
+        print('here pending');
+        pendingPropertyList.addAll(seeker.cast<PropertyModel>());
+      } else if (type == 'approved') {
+        approvedPropertyList.addAll(seeker.cast<PropertyModel>());
+      } else if (type == 'rejected') {
+        rejectedPropertyList.addAll(seeker.cast<PropertyModel>());
+      }
+    } else {
+      isDataProcessing(false);
     }
   }
 }

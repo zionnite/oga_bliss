@@ -74,16 +74,16 @@ class _ManageAllPropertyState extends State<ManageAllProperty> {
           // itemExtent: 350,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: propsController.propertyList.length,
+          itemCount: propsController.allPropertyList.length,
           itemBuilder: (BuildContext context, int index) {
-            var props = propsController.propertyList[index];
-            if (index == propsController.propertyList.length + 1 &&
+            var props = propsController.allPropertyList[index];
+            if (index == propsController.allPropertyList.length + 1 &&
                 isLoading == true) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            if (propsController.propertyList[index].propsId == null) {
+            if (propsController.allPropertyList[index].propsId == null) {
               propsController.isMoreDataAvailable.value = false;
               return Container();
             }
