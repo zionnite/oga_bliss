@@ -40,7 +40,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
     _controller = ScrollController()..addListener(_scrollListener);
 
-    Future.delayed(new Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         setState(() {
           checkIfListLoaded();

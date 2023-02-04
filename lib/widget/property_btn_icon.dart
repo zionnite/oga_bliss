@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PropertyBtnIcon extends StatefulWidget {
   PropertyBtnIcon({
@@ -8,6 +9,8 @@ class PropertyBtnIcon extends StatefulWidget {
     required this.icon,
     required this.icon_color,
     required this.icon_size,
+    this.isSuffix = false,
+    this.isLoading = false,
   });
 
   final VoidCallback onTap;
@@ -16,6 +19,8 @@ class PropertyBtnIcon extends StatefulWidget {
   final IconData icon;
   final Color icon_color;
   final double icon_size;
+  final bool isSuffix;
+  final bool isLoading;
 
   @override
   State<PropertyBtnIcon> createState() => _PropertyBtnIconState();
@@ -24,6 +29,7 @@ class PropertyBtnIcon extends StatefulWidget {
 class _PropertyBtnIconState extends State<PropertyBtnIcon> {
   @override
   Widget build(BuildContext context) {
+    print('sdfd ${widget.isLoading}');
     return InkWell(
       onTap: widget.onTap,
       child: Card(
@@ -46,26 +52,45 @@ class _PropertyBtnIconState extends State<PropertyBtnIcon> {
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    widget.icon,
-                    color: widget.icon_color,
-                    size: widget.icon_size,
-                  ),
-                  Text(
-                    widget.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontFamily: 'Passion One',
+              child: (widget.isLoading)
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    )
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        (!widget.isSuffix)
+                            ? Icon(
+                                widget.icon,
+                                color: widget.icon_color,
+                                size: widget.icon_size,
+                              )
+                            : Container(),
+                        Text(
+                          widget.title,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontFamily: 'Passion One',
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        (widget.isSuffix)
+                            ? Icon(
+                                widget.icon,
+                                color: widget.icon_color,
+                                size: widget.icon_size,
+                              )
+                            : Container(),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),

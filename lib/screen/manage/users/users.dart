@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
+import 'package:oga_bliss/screen/manage/users/send_email.dart';
 
 import '../../../widget/usersWidget.dart';
 
@@ -35,7 +36,15 @@ class _UsersPageState extends State<UsersPage> {
             avatarStatus: users.agentStatus.toString(),
             avatarId: users.agentId.toString(),
             avatarName: users.agentFullName.toString(),
-            onMessageTap: () {},
+            onMessageTap: () {
+              Get.to(
+                () => SendEmail(
+                  dis_user_id: users.agentId!,
+                  full_name: users.agentFullName!,
+                  email: users.agentEmail!,
+                ),
+              );
+            },
             model: usersController.usersList[index],
             userType: 'user',
           );

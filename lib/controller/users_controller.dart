@@ -110,4 +110,31 @@ class UsersController extends GetxController {
       return false;
     }
   }
+
+  Future<bool> sendEmail({
+    required String disUserId,
+    required String fullName,
+    required String email,
+    required String subject,
+    required String message,
+  }) async {
+    String? msg;
+    bool status = await ApiServices.sendEmail(
+        disUserId: disUserId,
+        fullName: fullName,
+        email: email,
+        subject: subject,
+        message: message);
+    if (status) {
+      msg = 'Email Sent...';
+      showSnackBar(
+          title: 'User Management', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = 'Email having trouble delivering';
+      showSnackBar(
+          title: 'User Management', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
 }

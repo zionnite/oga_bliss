@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/screen/manage/users/send_email.dart';
 
 import '../../../controller/users_controller.dart';
 import '../../../widget/usersWidget.dart';
@@ -35,7 +36,15 @@ class _LandlordPageState extends State<LandlordPage> {
             avatarStatus: users.agentStatus.toString(),
             avatarId: users.agentId.toString(),
             avatarName: users.agentFullName.toString(),
-            onMessageTap: () {},
+            onMessageTap: () {
+              Get.to(
+                () => SendEmail(
+                  dis_user_id: users.agentId!,
+                  full_name: users.agentFullName!,
+                  email: users.agentEmail!,
+                ),
+              );
+            },
             model: usersController.landLordList[index],
             userType: 'landlord',
           );
