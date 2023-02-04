@@ -112,6 +112,11 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
 
                       itemBuilder: (BuildContext context, int index) {
                         var props = propsController.myPropertyList[index];
+
+                        if (propsController.myPropertyList[index].propsId ==
+                            null) {
+                          return Container();
+                        }
                         return InkWell(
                           onTap: () {
                             Get.to(

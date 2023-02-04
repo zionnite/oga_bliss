@@ -116,6 +116,9 @@ class _WalletPageState extends State<WalletPage> {
                         itemBuilder: (BuildContext context, int index) {
                           var wallet = walletController.walletList[index];
 
+                          if (walletController.walletList[index].id == null) {
+                            return Container();
+                          }
                           return fundWallet(
                             walletModel: wallet,
                             image_name: wallet.propsImage!,

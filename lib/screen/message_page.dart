@@ -98,6 +98,9 @@ class _MessagePageState extends State<MessagePage> {
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         var chat = chController.chatHeadList[index];
+                        if (chController.chatHeadList[index].id == null) {
+                          return Container();
+                        }
                         if (user_id != chat.disUserId) {
                           return messageWidget(
                             image_name: chat.disUserImageName!,

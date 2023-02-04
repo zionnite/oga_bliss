@@ -102,6 +102,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       itemBuilder: (BuildContext context, int index) {
                         var con = conController.connectionList[index];
 
+                        if (conController.connectionList[index].id == null) {
+                          return Container();
+                        }
+
                         if (user_status == 'agent' ||
                             user_status == 'landlord') {
                           return connectionWidget(
@@ -198,7 +202,7 @@ class connectionWidget extends StatelessWidget {
               radius: 40,
               child: CircleAvatar(
                 radius: 38,
-                backgroundImage: AssetImage(
+                backgroundImage: NetworkImage(
                   avatarImg,
                 ),
               ),

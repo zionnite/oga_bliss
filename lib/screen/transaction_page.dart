@@ -98,6 +98,9 @@ class _TransactionPageState extends State<TransactionPage> {
                       itemCount: transController.transactionList.length,
                       itemBuilder: (BuildContext context, int index) {
                         var trans = transController.transactionList[index];
+                        if (transController.transactionList[index].id == null) {
+                          return Container();
+                        }
 
                         if (trans.disStatus == 'success') {
                           return transactionWidget(

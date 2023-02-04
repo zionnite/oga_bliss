@@ -15,6 +15,7 @@ import '../screen/dashboard.dart';
 import '../screen/front/splash_page.dart';
 import '../screen/front/welcome_page.dart';
 import '../screen/manage_property.dart';
+import '../screen/manage_users.dart';
 import '../screen/product_property_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -69,6 +70,14 @@ class NavigationDrawerWidget extends StatelessWidget {
                     icon: Icons.shopping_bag,
                     onClicked: () => Get.to(
                       () => const ManageProperty(),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  buildMenuItem(
+                    text: 'Manage Users',
+                    icon: Icons.person,
+                    onClicked: () => Get.to(
+                      () => const ManageUsers(),
                     ),
                   ),
                   const SizedBox(height: 24),

@@ -645,15 +645,12 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                   propsController.rejectedPropertyList.removeAt(newPropId2);
                 }
               } else if (widget.adminTap == 'pending') {
-                int index = propsController.pendingPropertyList
-                    .indexOf(widget.propertyModel);
-                propsController.pendingPropertyList[index].propsLiveStatus =
-                    'approved';
+                int index = propsController.pendingPropertyList.indexOf(widget.propertyModel);
+                propsController.pendingPropertyList[index].propsLiveStatus = 'approved';
 
                 propsController.approvedPropertyList.add(model);
                 propsController.pendingPropertyList.removeAt(index);
-                var newPropId = propsController.allPropertyList
-                    .indexWhere(((p) => p.propsId == model.propsId));
+                var newPropId = propsController.allPropertyList.indexWhere(((p) => p.propsId == model.propsId));
 
                 if (newPropId != -1) {
                   propsController.allPropertyList[newPropId].propsLiveStatus =

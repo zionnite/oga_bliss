@@ -70,6 +70,7 @@ class _FavouritePageState extends State<FavouritePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blue,
         title: const Text('Favourite'),
       ),
@@ -83,7 +84,7 @@ class _FavouritePageState extends State<FavouritePage> {
           () => ListView.builder(
             padding: const EdgeInsets.only(bottom: 120),
             controller: _controller,
-            key: const PageStorageKey<String>('allFilter'),
+            key: const PageStorageKey<String>('allFavourite'),
             physics: const ClampingScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,

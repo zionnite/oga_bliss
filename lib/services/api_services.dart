@@ -13,6 +13,7 @@ import '../model/request_model.dart';
 import '../model/state_model.dart';
 import '../model/transaction_model.dart';
 import '../model/types_property_model.dart';
+import '../model/users_model.dart';
 import '../model/wallet_model.dart';
 import '../util/common.dart';
 import '../widget/my_raidio_field.dart';
@@ -58,6 +59,10 @@ class ApiServices {
   static const String _manage_property = 'manage_product';
   static const String _approve_property = 'approve_property';
   static const String _reject_property = 'reject_property';
+  static const String _get_users = 'get_users';
+  static const String _get_landlords = 'get_landlords';
+  static const String _toggle_ban = 'toggle_ban';
+  static const String _delete_user = 'delete_user';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1444,6 +1449,114 @@ class ApiServices {
         final j = json.decode(result) as Map<String, dynamic>;
         bool status = j['status'];
 
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<UsersModel>> getUsers(var pageNum) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_get_users/$pageNum');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        final data = usersModelFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<UsersModel>> getLandlords(var pageNum) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_get_landlords/$pageNum');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        final data = usersModelFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future toggleBan({required String UserId}) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_toggle_ban/$UserId');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        var body = result.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future deleteUser({required String UserId}) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_delete_user/$UserId');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        var body = result.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
         return status;
       } else {
         return showSnackBar(
