@@ -37,6 +37,7 @@ dependencies:
   url_launcher: ^6.1.8
   loading_animation_widget: ^1.2.0+4
   cached_network_image: ^3.2.3
+  card_loading: ^0.2.2
 
   #  another_xlider: ^1.1.2
 

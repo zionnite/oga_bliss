@@ -60,6 +60,8 @@ class _ManageAllApprovedPropertyState extends State<ManageAllApprovedProperty> {
               props_image_counter: '${props.countPropsImage!}',
               propertyModel: props,
               route: 'default',
+              adminStatus: true,
+              adminTap: 'approved',
             );
           },
         ),

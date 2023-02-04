@@ -60,6 +60,8 @@ class _ManageAllRejectedPropertyState extends State<ManageAllRejectedProperty> {
               props_image_counter: '${props.countPropsImage!}',
               propertyModel: props,
               route: 'default',
+              adminStatus: true,
+              adminTap: 'rejected',
             );
           },
         ),

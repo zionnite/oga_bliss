@@ -756,4 +756,45 @@ class PropertyController extends GetxController {
       isDataProcessing(false);
     }
   }
+
+  Future<bool> approveProperty({
+    required String propsId,
+    required String userId,
+    required String agentId,
+  }) async {
+    String? msg;
+    bool status = await ApiServices.approveProperty(
+        propsId: propsId, userId: userId, agentId: agentId);
+    if (status) {
+      msg =
+          'Property status is now Approved and Visible to all users and quest';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
+
+  Future<bool> rejectProperty({
+    required String propsId,
+    required String userId,
+    required String agentId,
+    required String message,
+  }) async {
+    String? msg;
+    bool status = await ApiServices.rejectProperty(
+        propsId: propsId, userId: userId, agentId: agentId, message: message);
+    if (status) {
+      msg =
+          'Property Live Status is now updated to Rejected, no site user or quest can see it except only the uploader';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
 }

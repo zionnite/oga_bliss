@@ -81,7 +81,6 @@ class _ManagePropertyState extends State<ManageProperty> {
         current_page_pending++;
       });
 
-      print('current page pending $current_page_pending');
       propsController.manageProductMore(
         current_page_pending,
         user_id,
@@ -104,7 +103,6 @@ class _ManagePropertyState extends State<ManageProperty> {
         current_page_approved++;
       });
 
-      print('current page approved $current_page_approved');
       propsController.manageProductMore(
         current_page_approved,
         user_id,
@@ -126,8 +124,6 @@ class _ManagePropertyState extends State<ManageProperty> {
         isLoading = true;
         current_page_rejected++;
       });
-
-      print('current page rejected $current_page_rejected');
 
       propsController.manageProductMore(
         current_page_rejected,

@@ -56,6 +56,8 @@ class ApiServices {
   static const String _submit_property = 'submit_property';
   static const String _delete_property = 'delete_property';
   static const String _manage_property = 'manage_product';
+  static const String _approve_property = 'approve_property';
+  static const String _reject_property = 'reject_property';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1380,6 +1382,77 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> approveProperty({
+    required String propsId,
+    required String userId,
+    required String agentId,
+  }) async {
+    try {
+      final uri =
+          Uri.parse('$_mybaseUrl$_approve_property/$propsId/$userId/$agentId');
+
+      final response = await client.get(uri);
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future rejectProperty({
+    required String propsId,
+    required String userId,
+    required String agentId,
+    required String message,
+  }) async {
+    try {
+      final uri =
+          Uri.parse('$_mybaseUrl$_reject_property/$propsId/$userId/$agentId');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['message'] = message.toString();
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        var result = await respond.stream.bytesToString();
+        final j = json.decode(result) as Map<String, dynamic>;
+        bool status = j['status'];
+
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

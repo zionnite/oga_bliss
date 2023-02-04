@@ -59,6 +59,8 @@ class _ManageAllPendingPropertyState extends State<ManageAllPendingProperty> {
               props_image_counter: '${props.countPropsImage!}',
               propertyModel: props,
               route: 'default',
+              adminStatus: true,
+              adminTap: 'pending',
             );
           },
         ),

@@ -59,6 +59,8 @@ class _ManageAllPropertyState extends State<ManageAllProperty> {
               props_image_counter: '${props.countPropsImage!}',
               propertyModel: props,
               route: 'default',
+              adminStatus: true,
+              adminTap: 'all',
             );
           },
         ),
