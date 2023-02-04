@@ -180,7 +180,7 @@ class _ManagePropertyState extends State<ManageProperty> {
                 text: 'Approved',
               ),
               Tab(
-                icon: Icon(Icons.ac_unit),
+                icon: Icon(Icons.cancel),
                 text: 'Rejected',
               ),
             ],
