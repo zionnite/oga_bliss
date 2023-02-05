@@ -137,4 +137,34 @@ class UsersController extends GetxController {
       return false;
     }
   }
+
+  Future<bool> signUp({
+    required String userName,
+    required String fullName,
+    required String email,
+    required String phone,
+    required String password,
+    required String usersType,
+  }) async {
+    String? msg;
+    String status = await ApiServices.signUp(
+      userName: userName,
+      fullName: fullName,
+      email: email,
+      phone: phone,
+      password: password,
+      userType: usersType,
+    );
+    if (status == 'true') {
+      msg = 'Account Creation was successful...';
+      showSnackBar(
+          title: 'Account Creation', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = '';
+      showSnackBar(
+          title: 'Account Creation', msg: status, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
 }

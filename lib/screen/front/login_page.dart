@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:oga_bliss/screen/front/signup_page.dart';
 
 import '../../widget/my_textfield_icon.dart';
+import 'decide_page.dart';
 import 'foreget_password.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -102,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(18.0),
               child: TextButton(
                 onPressed: () {
-                  Get.to(() => SignupPage());
+                  Get.to(() => const DecidePage());
                 },
                 child: Align(
                   alignment: Alignment.center,

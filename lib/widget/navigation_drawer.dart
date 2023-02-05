@@ -3,13 +3,14 @@ import 'package:get/get.dart';
 import 'package:oga_bliss/screen/alert_page.dart';
 import 'package:oga_bliss/screen/connection_page.dart';
 import 'package:oga_bliss/screen/favourite.dart';
+import 'package:oga_bliss/screen/front/decide_page.dart';
 import 'package:oga_bliss/screen/front/login_page.dart';
-import 'package:oga_bliss/screen/front/signup_page.dart';
 import 'package:oga_bliss/screen/message_page.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
 import 'package:oga_bliss/screen/request_page.dart';
 import 'package:oga_bliss/screen/transaction_page.dart';
 import 'package:oga_bliss/screen/wallet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screen/dashboard.dart';
 import '../screen/front/splash_page.dart';
@@ -18,25 +19,58 @@ import '../screen/manage_property.dart';
 import '../screen/manage_users.dart';
 import '../screen/product_property_page.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+class NavigationDrawerWidget extends StatefulWidget {
+  @override
+  State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
+  String? user_id;
+  String? user_status;
+  String? user_name;
+  String? fullName;
+  String? image_name;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+    var image_name1 = prefs.getString('image_name');
+    var user_name1 = prefs.getString('user_name');
+    var full_name1 = prefs.getString('full_name');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+        image_name = image_name1;
+        user_name = user_name1;
+        fullName = full_name1;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    initUserDetail();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const name = 'Sarah Abs';
-    const email = 'sarah@abs.com';
-    const urlImage =
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
-
     return Drawer(
       child: Material(
         color: Colors.blue,
         child: ListView(
           children: <Widget>[
             buildHeader(
-              urlImage: urlImage,
-              name: name,
-              email: email,
+              urlImage: image_name!,
+              name: fullName!,
+              email: user_name!,
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProfilePage(),
               )),
@@ -144,7 +178,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Signup Page',
                     icon: Icons.notifications_outlined,
                     onClicked: () => Get.to(
-                      () => const SignupPage(),
+                      () => const DecidePage(),
                     ),
                   ),
                   const SizedBox(height: 16),

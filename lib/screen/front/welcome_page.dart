@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/home_page.dart';
 
+import 'decide_page.dart';
+import 'login_page.dart';
+
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -71,7 +74,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             padding: const EdgeInsets.symmetric(vertical: 20),
                           ),
                           onPressed: () {
-                            print('hey');
+                            Get.offAll(() => const LoginPage());
                           },
                           child: const Text(
                             'Login',
@@ -95,7 +98,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             padding: const EdgeInsets.symmetric(vertical: 20),
                           ),
                           onPressed: () {
-                            print('hey');
+                            Get.offAll(() => const DecidePage());
                           },
                           child: const Text(
                             'SignUp',
@@ -107,13 +110,13 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
-                    child: InkWell(
-                      onTap: () {
-                        Get.to(() => const HomePage());
-                      },
-                      child: const Text(
+                  InkWell(
+                    onTap: () {
+                      Get.offAll(() => const HomePage());
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(top: 40.0),
+                      child: Text(
                         'Login As a Guest & Decide later',
                         style: TextStyle(
                           color: Colors.white,

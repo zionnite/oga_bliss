@@ -48,17 +48,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   addStringToSF() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('user_id', "1");
-    prefs.setString('phone_no', "090");
-    prefs.setString('user_name', "doe");
-    prefs.setString('user_img', "https://");
-    prefs.setString('email', "email@email.com");
-    prefs.setString('full_name', "Jone");
-    prefs.setBool('status', true);
-    prefs.setBool('validation', true);
-    prefs.setString('user_status', "user");
-    prefs.setString('online_status', "online");
-    prefs.setBool('admin_status', false);
+    // prefs.setBool('status', true);
+    // prefs.setBool('validation', true);
+    // prefs.setString('user_status', "user");
+    // prefs.setString('online_status', "online");
   }
 
   @override

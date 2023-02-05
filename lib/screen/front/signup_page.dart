@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/controller/users_controller.dart';
 
 import '../../widget/my_textfield_icon.dart';
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+  SignupPage({required this.usersType});
+
+  final String usersType;
 
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final usersController = UsersController().getXID;
+
+  final userNameController = TextEditingController();
   final fullnameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -45,7 +53,23 @@ class _SignupPageState extends State<SignupPage> {
               padding: const EdgeInsets.all(18.0),
               child: Form(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    MyTextFieldIcon(
+                      myTextFormController: userNameController,
+                      fieldName: 'User Name',
+                      prefix: Icons.person,
+                    ),
+                    const Text(
+                      'Username must not contain special character or space',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     MyTextFieldIcon(
                       myTextFormController: fullnameController,
                       fieldName: 'Full Name',
@@ -83,7 +107,7 @@ class _SignupPageState extends State<SignupPage> {
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          Get.to(() => const LoginPage());
+                          Get.off(() => const LoginPage());
                         },
                         child: const Text('Already have Account?'),
                       ),
@@ -99,15 +123,52 @@ class _SignupPageState extends State<SignupPage> {
                           backgroundColor: Colors.blue,
                           padding: const EdgeInsets.symmetric(vertical: 20),
                         ),
-                        onPressed: () {
-                          print('hey');
+                        onPressed: () async {
+                          if (userNameController.text != '' &&
+                              fullnameController.text != '' &&
+                              emailController.text != '' &&
+                              phoneController.text != '' &&
+                              passwordController.text != '') {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            bool status = await usersController.signUp(
+                              userName: userNameController.text,
+                              fullName: fullnameController.text,
+                              email: emailController.text,
+                              phone: phoneController.text,
+                              password: passwordController.text,
+                              usersType: widget.usersType,
+                            );
+
+                            if (status) {
+                              setState(() {
+                                userNameController.text = '';
+                                fullnameController.text = '';
+                                emailController.text = '';
+                                phoneController.text = '';
+                                passwordController.text = '';
+                                isLoading = false;
+                              });
+                            } else {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          }
                         },
-                        child: const Text(
-                          'SignUp',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: (isLoading)
+                            ? Center(
+                                child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: Colors.white,
+                                size: 20,
+                              ))
+                            : const Text(
+                                'SignUp',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ],
