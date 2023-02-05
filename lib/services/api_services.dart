@@ -66,6 +66,8 @@ class ApiServices {
   static const String _delete_user = 'delete_user';
   static const String _message_user = 'message_user';
   static const String _signup = 'signup_authorization';
+  static const String _login = 'login_authorization';
+  static const String _resetPassword = 'reset_password';
 
   static Future<List<PropertyModel?>?> getAllProducts(
       var page_num, var userId) async {
@@ -1685,6 +1687,123 @@ class ApiServices {
           prefs.setBool('isUserLogin', true);
           prefs.setBool('admin_status', admin_status);
 
+          return 'true';
+        } else {
+          String msg = j['status_msg'];
+          return msg;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_login');
+
+      var response = await http.post(uri, body: {
+        'email': email.toString(),
+        'password': password.toString(),
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          String user_id = j['agent_id'];
+          String user_name = j['agent_user_name'];
+          String full_name = j['agent_full_name'];
+          String email = j['agent_email'];
+          String image_name = j['agent_image_name'];
+          String status = j['agent_status'];
+          String phone = j['agent_phone'];
+          String age = j['agent_age'];
+          String sex = j['agent_sex'];
+          String address = j['agent_address'];
+          String date_created = j['agent_date_created'];
+          String account_name = j['agent_account_name'];
+          String account_number = j['agent_account_number'];
+          String bank_name = j['agent_bank_name'];
+          String bank_code = j['agent_bank_code'];
+          String current_balance = j['agent_current_balance'];
+          String login_status = j['agent_login_status'];
+          String prop_counter = j['agent_prop_counter'];
+          bool admin_status = j['admin_status'];
+
+          prefs.setString('user_id', user_id);
+          prefs.setString('user_name', user_name);
+          prefs.setString('full_name', full_name);
+          prefs.setString('email', email);
+          prefs.setString('image_name', image_name);
+          prefs.setString('user_status', status);
+          prefs.setString('phone', phone);
+          prefs.setString('age', age);
+          prefs.setString('sex', sex);
+          prefs.setString('address', address);
+          prefs.setString('date_created', date_created);
+          prefs.setString('account_name', account_name);
+          prefs.setString('account_number', account_number);
+          prefs.setString('bank_name', bank_name);
+          prefs.setString('bank_code', bank_code);
+          prefs.setString('current_balance', current_balance);
+          prefs.setString('login_status', login_status);
+          prefs.setString('prop_counter', prop_counter);
+          prefs.setBool('isUserLogin', true);
+          prefs.setBool('admin_status', admin_status);
+
+          return 'true';
+        } else {
+          String msg = j['status_msg'];
+          return msg;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> resetPassword({required String email}) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_resetPassword');
+
+      var response = await http.post(uri, body: {
+        'email': email.toString(),
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
           return 'true';
         } else {
           String msg = j['status_msg'];

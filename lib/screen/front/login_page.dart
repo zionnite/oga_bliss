@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/controller/users_controller.dart';
+import 'package:oga_bliss/home_page.dart';
 
 import '../../widget/my_textfield_icon.dart';
 import 'decide_page.dart';
@@ -13,6 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final usersController = UsersController().getXID;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isLoading = false;
@@ -83,15 +88,40 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundColor: Colors.blue,
                           padding: const EdgeInsets.symmetric(vertical: 20),
                         ),
-                        onPressed: () {
-                          print('hey');
+                        onPressed: () async {
+                          if (emailController.text != '' &&
+                              passwordController.text != '') {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            bool status = await usersController.login(
+                                email: emailController.text,
+                                password: passwordController.text);
+                            if (status) {
+                              setState(() {
+                                isLoading = false;
+                              });
+
+                              Get.offAll(() => const HomePage());
+                            } else {
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          }
                         },
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: (isLoading)
+                            ? Center(
+                                child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: Colors.white,
+                                size: 20,
+                              ))
+                            : const Text(
+                                'Login',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ],

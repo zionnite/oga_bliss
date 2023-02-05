@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/controller/users_controller.dart';
+import 'package:oga_bliss/home_page.dart';
 import 'package:oga_bliss/screen/front/login_page.dart';
 
 import '../../widget/my_textfield_icon.dart';
@@ -12,7 +15,9 @@ class ForgetPasswordPage extends StatefulWidget {
 }
 
 class _ForetPasswordPageState extends State<ForgetPasswordPage> {
+  final usersController = UsersController().getXID;
   final emailController = TextEditingController();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -71,15 +76,39 @@ class _ForetPasswordPageState extends State<ForgetPasswordPage> {
                         backgroundColor: Colors.blue,
                         padding: const EdgeInsets.symmetric(vertical: 20),
                       ),
-                      onPressed: () {
-                        print('hey');
+                      onPressed: () async {
+                        if (emailController.text != '') {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          bool status = await usersController.resetPassword(
+                            email: emailController.text,
+                          );
+                          if (status) {
+                            setState(() {
+                              isLoading = false;
+                            });
+
+                            Get.offAll(() => const HomePage());
+                          } else {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        }
                       },
-                      child: const Text(
-                        'Reset Password',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: (isLoading)
+                          ? Center(
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.white,
+                              size: 20,
+                            ))
+                          : const Text(
+                              'Reset Password',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                 ],

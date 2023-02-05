@@ -167,4 +167,44 @@ class UsersController extends GetxController {
       return false;
     }
   }
+
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    String? msg;
+    String status = await ApiServices.login(
+      email: email,
+      password: password,
+    );
+    if (status == 'true') {
+      msg = 'Login Successful...';
+      showSnackBar(title: 'Success', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = '';
+      showSnackBar(title: 'Oops', msg: status, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword({
+    required String email,
+  }) async {
+    String? msg;
+    String status = await ApiServices.resetPassword(
+      email: email,
+    );
+    if (status == 'true') {
+      msg =
+          'An Email has been Sent to the provided email for further instruction!...';
+      showSnackBar(
+          title: 'Congratulation', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = '';
+      showSnackBar(title: 'Oops', msg: status, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
 }

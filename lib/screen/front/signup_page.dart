@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
+import 'package:oga_bliss/home_page.dart';
 
 import '../../widget/my_textfield_icon.dart';
 import 'login_page.dart';
@@ -150,6 +151,8 @@ class _SignupPageState extends State<SignupPage> {
                                 passwordController.text = '';
                                 isLoading = false;
                               });
+
+                              Get.offAll(() => const HomePage());
                             } else {
                               setState(() {
                                 isLoading = false;

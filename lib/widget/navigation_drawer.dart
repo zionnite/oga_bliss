@@ -235,6 +235,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   Text(
                     name,
                     style: const TextStyle(fontSize: 20, color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
