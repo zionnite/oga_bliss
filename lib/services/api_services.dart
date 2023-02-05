@@ -69,15 +69,31 @@ class ApiServices {
   static const String _login = 'login_authorization';
   static const String _resetPassword = 'reset_password';
 
-  static Future<List<PropertyModel?>?> getAllProducts(
-      var page_num, var userId) async {
+  static Future getAllProducts(var page_num, var userId) async {
     try {
       final result = await client
           .get(Uri.parse('$_mybaseUrl$_all_product/$page_num/$userId'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = propertyModelFromJson(result.body);
-        return data;
+        // final data = propertyModelFromJson(result.body);
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+
+          // final data = propertyModelFromJson(disData);
+
+          // var disData = jsonDecode(result.body)['product'];
+
+          // final data = propertyModelFromJson(disData);
+          // return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -86,7 +102,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      // print(ex);
+      print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -740,7 +756,6 @@ class ApiServices {
       newMode = 'Serviced';
     }
 
-    print(airport.toString());
     try {
       final uri = Uri.parse('$_mybaseUrl$_add_product/$user_id');
       var request = http.MultipartRequest('POST', uri);

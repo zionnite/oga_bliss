@@ -87,6 +87,8 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       // key: _key,
       // drawer: NavigationDrawerWidget(),
@@ -158,12 +160,34 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
               ),
               (propsController.propertyList.isEmpty)
                   ? Column(
-                      children: const [
-                        SizedBox(
-                          height: 450,
+                      children: [
+                        const SizedBox(
+                          height: 350,
                         ),
-                        CircularProgressIndicator(
-                          color: Colors.red,
+                        const Text(
+                          'Oops!... no data found',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontFamily: 'RubikMonoOne-Regular',
+                          ),
+                        ),
+                        Container(
+                          height: height * 0.6,
+                          // margin: const EdgeInsets.only(
+                          //     left: 59, right: 59, top: 10),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              colorFilter: ColorFilter.mode(
+                                Colors.blue.withOpacity(1),
+                                BlendMode.color,
+                              ),
+                              fit: BoxFit.fitWidth,
+                              image: const AssetImage(
+                                'assets/images/data_not_found.png',
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     )
