@@ -76,6 +76,7 @@ class ApiServices {
       // print(result.body);
       if (result.statusCode == 200) {
         // final data = propertyModelFromJson(result.body);
+        // retur data;
         var body = result.body;
         final j = json.decode(body) as Map<String, dynamic>;
         String status = j['status'];
@@ -86,13 +87,6 @@ class ApiServices {
               .map<PropertyModel>((json) => PropertyModel.fromJson(json))
               .toList();
           return data;
-
-          // final data = propertyModelFromJson(disData);
-
-          // var disData = jsonDecode(result.body)['product'];
-
-          // final data = propertyModelFromJson(disData);
-          // return data;
         }
       } else {
         return showSnackBar(
@@ -102,12 +96,12 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -186,8 +180,20 @@ class ApiServices {
       });
 
       if (response.statusCode == 200) {
-        final data = propertyModelFromJson(response.body);
-        return data;
+        // final data = propertyModelFromJson(response.body);
+        // return data;
+
+        var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -261,8 +267,17 @@ class ApiServices {
       });
 
       if (response.statusCode == 200) {
-        final data = propertyModelFromJson(response.body);
-        return data;
+        var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -271,11 +286,11 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -288,8 +303,20 @@ class ApiServices {
       });
 
       if (response.statusCode == 200) {
-        final data = propertyModelFromJson(response.body);
-        return data;
+        // final data = propertyModelFromJson(response.body);
+        // return data;
+
+        var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -317,8 +344,20 @@ class ApiServices {
       });
 
       if (response.statusCode == 200) {
-        final data = propertyModelFromJson(response.body);
-        return data;
+        // final data = propertyModelFromJson(response.body);
+        // return data;
+
+        var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -342,8 +381,20 @@ class ApiServices {
           .get(Uri.parse('$_mybaseUrl$_get_favourite/$page_num/$userId'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = propertyModelFromJson(result.body);
-        return data;
+        // final data = propertyModelFromJson(result.body);
+        // return data;
+
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',

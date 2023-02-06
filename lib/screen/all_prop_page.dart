@@ -23,10 +23,6 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
   String? user_status;
   bool? admin_status;
 
-  var current_page = 1;
-  bool isLoading = false;
-  bool widgetLoading = true;
-
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId1 = prefs.getString('user_id');
@@ -41,6 +37,10 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
       });
     }
   }
+
+  var current_page = 1;
+  bool isLoading = false;
+  bool widgetLoading = true;
 
   checkIfListLoaded() {
     var loading = propsController.isDataProcessing.value;

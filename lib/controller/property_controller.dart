@@ -32,12 +32,14 @@ class PropertyController extends GetxController {
   var imageList = <GetAllPropsImage>[].obs;
 
   String? user_id;
+  String? user_status;
 
   @override
   void onInit() async {
     super.onInit();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = prefs.getString('user_id');
+    user_status = prefs.getString('user_status');
     await getDetails(user_id);
     await fetchTypesProps();
 
@@ -80,6 +82,23 @@ class PropertyController extends GetxController {
       var userId, var propsId, PropertyModel model, var route) async {
     //return await !status;
     String status = await ApiServices.toggleLike(userId, propsId);
+    if (user_id == null) {
+      showSnackBar(
+        title: 'Oops!',
+        msg: 'You need to Login before you can perform this action',
+        backgroundColor: Colors.red,
+      );
+      return false;
+    }
+
+    if (user_status != 'user') {
+      showSnackBar(
+        title: 'Oops!',
+        msg: 'This action is only for Users not Landlord or Agent',
+        backgroundColor: Colors.red,
+      );
+      return false;
+    }
 
     if (status == 'liked') {
       if (route == 'default') {

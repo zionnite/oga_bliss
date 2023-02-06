@@ -348,7 +348,6 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                               endPrice: _rangeValues.end.toString(),
                             ),
                           );
-                          print('${_rangeValues.start} ${_rangeValues.end}');
                         },
                         child: Align(
                           alignment: Alignment.center,

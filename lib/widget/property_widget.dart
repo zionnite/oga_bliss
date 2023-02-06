@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/model/property_model.dart';
 import 'package:oga_bliss/widget/my_text_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/favourite_controller.dart';
 import '../controller/property_controller.dart';
@@ -49,7 +50,31 @@ class _PropertyWidgetState extends State<PropertyWidget> {
   final favController = FavouriteController().getXID;
   TextEditingController reasonController = TextEditingController();
 
-  String user_id = '1';
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    initUserDetail();
+    super.initState();
+  }
+
   bool isLoading = false;
 
   @override
@@ -218,6 +243,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                                   widget.propertyModel!.favourite =
                                       !widget.isFav;
                                 });
+
                                 var status = await propsController.toggleLike(
                                     user_id,
                                     widget.propertyModel!.propsId,
@@ -394,7 +420,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
             });
             bool status = await propsController.approveProperty(
               propsId: model.propsId!,
-              userId: user_id,
+              userId: user_id!,
               agentId: model.propsAgentId!,
             );
             if (status) {
@@ -476,7 +502,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
 
                   bool status = await propsController.rejectProperty(
                     propsId: model.propsId!,
-                    userId: user_id,
+                    userId: user_id!,
                     agentId: model.propsAgentId!,
                     message: reasonController.text,
                   );
@@ -620,7 +646,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
           });
           bool status = await propsController.approveProperty(
             propsId: model.propsId!,
-            userId: user_id,
+            userId: user_id!,
             agentId: model.propsAgentId!,
           );
           if (status) {
@@ -645,12 +671,15 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                   propsController.rejectedPropertyList.removeAt(newPropId2);
                 }
               } else if (widget.adminTap == 'pending') {
-                int index = propsController.pendingPropertyList.indexOf(widget.propertyModel);
-                propsController.pendingPropertyList[index].propsLiveStatus = 'approved';
+                int index = propsController.pendingPropertyList
+                    .indexOf(widget.propertyModel);
+                propsController.pendingPropertyList[index].propsLiveStatus =
+                    'approved';
 
                 propsController.approvedPropertyList.add(model);
                 propsController.pendingPropertyList.removeAt(index);
-                var newPropId = propsController.allPropertyList.indexWhere(((p) => p.propsId == model.propsId));
+                var newPropId = propsController.allPropertyList
+                    .indexWhere(((p) => p.propsId == model.propsId));
 
                 if (newPropId != -1) {
                   propsController.allPropertyList[newPropId].propsLiveStatus =
@@ -733,7 +762,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
 
                 bool status = await propsController.rejectProperty(
                   propsId: model.propsId!,
-                  userId: user_id,
+                  userId: user_id!,
                   agentId: model.propsAgentId!,
                   message: reasonController.text,
                 );
