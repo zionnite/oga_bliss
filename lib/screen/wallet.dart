@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../controller/wallet_controller.dart';
@@ -20,9 +23,24 @@ class _WalletPageState extends State<WalletPage> {
   final walletController = WalletController().getXID;
   late ScrollController _controller;
 
-  String user_id = '1';
-  String user_status = 'user';
-  bool admin_status = true;
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
 
   var current_page = 1;
   bool isLoading = false;
@@ -32,7 +50,7 @@ class _WalletPageState extends State<WalletPage> {
 
   checkIfListLoaded() {
     var loading = walletController.isDataProcessing.value;
-    if (loading) {
+    if (loading || !loading) {
       setState(() {
         widgetLoading = false;
       });
@@ -41,6 +59,7 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
 
     _controller = ScrollController()..addListener(_scrollListener);
@@ -104,38 +123,47 @@ class _WalletPageState extends State<WalletPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Obx(() => ListView.builder(
-                        controller: _controller,
-                        padding: const EdgeInsets.only(bottom: 120),
-                        key: const PageStorageKey<String>('allWallet'),
-                        physics: const ClampingScrollPhysics(),
-                        // itemExtent: 350,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: walletController.walletList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var wallet = walletController.walletList[index];
+                  (widgetLoading)
+                      ? LoadingAnimationWidget.staggeredDotsWave(
+                          color: Colors.blue,
+                          size: 20,
+                        )
+                      : (walletController.walletList.isEmpty)
+                          ? const Center(child: ShowNotFound())
+                          : Obx(() => ListView.builder(
+                                controller: _controller,
+                                padding: const EdgeInsets.only(bottom: 120),
+                                key: const PageStorageKey<String>('allWallet'),
+                                physics: const ClampingScrollPhysics(),
+                                // itemExtent: 350,
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: walletController.walletList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  var wallet =
+                                      walletController.walletList[index];
 
-                          if (walletController.walletList[index].id == null) {
-                            return Container();
-                          }
-                          return fundWallet(
-                            walletModel: wallet,
-                            image_name: wallet.propsImage!,
-                            name: wallet.propsName!,
-                            time: wallet.time!,
-                            amount: wallet.amount!,
-                            onTap: () {
-                              Get.to(
-                                () => ViewPropertyDetailedDashboard(
-                                  propsId: wallet.propsId!,
-                                  route: 'dashboard',
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      )),
+                                  if (walletController.walletList[index].id ==
+                                      null) {
+                                    return Container();
+                                  }
+                                  return fundWallet(
+                                    walletModel: wallet,
+                                    image_name: wallet.propsImage!,
+                                    name: wallet.propsName!,
+                                    time: wallet.time!,
+                                    amount: wallet.amount!,
+                                    onTap: () {
+                                      Get.to(
+                                        () => ViewPropertyDetailedDashboard(
+                                          propsId: wallet.propsId!,
+                                          route: 'dashboard',
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              )),
                 ],
               ),
             ),

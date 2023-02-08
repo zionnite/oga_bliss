@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/add_prop_page.dart';
 import 'package:oga_bliss/screen/view_my_product.dart';
 import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
 import 'package:oga_bliss/widget/property_btn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
 import '../model/property_model.dart';
@@ -11,6 +13,7 @@ import '../util/common.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
+import '../widget/show_not_found.dart';
 import 'edit_amenities.dart';
 import 'edit_basic_detail.dart';
 import 'edit_extra_detail.dart';
@@ -34,7 +37,25 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
 
   SampleItem? selectedMenu;
 
-  var user_id = 1;
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
   var current_page = 1;
   bool isLoading = false;
   bool widgetLoading = true;
@@ -50,10 +71,11 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
 
-    Future.delayed(new Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         setState(() {
           checkIfListLoaded();
@@ -88,63 +110,74 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         children: [
           const PropertyAppBar(title: 'Property'),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  NoticeMe(
-                    title: 'Oops!',
-                    desc: 'Your bank account is not yet verify!',
-                    icon: Icons.warning,
-                    icon_color: Colors.red,
-                    border_color: Colors.red,
-                    btnTitle: 'Verify Now',
-                    btnColor: Colors.blue,
-                    onTap: () {},
-                  ),
-                  Obx(
-                    () => ListView.builder(
-                      key: const PageStorageKey<String>('myProperty'),
-                      physics: const ClampingScrollPhysics(),
-                      // itemExtent: 350,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: propsController.myPropertyList.length,
-
-                      itemBuilder: (BuildContext context, int index) {
-                        var props = propsController.myPropertyList[index];
-
-                        if (propsController.myPropertyList[index].propsId ==
-                            null) {
-                          return Container();
-                        }
-                        return InkWell(
-                          onTap: () {
-                            Get.to(
-                              () => ViewPropertyDetailedDashboard(
-                                propsId: props.propsId!,
-                                route: 'dashboard',
-                              ),
-                            );
-                          },
-                          child: PropertyTileWidget(
-                            props_image_name: props.propsImgName!,
-                            props_name: props.propsName!,
-                            props_desc: props.propsDescription!,
-                            props_price: '${props.propsPrice}',
-                            props_type: props.propsPurpose!,
-                            props_bedroom: props.propsBedrom!,
-                            props_bathroom: props.propsBathroom!,
-                            props_toilet: props.propsToilet!,
-                            onTap: _popUpButton(props),
-                            live_status: props.propsLiveStatus.toString(),
-                          ),
-                        );
-                      },
-                    ),
+            child: (widgetLoading)
+                ? LoadingAnimationWidget.staggeredDotsWave(
+                    color: Colors.blue,
+                    size: 20,
                   )
-                ],
-              ),
-            ),
+                : (propsController.myPropertyList.isEmpty)
+                    ? const Center(child: ShowNotFound())
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            NoticeMe(
+                              title: 'Oops!',
+                              desc: 'Your bank account is not yet verify!',
+                              icon: Icons.warning,
+                              icon_color: Colors.red,
+                              border_color: Colors.red,
+                              btnTitle: 'Verify Now',
+                              btnColor: Colors.blue,
+                              onTap: () {},
+                            ),
+                            Obx(
+                              () => ListView.builder(
+                                key: const PageStorageKey<String>('myProperty'),
+                                physics: const ClampingScrollPhysics(),
+                                // itemExtent: 350,
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount:
+                                    propsController.myPropertyList.length,
+
+                                itemBuilder: (BuildContext context, int index) {
+                                  var props =
+                                      propsController.myPropertyList[index];
+
+                                  if (propsController
+                                          .myPropertyList[index].propsId ==
+                                      null) {
+                                    return Container();
+                                  }
+                                  return InkWell(
+                                    onTap: () {
+                                      Get.to(
+                                        () => ViewPropertyDetailedDashboard(
+                                          propsId: props.propsId!,
+                                          route: 'dashboard',
+                                        ),
+                                      );
+                                    },
+                                    child: PropertyTileWidget(
+                                      props_image_name: props.propsImgName!,
+                                      props_name: props.propsName!,
+                                      props_desc: props.propsDescription!,
+                                      props_price: '${props.propsPrice}',
+                                      props_type: props.propsPurpose!,
+                                      props_bedroom: props.propsBedrom!,
+                                      props_bathroom: props.propsBathroom!,
+                                      props_toilet: props.propsToilet!,
+                                      onTap: _popUpButton(props),
+                                      live_status:
+                                          props.propsLiveStatus.toString(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
           )
         ],
       ),

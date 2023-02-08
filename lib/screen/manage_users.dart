@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/users_controller.dart';
 import 'manage/users/landlord.dart';
@@ -16,7 +17,25 @@ class _ManageUsersState extends State<ManageUsers> {
   late ScrollController _controller;
   late ScrollController _controller_2;
 
-  var user_id = 1;
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
   var current_page = 1;
   var current_page_landlord = 1;
   bool isLoading = false;
@@ -33,6 +52,7 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
     _controller_2 = ScrollController()..addListener(_scrollListener_2);

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/chat_head_controller.dart';
 import '../widget/message_widget.dart';
@@ -17,10 +20,24 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
   final chController = ChatHeadController().getXID;
   late ScrollController _controller;
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
 
-  String user_id = '1';
-  String user_status = 'user';
-  bool admin_status = true;
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
 
   var current_page = 1;
   bool isLoading = false;
@@ -28,7 +45,7 @@ class _MessagePageState extends State<MessagePage> {
 
   checkIfListLoaded() {
     var loading = chController.isDataProcessing.value;
-    if (loading) {
+    if (loading || !loading) {
       setState(() {
         widgetLoading = false;
       });
@@ -37,11 +54,12 @@ class _MessagePageState extends State<MessagePage> {
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
 
     _controller = ScrollController()..addListener(_scrollListener);
 
-    Future.delayed(new Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         setState(() {
           checkIfListLoaded();
@@ -74,62 +92,71 @@ class _MessagePageState extends State<MessagePage> {
         children: [
           const PropertyAppBar(title: 'Conversation'),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  NoticeMe(
-                    title: 'Oops!',
-                    desc: 'Your bank account is not yet verify!',
-                    icon: Icons.warning,
-                    icon_color: Colors.red,
-                    border_color: Colors.red,
-                    btnTitle: 'Verify Now',
-                    btnColor: Colors.blue,
-                    onTap: () {},
-                  ),
-                  Obx(
-                    () => ListView.builder(
-                      controller: _controller,
-                      padding: const EdgeInsets.only(bottom: 120),
-                      key: const PageStorageKey<String>('allChatHead'),
-                      physics: const ClampingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: chController.chatHeadList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        var chat = chController.chatHeadList[index];
-                        if (chController.chatHeadList[index].id == null) {
-                          return Container();
-                        }
-                        if (user_id != chat.disUserId) {
-                          return messageWidget(
-                            image_name: chat.disUserImageName!,
-                            name: chat.disUserFullName!,
-                            status: chat.disUserUserStatus!,
-                            onTap: () {
-                              Get.to(
-                                () => MessageAlonePage(
-                                  sender: chat.disUserId!,
-                                  receiver: chat.disMyId!,
-                                  propsId: chat.propsId!,
-                                  image_name: chat.disUserImageName!,
-                                  status: chat.disUserUserStatus!,
-                                  name: chat.disUserFullName!,
-                                ),
-                              );
-                            },
-                            time: chat.lastTimeMsg.toString(),
-                            last_msg: chat.lastMsg.toString(),
-                            counter: chat.countUnreadMsg.toString(),
-                          );
-                        }
-                        return Container();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: (widgetLoading)
+                ? LoadingAnimationWidget.staggeredDotsWave(
+                    color: Colors.blue,
+                    size: 20,
+                  )
+                : (chController.chatHeadList.isEmpty)
+                    ? const Center(child: ShowNotFound())
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            NoticeMe(
+                              title: 'Oops!',
+                              desc: 'Your bank account is not yet verify!',
+                              icon: Icons.warning,
+                              icon_color: Colors.red,
+                              border_color: Colors.red,
+                              btnTitle: 'Verify Now',
+                              btnColor: Colors.blue,
+                              onTap: () {},
+                            ),
+                            Obx(
+                              () => ListView.builder(
+                                controller: _controller,
+                                padding: const EdgeInsets.only(bottom: 120),
+                                key:
+                                    const PageStorageKey<String>('allChatHead'),
+                                physics: const ClampingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount: chController.chatHeadList.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext context, int index) {
+                                  var chat = chController.chatHeadList[index];
+                                  if (chController.chatHeadList[index].id ==
+                                      null) {
+                                    return Container();
+                                  }
+                                  if (user_id != chat.disUserId) {
+                                    return messageWidget(
+                                      image_name: chat.disUserImageName!,
+                                      name: chat.disUserFullName!,
+                                      status: chat.disUserUserStatus!,
+                                      onTap: () {
+                                        Get.to(
+                                          () => MessageAlonePage(
+                                            sender: chat.disUserId!,
+                                            receiver: chat.disMyId!,
+                                            propsId: chat.propsId!,
+                                            image_name: chat.disUserImageName!,
+                                            status: chat.disUserUserStatus!,
+                                            name: chat.disUserFullName!,
+                                          ),
+                                        );
+                                      },
+                                      time: chat.lastTimeMsg.toString(),
+                                      last_msg: chat.lastMsg.toString(),
+                                      counter: chat.countUnreadMsg.toString(),
+                                    );
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
           )
         ],
       ),

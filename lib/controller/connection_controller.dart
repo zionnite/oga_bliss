@@ -26,6 +26,7 @@ class ConnectionController extends GetxController {
 
   fetchConnection(pageNum) async {
     var seeker = await ApiServices.getConnection(pageNum, user_id);
+
     if (seeker != null) {
       isDataProcessing(true);
       connectionList.value = seeker.cast<ConnectionModel>();
@@ -36,6 +37,7 @@ class ConnectionController extends GetxController {
 
   fetchConnectionMore(pageNum) async {
     var seeker = await ApiServices.getConnection(pageNum, user_id);
+
     if (seeker != null) {
       isDataProcessing(true);
       connectionList.addAll(seeker.cast<ConnectionModel>());

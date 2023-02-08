@@ -2,13 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
-import 'package:oga_bliss/screen/favourite.dart';
 import 'package:oga_bliss/widget/header_title.dart';
 
 import '../widget/property_btn.dart';
 import '../widget/property_key.dart';
+import 'favourite.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -22,6 +20,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   title: Text('Profile'),
+      //   automaticallyImplyLeading: false,
+      // ),
+      backgroundColor: Colors.white12,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 190.0),
@@ -98,9 +101,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.only(top: 230),
+                    margin: const EdgeInsets.only(top: 210),
                     child: const CircleAvatar(
-                      radius: 50,
+                      radius: 70,
                       backgroundImage: AssetImage(
                         'assets/images/a.jpeg',
                       ),
@@ -108,19 +111,54 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ],
               ),
+
+              // const SizedBox(
+              //   height: 15,
+              // ),
+              // Align(
+              //   alignment: Alignment.center,
+              //   child: Card(
+              //     color: Colors.blue,
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(45.0),
+              //     ),
+              //     child: Container(
+              //       padding: const EdgeInsets.symmetric(
+              //           horizontal: 30.0, vertical: 15),
+              //       child: Row(
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: const [
+              //           Text(
+              //             'Edit Profile',
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.only(top: 40),
                 child: const HeaderTitle(
                   title: 'Full Name',
+                  icon: Icon(
+                    Icons.person,
+                  ),
                 ),
               ),
-              const PropertyKey(
-                propsKey: 'Nosakhare Atekha Endurance Zionnite',
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: PropertyKey(
+                  propsKey: 'Nosakhare Atekha Endurance Zionnite',
+                ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 child: const HeaderTitle(
                   title: 'Email',
+                  icon: Icon(Icons.email),
                 ),
               ),
               const PropertyKey(
@@ -130,6 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 margin: const EdgeInsets.only(top: 10),
                 child: const HeaderTitle(
                   title: 'Phone',
+                  icon: Icon(Icons.phone_android_sharp),
                 ),
               ),
               const PropertyKey(
@@ -148,6 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 margin: const EdgeInsets.only(top: 10),
                 child: const HeaderTitle(
                   title: 'Sex',
+                  icon: Icon(Icons.support_agent),
                 ),
               ),
               const PropertyKey(
@@ -159,10 +199,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: 'Address',
                 ),
               ),
-              const PropertyKey(
-                propsKey:
-                    '10, Osemwengie street off akugbe road, off upper sakponba road benin city, edo state, Nigeria',
+
+              Container(
+                margin: const EdgeInsets.only(
+                  left: 15,
+                  right: 15,
+                  bottom: 0,
+                ),
+                child: const Text(
+                  '10, Osemwengie street off akugbe road, off upper sakponba road benin city, edo state, Nigeria',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
+
+              // const PropertyKey(
+              //   propsKey:
+              //       '10, Osemwengie street off akugbe road, off upper sakponba road benin city, edo state, Nigeria',
+              // ),
               const SizedBox(
                 height: 20,
               ),

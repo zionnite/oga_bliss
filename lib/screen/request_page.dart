@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/request_controller.dart';
 import '../widget/notice_me.dart';
@@ -20,9 +22,24 @@ class _RequestPageState extends State<RequestPage> {
   final requestController = RequestController().getXID;
   late ScrollController _controller;
 
-  String user_id = '1';
-  String user_status = 'user';
-  bool admin_status = true;
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
 
   var current_page = 1;
   bool isLoading = false;
@@ -30,7 +47,7 @@ class _RequestPageState extends State<RequestPage> {
 
   checkIfListLoaded() {
     var loading = requestController.isDataProcessing.value;
-    if (loading) {
+    if (loading || !loading) {
       setState(() {
         widgetLoading = false;
       });
@@ -39,11 +56,12 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
 
     _controller = ScrollController()..addListener(_scrollListener);
 
-    Future.delayed(new Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
         setState(() {
           checkIfListLoaded();
@@ -69,6 +87,34 @@ class _RequestPageState extends State<RequestPage> {
     }
   }
 
+  showNotFound() {
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 250,
+            ),
+            Image.asset(
+              'assets/images/data_not_found.png',
+              fit: BoxFit.fitWidth,
+            ),
+            const Text(
+              'Oops!... no data found',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontFamily: 'Lobster',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,64 +122,83 @@ class _RequestPageState extends State<RequestPage> {
         children: [
           const PropertyAppBar(title: 'Request'),
           Expanded(
-            child: PageStorage(
-              bucket: pageBucket,
-              child: SingleChildScrollView(
-                controller: _controller,
-                key: const PageStorageKey<String>('allRequest'),
-                child: Column(
-                  children: [
-                    NoticeMe(
-                      title: 'Oops!',
-                      desc: 'Your bank account is not yet verify!',
-                      icon: Icons.warning,
-                      icon_color: Colors.red,
-                      border_color: Colors.red,
-                      btnTitle: 'Verify Now',
-                      btnColor: Colors.blue,
-                      onTap: () {},
+            child: (widgetLoading)
+                ? Center(
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.blue,
+                      size: 20,
                     ),
-                    Obx(
-                      () => ListView.builder(
-                        padding: const EdgeInsets.only(bottom: 120),
-                        key: const PageStorageKey<String>('allRequest'),
-                        physics: const ClampingScrollPhysics(),
-                        // itemExtent: 350,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: requestController.requestList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          var req = requestController.requestList[index];
-                          if (index ==
-                                  requestController.requestList.length + 1 &&
-                              isLoading == true) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          if (requestController.requestList[index].id == null) {
-                            requestController.isMoreDataAvailable.value = false;
-                            return Container();
-                          }
-                          return requestWidget(
-                            user_id: user_id,
-                            onTap: () {
-                              Get.to(() => ViewPropertyDetailedDashboard(
-                                    propsId: req.propsId!,
-                                    route: 'dashboard',
-                                  ));
-                            },
-                            user_status: user_status,
-                            admin_status: admin_status,
-                            requestModel: req,
-                          );
-                        },
+                  )
+                : (requestController.requestList.isEmpty)
+                    ? showNotFound()
+                    : PageStorage(
+                        bucket: pageBucket,
+                        child: SingleChildScrollView(
+                          controller: _controller,
+                          key: const PageStorageKey<String>('allRequest'),
+                          child: Column(
+                            children: [
+                              NoticeMe(
+                                title: 'Oops!',
+                                desc: 'Your bank account is not yet verify!',
+                                icon: Icons.warning,
+                                icon_color: Colors.red,
+                                border_color: Colors.red,
+                                btnTitle: 'Verify Now',
+                                btnColor: Colors.blue,
+                                onTap: () {},
+                              ),
+                              Obx(
+                                () => ListView.builder(
+                                  padding: const EdgeInsets.only(bottom: 120),
+                                  key: const PageStorageKey<String>(
+                                      'allRequest'),
+                                  physics: const ClampingScrollPhysics(),
+                                  // itemExtent: 350,
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      requestController.requestList.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    var req =
+                                        requestController.requestList[index];
+                                    if (index ==
+                                            requestController
+                                                    .requestList.length +
+                                                1 &&
+                                        isLoading == true) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    if (requestController
+                                            .requestList[index].id ==
+                                        null) {
+                                      requestController
+                                          .isMoreDataAvailable.value = false;
+                                      return Container();
+                                    }
+                                    return requestWidget(
+                                      user_id: user_id!,
+                                      onTap: () {
+                                        Get.to(
+                                            () => ViewPropertyDetailedDashboard(
+                                                  propsId: req.propsId!,
+                                                  route: 'dashboard',
+                                                ));
+                                      },
+                                      user_status: user_status!,
+                                      admin_status: admin_status!,
+                                      requestModel: req,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           )
         ],
       ),

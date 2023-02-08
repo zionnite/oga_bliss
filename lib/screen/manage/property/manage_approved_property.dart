@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/widget/property_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controller/property_controller.dart';
 
@@ -15,11 +16,30 @@ class ManageAllApprovedProperty extends StatefulWidget {
 class _ManageAllApprovedPropertyState extends State<ManageAllApprovedProperty> {
   final propsController = PropertyController().getXID;
 
-  var user_id = 1;
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
   bool isLoading = false;
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
   }
 

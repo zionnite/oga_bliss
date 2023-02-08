@@ -55,26 +55,26 @@ class PropertyController extends GetxController {
 
   getDetails(var userId) async {
     var seeker = await ApiServices.getAllProducts(page_num, userId);
+    isSearchDataProcessing(true);
     if (seeker != null) {
-      isDataProcessing(true);
       propertyList.value = seeker.cast<PropertyModel>();
       allPropertyList.value = seeker.cast<PropertyModel>();
     } else {
-      isDataProcessing(false);
+      // isDataProcessing(false);
     }
   }
 
   void getMoreDetail(var pageNum, var userId) async {
     var seeker = await ApiServices.getAllProducts(pageNum, userId);
 
+    // isSearchDataProcessing(true);
     if (seeker != null) {
-      isMoreDataAvailable(true);
       propertyList.addAll(seeker.cast<PropertyModel>());
       allPropertyList.addAll(seeker.cast<PropertyModel>());
       // propertyList.refresh();
-      isMoreDataAvailable(false);
+      // isMoreDataAvailable(false);
     } else {
-      isMoreDataAvailable(false);
+      // isMoreDataAvailable(false);
     }
   }
 
@@ -156,8 +156,8 @@ class PropertyController extends GetxController {
     var seeker =
         await ApiServices.getSearchProduct(pageNum, userId, searchTerm);
 
+    isSearchDataProcessing(true);
     if (seeker != null) {
-      isSearchDataProcessing(true);
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
@@ -187,8 +187,8 @@ class PropertyController extends GetxController {
     var seeker = await ApiServices.getFilterProductLocation(
         pageNum, userId, stateId, areaId);
 
+    isSearchDataProcessing(true);
     if (seeker != null) {
-      isSearchDataProcessing(true);
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
@@ -208,8 +208,8 @@ class PropertyController extends GetxController {
     var seeker =
         await ApiServices.getFilterProductType(pageNum, userId, typeId);
 
+    isSearchDataProcessing(true);
     if (seeker != null) {
-      isSearchDataProcessing(true);
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
@@ -230,8 +230,8 @@ class PropertyController extends GetxController {
     var seeker = await ApiServices.getFilterProductPrice(
         pageNum, userId, startPrice, endPrice);
 
+    isSearchDataProcessing(true);
     if (seeker != null) {
-      isSearchDataProcessing(true);
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
@@ -250,8 +250,8 @@ class PropertyController extends GetxController {
     favPropertyList.clear();
     var seeker = await ApiServices.getAllFav(pageNum, userId);
 
+    isSearchDataProcessing(true);
     if (seeker != null) {
-      isSearchDataProcessing(true);
       favPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }

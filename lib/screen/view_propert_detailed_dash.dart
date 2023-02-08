@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_youtube_view/flutter_youtube_view.dart';
 import 'package:get/get.dart';
 import 'package:popup_banner/popup_banner.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
 import '../util/currency_formatter.dart';
@@ -26,7 +27,25 @@ class _ViewPropertyDetailedDashboardState
   final propsController = PropertyController().getXID;
   late FlutterYoutubeViewController _controller;
 
-  var user_id = 1;
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
   var current_page = 1;
   bool isLoading = false;
   bool widgetLoading = true;
@@ -36,7 +55,7 @@ class _ViewPropertyDetailedDashboardState
 
   checkIfListLoaded() {
     var loading = propsController.isDataProcessing.value;
-    if (loading) {
+    if (loading || !loading) {
       setState(() {
         widgetLoading = false;
       });
@@ -45,6 +64,7 @@ class _ViewPropertyDetailedDashboardState
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
     Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {

@@ -202,11 +202,11 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -325,11 +325,11 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -366,11 +366,11 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -404,15 +404,15 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
-  static Future<List<RequestModel>> getRequest(
+  static Future<List<RequestModel?>?> getRequest(
       var pageNum, var userId, var adminStatus) async {
     try {
       final uri = Uri.parse('$_mybaseUrl$_get_requeest/$pageNum/$userId');
@@ -422,8 +422,20 @@ class ApiServices {
       });
 
       if (response.statusCode == 200) {
-        final data = requestModelFromJson(response.body);
-        return data;
+        // final data = requestModelFromJson(response.body);
+        // return data;
+
+        var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['request'] as List;
+
+          final data = disData
+              .map<RequestModel>((json) => RequestModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -432,12 +444,12 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // print(ex.toString());
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -522,8 +534,20 @@ class ApiServices {
           .get(Uri.parse('$_mybaseUrl$_get_connection/$page_num/$userId'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = connectionModelFromJson(result.body);
-        return data;
+        // final data = connectionModelFromJson(result.body);
+        // return data;
+
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['connection'] as List;
+
+          final data = disData
+              .map<ConnectionModel>((json) => ConnectionModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -533,15 +557,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+
     }
   }
 
-  static Future<List<TransactionModel>> getTransaction(
+  static Future<List<TransactionModel?>?> getTransaction(
       var pageNum, var userId, var adminStatus) async {
     try {
       final uri = Uri.parse('$_mybaseUrl$_get_transaction/$pageNum/$userId');
@@ -551,8 +571,17 @@ class ApiServices {
       });
 
       if (response.statusCode == 200) {
-        final data = transactionModelFromJson(response.body);
-        return data;
+        var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['transaction'] as List;
+
+          final data = disData
+              .map<TransactionModel>((json) => TransactionModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -561,12 +590,12 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // print(ex.toString());
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -576,8 +605,17 @@ class ApiServices {
           .get(Uri.parse('$_mybaseUrl$_get_alert/$page_num/$userId'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = alertModelFromJson(result.body);
-        return data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['alert'] as List;
+
+          final data = disData
+              .map<AlertModel>((json) => AlertModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -587,11 +625,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -634,8 +672,17 @@ class ApiServices {
           .get(Uri.parse('$_mybaseUrl$_get_chat_head/$page_num/$userId'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = chatHeadModelFromJson(result.body);
-        return data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['heads'] as List;
+
+          final data = disData
+              .map<ChatHeadModel>((json) => ChatHeadModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -645,15 +692,15 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
-  static Future<List<WalletModel>> getWallet(
+  static Future<List<WalletModel?>?> getWallet(
       var pageNum, var userId, var userStatus) async {
     try {
       final uri = Uri.parse('$_mybaseUrl$_get_wallet/$pageNum/$userId');
@@ -663,8 +710,17 @@ class ApiServices {
       });
 
       if (response.statusCode == 200) {
-        final data = walletModelFromJson(response.body);
-        return data;
+        var body = response.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['wallet'] as List;
+
+          final data = disData
+              .map<WalletModel>((json) => WalletModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -673,12 +729,12 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // print(ex.toString());
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -889,7 +945,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -905,8 +961,17 @@ class ApiServices {
           .get(Uri.parse('$_mybaseUrl$_my_product/$page_num/$userId'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = propertyModelFromJson(result.body);
-        return data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -916,11 +981,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -931,8 +996,17 @@ class ApiServices {
           .get(Uri.parse('$_mybaseUrl$_dis_product/$page_num/$userId/$prodId'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = propertyModelFromJson(result.body);
-        return data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -942,11 +1016,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -1447,8 +1521,17 @@ class ApiServices {
           Uri.parse('$_mybaseUrl$_manage_property/$page_num/$userId/$type'));
       // print(result.body);
       if (result.statusCode == 200) {
-        final data = propertyModelFromJson(result.body);
-        return data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product'] as List;
+
+          final data = disData
+              .map<PropertyModel>((json) => PropertyModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -1458,11 +1541,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
@@ -1537,15 +1620,24 @@ class ApiServices {
     }
   }
 
-  static Future<List<UsersModel>> getUsers(var pageNum) async {
+  static Future<List<UsersModel?>?> getUsers(var pageNum) async {
     try {
       final uri = Uri.parse('$_mybaseUrl$_get_users/$pageNum');
 
       final result = await client.get(uri);
 
       if (result.statusCode == 200) {
-        final data = usersModelFromJson(result.body);
-        return data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['users'] as List;
+
+          final data = disData
+              .map<UsersModel>((json) => UsersModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -1554,24 +1646,33 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // print(ex.toString());
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 
-  static Future<List<UsersModel>> getLandlords(var pageNum) async {
+  static Future<List<UsersModel?>?> getLandlords(var pageNum) async {
     try {
       final uri = Uri.parse('$_mybaseUrl$_get_landlords/$pageNum');
 
       final result = await client.get(uri);
 
       if (result.statusCode == 200) {
-        final data = usersModelFromJson(result.body);
-        return data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['users'] as List;
+
+          final data = disData
+              .map<UsersModel>((json) => UsersModel.fromJson(json))
+              .toList();
+          return data;
+        }
       } else {
         return showSnackBar(
           title: 'Oops!',
@@ -1580,12 +1681,12 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // print(ex.toString());
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 

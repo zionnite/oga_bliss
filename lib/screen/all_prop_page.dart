@@ -28,6 +28,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
     var userId1 = prefs.getString('user_id');
     var user_status1 = prefs.getString('user_status');
     var admin_status1 = prefs.getBool('admin_status');
+    bool? isNew = prefs.getBool('isNew');
 
     if (mounted) {
       setState(() {
@@ -35,6 +36,9 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+    }
+    if (isNew!) {
+      propsController.getDetails(user_id);
     }
   }
 

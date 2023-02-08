@@ -229,30 +229,31 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             children: [
               CircleAvatar(radius: 30, backgroundImage: NetworkImage(urlImage)),
               const SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    email,
-                    style: const TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: Colors.blue.shade300,
-                child: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(9),
+                      child: Text(
+                        name,
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      email,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-              )
+              ),
             ],
           ),
         ),
