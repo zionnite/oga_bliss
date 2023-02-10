@@ -57,14 +57,9 @@ class _FavouritePageState extends State<FavouritePage> {
 
     _controller = ScrollController()..addListener(_scrollListener);
 
-    Future.delayed(new Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () {
       getIfAudioLoaded();
     });
-  }
-
-  void searchPage() {
-    propsController.fetch_favourite(1, user_id);
-    _controller = ScrollController()..addListener(_scrollListener);
   }
 
   void _scrollListener() {
@@ -73,8 +68,6 @@ class _FavouritePageState extends State<FavouritePage> {
         isLoading = true;
         current_page++;
       });
-
-      //
 
       propsController.fetch_more_favourite(current_page, user_id);
 
@@ -86,34 +79,6 @@ class _FavouritePageState extends State<FavouritePage> {
     }
   }
 
-  showNotFound() {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 250,
-            ),
-            Image.asset(
-              'assets/images/data_not_found.png',
-              fit: BoxFit.fitWidth,
-            ),
-            const Text(
-              'Oops!... no data found',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontFamily: 'Lobster',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,53 +87,50 @@ class _FavouritePageState extends State<FavouritePage> {
         backgroundColor: Colors.blue,
         title: const Text('Favourite'),
       ),
-      body: (propsController.favPropertyList.isEmpty)
-          ? showNotFound()
-          : Padding(
-              padding: const EdgeInsets.only(
-                top: 20,
-                left: 15.0,
-                right: 15,
-              ),
-              child: Obx(
-                () => ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 120),
-                  controller: _controller,
-                  key: const PageStorageKey<String>('allFavourite'),
-                  physics: const ClampingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: propsController.favPropertyList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    var props = propsController.favPropertyList[index];
-                    if (index == propsController.favPropertyList.length + 1 &&
-                        isLoading == true) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (propsController.favPropertyList[index].propsId ==
-                        null) {
-                      propsController.isMoreDataAvailable.value = false;
-                      return Container();
-                    }
-                    return PropertyWidget(
-                      props_image: props.propsImgName!,
-                      props_name: props.propsName!,
-                      props_type: props.propsPurpose!,
-                      props_price: props.propsPrice!,
-                      isFav: (props.favourite! == 'true') ? true : false,
-                      props_bedroom: props.propsBedrom!,
-                      props_bathroom: props.propsBathroom!,
-                      props_toilet: props.propsToilet!,
-                      props_image_counter: '${props.countPropsImage!}',
-                      propertyModel: props,
-                      route: 'fav',
-                    );
-                  },
-                ),
-              ),
-            ),
+      body: Padding(
+        padding: const EdgeInsets.only(
+          top: 20,
+          left: 15.0,
+          right: 15,
+        ),
+        child: Obx(
+          () => ListView.builder(
+            padding: const EdgeInsets.only(bottom: 120),
+            controller: _controller,
+            key: const PageStorageKey<String>('allFavourite'),
+            physics: const ClampingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: propsController.favPropertyList.length,
+            itemBuilder: (BuildContext context, int index) {
+              var props = propsController.favPropertyList[index];
+              if (index == propsController.favPropertyList.length + 1 &&
+                  isLoading == true) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (propsController.favPropertyList[index].propsId == null) {
+                propsController.isMoreDataAvailable.value = false;
+                return Container();
+              }
+              return PropertyWidget(
+                props_image: props.propsImgName!,
+                props_name: props.propsName!,
+                props_type: props.propsPurpose!,
+                props_price: props.propsPrice!,
+                isFav: (props.favourite! == 'true') ? true : false,
+                props_bedroom: props.propsBedrom!,
+                props_bathroom: props.propsBathroom!,
+                props_toilet: props.propsToilet!,
+                props_image_counter: '${props.countPropsImage!}',
+                propertyModel: props,
+                route: 'fav',
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }

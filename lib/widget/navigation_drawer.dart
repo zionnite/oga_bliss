@@ -68,11 +68,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         child: ListView(
           children: <Widget>[
             buildHeader(
-              urlImage: image_name!,
-              name: fullName!,
-              email: user_name!,
+              urlImage: '${image_name}',
+              name: '${fullName}',
+              email: '${user_name}',
               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfilePage(),
+                builder: (context) => const ProfilePage(),
               )),
             ),
             Container(
@@ -86,7 +86,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Icons.dashboard,
                     onClicked: () {
                       Get.to(
-                        () => DashboardPage(),
+                        () => const DashboardPage(),
                       );
                     },
                   ),

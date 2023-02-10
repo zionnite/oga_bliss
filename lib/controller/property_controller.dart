@@ -58,7 +58,6 @@ class PropertyController extends GetxController {
     isSearchDataProcessing(true);
     if (seeker != null) {
       propertyList.value = seeker.cast<PropertyModel>();
-      allPropertyList.value = seeker.cast<PropertyModel>();
     } else {
       // isDataProcessing(false);
     }
@@ -70,7 +69,6 @@ class PropertyController extends GetxController {
     // isSearchDataProcessing(true);
     if (seeker != null) {
       propertyList.addAll(seeker.cast<PropertyModel>());
-      allPropertyList.addAll(seeker.cast<PropertyModel>());
       // propertyList.refresh();
       // isMoreDataAvailable(false);
     } else {
@@ -248,19 +246,18 @@ class PropertyController extends GetxController {
 
   void fetch_favourite(var pageNum, var userId) async {
     favPropertyList.clear();
-    var seeker = await ApiServices.getAllFav(pageNum, userId);
-
     isSearchDataProcessing(true);
+    var seeker = await ApiServices.getAllFav(pageNum, userId);
     if (seeker != null) {
       favPropertyList.addAll(seeker.cast<PropertyModel>());
     }
+    isSearchDataProcessing(false);
   }
 
   void fetch_more_favourite(var pageNum, var userId) async {
     var seeker = await ApiServices.getAllFav(pageNum, userId);
 
     if (seeker != null) {
-      isSearchDataProcessing(true);
       favPropertyList.addAll(seeker.cast<PropertyModel>());
     }
   }
@@ -812,6 +809,33 @@ class PropertyController extends GetxController {
       return true;
     } else {
       msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
+
+  Future<bool> reportProperty({
+    required String propsId,
+    required String userId,
+    required String type,
+  }) async {
+    String? msg;
+    String status = await ApiServices.reportProperty(
+      propsId: propsId,
+      userId: userId,
+      type: type,
+    );
+    if (status == 'true') {
+      msg = 'Report has been submitted, awaiting admin';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else if (status == 'false') {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    } else {
+      msg =
+          'You have already report this property, please be patient why the admin act on this';
       showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
       return false;
     }

@@ -37,9 +37,9 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
         admin_status = admin_status1;
       });
     }
-    if (isNew!) {
-      propsController.getDetails(user_id);
-    }
+    // if (isNew!) {
+    //   propsController.getDetails(user_id);
+    // }
   }
 
   var current_page = 1;

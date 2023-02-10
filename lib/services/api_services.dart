@@ -68,6 +68,8 @@ class ApiServices {
   static const String _signup = 'signup_authorization';
   static const String _login = 'login_authorization';
   static const String _resetPassword = 'reset_password';
+  static const String _reportProperty = 'report_property';
+  static const String _get_dis_user = 'get_dis_user';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -1990,6 +1992,75 @@ class ApiServices {
         msg: ex.toString(),
         backgroundColor: Colors.red,
       );
+    }
+  }
+
+  static Future<String> reportProperty({
+    required String propsId,
+    required String userId,
+    required String type,
+  }) async {
+    try {
+      final uri =
+          Uri.parse('$_mybaseUrl$_reportProperty/$propsId/$userId/$type');
+
+      final response = await client.get(uri);
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<UsersModel?>?> getDisUser(var userId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_get_dis_user/$userId');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['users'] as List;
+
+          final data = disData
+              .map<UsersModel>((json) => UsersModel.fromJson(json))
+              .toList();
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex.toString());
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 }

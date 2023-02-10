@@ -12,7 +12,9 @@ class UsersController extends GetxController {
   var page_num = 1;
   var isDataProcessing = false.obs;
   var isMoreDataAvailable = true.obs;
+  var isUserFetching = false.obs;
   var usersList = <UsersModel>[].obs;
+  var disUsersList = <UsersModel>[].obs;
   var landLordList = <UsersModel>[].obs;
 
   String? user_id;
@@ -205,6 +207,18 @@ class UsersController extends GetxController {
       msg = '';
       showSnackBar(title: 'Oops', msg: status, backgroundColor: Colors.blue);
       return false;
+    }
+  }
+
+  getDisUser(var userId) async {
+    disUsersList.clear();
+    isUserFetching(true);
+    var seeker = await ApiServices.getDisUser(userId);
+    if (seeker != null) {
+      isUserFetching(false);
+      disUsersList.value = seeker.cast<UsersModel>();
+    } else {
+      isUserFetching(false);
     }
   }
 }

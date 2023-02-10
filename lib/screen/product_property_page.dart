@@ -82,8 +82,6 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         });
       }
     });
-
-    // propsController.getDetails(1);
   }
 
   void _scrollListener() {

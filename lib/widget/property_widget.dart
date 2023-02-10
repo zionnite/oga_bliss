@@ -1,6 +1,7 @@
 import 'package:card_loading/card_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/model/property_model.dart';
 import 'package:oga_bliss/widget/my_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,16 +70,19 @@ class _PropertyWidgetState extends State<PropertyWidget> {
     }
   }
 
+  bool isLoading = false;
+
   @override
   void initState() {
     initUserDetail();
     super.initState();
   }
 
-  bool isLoading = false;
+  bool isReportLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return (isLoading)
         ? const CardLoading(
             height: 250,
@@ -100,11 +104,27 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                           ),
                         );
                       },
-                      child: Image.network(
-                        widget.props_image,
-                        fit: BoxFit.cover,
-                        height: 150,
-                        width: double.infinity,
+                      child: Stack(
+                        children: [
+                          Image.network(
+                            widget.props_image,
+                            fit: BoxFit.cover,
+                            height: 150,
+                            width: double.infinity,
+                          ),
+                          (isReportLoading)
+                              ? Positioned(
+                                  top: 70,
+                                  left: width * 0.45,
+                                  child: Center(
+                                    child: LoadingAnimationWidget.inkDrop(
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ],
                       ),
                     ),
                     ListTile(
@@ -375,6 +395,21 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                           Icons.more_vert_outlined,
                           color: Colors.white,
                         ),
+                        onSelected: (val) async {
+                          setState(() {
+                            isReportLoading = true;
+                          });
+                          bool status = await propsController.reportProperty(
+                            propsId: widget.propertyModel!.propsId!,
+                            userId: user_id!,
+                            type: val,
+                          );
+                          if (status || !status) {
+                            setState(() {
+                              isReportLoading = false;
+                            });
+                          }
+                        },
                         itemBuilder: (BuildContext context) {
                           return [
                             const PopupMenuItem(
@@ -387,7 +422,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                               ),
                             ),
                             const PopupMenuItem(
-                              value: 'spam',
+                              value: 'inappropriat_content',
                               child: Text(
                                 'Inappropriate Content',
                                 style: TextStyle(

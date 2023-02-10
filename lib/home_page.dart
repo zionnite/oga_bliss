@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    PageController _pageController = PageController(initialPage: 0);
+    PageController pageController = PageController(initialPage: 0);
 
     return Scaffold(
       key: _key,
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         children: [
           PageView(
-            controller: _pageController,
+            controller: pageController,
             onPageChanged: (newIndex) {
               setState(() {
                 _currentPage = newIndex;
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(9),
                 indexSelected: _currentPage,
                 onTap: (index) => setState(() {
-                  _pageController.animateToPage(
+                  pageController.animateToPage(
                     index,
                     duration: Duration(microseconds: 500),
                     curve: Curves.bounceIn,

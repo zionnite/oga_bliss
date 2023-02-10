@@ -57,15 +57,13 @@ class _ManageUsersState extends State<ManageUsers> {
     _controller = ScrollController()..addListener(_scrollListener);
     _controller_2 = ScrollController()..addListener(_scrollListener_2);
 
-    Future.delayed(new Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         setState(() {
           checkIfListLoaded();
         });
       }
     });
-
-    // propsController.getDetails(1);
   }
 
   void _scrollListener() {

@@ -72,8 +72,6 @@ class _ManagePropertyState extends State<ManageProperty> {
         });
       }
     });
-
-    // propsController.getDetails(1);
   }
 
   void _scrollListener() {
@@ -83,7 +81,7 @@ class _ManagePropertyState extends State<ManageProperty> {
         current_page++;
       });
 
-      propsController.getMoreDetail(current_page, user_id);
+      propsController.manageProductMore(current_page, user_id, 'all');
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
