@@ -6,12 +6,14 @@ class MyDropDownField<T> extends StatefulWidget {
     required this.dropDownList,
     required this.onChanged,
     required this.labelText,
+    this.prefix,
   });
 
   late final T value;
   final List<DropdownMenuItem<T>> dropDownList;
   final ValueChanged<T> onChanged;
   final String labelText;
+  final IconData? prefix;
 
   @override
   State<MyDropDownField> createState() => _MyDropDownFieldState();
@@ -37,6 +39,9 @@ class _MyDropDownFieldState extends State<MyDropDownField> {
         ),
         filled: true,
         fillColor: Colors.white30,
+        prefixIcon: (widget.prefix != '' && widget.prefix != null)
+            ? Icon(widget.prefix)
+            : null,
       ),
       isExpanded: true,
       value: widget.value,

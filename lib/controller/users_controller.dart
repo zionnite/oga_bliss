@@ -221,4 +221,34 @@ class UsersController extends GetxController {
       isUserFetching(false);
     }
   }
+
+  Future<bool> updateUserBio({
+    required String fullName,
+    required String email,
+    required String phone,
+    required String age,
+    required String address,
+    required String sex,
+    required String my_id,
+  }) async {
+    String? msg;
+    String status = await ApiServices.updateUserBio(
+      fullName: fullName,
+      email: email,
+      phone: phone,
+      age: age,
+      address: address,
+      sex: sex,
+      my_id: my_id,
+    ); 
+    if (status == 'true') {
+      msg = 'Update Successful...';
+      showSnackBar(title: 'Success', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = 'Could not update Profile';
+      showSnackBar(title: 'Oops', msg: msg, backgroundColor: Colors.blue);
+      return false;  
+    }
+  }
 }

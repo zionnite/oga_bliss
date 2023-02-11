@@ -39,6 +39,12 @@ class _MyNumFieldState extends State<MyNumField> {
           ),
           labelText: widget.fieldName,
           hintText: widget.hintText,
+          prefixIcon: (widget.prefix != '' && widget.prefix != null)
+              ? Icon(widget.prefix)
+              : null,
+          suffixIcon: (widget.suffix != '' && widget.suffix != null)
+              ? Icon(widget.suffix)
+              : null,
         ),
       ),
     );
