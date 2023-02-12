@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/screen/front/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -22,19 +23,21 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
   String? user_id;
   String? user_status;
   bool? admin_status;
+  bool? isUserLogin;
 
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId1 = prefs.getString('user_id');
     var user_status1 = prefs.getString('user_status');
     var admin_status1 = prefs.getBool('admin_status');
-    bool? isNew = prefs.getBool('isNew');
+    var isUserLogin1 = prefs.getBool('isUserLogin');
 
     if (mounted) {
       setState(() {
         user_id = userId1;
         user_status = user_status1;
         admin_status = admin_status1;
+        isUserLogin = isUserLogin1;
       });
     }
   }
@@ -119,9 +122,10 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                           color: Colors.white,
                           size: 39,
                         ),
-                        onPressed: () {
-                          // Scaffold.of(context).openDrawer();
-                          widget.s_key.currentState!.openDrawer();
+                        onPressed: () async {
+                          (isUserLogin == null)
+                              ? const WelcomePage()
+                              : widget.s_key.currentState!.openDrawer();
                         },
                       ),
                     ),

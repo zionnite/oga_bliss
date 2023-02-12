@@ -16,7 +16,7 @@ import 'controller/transaction_controller.dart';
 import 'controller/users_controller.dart';
 import 'controller/wallet_controller.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   Get.put(SplashController());
@@ -30,16 +30,37 @@ void main() {
   Get.put(ChatHeadController());
   Get.put(WalletController());
   Get.put(UsersController());
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var isUserLogin = prefs.getBool('isUserLogin');
+  var isFirstTime = prefs.getBool('isFirstTime');
+  var userId1 = prefs.getString('user_id');
+  var demoStatus = prefs.getBool("displayShowCase");
   runApp(
-    const GetMaterialApp(
+    GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyApp(),
+      home: MyApp(
+        isUserLogin: isUserLogin,
+        isFirstTIme: isFirstTime,
+        userId: userId1,
+        demoStatus: demoStatus,
+      ),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  MyApp({
+    required this.isUserLogin,
+    required this.isFirstTIme,
+    required this.userId,
+    required this.demoStatus,
+  });
+
+  late var isUserLogin;
+  late var isFirstTIme;
+  late var userId;
+  late var demoStatus;
 
   @override
   State<MyApp> createState() => _MyAppState();

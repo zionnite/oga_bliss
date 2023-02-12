@@ -2096,7 +2096,6 @@ class ApiServices {
           prefs.setString('current_balance', current_balance);
           prefs.setString('login_status', login_status);
           prefs.setString('prop_counter', prop_counter);
-          prefs.setBool('isUserLogin', true);
           prefs.setBool('admin_status', admin_status);
           prefs.setString('isbank_verify', isbank_verify);
 
@@ -2207,7 +2206,6 @@ class ApiServices {
           prefs.setString('current_balance', current_balance);
           prefs.setString('login_status', login_status);
           prefs.setString('prop_counter', prop_counter);
-          prefs.setBool('isUserLogin', true);
           prefs.setBool('admin_status', admin_status);
           prefs.setString('isbank_verify', isbank_verify);
 

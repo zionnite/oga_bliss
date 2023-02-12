@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:oga_bliss/screen/front/welcome_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../controller/onboarding_controller.dart';
@@ -39,12 +40,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
               bottom: 40,
               child: (onboardingController.currentPage.value == 3)
                   ? InkWell(
-                      onTap: () {
-                        Get.to(() => const WelcomePage());
+                      onTap: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setBool('isFirstTime', true);
+                        Get.offAll(() => const WelcomePage());
                       },
                       child: Card(
                         child: Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(

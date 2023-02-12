@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'decide_page.dart';
 import 'login_page.dart';
@@ -110,18 +111,19 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ],
                   ),
-                  InkWell(
-                    onTap: () {
+                  const SizedBox(height: 30,),
+                  TextButton(
+                    onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setBool('isGuestLogin', true);
                       Get.offAll(() => const HomePage());
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 40.0),
-                      child: Text(
-                        'Login As a Guest & Decide later',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    child: const Text(
+                      'Login As a Guest & Decide later',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

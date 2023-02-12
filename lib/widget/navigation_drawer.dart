@@ -36,20 +36,20 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId1 = prefs.getString('user_id');
-    var user_status1 = prefs.getString('user_status');
-    var admin_status1 = prefs.getBool('admin_status');
-    var image_name1 = prefs.getString('image_name');
-    var user_name1 = prefs.getString('user_name');
-    var full_name1 = prefs.getString('full_name');
+    var userStatus1 = prefs.getString('user_status');
+    var adminStatus1 = prefs.getBool('admin_status');
+    var imageName1 = prefs.getString('image_name');
+    var userName1 = prefs.getString('user_name');
+    var fullName1 = prefs.getString('full_name');
 
     if (mounted) {
       setState(() {
         user_id = userId1;
-        user_status = user_status1;
-        admin_status = admin_status1;
-        image_name = image_name1;
-        user_name = user_name1;
-        fullName = full_name1;
+        user_status = userStatus1;
+        admin_status = adminStatus1;
+        image_name = imageName1;
+        user_name = userName1;
+        fullName = fullName1;
       });
     }
   }
@@ -90,30 +90,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       );
                     },
                   ),
-                  const SizedBox(height: 24),
-                  buildMenuItem(
-                    text: 'Product',
-                    icon: Icons.shopping_bag,
-                    onClicked: () => Get.to(
-                      () => const ProductPropertyPage(),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  buildMenuItem(
-                    text: 'Manage Product',
-                    icon: Icons.shopping_bag,
-                    onClicked: () => Get.to(
-                      () => const ManageProperty(),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  buildMenuItem(
-                    text: 'Manage Users',
-                    icon: Icons.person,
-                    onClicked: () => Get.to(
-                      () => const ManageUsers(),
-                    ),
-                  ),
+
+                  /*Admin*/
+                  adminWidget(),
+                  usersWidget(),
+
+                  /*End Admin*/
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'Request',
@@ -125,22 +107,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Wallet',
-                    icon: Icons.wallet,
-                    onClicked: () => Get.to(
-                      () => const WalletPage(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Connection',
-                    icon: Icons.account_tree_outlined,
-                    onClicked: () => Get.to(
-                      () => const ConnectionPage(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
                     text: 'Transaction',
                     icon: Icons.receipt_long,
                     onClicked: () => Get.to(
@@ -149,14 +115,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   ),
                   const SizedBox(height: 24),
                   const Divider(color: Colors.white70),
-                  const SizedBox(height: 24),
-                  buildMenuItem(
-                    text: 'Message',
-                    icon: Icons.message,
-                    onClicked: () => Get.to(
-                      () => const MessagePage(),
-                    ),
-                  ),
+
+                  bottomWidget(),
+
                   const SizedBox(height: 16),
                   buildMenuItem(
                     text: 'Alert',
@@ -165,46 +126,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       () => const AlertPage(),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Login Page',
-                    icon: Icons.notifications_outlined,
-                    onClicked: () => Get.to(
-                      () => const LoginPage(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Signup Page',
-                    icon: Icons.notifications_outlined,
-                    onClicked: () => Get.to(
-                      () => const DecidePage(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Welcome Page',
-                    icon: Icons.notifications_outlined,
-                    onClicked: () => Get.to(
-                      () => const WelcomePage(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Onboarding Screen',
-                    icon: Icons.notifications_outlined,
-                    onClicked: () => Get.to(
-                      () => const LoginPage(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Splash Screen',
-                    icon: Icons.notifications_outlined,
-                    onClicked: () => Get.to(
-                      () => SplashPage(),
-                    ),
-                  ),
+                  // extraWidget(),
                   const SizedBox(height: 30),
                 ],
               ),
@@ -259,6 +181,81 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         ),
       );
 
+  Widget adminWidget() {
+    return (admin_status!)
+        ? Column(
+            children: [
+              const SizedBox(height: 24),
+              buildMenuItem(
+                text: 'Manage Product',
+                icon: Icons.shopping_bag,
+                onClicked: () => Get.to(
+                  () => const ManageProperty(),
+                ),
+              ),
+              const SizedBox(height: 24),
+              buildMenuItem(
+                text: 'Manage Users',
+                icon: Icons.person,
+                onClicked: () => Get.to(
+                  () => const ManageUsers(),
+                ),
+              ),
+            ],
+          )
+        : Container();
+  }
+
+  Widget usersWidget() {
+    return (!admin_status!)
+        ? Column(
+            children: [
+              const SizedBox(height: 24),
+              buildMenuItem(
+                text: 'Product',
+                icon: Icons.shopping_bag,
+                onClicked: () => Get.to(
+                  () => const ProductPropertyPage(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              buildMenuItem(
+                text: 'Wallet',
+                icon: Icons.wallet,
+                onClicked: () => Get.to(
+                  () => const WalletPage(),
+                ),
+              ),
+              const SizedBox(height: 16),
+              buildMenuItem(
+                text: 'Connection',
+                icon: Icons.account_tree_outlined,
+                onClicked: () => Get.to(
+                  () => const ConnectionPage(),
+                ),
+              ),
+            ],
+          )
+        : Container();
+  }
+
+  Widget bottomWidget() {
+    return (!admin_status!)
+        ? Column(
+            children: [
+              const SizedBox(height: 24),
+              buildMenuItem(
+                text: 'Message',
+                icon: Icons.message,
+                onClicked: () => Get.to(
+                  () => const MessagePage(),
+                ),
+              ),
+            ],
+          )
+        : Container();
+  }
+
   Widget buildSearchField() {
     const color = Colors.white;
 
@@ -297,6 +294,53 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       title: Text(text, style: const TextStyle(color: color)),
       hoverColor: hoverColor,
       onTap: onClicked,
+    );
+  }
+
+  Widget extraWidget() {
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        buildMenuItem(
+          text: 'Login Page',
+          icon: Icons.notifications_outlined,
+          onClicked: () => Get.to(
+            () => const LoginPage(),
+          ),
+        ),
+        const SizedBox(height: 16),
+        buildMenuItem(
+          text: 'Signup Page',
+          icon: Icons.notifications_outlined,
+          onClicked: () => Get.to(
+            () => const DecidePage(),
+          ),
+        ),
+        const SizedBox(height: 16),
+        buildMenuItem(
+          text: 'Welcome Page',
+          icon: Icons.notifications_outlined,
+          onClicked: () => Get.to(
+            () => const WelcomePage(),
+          ),
+        ),
+        const SizedBox(height: 16),
+        buildMenuItem(
+          text: 'Onboarding Screen',
+          icon: Icons.notifications_outlined,
+          onClicked: () => Get.to(
+            () => const LoginPage(),
+          ),
+        ),
+        const SizedBox(height: 16),
+        buildMenuItem(
+          text: 'Splash Screen',
+          icon: Icons.notifications_outlined,
+          onClicked: () => Get.to(
+            () => SplashPage(),
+          ),
+        ),
+      ],
     );
   }
 
