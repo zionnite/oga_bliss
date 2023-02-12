@@ -171,6 +171,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('image_name', status);
+
+                              setState(() {
+                                image_name = status;
+                              });
                             }
                           },
                           child: const Icon(
@@ -187,7 +191,6 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 20,
               ),
-
               const SizedBox(
                 height: 20,
               ),
@@ -203,7 +206,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(left: 28.0),
                 child: Text(
@@ -227,7 +229,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-
               ProfileItem(
                 icon: const Icon(
                   Icons.phone,
@@ -266,18 +267,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   bgColor: Colors.blue.shade700,
                 ),
               ),
-              // const ProfileItem(
-              //   icon: Icon(
-              //     Icons.location_city,
-              //     color: Colors.blue,
-              //   ),
-              //   name:
-              //       '10, Osemwengie street off akugbe road, off upper sakponba road benin city, edo state, Nigeria',
-              // ),
               const SizedBox(
                 height: 40,
               ),
-
               const Padding(
                 padding: EdgeInsets.only(left: 28.0),
                 child: Text(
@@ -300,7 +292,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-
               ProfileItem(
                 icon: const Icon(
                   Icons.food_bank,
@@ -308,7 +299,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 name: '$accountName',
               ),
-
               ProfileItem(
                 icon: const Icon(
                   Icons.food_bank,
@@ -316,7 +306,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 name: '$bankName - $accountNum',
               ),
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -336,31 +325,43 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: propertyBtn(
-                      onTap: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
+                  (isbank_verify == 'yes')
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: propertyBtn(
+                            onTap: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
 
-                        bool status = await usersController.verifyBank(
-                          accountNum: accountNum!,
-                          bankCode: bankCode!,
-                          my_id: user_id!,
-                        );
+                              bool status = await usersController.verifyBank(
+                                accountNum: accountNum!,
+                                bankCode: bankCode!,
+                                my_id: user_id!,
+                              );
 
-                        if (status || !status) {
-                          setState(() {
-                            isLoading = false;
-                          });
-                        }
-                      },
-                      title: 'Verify Bank',
-                      bgColor: Colors.blue.shade700,
-                      isLoading: isLoading,
-                    ),
-                  ),
+                              if (status || !status) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
+
+                              if (status) {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                prefs.setString('isbank_verify', 'yes');
+
+                                setState(() {
+                                  isbank_verify = 'yes';
+                                });
+                              }
+                            },
+                            title: 'Verify Bank',
+                            bgColor: Colors.blue.shade700,
+                            isLoading: isLoading,
+                          ),
+                        ),
                 ],
               ),
             ],

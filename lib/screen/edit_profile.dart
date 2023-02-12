@@ -173,6 +173,10 @@ class _EditProfileState extends State<EditProfile> {
                           sex = null;
                         });
                       });
+
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('isbank_verify', 'no');
                     }
                   }
                 },

@@ -149,6 +149,10 @@ class _VerifyBankState extends State<VerifyBank> {
                           bankName = null;
                         });
                       });
+
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('isbank_verify', 'no');
                     }
                   }
                 },

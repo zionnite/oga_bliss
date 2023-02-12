@@ -309,6 +309,7 @@ class UsersController extends GetxController {
     );
     if (status == 'true') {
       msg = 'Verify Successful...';
+
       showSnackBar(title: 'Success', msg: msg, backgroundColor: Colors.blue);
       return true;
     } else if (status == 'fail') {
