@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:oga_bliss/model/banklist_model.dart';
 import 'package:oga_bliss/model/property_type_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -71,6 +72,10 @@ class ApiServices {
   static const String _reportProperty = 'report_property';
   static const String _get_dis_user = 'get_dis_user';
   static const String _update_profile = 'update_profile';
+  static const String _update_bank_detail = 'update_bank_detail';
+  static const String _get_bank_list = 'get_bank_list';
+  static const String _update_profile_image = 'update_profile_image';
+  static const String _verify_bank_account = 'verify_bank_account';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -2141,6 +2146,198 @@ class ApiServices {
           String msg = j['status_msg'];
           return msg;
         }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static getBankList() async {
+    try {
+      final result = await client.get(Uri.parse('$_mybaseUrl$_get_bank_list'));
+      if (result.statusCode == 200) {
+        BankModel data = bankModelFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
+    }
+  }
+
+  static Future<String> updateUserBank({
+    required String accountName,
+    required String accountNum,
+    required String bankName,
+    required String my_id,
+  }) async {
+    print('bank code $bankName');
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_update_bank_detail/$my_id');
+
+      var response = await http.post(uri, body: {
+        'account_name': accountName.toString(),
+        'account_num': accountNum.toString(),
+        'bank_code': bankName.toString(),
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          String user_id = j['agent_id'];
+          String user_name = j['agent_user_name'];
+          String full_name = j['agent_full_name'];
+          String email = j['agent_email'];
+          String image_name = j['agent_image_name'];
+          String status = j['agent_status'];
+          String phone = j['agent_phone'];
+          String age = j['agent_age'];
+          String sex = j['agent_sex'];
+          String address = j['agent_address'];
+          String date_created = j['agent_date_created'];
+          String account_name = j['agent_account_name'];
+          String account_number = j['agent_account_number'];
+          String bank_name = j['agent_bank_name'];
+          String bank_code = j['agent_bank_code'];
+          String current_balance = j['agent_current_balance'];
+          String login_status = j['agent_login_status'];
+          String prop_counter = j['agent_prop_counter'];
+          bool admin_status = j['admin_status'];
+          String isbank_verify = j['isbank_verify'];
+
+          prefs.setString('user_id', user_id);
+          prefs.setString('user_name', user_name);
+          prefs.setString('full_name', full_name);
+          prefs.setString('email', email);
+          prefs.setString('image_name', image_name);
+          prefs.setString('user_status', status);
+          prefs.setString('phone', phone);
+          prefs.setString('age', age);
+          prefs.setString('sex', sex);
+          prefs.setString('address', address);
+          prefs.setString('date_created', date_created);
+          prefs.setString('account_name', account_name);
+          prefs.setString('account_number', account_number);
+          prefs.setString('bank_name', bank_name);
+          prefs.setString('bank_code', bank_code);
+          prefs.setString('current_balance', current_balance);
+          prefs.setString('login_status', login_status);
+          prefs.setString('prop_counter', prop_counter);
+          prefs.setBool('isUserLogin', true);
+          prefs.setBool('admin_status', admin_status);
+          prefs.setString('isbank_verify', isbank_verify);
+
+          return 'true';
+        } else {
+          String msg = j['status_msg'];
+          return msg;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future uploadUserImage({
+    required String userId,
+    required File image,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_update_profile_image/$userId');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['user_id'] = userId.toString();
+
+      var productImage =
+          await http.MultipartFile.fromPath('property_image', image.path);
+      request.files.add(productImage);
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        var result = await respond.stream.bytesToString();
+        final j = json.decode(result) as Map<String, dynamic>;
+        bool status = j['status'];
+
+        if (status) {
+          String image_name = j['image_name'];
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('image_name', image_name);
+          return image_name;
+        }
+        return false;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> verifyBank({
+    required String accountNum,
+    required String bankCode,
+    required String my_id,
+  }) async {
+    // print(accountNum);
+    // print(bankCode);
+    // print(my_id);
+    try {
+      final uri = Uri.parse(
+          '$_mybaseUrl$_verify_bank_account/$my_id/$bankCode/$accountNum');
+
+      var response = await http.post(uri);
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
       } else {
         return showSnackBar(
           title: 'Oops!',

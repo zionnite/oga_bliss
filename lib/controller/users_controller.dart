@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/util/common.dart';
@@ -240,7 +242,7 @@ class UsersController extends GetxController {
       address: address,
       sex: sex,
       my_id: my_id,
-    ); 
+    );
     if (status == 'true') {
       msg = 'Update Successful...';
       showSnackBar(title: 'Success', msg: msg, backgroundColor: Colors.blue);
@@ -248,7 +250,76 @@ class UsersController extends GetxController {
     } else {
       msg = 'Could not update Profile';
       showSnackBar(title: 'Oops', msg: msg, backgroundColor: Colors.blue);
-      return false;  
+      return false;
+    }
+  }
+
+  Future<bool> updateUserBank({
+    required String accountName,
+    required String accountNum,
+    required String bankName,
+    required String my_id,
+  }) async {
+    String? msg;
+    String status = await ApiServices.updateUserBank(
+      accountName: accountName,
+      accountNum: accountNum,
+      bankName: bankName,
+      my_id: my_id,
+    );
+    if (status == 'true') {
+      msg = 'Update Successful...';
+      showSnackBar(title: 'Success', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else {
+      msg = 'Could not update Profile';
+      showSnackBar(title: 'Oops', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
+
+  uploadImage(var userId, File imageName) async {
+    var status =
+        await ApiServices.uploadUserImage(userId: userId, image: imageName);
+
+    String? msg;
+
+    if (status != false) {
+      msg = 'Image Uploaded';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+      return status;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
+
+  Future<bool> verifyBank({
+    required String accountNum,
+    required String bankCode,
+    required String my_id,
+  }) async {
+    String? msg;
+    String status = await ApiServices.verifyBank(
+      accountNum: accountNum,
+      bankCode: bankCode,
+      my_id: my_id,
+    );
+    if (status == 'true') {
+      msg = 'Verify Successful...';
+      showSnackBar(title: 'Success', msg: msg, backgroundColor: Colors.blue);
+      return true;
+    } else if (status == 'fail') {
+      msg = 'Verify Successful, but could not update your profile';
+      showSnackBar(title: 'Oops', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    } else {
+      msg =
+          'Could not verify bank account detail, pls try updating your bank details and come try again';
+      showSnackBar(title: 'Oops', msg: msg, backgroundColor: Colors.blue);
+      return false;
     }
   }
 }

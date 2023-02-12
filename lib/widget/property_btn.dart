@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class propertyBtn extends StatefulWidget {
   propertyBtn({
@@ -51,9 +52,10 @@ class _propertyBtnState extends State<propertyBtn> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: (widget.isLoading == true)
-                  ? const Center(
-                      child: CircularProgressIndicator(
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
                         color: Colors.white,
+                        size: 20,
                       ),
                     )
                   : Text(
