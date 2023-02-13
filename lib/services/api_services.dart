@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:oga_bliss/model/banklist_model.dart';
+import 'package:oga_bliss/model/dashboard_model.dart';
 import 'package:oga_bliss/model/property_type_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,6 +77,7 @@ class ApiServices {
   static const String _get_bank_list = 'get_bank_list';
   static const String _update_profile_image = 'update_profile_image';
   static const String _verify_bank_account = 'verify_bank_account';
+  static const String _count_dashboard = 'count_dashboard';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -2150,7 +2152,6 @@ class ApiServices {
     required String bankName,
     required String my_id,
   }) async {
-    print('bank code $bankName');
     try {
       final uri = Uri.parse('$_mybaseUrl$_update_bank_detail/$my_id');
 
@@ -2309,6 +2310,36 @@ class ApiServices {
         msg: ex.toString(),
         backgroundColor: Colors.red,
       );
+    }
+  }
+
+  static Future countDashboard(
+      var userId, var adminStatus, var userStatus) async {
+    try {
+      final result = await client.get(Uri.parse(
+          '$_mybaseUrl$_count_dashboard/$userId/$adminStatus/$userStatus'));
+
+      if (result.statusCode == 200) {
+        final data = dashboardModelFromJson(result.body);
+        return data;
+
+        // var body = result.body;
+        // final data = dashboardModelToJson(json.decode(body));
+        // return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 }

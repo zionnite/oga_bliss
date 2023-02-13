@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:oga_bliss/controller/dashboard_controller.dart';
 import 'package:oga_bliss/screen/front/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,6 +31,7 @@ void main() async {
   Get.put(ChatHeadController());
   Get.put(WalletController());
   Get.put(UsersController());
+  Get.put(DashboardController());
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var isUserLogin = prefs.getBool('isUserLogin');
