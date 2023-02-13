@@ -140,7 +140,7 @@ class _EditFacilitiesState extends State<EditFacilities> {
         // Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
-      print(e);
+      // print(e);
       // Navigator.of(context).pop();
     }
   }
@@ -271,7 +271,7 @@ class _EditFacilitiesState extends State<EditFacilities> {
             setState(() {
               isLoading = true;
             });
-            print('form its filled');
+            // print('form its filled');
             bool status = await propsController.editFacilities(
               shopping: shoppingController.text,
               hospital: hospitalController.text,
@@ -289,11 +289,11 @@ class _EditFacilitiesState extends State<EditFacilities> {
             });
             // }
           } else {
-            print('form not filled');
+            // print('form not filled');
           }
 
-          print('form selected == ${selectedPref}');
-          print('Submited');
+          // print('form selected == ${selectedPref}');
+          // print('Submited');
         }
       },
       onStepCancel: () {

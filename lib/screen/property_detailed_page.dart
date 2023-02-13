@@ -81,7 +81,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
             dotsColorActive: Colors.blue,
             dotsColorInactive: Colors.grey.withOpacity(0.5),
             onClick: (index) {
-              debugPrint("CLICKED $index");
+              // debugPrint("CLICKED $index");
             },
           ).show();
   }

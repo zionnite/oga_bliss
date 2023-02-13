@@ -141,7 +141,7 @@ class _EditValuationState extends State<EditValuation> {
         // Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
-      print(e);
+      // print(e);
       // Navigator.of(context).pop();
     }
   }
@@ -254,7 +254,7 @@ class _EditValuationState extends State<EditValuation> {
             setState(() {
               isLoading = true;
             });
-            print('form its filled');
+            // print('form its filled');
             bool status = await propsController.editValuation(
               crime: crimeController.text,
               traffic: trafficController.text,
@@ -270,11 +270,11 @@ class _EditValuationState extends State<EditValuation> {
             });
             // }
           } else {
-            print('form not filled');
+            // print('form not filled');
           }
 
-          print('form selected == ${selectedPref}');
-          print('Submited');
+          // print('form selected == ${selectedPref}');
+          // print('Submited');
         }
       },
       onStepCancel: () {

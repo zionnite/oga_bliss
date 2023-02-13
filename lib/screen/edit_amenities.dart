@@ -140,7 +140,7 @@ class _EditAmenitiesState extends State<EditAmenities> {
         // Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
-      print(e);
+      // print(e);
       // Navigator.of(context).pop();
     }
   }
@@ -605,7 +605,7 @@ class _EditAmenitiesState extends State<EditAmenities> {
             setState(() {
               isLoading = true;
             });
-            print('form its filled');
+            // print('form its filled');
             bool status = await propsController.editAmenities(
               air_condition: air_condition,
               balcony: balcony,
@@ -640,11 +640,11 @@ class _EditAmenitiesState extends State<EditAmenities> {
             });
             // }
           } else {
-            print('form not filled');
+            // print('form not filled');
           }
 
-          print('form selected == ${selectedPref}');
-          print('Submited');
+          // print('form selected == ${selectedPref}');
+          // print('Submited');
         }
       },
       onStepCancel: () {

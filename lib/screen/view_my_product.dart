@@ -221,7 +221,7 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                                   // print("Index $index1: ${people[index1]}");
                                 }
 
-                                print('refresh');
+                                // print('refresh');
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
 
@@ -362,7 +362,7 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                                       'Are you sure you want to Delete this Image',
                                   textConfirm: 'Yes',
                                   onConfirm: () async {
-                                    print('confirm');
+                                    // print('confirm');
                                     bool status =
                                         await propsController.deleteProps(
                                       widget.user_id,

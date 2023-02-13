@@ -22,7 +22,6 @@ class DashboardController extends GetxController {
   }
 
   getCounters(userId, adminStatus, userStatus) async {
-    print('called');
     var seeker =
         await ApiServices.countDashboard(userId, adminStatus, userStatus);
     if (seeker != null) {

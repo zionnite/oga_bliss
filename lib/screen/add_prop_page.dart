@@ -143,7 +143,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         // Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
-      print(e);
+      // print(e);
       // Navigator.of(context).pop();
     }
   }

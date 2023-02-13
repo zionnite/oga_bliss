@@ -52,7 +52,7 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
           'props_id': widget.propsId,
         });
 
-    print('jsonBODY ${res.body}');
+    // print('jsonBODY ${res.body}');
     var jsonx = json.decode(res.body);
 
     // return jsonx;

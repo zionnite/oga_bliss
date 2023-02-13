@@ -1099,7 +1099,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1142,7 +1142,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1227,7 +1227,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1278,7 +1278,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1325,7 +1325,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1388,7 +1388,7 @@ class ApiServices {
         var result = await respond.stream.bytesToString();
         final j = json.decode(result) as Map<String, dynamic>;
         bool status = j['status'];
-        print('dis status $status');
+        // print('dis status $status');
 
         var imageList = <GetAllPropsImage>[];
         if (status) {
@@ -1401,7 +1401,7 @@ class ApiServices {
           imageList.add(disImage);
           return imageList;
         }
-        print('fallout');
+        // print('fallout');
         return false;
       } else {
         return showSnackBar(
@@ -1411,7 +1411,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1458,7 +1458,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
+      // print(ex.toString());
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1551,11 +1551,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-      // return showSnackBar(
-      //   title: 'Oops!',
-      //   msg: ex.toString(),
-      //   backgroundColor: Colors.red,
-      // );
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
     }
   }
 
@@ -1584,7 +1584,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex);
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -1657,11 +1657,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex.toString());
-      // return showSnackBar(
-      //   title: 'Oops!',
-      //   msg: ex.toString(),
-      //   backgroundColor: Colors.red,
-      // );
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
     }
   }
 
@@ -1692,11 +1692,11 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex.toString());
-      // return showSnackBar(
-      //   title: 'Oops!',
-      //   msg: ex.toString(),
-      //   backgroundColor: Colors.red,
-      // );
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
     }
   }
 
@@ -1987,7 +1987,7 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex);
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
@@ -2268,12 +2268,12 @@ class ApiServices {
         );
       }
     } catch (ex) {
-      print(ex.toString());
-      return showSnackBar(
-        title: 'Oops!',
-        msg: ex.toString(),
-        backgroundColor: Colors.red,
-      );
+      // print(ex.toString());
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
     }
   }
 

@@ -141,7 +141,7 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
         // Navigator.of(context).pop();
       });
     } on PlatformException catch (e) {
-      print(e);
+      // print(e);
       // Navigator.of(context).pop();
     }
   }
@@ -479,7 +479,7 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
             setState(() {
               isLoading = true;
             });
-            print('form its filled');
+            // print('form its filled');
             bool status = await propsController.editBasicDetail(
               propsName: propsName.text,
               props_purpose: props_purpose!,
@@ -505,11 +505,11 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
             });
             // }
           } else {
-            print('form not filled');
+            // print('form not filled');
           }
 
-          print('form selected == ${selectedPref}');
-          print('Submited');
+          // print('form selected == ${selectedPref}');
+          // print('Submited');
         }
       },
       onStepCancel: () {

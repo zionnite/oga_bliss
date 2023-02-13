@@ -590,7 +590,7 @@ class PropertyController extends GetxController {
     required String school,
     required String propsId,
   }) async {
-    print('here');
+    // print('here');
     bool? status = await ApiServices.editFacilities(
       shopping: shopping,
       hospital: hospital,
@@ -605,7 +605,7 @@ class PropertyController extends GetxController {
 
     bool statusType;
     String? msg;
-    print('this status $status');
+    // print('this status $status');
     if (status == true) {
       msg =
           'Product Information Updated..., Changes will take effect in the next few min.';
