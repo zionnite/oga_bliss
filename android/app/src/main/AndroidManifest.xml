@@ -5,7 +5,7 @@
 
 
    <application
-        android:label="oga_bliss"
+        android:label="Oga Bliss"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

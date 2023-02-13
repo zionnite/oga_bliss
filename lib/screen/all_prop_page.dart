@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/front/welcome_page.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -124,7 +125,14 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                         ),
                         onPressed: () async {
                           (isUserLogin == null)
-                              ? const WelcomePage()
+                              ? showSnackBar(
+                                  title: 'Oops',
+                                  msg:
+                                      'You are not authenticated, you need to register or Login to be authenticated',
+                                  backgroundColor: Colors.red)
+                              : Container();
+                          (isUserLogin == null)
+                              ? Get.to(() => const WelcomePage())
                               : widget.s_key.currentState!.openDrawer();
                         },
                       ),

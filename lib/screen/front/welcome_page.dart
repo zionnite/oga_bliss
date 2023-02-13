@@ -7,7 +7,7 @@ import 'decide_page.dart';
 import 'login_page.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage();
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -111,7 +111,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30,),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   TextButton(
                     onPressed: () async {
                       SharedPreferences prefs =
