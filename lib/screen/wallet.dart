@@ -51,8 +51,8 @@ class _WalletPageState extends State<WalletPage> {
   String link = 'https://ogabliss.com/Wallet/auth_user';
 
   checkIfListLoaded() {
-    var loading = walletController.isDataProcessing.value;
-    if (loading || !loading) {
+    var loading = walletController.isWalletProcessing;
+    if (loading == 'yes' || loading == 'no') {
       setState(() {
         widgetLoading = false;
       });
@@ -125,47 +125,14 @@ class _WalletPageState extends State<WalletPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  (widgetLoading)
-                      ? LoadingAnimationWidget.staggeredDotsWave(
-                          color: Colors.blue,
-                          size: 20,
-                        )
-                      : (walletController.walletList.isEmpty)
-                          ? const Center(child: ShowNotFound())
-                          : Obx(() => ListView.builder(
-                                controller: _controller,
-                                padding: const EdgeInsets.only(bottom: 120),
-                                key: const PageStorageKey<String>('allWallet'),
-                                physics: const ClampingScrollPhysics(),
-                                // itemExtent: 350,
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: walletController.walletList.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  var wallet =
-                                      walletController.walletList[index];
-
-                                  if (walletController.walletList[index].id ==
-                                      null) {
-                                    return Container();
-                                  }
-                                  return fundWallet(
-                                    walletModel: wallet,
-                                    image_name: wallet.propsImage!,
-                                    name: wallet.propsName!,
-                                    time: wallet.time!,
-                                    amount: wallet.amount!,
-                                    onTap: () {
-                                      Get.to(
-                                        () => ViewPropertyDetailedDashboard(
-                                          propsId: wallet.propsId!,
-                                          route: 'dashboard',
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              )),
+                  Obx(
+                    () => (walletController.isWalletProcessing == 'null')
+                        ? LoadingAnimationWidget.staggeredDotsWave(
+                            color: Colors.blue,
+                            size: 20,
+                          )
+                        : detail(),
+                  ),
                 ],
               ),
             ),
@@ -173,6 +140,72 @@ class _WalletPageState extends State<WalletPage> {
         ],
       ),
     );
+  }
+
+  Widget detail() {
+    return (walletController.walletList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    walletController.isWalletProcessing.value = 'null';
+                    walletController.fetchWalletMore(1, user_id, user_status);
+                    walletController.walletList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : Obx(() => ListView.builder(
+              controller: _controller,
+              padding: const EdgeInsets.only(bottom: 120),
+              key: const PageStorageKey<String>('allWallet'),
+              physics: const ClampingScrollPhysics(),
+              // itemExtent: 350,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: walletController.walletList.length,
+              itemBuilder: (BuildContext context, int index) {
+                var wallet = walletController.walletList[index];
+
+                if (walletController.walletList[index].id == null) {
+                  return Container();
+                }
+                return fundWallet(
+                  walletModel: wallet,
+                  image_name: wallet.propsImage!,
+                  name: wallet.propsName!,
+                  time: wallet.time!,
+                  amount: wallet.amount!,
+                  onTap: () {
+                    Get.to(
+                      () => ViewPropertyDetailedDashboard(
+                        propsId: wallet.propsId!,
+                        route: 'dashboard',
+                      ),
+                    );
+                  },
+                );
+              },
+            ));
   }
 
   Future<void> _launchInBrowser(Uri url) async {

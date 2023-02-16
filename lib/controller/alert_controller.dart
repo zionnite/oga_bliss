@@ -9,7 +9,7 @@ class AlertController extends GetxController {
   AlertController get getXID => Get.find<AlertController>();
 
   var page_num = 1;
-  var isDataProcessing = false.obs;
+  var isAlertProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
   var alertList = <AlertModel>[].obs;
   var alertCounter = 0.obs;
@@ -29,21 +29,18 @@ class AlertController extends GetxController {
   fetchAlert(pageNum, user_id) async {
     var seeker = await ApiServices.getAlerts(pageNum, user_id);
     if (seeker != null) {
-      isDataProcessing(true);
+      isAlertProcessing.value = 'yes';
       alertList.value = seeker.cast<AlertModel>();
     } else {
-      isDataProcessing(false);
+      isAlertProcessing.value = 'no';
     }
   }
 
   fetchAlertMore(pageNum, user_id) async {
     var seeker = await ApiServices.getAlerts(pageNum, user_id);
     if (seeker != null) {
-      isDataProcessing(true);
       alertList.addAll(seeker.cast<AlertModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   deleteAlert({required String id}) async {

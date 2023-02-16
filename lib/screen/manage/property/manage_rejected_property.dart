@@ -65,7 +65,6 @@ class _ManageAllRejectedPropertyState extends State<ManageAllRejectedProperty> {
               );
             }
             if (propsController.rejectedPropertyList[index].propsId == null) {
-              propsController.isMoreDataAvailable.value = false;
               return Container();
             }
             return PropertyWidget(

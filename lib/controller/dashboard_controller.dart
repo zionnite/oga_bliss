@@ -10,6 +10,8 @@ class DashboardController extends GetxController {
   // bool? admin_status;
   // String? user_status;
 
+  var isDashboardProcessing = 'null'.obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -24,7 +26,10 @@ class DashboardController extends GetxController {
     var seeker =
         await ApiServices.countDashboard(userId, adminStatus, userStatus);
     if (seeker != null) {
+      isDashboardProcessing.value = 'yes';
       counterList.value = seeker.cast<DashboardModel>();
+    } else {
+      isDashboardProcessing.value = 'no';
     }
   }
 }

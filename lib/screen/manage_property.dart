@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -51,15 +54,6 @@ class _ManagePropertyState extends State<ManageProperty> {
   bool isLoading = false;
   bool widgetLoading = true;
 
-  checkIfListLoaded() {
-    var loading = propsController.isDataProcessing.value;
-    if (loading) {
-      setState(() {
-        widgetLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     initUserDetail();
@@ -68,14 +62,6 @@ class _ManagePropertyState extends State<ManageProperty> {
     _controller_2 = ScrollController()..addListener(_scrollListener_2);
     _controller_3 = ScrollController()..addListener(_scrollListener_3);
     _controller_4 = ScrollController()..addListener(_scrollListener_4);
-
-    Future.delayed(new Duration(seconds: 4), () {
-      if (mounted) {
-        setState(() {
-          checkIfListLoaded();
-        });
-      }
-    });
   }
 
   void _scrollListener() {
@@ -161,6 +147,146 @@ class _ManagePropertyState extends State<ManageProperty> {
     }
   }
 
+  getAllProperty() {
+    return (propsController.allPropertyList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    propsController.isAllProductProcessing.value = 'null';
+                    propsController.manageProduct(user_id, 'all');
+                    propsController.allPropertyList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : const ManageAllProperty();
+  }
+
+  getPendingProperty() {
+    return (propsController.pendingPropertyList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    propsController.isPendingProductProcessing.value = 'null';
+                    propsController.manageProduct(user_id, 'pending');
+                    propsController.pendingPropertyList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : const ManageAllPendingProperty();
+  }
+
+  getApprovedProperty() {
+    return (propsController.approvedPropertyList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    propsController.isApprovedProductProcessing.value = 'null';
+                    propsController.manageProduct(user_id, 'approved');
+                    propsController.approvedPropertyList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : const ManageAllApprovedProperty();
+  }
+
+  getRejectedProperty() {
+    return (propsController.rejectedPropertyList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    propsController.isRejectedProductProcessing.value = 'null';
+                    propsController.manageProduct(user_id, 'rejected');
+                    propsController.rejectedPropertyList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : const ManageAllRejectedProperty();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -213,48 +339,86 @@ class _ManagePropertyState extends State<ManageProperty> {
             SingleChildScrollView(
               controller: _controller,
               child: Column(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 5,
                   ),
                   // Text('All'),
-                  ManageAllProperty(),
+                  Obx(
+                    () => (propsController.isAllProductProcessing == 'null')
+                        ? Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.blue,
+                              size: 30,
+                            ),
+                          )
+                        : getAllProperty(),
+                  )
                 ],
               ),
             ),
             SingleChildScrollView(
               controller: _controller_2,
               child: Column(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 5,
                   ),
                   // Text('Pending'),
-                  ManageAllPendingProperty(),
+                  Obx(
+                    () => (propsController.isPendingProductProcessing == 'null')
+                        ? Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.blue,
+                              size: 30,
+                            ),
+                          )
+                        : getPendingProperty(),
+                  ),
                 ],
               ),
             ),
             SingleChildScrollView(
               controller: _controller_3,
               child: Column(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 5,
                   ),
                   // Text('Approved'),
-                  ManageAllApprovedProperty(),
+                  Obx(
+                    () =>
+                        (propsController.isApprovedProductProcessing == 'null')
+                            ? Center(
+                                child: LoadingAnimationWidget.staggeredDotsWave(
+                                  color: Colors.blue,
+                                  size: 30,
+                                ),
+                              )
+                            : getApprovedProperty(),
+                  ),
                 ],
               ),
             ),
             SingleChildScrollView(
               controller: _controller_4,
               child: Column(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 5,
                   ),
                   // Text('Rejected'),
-                  ManageAllRejectedProperty(),
+                  Obx(
+                    () =>
+                        (propsController.isApprovedProductProcessing == 'null')
+                            ? Center(
+                                child: LoadingAnimationWidget.staggeredDotsWave(
+                                  color: Colors.blue,
+                                  size: 30,
+                                ),
+                              )
+                            : getRejectedProperty(),
+                  ),
                 ],
               ),
             ),

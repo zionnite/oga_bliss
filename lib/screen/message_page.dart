@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/widget/property_app_bar.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/chat_head_controller.dart';
 import '../widget/message_widget.dart';
 import '../widget/notice_me.dart';
-import '../widget/property_app_bar.dart';
 import 'message_alone_page.dart';
 
 class MessagePage extends StatefulWidget {
@@ -46,8 +46,8 @@ class _MessagePageState extends State<MessagePage> {
   bool widgetLoading = true;
 
   checkIfListLoaded() {
-    var loading = chController.isDataProcessing.value;
-    if (loading || !loading) {
+    var loading = chController.isChatHeadProcessing;
+    if (loading == 'yes' || loading == 'no') {
       setState(() {
         widgetLoading = false;
       });
@@ -93,75 +93,104 @@ class _MessagePageState extends State<MessagePage> {
       body: Column(
         children: [
           const PropertyAppBar(title: 'Conversation'),
-          Expanded(
-            child: (widgetLoading)
-                ? LoadingAnimationWidget.staggeredDotsWave(
-                    color: Colors.blue,
-                    size: 20,
+          NoticeMe(
+            title: 'Oops!',
+            desc: 'Your bank account is not yet verify!',
+            icon: Icons.warning,
+            icon_color: Colors.red,
+            border_color: Colors.red,
+            btnTitle: 'Verify Now',
+            btnColor: Colors.blue,
+            onTap: () {},
+          ),
+          Obx(
+            () => (chController.isChatHeadProcessing == 'null')
+                ? Center(
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.blue,
+                      size: 20,
+                    ),
                   )
-                : (chController.chatHeadList.isEmpty)
-                    ? const Center(child: ShowNotFound())
-                    : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            NoticeMe(
-                              title: 'Oops!',
-                              desc: 'Your bank account is not yet verify!',
-                              icon: Icons.warning,
-                              icon_color: Colors.red,
-                              border_color: Colors.red,
-                              btnTitle: 'Verify Now',
-                              btnColor: Colors.blue,
-                              onTap: () {},
-                            ),
-                            Obx(
-                              () => ListView.builder(
-                                controller: _controller,
-                                padding: const EdgeInsets.only(bottom: 120),
-                                key:
-                                    const PageStorageKey<String>('allChatHead'),
-                                physics: const ClampingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemCount: chController.chatHeadList.length,
-                                shrinkWrap: true,
-                                itemBuilder: (BuildContext context, int index) {
-                                  var chat = chController.chatHeadList[index];
-                                  if (chController.chatHeadList[index].id ==
-                                      null) {
-                                    return Container();
-                                  }
-                                  if (user_id != chat.disUserId) {
-                                    return messageWidget(
-                                      image_name: chat.disUserImageName!,
-                                      name: chat.disUserFullName!,
-                                      status: chat.disUserUserStatus!,
-                                      onTap: () {
-                                        Get.to(
-                                          () => MessageAlonePage(
-                                            sender: chat.disUserId!,
-                                            receiver: chat.disMyId!,
-                                            propsId: chat.propsId!,
-                                            image_name: chat.disUserImageName!,
-                                            status: chat.disUserUserStatus!,
-                                            name: chat.disUserFullName!,
-                                          ),
-                                        );
-                                      },
-                                      time: chat.lastTimeMsg.toString(),
-                                      last_msg: chat.lastMsg.toString(),
-                                      counter: chat.countUnreadMsg.toString(),
-                                    );
-                                  }
-                                  return Container();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-          )
+                : detail(),
+          ),
         ],
       ),
     );
+  }
+
+  Widget detail() {
+    return (chController.chatHeadList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    chController.isChatHeadProcessing.value = 'null';
+                    chController.fetchChatHead(1, user_id);
+                    chController.chatHeadList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : Expanded(
+            child: Obx(
+              () => ListView.builder(
+                controller: _controller,
+                padding: const EdgeInsets.only(bottom: 120),
+                key: const PageStorageKey<String>('allChatHead'),
+                physics: const ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: chController.chatHeadList.length,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  var chat = chController.chatHeadList[index];
+                  if (chController.chatHeadList[index].id == null) {
+                    return Container();
+                  }
+                  if (user_id != chat.disUserId) {
+                    return messageWidget(
+                      image_name: chat.disUserImageName!,
+                      name: chat.disUserFullName!,
+                      status: chat.disUserUserStatus!,
+                      onTap: () {
+                        Get.to(
+                          () => MessageAlonePage(
+                            sender: chat.disUserId!,
+                            receiver: chat.disMyId!,
+                            propsId: chat.propsId!,
+                            image_name: chat.disUserImageName!,
+                            status: chat.disUserUserStatus!,
+                            name: chat.disUserFullName!,
+                          ),
+                        );
+                      },
+                      time: chat.lastTimeMsg.toString(),
+                      last_msg: chat.lastMsg.toString(),
+                      counter: chat.countUnreadMsg.toString(),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+            ),
+          );
   }
 }

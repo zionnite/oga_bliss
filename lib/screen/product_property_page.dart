@@ -62,28 +62,11 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
   bool isLoading = false;
   bool widgetLoading = true;
 
-  checkIfListLoaded() {
-    var loading = propsController.isDataProcessing.value;
-    if (loading) {
-      setState(() {
-        widgetLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     initUserDetail();
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
-
-    Future.delayed(const Duration(seconds: 4), () {
-      if (mounted) {
-        setState(() {
-          checkIfListLoaded();
-        });
-      }
-    });
   }
 
   void _scrollListener() {
@@ -93,7 +76,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         current_page++;
       });
 
-      propsController.getMoreDetail(current_page, user_id);
+      propsController.getMyProductMore(current_page, user_id);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
@@ -110,74 +93,16 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         children: [
           const PropertyAppBar(title: 'Property'),
           Expanded(
-            child: (widgetLoading)
-                ? LoadingAnimationWidget.staggeredDotsWave(
-                    color: Colors.blue,
-                    size: 20,
-                  )
-                : (propsController.myPropertyList.isEmpty)
-                    ? const Center(child: ShowNotFound())
-                    : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            NoticeMe(
-                              title: 'Oops!',
-                              desc: 'Your bank account is not yet verify!',
-                              icon: Icons.warning,
-                              icon_color: Colors.red,
-                              border_color: Colors.red,
-                              btnTitle: 'Verify Now',
-                              btnColor: Colors.blue,
-                              onTap: () {},
-                            ),
-                            Obx(
-                              () => ListView.builder(
-                                key: const PageStorageKey<String>('myProperty'),
-                                physics: const ClampingScrollPhysics(),
-                                // itemExtent: 350,
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount:
-                                    propsController.myPropertyList.length,
-
-                                itemBuilder: (BuildContext context, int index) {
-                                  var props =
-                                      propsController.myPropertyList[index];
-
-                                  if (propsController
-                                          .myPropertyList[index].propsId ==
-                                      null) {
-                                    return Container();
-                                  }
-                                  return InkWell(
-                                    onTap: () {
-                                      Get.to(
-                                        () => ViewPropertyDetailedDashboard(
-                                          propsId: props.propsId!,
-                                          route: 'dashboard',
-                                        ),
-                                      );
-                                    },
-                                    child: PropertyTileWidget(
-                                      props_image_name: props.propsImgName!,
-                                      props_name: props.propsName!,
-                                      props_desc: props.propsDescription!,
-                                      props_price: '${props.propsPrice}',
-                                      props_type: props.propsPurpose!,
-                                      props_bedroom: props.propsBedrom!,
-                                      props_bathroom: props.propsBathroom!,
-                                      props_toilet: props.propsToilet!,
-                                      onTap: _popUpButton(props),
-                                      live_status:
-                                          props.propsLiveStatus.toString(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            )
-                          ],
-                        ),
+            child: Obx(
+              () => (propsController.isMyProductProcessing == 'null')
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.blue,
+                        size: 20,
                       ),
+                    )
+                  : detail(),
+            ),
           )
         ],
       ),
@@ -191,6 +116,97 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Widget detail() {
+    return (propsController.myPropertyList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    propsController.isMyProductProcessing.value = 'null';
+                    propsController.getMyProduct(user_id);
+                    propsController.searchPropertyList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : SingleChildScrollView(
+            child: Column(
+              children: [
+                NoticeMe(
+                  title: 'Oops!',
+                  desc: 'Your bank account is not yet verify!',
+                  icon: Icons.warning,
+                  icon_color: Colors.red,
+                  border_color: Colors.red,
+                  btnTitle: 'Verify Now',
+                  btnColor: Colors.blue,
+                  onTap: () {},
+                ),
+                Obx(
+                  () => ListView.builder(
+                    key: const PageStorageKey<String>('myProperty'),
+                    physics: const ClampingScrollPhysics(),
+                    // itemExtent: 350,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: propsController.myPropertyList.length,
+
+                    itemBuilder: (BuildContext context, int index) {
+                      var props = propsController.myPropertyList[index];
+
+                      if (propsController.myPropertyList[index].propsId ==
+                          null) {
+                        return Container();
+                      }
+                      return InkWell(
+                        onTap: () {
+                          Get.to(
+                            () => ViewPropertyDetailedDashboard(
+                              propsId: props.propsId!,
+                              route: 'dashboard',
+                            ),
+                          );
+                        },
+                        child: PropertyTileWidget(
+                          props_image_name: props.propsImgName!,
+                          props_name: props.propsName!,
+                          props_desc: props.propsDescription!,
+                          props_price: '${props.propsPrice}',
+                          props_type: props.propsPurpose!,
+                          props_bedroom: props.propsBedrom!,
+                          props_bathroom: props.propsBathroom!,
+                          props_toilet: props.propsToilet!,
+                          onTap: _popUpButton(props),
+                          live_status: props.propsLiveStatus.toString(),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          );
   }
 
   Widget _popUpButton(PropertyModel props) {

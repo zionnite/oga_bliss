@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/users_controller.dart';
@@ -44,29 +47,12 @@ class _ManageUsersState extends State<ManageUsers> {
   bool isLoading = false;
   bool widgetLoading = true;
 
-  checkIfListLoaded() {
-    var loading = usersController.isDataProcessing.value;
-    if (loading) {
-      setState(() {
-        widgetLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     initUserDetail();
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
     _controller_2 = ScrollController()..addListener(_scrollListener_2);
-
-    Future.delayed(const Duration(seconds: 4), () {
-      if (mounted) {
-        setState(() {
-          checkIfListLoaded();
-        });
-      }
-    });
   }
 
   void _scrollListener() {
@@ -102,6 +88,76 @@ class _ManageUsersState extends State<ManageUsers> {
         });
       });
     }
+  }
+
+  Widget getUsersDetail() {
+    return (usersController.usersList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    usersController.isUserFetchProcessing.value = 'null';
+                    usersController.getUsers(1);
+                    usersController.usersList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : const UsersPage();
+  }
+
+  Widget getAgentsDetail() {
+    return (usersController.landLordList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    usersController.isAgentFetchProcessing.value = 'null';
+                    usersController.getLandlord(1);
+                    usersController.landLordList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : const LandlordPage();
   }
 
   @override
@@ -148,24 +204,42 @@ class _ManageUsersState extends State<ManageUsers> {
             SingleChildScrollView(
               controller: _controller,
               child: Column(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 5,
                   ),
                   // Text('All'),
-                  UsersPage(),
+                  Obx(
+                    () => (usersController.isUserFetchProcessing == 'null')
+                        ? Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.blue,
+                              size: 30,
+                            ),
+                          )
+                        : getUsersDetail(),
+                  ),
                 ],
               ),
             ),
             SingleChildScrollView(
               controller: _controller_2,
               child: Column(
-                children: const [
-                  SizedBox(
+                children: [
+                  const SizedBox(
                     height: 5,
                   ),
                   // Text('Pending'),
-                  LandlordPage(),
+                  Obx(
+                    () => (usersController.isAgentFetchProcessing == 'null')
+                        ? Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.blue,
+                              size: 30,
+                            ),
+                          )
+                        : getAgentsDetail(),
+                  ),
                 ],
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -91,95 +92,101 @@ class _FilterByTypeState extends State<FilterByType> {
     }
   }
 
-  showNotFound() {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 250,
-            ),
-            Image.asset(
-              'assets/images/data_not_found.png',
-              fit: BoxFit.fitWidth,
-            ),
-            const Text(
-              'Oops!... no data found',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontFamily: 'Lobster',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
       ),
-      body: (widgetLoading)
-          ? Center(
-              child: LoadingAnimationWidget.staggeredDotsWave(
-                color: Colors.blue,
-                size: 20,
-              ),
-            )
-          : (propsController.searchPropertyList.isEmpty)
-              ? showNotFound()
-              : Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20,
-                    left: 15.0,
-                    right: 15,
+      body: Obx(
+        () => (propsController.isTypeProcessing == 'null')
+            ? Center(
+                child: LoadingAnimationWidget.staggeredDotsWave(
+                  color: Colors.blue,
+                  size: 20,
+                ),
+              )
+            : detail(),
+      ),
+    );
+  }
+
+  Widget detail() {
+    return (propsController.searchPropertyList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    propsController.isTypeProcessing.value = 'null';
+                    propsController.filter_search_page_type(
+                        current_page, widget.typeId, user_id);
+                    propsController.searchPropertyList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
-                  child: Obx(
-                    () => ListView.builder(
-                      controller: _controller,
-                      key: const PageStorageKey<String>('allFilter'),
-                      physics: const ClampingScrollPhysics(),
-                      // itemExtent: 350,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: propsController.searchPropertyList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var props = propsController.searchPropertyList[index];
-                        if (index ==
-                                propsController.searchPropertyList.length + 1 &&
-                            isLoading == true) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (propsController.searchPropertyList[index].propsId ==
-                            null) {
-                          propsController.isMoreDataAvailable.value = false;
-                          return Container();
-                        }
-                        return PropertyWidget(
-                          props_image: props.propsImgName!,
-                          props_name: props.propsName!,
-                          props_type: props.propsPurpose!,
-                          props_price: props.propsPrice!,
-                          isFav: (props.favourite! == 'true') ? true : false,
-                          props_bedroom: props.propsBedrom!,
-                          props_bathroom: props.propsBathroom!,
-                          props_toilet: props.propsToilet!,
-                          props_image_counter: '${props.countPropsImage!}',
-                          propertyModel: props,
-                          route: 'search',
-                        );
-                      },
-                    ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
                   ),
                 ),
-    );
+              ),
+            ),
+          ])
+        : Padding(
+            padding: const EdgeInsets.only(
+              top: 20,
+              left: 15.0,
+              right: 15,
+            ),
+            child: Obx(
+              () => ListView.builder(
+                controller: _controller,
+                key: const PageStorageKey<String>('allFilter'),
+                physics: const ClampingScrollPhysics(),
+                // itemExtent: 350,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: propsController.searchPropertyList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var props = propsController.searchPropertyList[index];
+                  if (index == propsController.searchPropertyList.length + 1 &&
+                      isLoading == true) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (propsController.searchPropertyList[index].propsId ==
+                      null) {
+                    return Container();
+                  }
+                  return PropertyWidget(
+                    props_image: props.propsImgName!,
+                    props_name: props.propsName!,
+                    props_type: props.propsPurpose!,
+                    props_price: props.propsPrice!,
+                    isFav: (props.favourite! == 'true') ? true : false,
+                    props_bedroom: props.propsBedrom!,
+                    props_bathroom: props.propsBathroom!,
+                    props_toilet: props.propsToilet!,
+                    props_image_counter: '${props.countPropsImage!}',
+                    propertyModel: props,
+                    route: 'search',
+                  );
+                },
+              ),
+            ),
+          );
   }
 }

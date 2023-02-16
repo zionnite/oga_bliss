@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/transaction_controller.dart';
@@ -44,8 +45,8 @@ class _TransactionPageState extends State<TransactionPage> {
   bool widgetLoading = true;
 
   checkIfListLoaded() {
-    var loading = transController.isDataProcessing.value;
-    if (loading || !loading) {
+    var loading = transController.isTransactionProcessing;
+    if (loading == 'yes' || loading == 'no') {
       setState(() {
         widgetLoading = false;
       });
@@ -85,157 +86,147 @@ class _TransactionPageState extends State<TransactionPage> {
     }
   }
 
-  showNotFound() {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 250,
-            ),
-            Image.asset(
-              'assets/images/data_not_found.png',
-              fit: BoxFit.fitWidth,
-            ),
-            const Text(
-              'Oops!... no data found',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontFamily: 'Lobster',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           const PropertyAppBar(title: 'Transactions'),
+          NoticeMe(
+            title: 'Oops!',
+            desc: 'Your bank account is not yet verify!',
+            icon: Icons.warning,
+            icon_color: Colors.red,
+            border_color: Colors.red,
+            btnTitle: 'Verify Now',
+            btnColor: Colors.blue,
+            onTap: () {},
+          ),
           Expanded(
-            child: (widgetLoading)
-                ? Center(
-                    child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: Colors.blue,
-                      size: 20,
-                    ),
-                  )
-                : (transController.transactionList.isEmpty)
-                    ? showNotFound()
-                    : SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            NoticeMe(
-                              title: 'Oops!',
-                              desc: 'Your bank account is not yet verify!',
-                              icon: Icons.warning,
-                              icon_color: Colors.red,
-                              border_color: Colors.red,
-                              btnTitle: 'Verify Now',
-                              btnColor: Colors.blue,
-                              onTap: () {},
-                            ),
-                            Obx(
-                              () => ListView.builder(
-                                controller: _controller,
-                                padding: const EdgeInsets.only(bottom: 120),
-                                key: const PageStorageKey<String>(
-                                    'allTransaction'),
-                                physics: const ClampingScrollPhysics(),
-                                // itemExtent: 350,
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount:
-                                    transController.transactionList.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  var trans =
-                                      transController.transactionList[index];
-                                  if (transController
-                                          .transactionList[index].id ==
-                                      null) {
-                                    return Container();
-                                  }
-
-                                  if (trans.disStatus == 'success') {
-                                    return transactionWidget(
-                                      leadingIcon:
-                                          (trans.transType == 'deposit' ||
-                                                  trans.transType ==
-                                                      'complete_transafer')
-                                              ? const Icon(
-                                                  Icons.trending_up,
-                                                  color: Colors.green,
-                                                )
-                                              : const Icon(
-                                                  Icons.trending_down,
-                                                  color: Colors.red,
-                                                ),
-                                      amount: trans.disAmount.toString(),
-                                      date: trans.dateCreated.toString(),
-                                      trailingIcon: const Icon(
-                                        Icons.check,
-                                        color: Colors.green,
-                                      ),
-                                    );
-                                  } else if (trans.disStatus == 'cancel') {
-                                    return transactionWidget(
-                                      leadingIcon:
-                                          (trans.transType == 'deposit' ||
-                                                  trans.transType ==
-                                                      'complete_transafer')
-                                              ? const Icon(
-                                                  Icons.trending_up,
-                                                  color: Colors.green,
-                                                )
-                                              : const Icon(
-                                                  Icons.trending_down,
-                                                  color: Colors.red,
-                                                ),
-                                      amount: trans.disAmount.toString()!,
-                                      date: trans.dateCreated.toString()!,
-                                      trailingIcon: const Icon(
-                                        Icons.cancel_outlined,
-                                        color: Colors.red,
-                                      ),
-                                    );
-                                  } else {
-                                    return transactionWidget(
-                                      leadingIcon:
-                                          (trans.transType == 'deposit' ||
-                                                  trans.transType ==
-                                                      'complete_transafer')
-                                              ? const Icon(
-                                                  Icons.trending_up,
-                                                  color: Colors.green,
-                                                )
-                                              : const Icon(
-                                                  Icons.trending_down,
-                                                  color: Colors.red,
-                                                ),
-                                      amount: trans.disAmount.toString()!,
-                                      date: trans.dateCreated.toString()!,
-                                      trailingIcon: const Icon(
-                                        Icons.fiber_manual_record_outlined,
-                                        color: Colors.blue,
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+            child: Obx(
+              () => (transController.isTransactionProcessing == 'null')
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.blue,
+                        size: 20,
                       ),
+                    )
+                  : detail(),
+            ),
           )
         ],
       ),
     );
+  }
+
+  Widget detail() {
+    return (transController.transactionList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    transController.isTransactionProcessing.value = 'null';
+                    transController.fetchTransaction(1, user_id, admin_status);
+                    transController.transactionList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : Obx(
+            () => ListView.builder(
+              controller: _controller,
+              padding: const EdgeInsets.only(bottom: 120),
+              key: const PageStorageKey<String>('allTransaction'),
+              physics: const ClampingScrollPhysics(),
+              // itemExtent: 350,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: transController.transactionList.length,
+              itemBuilder: (BuildContext context, int index) {
+                var trans = transController.transactionList[index];
+                if (transController.transactionList[index].id == null) {
+                  return Container();
+                }
+
+                if (trans.disStatus == 'success') {
+                  return transactionWidget(
+                    leadingIcon: (trans.transType == 'deposit' ||
+                            trans.transType == 'complete_transafer')
+                        ? const Icon(
+                            Icons.trending_up,
+                            color: Colors.green,
+                          )
+                        : const Icon(
+                            Icons.trending_down,
+                            color: Colors.red,
+                          ),
+                    amount: trans.disAmount.toString(),
+                    date: trans.dateCreated.toString(),
+                    trailingIcon: const Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    ),
+                  );
+                } else if (trans.disStatus == 'cancel') {
+                  return transactionWidget(
+                    leadingIcon: (trans.transType == 'deposit' ||
+                            trans.transType == 'complete_transafer')
+                        ? const Icon(
+                            Icons.trending_up,
+                            color: Colors.green,
+                          )
+                        : const Icon(
+                            Icons.trending_down,
+                            color: Colors.red,
+                          ),
+                    amount: trans.disAmount.toString()!,
+                    date: trans.dateCreated.toString()!,
+                    trailingIcon: const Icon(
+                      Icons.cancel_outlined,
+                      color: Colors.red,
+                    ),
+                  );
+                } else {
+                  return transactionWidget(
+                    leadingIcon: (trans.transType == 'deposit' ||
+                            trans.transType == 'complete_transafer')
+                        ? const Icon(
+                            Icons.trending_up,
+                            color: Colors.green,
+                          )
+                        : const Icon(
+                            Icons.trending_down,
+                            color: Colors.red,
+                          ),
+                    amount: trans.disAmount.toString()!,
+                    date: trans.dateCreated.toString()!,
+                    trailingIcon: const Icon(
+                      Icons.fiber_manual_record_outlined,
+                      color: Colors.blue,
+                    ),
+                  );
+                }
+              },
+            ),
+          );
   }
 }

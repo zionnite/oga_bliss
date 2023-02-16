@@ -8,6 +8,7 @@ import '../controller/request_controller.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/request_widget.dart';
+import '../widget/show_not_found.dart';
 
 final pageBucket = PageStorageBucket();
 
@@ -47,8 +48,8 @@ class _RequestPageState extends State<RequestPage> {
   bool widgetLoading = true;
 
   checkIfListLoaded() {
-    var loading = requestController.isDataProcessing.value;
-    if (loading || !loading) {
+    var loading = requestController.isRequestProcessing;
+    if (loading == 'yes' || loading == 'no') {
       setState(() {
         widgetLoading = false;
       });
@@ -88,122 +89,112 @@ class _RequestPageState extends State<RequestPage> {
     }
   }
 
-  showNotFound() {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 250,
-            ),
-            Image.asset(
-              'assets/images/data_not_found.png',
-              fit: BoxFit.fitWidth,
-            ),
-            const Text(
-              'Oops!... no data found',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontFamily: 'Lobster',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           const PropertyAppBar(title: 'Request'),
+          NoticeMe(
+            title: 'Oops!',
+            desc: 'Your bank account is not yet verify!',
+            icon: Icons.warning,
+            icon_color: Colors.red,
+            border_color: Colors.red,
+            btnTitle: 'Verify Now',
+            btnColor: Colors.blue,
+            onTap: () {},
+          ),
           Expanded(
-            child: (widgetLoading)
-                ? Center(
-                    child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: Colors.blue,
-                      size: 20,
-                    ),
-                  )
-                : (requestController.requestList.isEmpty)
-                    ? showNotFound()
-                    : PageStorage(
-                        bucket: pageBucket,
-                        child: SingleChildScrollView(
-                          controller: _controller,
-                          key: const PageStorageKey<String>('allRequest'),
-                          child: Column(
-                            children: [
-                              NoticeMe(
-                                title: 'Oops!',
-                                desc: 'Your bank account is not yet verify!',
-                                icon: Icons.warning,
-                                icon_color: Colors.red,
-                                border_color: Colors.red,
-                                btnTitle: 'Verify Now',
-                                btnColor: Colors.blue,
-                                onTap: () {},
-                              ),
-                              Obx(
-                                () => ListView.builder(
-                                  padding: const EdgeInsets.only(bottom: 120),
-                                  key: const PageStorageKey<String>(
-                                      'allRequest'),
-                                  physics: const ClampingScrollPhysics(),
-                                  // itemExtent: 350,
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      requestController.requestList.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    var req =
-                                        requestController.requestList[index];
-                                    if (index ==
-                                            requestController
-                                                    .requestList.length +
-                                                1 &&
-                                        isLoading == true) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    if (requestController
-                                            .requestList[index].id ==
-                                        null) {
-                                      requestController
-                                          .isMoreDataAvailable.value = false;
-                                      return Container();
-                                    }
-                                    return requestWidget(
-                                      user_id: user_id!,
-                                      onTap: () {
-                                        Get.to(
-                                          () => ViewPropertyDetailedDashboard(
-                                            propsId: req.propsId!,
-                                            route: 'dashboard',
-                                          ),
-                                        );
-                                      },
-                                      user_status: user_status!,
-                                      admin_status: admin_status!,
-                                      requestModel: req,
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+            child: Obx(
+              () => (requestController.isRequestProcessing == 'null')
+                  ? Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.blue,
+                        size: 20,
                       ),
+                    )
+                  : detail(),
+            ),
           )
         ],
       ),
     );
+  }
+
+  Widget detail() {
+    return (requestController.requestList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    requestController.isRequestProcessing.value = 'null';
+                    requestController.fetchRequest(1, user_id, admin_status);
+                    requestController.requestList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : PageStorage(
+            bucket: pageBucket,
+            child: Obx(
+              () => ListView.builder(
+                padding: const EdgeInsets.only(bottom: 120),
+                key: const PageStorageKey<String>('allRequest'),
+                physics: const ClampingScrollPhysics(),
+                // itemExtent: 350,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: requestController.requestList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var req = requestController.requestList[index];
+                  if (index == requestController.requestList.length + 1 &&
+                      isLoading == true) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (requestController.requestList[index].id == null) {
+                    requestController.isMoreDataAvailable.value = false;
+                    return Container();
+                  }
+
+                  return requestWidget(
+                    user_id: user_id!,
+                    onTap: () {
+                      Get.to(
+                        () => ViewPropertyDetailedDashboard(
+                          propsId: req.propsId!,
+                          route: 'dashboard',
+                        ),
+                      );
+                    },
+                    user_status: user_status!,
+                    admin_status: admin_status!,
+                    requestModel: req,
+                  );
+                },
+              ),
+            ),
+          );
   }
 }

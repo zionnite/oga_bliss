@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/view_user_profile.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/connection_controller.dart';
@@ -47,8 +48,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
   bool widgetLoading = true;
 
   checkIfListLoaded() {
-    var loading = conController.isDataProcessing.value;
-    if (loading || !loading) {
+    var loading = conController.isConnectionProcessing;
+    if (loading == 'yes' || loading == 'no') {
       setState(() {
         widgetLoading = false;
       });
@@ -88,34 +89,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
     }
   }
 
-  showNotFound() {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 250,
-            ),
-            Image.asset(
-              'assets/images/data_not_found.png',
-              fit: BoxFit.fitWidth,
-            ),
-            const Text(
-              'Oops!... no data found',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontFamily: 'Lobster',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,88 +109,16 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     btnColor: Colors.blue,
                     onTap: () {},
                   ),
-                  (widgetLoading)
-                      ? Center(
-                          child: LoadingAnimationWidget.staggeredDotsWave(
-                            color: Colors.blue,
-                            size: 20,
-                          ),
-                        )
-                      : (conController.connectionList.isEmpty)
-                          ? showNotFound()
-                          : Obx(
-                              () => ListView.builder(
-                                controller: _controller,
-                                padding: const EdgeInsets.only(bottom: 120),
-                                key: const PageStorageKey<String>(
-                                    'allConnection'),
-                                physics: const ClampingScrollPhysics(),
-                                // itemExtent: 350,
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: conController.connectionList.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  var con = conController.connectionList[index];
-
-                                  if (conController.connectionList[index].id ==
-                                      null) {
-                                    return Container();
-                                  }
-
-                                  if (user_status == 'agent' ||
-                                      user_status == 'landlord') {
-                                    return connectionWidget(
-                                      avatarImg: con.getUserImage.toString(),
-                                      avatarStatus:
-                                          con.getUserStatus.toString(),
-                                      avatarId: con.disUserId.toString(),
-                                      avatarName:
-                                          con.getUserFullName.toString(),
-                                      onMessageTap: () {
-                                        Get.to(
-                                          () => MessageAlonePage(
-                                            sender: con.disUserId.toString(),
-                                            receiver: con.agentId.toString(),
-                                            propsId: con.propsId.toString(),
-                                            image_name:
-                                                con.getUserImage.toString(),
-                                            status:
-                                                con.getUserStatus.toString(),
-                                            name:
-                                                con.getUserFullName.toString(),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  } else if (user_status == 'user') {
-                                    return connectionWidget(
-                                      avatarImg: con.getAgentImage.toString(),
-                                      avatarStatus:
-                                          con.getAgentStatus.toString(),
-                                      avatarId: con.agentId.toString(),
-                                      avatarName:
-                                          con.getAgentFullName.toString(),
-                                      onMessageTap: () {
-                                        Get.to(
-                                          () => MessageAlonePage(
-                                            sender: con.agentId.toString(),
-                                            receiver: con.disUserId.toString(),
-                                            propsId: con.propsId.toString(),
-                                            image_name:
-                                                con.getAgentImage.toString(),
-                                            status:
-                                                con.getAgentStatus.toString(),
-                                            name:
-                                                con.getAgentFullName.toString(),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }
-                                  return Container();
-                                },
-                              ),
+                  Obx(
+                    () => (conController.isConnectionProcessing == 'null')
+                        ? Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.blue,
+                              size: 20,
                             ),
+                          )
+                        : detail(),
+                  ),
                 ],
               ),
             ),
@@ -225,6 +126,100 @@ class _ConnectionPageState extends State<ConnectionPage> {
         ],
       ),
     );
+  }
+
+  Widget detail() {
+    return (conController.connectionList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    conController.isConnectionProcessing.value = 'null';
+                    conController.fetchConnection(1, user_id);
+                    conController.connectionList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : Obx(
+            () => ListView.builder(
+              controller: _controller,
+              padding: const EdgeInsets.only(bottom: 120),
+              key: const PageStorageKey<String>('allConnection'),
+              physics: const ClampingScrollPhysics(),
+              // itemExtent: 350,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: conController.connectionList.length,
+              itemBuilder: (BuildContext context, int index) {
+                var con = conController.connectionList[index];
+
+                if (conController.connectionList[index].id == null) {
+                  return Container();
+                }
+
+                if (user_status == 'agent' || user_status == 'landlord') {
+                  return connectionWidget(
+                    avatarImg: con.getUserImage.toString(),
+                    avatarStatus: con.getUserStatus.toString(),
+                    avatarId: con.disUserId.toString(),
+                    avatarName: con.getUserFullName.toString(),
+                    onMessageTap: () {
+                      Get.to(
+                        () => MessageAlonePage(
+                          sender: con.disUserId.toString(),
+                          receiver: con.agentId.toString(),
+                          propsId: con.propsId.toString(),
+                          image_name: con.getUserImage.toString(),
+                          status: con.getUserStatus.toString(),
+                          name: con.getUserFullName.toString(),
+                        ),
+                      );
+                    },
+                  );
+                } else if (user_status == 'user') {
+                  return connectionWidget(
+                    avatarImg: con.getAgentImage.toString(),
+                    avatarStatus: con.getAgentStatus.toString(),
+                    avatarId: con.agentId.toString(),
+                    avatarName: con.getAgentFullName.toString(),
+                    onMessageTap: () {
+                      Get.to(
+                        () => MessageAlonePage(
+                          sender: con.agentId.toString(),
+                          receiver: con.disUserId.toString(),
+                          propsId: con.propsId.toString(),
+                          image_name: con.getAgentImage.toString(),
+                          status: con.getAgentStatus.toString(),
+                          name: con.getAgentFullName.toString(),
+                        ),
+                      );
+                    },
+                  );
+                }
+                return Container();
+              },
+            ),
+          );
   }
 }
 

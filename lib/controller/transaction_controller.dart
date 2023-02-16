@@ -7,7 +7,7 @@ class TransactionController extends GetxController {
   TransactionController get getXID => Get.find<TransactionController>();
 
   var page_num = 1;
-  var isDataProcessing = false.obs;
+  var isTransactionProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
   var transactionList = <TransactionModel>[].obs;
 
@@ -27,10 +27,10 @@ class TransactionController extends GetxController {
     var seeker =
         await ApiServices.getTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {
-      isDataProcessing(true);
+      isTransactionProcessing.value = 'yes';
       transactionList.value = seeker.cast<TransactionModel>();
     } else {
-      isDataProcessing(false);
+      isTransactionProcessing.value = 'no';
     }
   }
 
@@ -38,10 +38,7 @@ class TransactionController extends GetxController {
     var seeker =
         await ApiServices.getTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {
-      isDataProcessing(true);
       transactionList.addAll(seeker.cast<TransactionModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 }

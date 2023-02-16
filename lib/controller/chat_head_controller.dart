@@ -7,7 +7,8 @@ class ChatHeadController extends GetxController {
   ChatHeadController get getXID => Get.find<ChatHeadController>();
 
   var page_num = 1;
-  var isDataProcessing = false.obs;
+
+  var isChatHeadProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
   var chatHeadList = <ChatHeadModel>[].obs;
   var msgCounter = 0.obs;
@@ -27,21 +28,18 @@ class ChatHeadController extends GetxController {
   fetchChatHead(pageNum, user_id) async {
     var seeker = await ApiServices.getChatHead(pageNum, user_id);
     if (seeker != null) {
-      isDataProcessing(true);
+      isChatHeadProcessing.value = 'yes';
       chatHeadList.value = seeker.cast<ChatHeadModel>();
     } else {
-      isDataProcessing(false);
+      isChatHeadProcessing.value = 'no';
     }
   }
 
   fetchChatHeadMore(pageNum, user_id) async {
     var seeker = await ApiServices.getChatHead(pageNum, user_id);
     if (seeker != null) {
-      isDataProcessing(true);
       chatHeadList.addAll(seeker.cast<ChatHeadModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   checkForUpdate(var userId) async {

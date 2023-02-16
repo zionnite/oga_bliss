@@ -65,7 +65,6 @@ class _ManageAllApprovedPropertyState extends State<ManageAllApprovedProperty> {
               );
             }
             if (propsController.approvedPropertyList[index].propsId == null) {
-              propsController.isMoreDataAvailable.value = false;
               return Container();
             }
             return PropertyWidget(

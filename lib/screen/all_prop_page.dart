@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/front/welcome_page.dart';
 import 'package:oga_bliss/util/common.dart';
+import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -50,30 +51,11 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
   bool isLoading = false;
   bool widgetLoading = true;
 
-  checkIfListLoaded() {
-    var loading = propsController.isDataProcessing.value;
-    if (loading) {
-      setState(() {
-        widgetLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     initUserDetail();
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
-
-    Future.delayed(new Duration(seconds: 4), () {
-      if (mounted) {
-        setState(() {
-          checkIfListLoaded();
-        });
-      }
-    });
-
-    // propsController.getDetails(1);
   }
 
   void _scrollListener() {
@@ -174,79 +156,107 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                   ],
                 ),
               ),
-              (propsController.propertyList.isEmpty)
-                  ? Column(
-                      children: [
-                        const SizedBox(
-                          height: 550,
-                        ),
-                        Center(
-                          child: LoadingAnimationWidget.staggeredDotsWave(
-                            color: Colors.blue,
-                            size: 30,
+              Obx(
+                () => (propsController.isHomeFetchProcessing == 'null')
+                    ? Column(
+                        children: [
+                          const SizedBox(
+                            height: 550,
                           ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        const SizedBox(
-                          height: 350,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 8.0, right: 20.0, left: 20.0, bottom: 120),
-                          child: Obx(
-                            () => ListView.builder(
-                              key: const PageStorageKey<String>('allProperty'),
-                              physics: const ClampingScrollPhysics(),
-                              // itemExtent: 350,
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: propsController.propertyList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                var props = propsController.propertyList[index];
-                                if (index ==
-                                        propsController.propertyList.length +
-                                            1 &&
-                                    isLoading == true) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-                                if (propsController
-                                        .propertyList[index].propsId ==
-                                    null) {
-                                  propsController.isMoreDataAvailable.value =
-                                      false;
-                                  return Container();
-                                }
-                                return PropertyWidget(
-                                  props_image: props.propsImgName!,
-                                  props_name: props.propsName!,
-                                  props_type: props.propsPurpose!,
-                                  props_price: props.propsPrice!,
-                                  isFav: (props.favourite! == 'true')
-                                      ? true
-                                      : false,
-                                  props_bedroom: props.propsBedrom!,
-                                  props_bathroom: props.propsBathroom!,
-                                  props_toilet: props.propsToilet!,
-                                  props_image_counter:
-                                      '${props.countPropsImage!}',
-                                  propertyModel: props,
-                                  route: 'default',
-                                );
-                              },
+                          Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.blue,
+                              size: 30,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      )
+                    : detail(),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget detail() {
+    return (propsController.propertyList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    propsController.isHomeFetchProcessing.value = 'null';
+                    propsController.getDetails(user_id);
+                    propsController.propertyList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : Column(
+            children: [
+              const SizedBox(
+                height: 350,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 8.0, right: 20.0, left: 20.0, bottom: 120),
+                child: Obx(
+                  () => ListView.builder(
+                    key: const PageStorageKey<String>('allProperty'),
+                    physics: const ClampingScrollPhysics(),
+                    // itemExtent: 350,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: propsController.propertyList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var props = propsController.propertyList[index];
+                      if (index == propsController.propertyList.length + 1 &&
+                          isLoading == true) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (propsController.propertyList[index].propsId == null) {
+                        return Container();
+                      }
+                      return PropertyWidget(
+                        props_image: props.propsImgName!,
+                        props_name: props.propsName!,
+                        props_type: props.propsPurpose!,
+                        props_price: props.propsPrice!,
+                        isFav: (props.favourite! == 'true') ? true : false,
+                        props_bedroom: props.propsBedrom!,
+                        props_bathroom: props.propsBathroom!,
+                        props_toilet: props.propsToilet!,
+                        props_image_counter: '${props.countPropsImage!}',
+                        propertyModel: props,
+                        route: 'default',
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
   }
 }

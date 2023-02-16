@@ -9,7 +9,7 @@ class WalletController extends GetxController {
   WalletController get getXID => Get.find<WalletController>();
 
   var page_num = 1;
-  var isDataProcessing = false.obs;
+  var isWalletProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
   var walletList = <WalletModel>[].obs;
 
@@ -30,21 +30,18 @@ class WalletController extends GetxController {
   fetchWallet(pageNum, user_id, user_status) async {
     var seeker = await ApiServices.getWallet(pageNum, user_id, user_status);
     if (seeker != null) {
-      isDataProcessing(true);
+      isWalletProcessing.value = 'yes';
       walletList.value = seeker.cast<WalletModel>();
     } else {
-      isDataProcessing(false);
+      isWalletProcessing.value = 'no';
     }
   }
 
   fetchWalletMore(pageNum, user_id, user_status) async {
     var seeker = await ApiServices.getWallet(pageNum, user_id, user_status);
     if (seeker != null) {
-      isDataProcessing(true);
       walletList.addAll(seeker.cast<WalletModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   pullOutRequest({

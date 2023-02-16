@@ -64,7 +64,6 @@ class _ManageAllPropertyState extends State<ManageAllProperty> {
               );
             }
             if (propsController.allPropertyList[index].propsId == null) {
-              propsController.isMoreDataAvailable.value = false;
               return Container();
             }
             return PropertyWidget(

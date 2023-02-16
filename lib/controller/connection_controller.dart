@@ -7,7 +7,7 @@ class ConnectionController extends GetxController {
   ConnectionController get getXID => Get.find<ConnectionController>();
 
   var page_num = 1;
-  var isDataProcessing = false.obs;
+  var isConnectionProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
   var connectionList = <ConnectionModel>[].obs;
 
@@ -27,10 +27,10 @@ class ConnectionController extends GetxController {
     var seeker = await ApiServices.getConnection(pageNum, user_id);
 
     if (seeker != null) {
-      isDataProcessing(true);
+      isConnectionProcessing.value = 'yes';
       connectionList.value = seeker.cast<ConnectionModel>();
     } else {
-      isDataProcessing(false);
+      isConnectionProcessing.value = 'no';
     }
   }
 
@@ -38,10 +38,7 @@ class ConnectionController extends GetxController {
     var seeker = await ApiServices.getConnection(pageNum, user_id);
 
     if (seeker != null) {
-      isDataProcessing(true);
       connectionList.addAll(seeker.cast<ConnectionModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 }

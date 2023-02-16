@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/dashboard_controller.dart';
 import 'package:oga_bliss/model/dashboard_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_card.dart';
+import '../widget/show_not_found.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage();
@@ -51,7 +53,55 @@ class _DashboardPageState extends State<DashboardPage> {
       body: Column(
         children: [
           const PropertyAppBar(title: 'Dashboard'),
-          Expanded(
+          Obx(
+            () => (dashController.isDashboardProcessing == 'null')
+                ? Center(
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: Colors.blue,
+                      size: 30,
+                    ),
+                  )
+                : details(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget details() {
+    return (dashController.counterList.isEmpty)
+        ? Stack(children: [
+            const ShowNotFound(),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    dashController.isDashboardProcessing.value = 'null';
+                    dashController.getCounters(
+                        user_id, admin_status, user_status);
+                    dashController.counterList.refresh();
+                  });
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 20,
+                  ),
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ])
+        : Expanded(
             child: SingleChildScrollView(
               child: Obx(
                 () => ListView.builder(
@@ -82,10 +132,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget adminWidget({required DashboardModel model}) {

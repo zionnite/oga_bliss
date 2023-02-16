@@ -9,7 +9,7 @@ class RequestController extends GetxController {
   RequestController get getXID => Get.find<RequestController>();
 
   var page_num = 1;
-  var isDataProcessing = false.obs;
+  var isRequestProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
   var requestList = <RequestModel>[].obs;
 
@@ -28,21 +28,18 @@ class RequestController extends GetxController {
   fetchRequest(pageNum, user_id, admin_status) async {
     var seeker = await ApiServices.getRequest(pageNum, user_id, admin_status);
     if (seeker != null) {
-      isDataProcessing(true);
+      isRequestProcessing.value = 'yes';
       requestList.value = seeker.cast<RequestModel>();
     } else {
-      isDataProcessing(false);
+      isRequestProcessing.value = 'no';
     }
   }
 
   fetchRequestMore(pageNum, user_id, admin_status) async {
     var seeker = await ApiServices.getRequest(pageNum, user_id, admin_status);
     if (seeker != null) {
-      isDataProcessing(true);
       requestList.addAll(seeker.cast<RequestModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   makeRequest({required String id, required String usersType}) async {

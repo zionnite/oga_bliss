@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/util/common.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/users_model.dart';
 import '../services/api_services.dart';
@@ -12,66 +11,61 @@ class UsersController extends GetxController {
   UsersController get getXID => Get.find<UsersController>();
 
   var page_num = 1;
-  var isDataProcessing = false.obs;
+  var isUserFetchProcessing = 'null'.obs;
+  var isAgentFetchProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
   var isUserFetching = false.obs;
   var usersList = <UsersModel>[].obs;
   var disUsersList = <UsersModel>[].obs;
   var landLordList = <UsersModel>[].obs;
 
-  String? user_id;
-  bool? admin_status;
-  String? user_status;
+  // String? user_id;
+  // bool? admin_status;
+  // String? user_status;
 
   @override
   void onInit() async {
     super.onInit();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = prefs.getString('user_id');
-    admin_status = prefs.getBool('admin_status');
-    user_status = prefs.getString('user_status');
-    await getUsers(page_num);
-    await getLandlord(page_num);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // user_id = prefs.getString('user_id');
+    // admin_status = prefs.getBool('admin_status');
+    // user_status = prefs.getString('user_status');
+    // await getUsers(page_num);
+    // await getLandlord(page_num);
   }
 
   getUsers(pageNum) async {
     var seeker = await ApiServices.getUsers(pageNum);
     if (seeker != null) {
-      isDataProcessing(true);
+      isUserFetchProcessing.value = 'yes';
       usersList.value = seeker.cast<UsersModel>();
     } else {
-      isDataProcessing(false);
+      isUserFetchProcessing.value = 'no';
     }
   }
 
   getUsersMore(pageNum) async {
     var seeker = await ApiServices.getUsers(pageNum);
     if (seeker != null) {
-      isDataProcessing(true);
       usersList.addAll(seeker.cast<UsersModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   getLandlord(pageNum) async {
     var seeker = await ApiServices.getLandlords(pageNum);
     if (seeker != null) {
-      isDataProcessing(true);
+      isAgentFetchProcessing.value = 'yes';
       landLordList.value = seeker.cast<UsersModel>();
     } else {
-      isDataProcessing(false);
+      isAgentFetchProcessing.value = 'no';
     }
   }
 
   getLandLordsMore(pageNum) async {
     var seeker = await ApiServices.getLandlords(pageNum);
     if (seeker != null) {
-      isDataProcessing(true);
       landLordList.addAll(seeker.cast<UsersModel>());
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   Future<String> toggleBan({

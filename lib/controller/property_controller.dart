@@ -13,10 +13,22 @@ class PropertyController extends GetxController {
   PropertyController get getXID => Get.find<PropertyController>();
 
   var page_num = 1;
-  var isWidgetLoading = true.obs;
-  var isDataProcessing = false.obs;
+  var isHomeFetchProcessing = 'null'.obs;
+  var isMyProductProcessing = 'null'.obs;
+  var disProductProcessing = 'null'.obs;
+  //
+  var isAllProductProcessing = 'null'.obs;
+  var isPendingProductProcessing = 'null'.obs;
+  var isApprovedProductProcessing = 'null'.obs;
+  var isRejectedProductProcessing = 'null'.obs;
   var isSearchDataProcessing = false.obs;
-  var isMoreDataAvailable = true.obs;
+
+  //
+  var isFavProcessing = 'null'.obs;
+  var isSearchProcessing = 'null'.obs;
+  var isLocationProcessing = 'null'.obs;
+  var isPriceProcessing = 'null'.obs;
+  var isTypeProcessing = 'null'.obs;
 
   var propertyList = <PropertyModel>[].obs;
   var allPropertyList = <PropertyModel>[].obs;
@@ -55,25 +67,21 @@ class PropertyController extends GetxController {
 
   getDetails(var userId) async {
     var seeker = await ApiServices.getAllProducts(page_num, userId);
-    isSearchDataProcessing(true);
+
     if (seeker != null) {
+      isHomeFetchProcessing.value = 'yes';
       propertyList.value = seeker.cast<PropertyModel>();
     } else {
-      // isDataProcessing(false);
+      isHomeFetchProcessing.value = 'no';
     }
   }
 
   void getMoreDetail(var pageNum, var userId) async {
     var seeker = await ApiServices.getAllProducts(pageNum, userId);
 
-    // isSearchDataProcessing(true);
     if (seeker != null) {
       propertyList.addAll(seeker.cast<PropertyModel>());
-      // propertyList.refresh();
-      // isMoreDataAvailable(false);
-    } else {
-      // isMoreDataAvailable(false);
-    }
+    } else {}
   }
 
   Future<bool> toggleLike(var userId, var propsId, PropertyModel model,
@@ -156,7 +164,10 @@ class PropertyController extends GetxController {
 
     isSearchDataProcessing(true);
     if (seeker != null) {
+      isSearchProcessing.value = 'yes';
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    } else {
+      isSearchProcessing.value = 'no';
     }
   }
 
@@ -174,9 +185,7 @@ class PropertyController extends GetxController {
     var seeker = await ApiServices.getTypesProperty();
     if (seeker != null) {
       typesPropertyList.value = seeker.cast<TypesPropertyModel>();
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   void filter_search_page_location(
@@ -185,9 +194,11 @@ class PropertyController extends GetxController {
     var seeker = await ApiServices.getFilterProductLocation(
         pageNum, userId, stateId, areaId);
 
-    isSearchDataProcessing(true);
     if (seeker != null) {
+      isLocationProcessing.value = 'yes';
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    } else {
+      isLocationProcessing.value = 'no';
     }
   }
 
@@ -206,9 +217,11 @@ class PropertyController extends GetxController {
     var seeker =
         await ApiServices.getFilterProductType(pageNum, userId, typeId);
 
-    isSearchDataProcessing(true);
     if (seeker != null) {
+      isTypeProcessing.value = 'null';
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    } else {
+      isTypeProcessing.value = 'null';
     }
   }
 
@@ -246,12 +259,14 @@ class PropertyController extends GetxController {
 
   fetch_favourite(var pageNum, var userId) async {
     favPropertyList.clear();
-    isSearchDataProcessing(true);
+
     var seeker = await ApiServices.getAllFav(pageNum, userId);
     if (seeker != null) {
+      isFavProcessing.value = 'yes';
       favPropertyList.addAll(seeker.cast<PropertyModel>());
+    } else {
+      isFavProcessing.value = 'no';
     }
-    isSearchDataProcessing(false);
   }
 
   void fetch_more_favourite(var pageNum, var userId) async {
@@ -400,10 +415,10 @@ class PropertyController extends GetxController {
     // print('user id $userId');
     var seeker = await ApiServices.getMyProducts(page_num, userId);
     if (seeker != null) {
-      isDataProcessing(true);
+      isMyProductProcessing.value = 'yes';
       myPropertyList.value = seeker.cast<PropertyModel>();
     } else {
-      isDataProcessing(false);
+      isMyProductProcessing.value = 'no';
     }
   }
 
@@ -411,22 +426,17 @@ class PropertyController extends GetxController {
     var seeker = await ApiServices.getMyProducts(pageNum, userId);
 
     if (seeker != null) {
-      isMoreDataAvailable(true);
       myPropertyList.addAll(seeker.cast<PropertyModel>());
-      // propertyList.refresh();
-      isMoreDataAvailable(false);
-    } else {
-      isMoreDataAvailable(false);
-    }
+    } else {}
   }
 
   getDisProduct(var prodId, user_id) async {
     var seeker = await ApiServices.getDisProduct(page_num, user_id, prodId);
     if (seeker != null) {
-      isDataProcessing(true);
+      disProductProcessing.value = 'yes';
       disPropertyList.value = seeker.cast<PropertyModel>();
     } else {
-      isDataProcessing(false);
+      disProductProcessing.value = 'no';
     }
   }
 
@@ -746,18 +756,29 @@ class PropertyController extends GetxController {
   manageProduct(var userId, var type) async {
     var seeker = await ApiServices.manageProducts(page_num, userId, type);
     if (seeker != null) {
-      isDataProcessing(true);
       if (type == 'all') {
+        isAllProductProcessing.value = 'yes';
         allPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'pending') {
+        isPendingProductProcessing.value = 'yes';
         pendingPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'approved') {
+        isApprovedProductProcessing.value = 'yes';
         approvedPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'rejected') {
+        isRejectedProductProcessing.value = 'yes';
         rejectedPropertyList.addAll(seeker.cast<PropertyModel>());
       }
     } else {
-      isDataProcessing(false);
+      if (type == 'all') {
+        isAllProductProcessing.value = 'no';
+      } else if (type == 'pending') {
+        isPendingProductProcessing.value = 'no';
+      } else if (type == 'approved') {
+        isApprovedProductProcessing.value = 'no';
+      } else if (type == 'rejected') {
+        isRejectedProductProcessing.value = 'no';
+      }
     }
   }
 
@@ -765,7 +786,6 @@ class PropertyController extends GetxController {
     var seeker = await ApiServices.manageProducts(pageNum, userId, type);
 
     if (seeker != null) {
-      isDataProcessing(true);
       if (type == 'all') {
         allPropertyList.addAll(seeker.cast<PropertyModel>());
       } else if (type == 'pending') {
@@ -775,9 +795,7 @@ class PropertyController extends GetxController {
       } else if (type == 'rejected') {
         rejectedPropertyList.addAll(seeker.cast<PropertyModel>());
       }
-    } else {
-      isDataProcessing(false);
-    }
+    } else {}
   }
 
   Future<bool> approveProperty({

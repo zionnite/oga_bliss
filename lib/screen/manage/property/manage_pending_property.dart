@@ -64,7 +64,6 @@ class _ManageAllPendingPropertyState extends State<ManageAllPendingProperty> {
               );
             }
             if (propsController.pendingPropertyList[index].propsId == null) {
-              propsController.isMoreDataAvailable.value = false;
               return Container();
             }
             return PropertyWidget(
