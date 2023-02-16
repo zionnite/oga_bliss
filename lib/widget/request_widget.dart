@@ -256,7 +256,7 @@ class _requestWidgetState extends State<requestWidget> {
               },
             )
           : Container();
-    } else {
+    } else if (widget.admin_status == true) {
       return smallBtn(
         btnName: 'Mark as Read',
         btnColor: Colors.black,
@@ -296,6 +296,7 @@ class _requestWidgetState extends State<requestWidget> {
         },
       );
     }
+    return Container();
   }
 
   Widget showRequestAdminButton() {
