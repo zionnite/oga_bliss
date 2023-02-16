@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/front/welcome_page.dart';
 import 'package:oga_bliss/util/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -177,31 +178,12 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                   ? Column(
                       children: [
                         const SizedBox(
-                          height: 350,
+                          height: 550,
                         ),
-                        const Text(
-                          'Oops!... no data found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontFamily: 'RubikMonoOne-Regular',
-                          ),
-                        ),
-                        Container(
-                          height: height * 0.6,
-                          // margin: const EdgeInsets.only(
-                          //     left: 59, right: 59, top: 10),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              colorFilter: ColorFilter.mode(
-                                Colors.blue.withOpacity(1),
-                                BlendMode.color,
-                              ),
-                              fit: BoxFit.fitWidth,
-                              image: const AssetImage(
-                                'assets/images/data_not_found.png',
-                              ),
-                            ),
+                        Center(
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                            color: Colors.blue,
+                            size: 30,
                           ),
                         ),
                       ],
