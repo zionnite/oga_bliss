@@ -211,48 +211,51 @@ class _requestWidgetState extends State<requestWidget> {
             });
           },
         );
-      } else if (widget.user_id == widget.requestModel.agentId &&
-          widget.admin_status == false) {
-        return smallBtn(
-          btnName: 'Mark as Read',
-          btnColor: Colors.black,
-          isLoading: isLoading,
-          loadingColor: Colors.white,
-          onTap: () async {
-            setState(() {
-              isLoading = true;
-            });
-            bool status = await requestController.makeRequest(
-              id: widget.requestModel.id.toString(),
-              usersType: 'agent',
-            );
+      }
 
-            if (status == true || status == false) {
-              Future.delayed(const Duration(seconds: 1), () {
+      return Container();
+    } else if (widget.user_id == widget.requestModel.agentId &&
+        widget.admin_status == false) {
+      return (widget.requestModel.agentReadStatus == 'unread')
+          ? smallBtn(
+              btnName: 'Mark as Read',
+              btnColor: Colors.black,
+              isLoading: isLoading,
+              loadingColor: Colors.white,
+              onTap: () async {
                 setState(() {
-                  isLoading = false;
+                  isLoading = true;
                 });
-              });
-            }
+                bool status = await requestController.makeRequest(
+                  id: widget.requestModel.id.toString(),
+                  usersType: 'agent',
+                );
 
-            Future.delayed(const Duration(seconds: 1), () {
-              if (status) {
-                //update the array
-                if (mounted) {
-                  setState(() {
-                    int index = requestController.requestList
-                        .indexOf(widget.requestModel);
-                    requestController.requestList[index].agentReadStatus =
-                        "read";
-                    requestController.requestList.removeAt(index);
+                if (status == true || status == false) {
+                  Future.delayed(const Duration(seconds: 1), () {
+                    setState(() {
+                      isLoading = false;
+                    });
                   });
                 }
-              }
-            });
-          },
-        );
-      }
-      return Container();
+
+                Future.delayed(const Duration(seconds: 1), () {
+                  if (status) {
+                    //update the array
+                    if (mounted) {
+                      setState(() {
+                        int index = requestController.requestList
+                            .indexOf(widget.requestModel);
+                        requestController.requestList[index].agentReadStatus =
+                            "read";
+                        requestController.requestList.removeAt(index);
+                      });
+                    }
+                  }
+                });
+              },
+            )
+          : Container();
     } else {
       return smallBtn(
         btnName: 'Mark as Read',
