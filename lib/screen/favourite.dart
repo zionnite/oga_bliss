@@ -44,14 +44,17 @@ class _FavouritePageState extends State<FavouritePage> {
   getIfAudioLoaded() {
     var loading = propsController.isSearchDataProcessing.value;
     if (loading || !loading) {
-      setState(() {
-        widgetLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          widgetLoading = false;
+        });
+      }
     }
   }
 
   @override
   void initState() {
+    propsController.favPropertyList.clear();
     initUserDetail();
     super.initState();
 
@@ -64,17 +67,21 @@ class _FavouritePageState extends State<FavouritePage> {
 
   void _scrollListener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      setState(() {
-        isLoading = true;
-        current_page++;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+          current_page++;
+        });
+      }
 
       propsController.fetch_more_favourite(current_page, user_id);
 
       Future.delayed(new Duration(seconds: 4), () {
-        setState(() {
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
       });
     }
   }

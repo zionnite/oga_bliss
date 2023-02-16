@@ -302,11 +302,13 @@ class _requestWidgetState extends State<requestWidget> {
         return PopupMenuButton(onSelected: (val) async {
           if (val == "start_request") {
             bool status = await requestController.setRequestStatus(
-                id: model.id!,
-                statusType: 'review',
-                disUserId: model.disUserId!,
-                agentId: model.agentId!,
-                propsId: model.propsId!);
+              id: model.id!,
+              statusType: 'review',
+              disUserId: model.disUserId!,
+              agentId: model.agentId!,
+              propsId: model.propsId!,
+              user_id: widget.user_id,
+            );
             //update the array
             if (status) {
               setState(() {
@@ -321,7 +323,8 @@ class _requestWidgetState extends State<requestWidget> {
                 statusType: 'rejected',
                 disUserId: model.disUserId!,
                 agentId: model.agentId!,
-                propsId: model.propsId!);
+                propsId: model.propsId!,
+                user_id: widget.user_id);
 
             //update the array
             if (status) {
@@ -353,7 +356,8 @@ class _requestWidgetState extends State<requestWidget> {
                 statusType: 'confirm',
                 disUserId: model.disUserId!,
                 agentId: model.agentId!,
-                propsId: model.propsId!);
+                propsId: model.propsId!,
+                user_id: widget.user_id);
             //update the array
             if (status) {
               setState(() {
@@ -368,7 +372,8 @@ class _requestWidgetState extends State<requestWidget> {
                 statusType: 'rejected',
                 disUserId: model.disUserId!,
                 agentId: model.agentId!,
-                propsId: model.propsId!);
+                propsId: model.propsId!,
+                user_id: widget.user_id);
 
             //update the array
             if (status) {
@@ -397,11 +402,13 @@ class _requestWidgetState extends State<requestWidget> {
           return PopupMenuButton(onSelected: (val) async {
             if (val == "open_connection") {
               bool status = await requestController.setRequestStatus(
-                  id: model.id!,
-                  statusType: 'done',
-                  disUserId: model.disUserId!,
-                  agentId: model.agentId!,
-                  propsId: model.propsId!);
+                id: model.id!,
+                statusType: 'done',
+                disUserId: model.disUserId!,
+                agentId: model.agentId!,
+                propsId: model.propsId!,
+                user_id: widget.user_id,
+              );
               //update the array
               if (status) {
                 setState(() {

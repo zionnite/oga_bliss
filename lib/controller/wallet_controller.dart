@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/model/wallet_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/api_services.dart';
 import '../util/common.dart';
@@ -14,21 +13,21 @@ class WalletController extends GetxController {
   var isMoreDataAvailable = true.obs;
   var walletList = <WalletModel>[].obs;
 
-  String? user_id;
-  bool? admin_status;
-  String? user_status;
+  // String? user_id;
+  // bool? admin_status;
+  // String? user_status;
 
   @override
   void onInit() async {
     super.onInit();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = prefs.getString('user_id');
-    admin_status = prefs.getBool('admin_status');
-    user_status = prefs.getString('user_status');
-    await fetchWallet(page_num);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // user_id = prefs.getString('user_id');
+    // admin_status = prefs.getBool('admin_status');
+    // user_status = prefs.getString('user_status');
+    // await fetchWallet(page_num);
   }
 
-  fetchWallet(pageNum) async {
+  fetchWallet(pageNum, user_id, user_status) async {
     var seeker = await ApiServices.getWallet(pageNum, user_id, user_status);
     if (seeker != null) {
       isDataProcessing(true);
@@ -38,7 +37,7 @@ class WalletController extends GetxController {
     }
   }
 
-  fetchWalletMore(pageNum) async {
+  fetchWalletMore(pageNum, user_id, user_status) async {
     var seeker = await ApiServices.getWallet(pageNum, user_id, user_status);
     if (seeker != null) {
       isDataProcessing(true);

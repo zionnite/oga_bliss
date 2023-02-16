@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/alert_model.dart';
 import '../services/api_services.dart';
@@ -13,20 +12,21 @@ class AlertController extends GetxController {
   var isDataProcessing = false.obs;
   var isMoreDataAvailable = true.obs;
   var alertList = <AlertModel>[].obs;
+  var alertCounter = 0.obs;
 
-  String? user_id;
-  bool? admin_status;
+  // String? user_id;
+  // bool? admin_status;
 
   @override
   void onInit() async {
     super.onInit();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = prefs.getString('user_id');
-    admin_status = prefs.getBool('admin_status');
-    await fetchAlert(page_num);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // user_id = prefs.getString('user_id');
+    // admin_status = prefs.getBool('admin_status');
+    // await fetchAlert(page_num);
   }
 
-  fetchAlert(pageNum) async {
+  fetchAlert(pageNum, user_id) async {
     var seeker = await ApiServices.getAlerts(pageNum, user_id);
     if (seeker != null) {
       isDataProcessing(true);
@@ -36,7 +36,7 @@ class AlertController extends GetxController {
     }
   }
 
-  fetchAlertMore(pageNum) async {
+  fetchAlertMore(pageNum, user_id) async {
     var seeker = await ApiServices.getAlerts(pageNum, user_id);
     if (seeker != null) {
       isDataProcessing(true);
@@ -61,5 +61,12 @@ class AlertController extends GetxController {
     showSnackBar(title: msg, msg: '', backgroundColor: Colors.blue);
 
     return statusType;
+  }
+
+  checkForUpdate(var userId) async {
+    var seeker = await ApiServices.countUnreadAlert(userId);
+    if (seeker != null) {
+      alertCounter.value = seeker;
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/tab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:oga_bliss/screen/favourite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controller/property_controller.dart';
 import 'screen/all_prop_page.dart';
@@ -30,8 +31,18 @@ class _HomePageState extends State<HomePage> {
   int android = 30;
   int ios = 30;
 
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tempLoginStatus = prefs.getBool("tempLoginStatus");
+
+    if (tempLoginStatus == true) {
+      prefs.remove("tempLoginStatus");
+    }
+  }
+
   @override
   void initState() {
+    initUserDetail();
     super.initState();
   }
 

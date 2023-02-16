@@ -3,7 +3,20 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/home_page.dart';
+import 'package:oga_bliss/main.dart';
 
+import '../../controller/alert_controller.dart';
+import '../../controller/chat_head_controller.dart';
+import '../../controller/connection_controller.dart';
+import '../../controller/dashboard_controller.dart';
+import '../../controller/favourite_controller.dart';
+import '../../controller/onboarding_controller.dart';
+import '../../controller/property_controller.dart';
+import '../../controller/redirect_controller.dart';
+import '../../controller/request_controller.dart';
+import '../../controller/splash_controller.dart';
+import '../../controller/transaction_controller.dart';
+import '../../controller/wallet_controller.dart';
 import '../../widget/my_textfield_icon.dart';
 import 'decide_page.dart';
 import 'foreget_password.dart';
@@ -101,6 +114,38 @@ class _LoginPageState extends State<LoginPage> {
                               setState(() {
                                 isLoading = false;
                               });
+
+                              // SharedPreferences prefs =
+                              //     await SharedPreferences.getInstance();
+                              // var tempLoginStatus =
+                              //     prefs.getBool("tempLoginStatus");
+                              //
+                              // if (tempLoginStatus == true) {
+                              //   var user_id = prefs.getString('user_id');
+                              //   var admin_status =
+                              //       prefs.getBool('admin_status');
+                              //   var user_status =
+                              //       prefs.getString('user_status');
+                              // }
+
+                              // redirectController.getAllControllers();
+
+                              RestartWidget.restartApp(context);
+
+                              // Phoenix.rebirth(context);
+                              Get.put(SplashController());
+                              Get.put(OnboardingCongroller());
+                              Get.put(PropertyController());
+                              Get.put(FavouriteController());
+                              Get.put(RequestController());
+                              Get.put(ConnectionController());
+                              Get.put(TransactionController());
+                              Get.put(AlertController());
+                              Get.put(ChatHeadController());
+                              Get.put(WalletController());
+                              Get.put(UsersController());
+                              Get.put(DashboardController());
+                              Get.put(RedirectController());
 
                               Get.offAll(() => const HomePage());
                             } else {

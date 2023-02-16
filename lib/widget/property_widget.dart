@@ -111,6 +111,29 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                             fit: BoxFit.cover,
                             height: 150,
                             width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/images/a.jpeg',
+                                fit: BoxFit.fitWidth,
+                              );
+                            },
+                            loadingBuilder:
+                                (context, Widget child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return SizedBox(
+                                height: 300,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                           (isReportLoading)
                               ? Positioned(
@@ -265,10 +288,12 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                                 });
 
                                 var status = await propsController.toggleLike(
-                                    user_id,
-                                    widget.propertyModel!.propsId,
-                                    widget.propertyModel!,
-                                    widget.route);
+                                  user_id,
+                                  widget.propertyModel!.propsId,
+                                  widget.propertyModel!,
+                                  widget.route,
+                                  user_status,
+                                );
 
                                 setState(() {
                                   widget.propertyModel!.favourite = status;

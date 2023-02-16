@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../widget/header_title.dart';
 import '../widget/property_key.dart';
 
 class ViewUserProfile extends StatefulWidget {
@@ -38,7 +37,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
       });
     }
 
-    usersController.getDisUser(user_id!);
+    usersController.getDisUser(widget.id);
   }
 
   @override
@@ -63,6 +62,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
               shrinkWrap: true,
               itemCount: usersController.disUsersList.length,
               itemBuilder: (BuildContext context, int index) {
+                var list = usersController.disUsersList[index];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -87,98 +87,110 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                             ),
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.only(top: 210),
-                          child: const CircleAvatar(
-                            radius: 70,
-                            backgroundImage: AssetImage(
-                              'assets/images/a.jpeg',
+                        Stack(children: [
+                          Card(
+                            elevation: 5,
+                            margin: const EdgeInsets.only(
+                              top: 310,
+                              left: 10,
+                              right: 10,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 40, left: 15),
+                                    child: const Text(
+                                      'Full Name',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'Passion One',
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  PropertyKey(
+                                    propsKey: '${list.agentFullName}',
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 28.0),
+                                    child:
+                                        Divider(height: 1, color: Colors.grey),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 10, left: 15),
+                                    child: const Text(
+                                      'Age',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'Passion One',
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  PropertyKey(
+                                    propsKey: '${list.agentAge}',
+                                  ),
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 28.0),
+                                    child:
+                                        Divider(height: 1, color: Colors.grey),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 10, left: 15),
+                                    child: const Text(
+                                      'Gender',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'Passion One',
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  PropertyKey(
+                                    propsKey: '${list.agentSex}',
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(top: 210),
+                            child: CircleAvatar(
+                              radius: 70,
+                              backgroundImage: NetworkImage(
+                                '${list.agentImageName}',
+                              ),
+                            ),
+                          ),
+                        ]),
                       ],
-                    ),
-
-                    Container(
-                      margin: const EdgeInsets.only(top: 40),
-                      child: const HeaderTitle(
-                        title: 'Full Name',
-                        icon: Icon(
-                          Icons.person,
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: PropertyKey(
-                        propsKey: 'Nosakhare Atekha Endurance Zionnite',
-                      ),
-                    ),
-                    // Container(
-                    //   margin: const EdgeInsets.only(top: 10),
-                    //   child: const HeaderTitle(
-                    //     title: 'Email',
-                    //     icon: Icon(Icons.email),
-                    //   ),
-                    // ),
-                    // const PropertyKey(
-                    //   propsKey: 'email@email.com',
-                    // ),
-                    // Container(
-                    //   margin: const EdgeInsets.only(top: 10),
-                    //   child: const HeaderTitle(
-                    //     title: 'Phone',
-                    //     icon: Icon(Icons.phone_android_sharp),
-                    //   ),
-                    // ),
-                    // const PropertyKey(
-                    //   propsKey: '09093537343',
-                    // ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: const HeaderTitle(
-                        title: 'Age',
-                      ),
-                    ),
-                    const PropertyKey(
-                      propsKey: '35yrs',
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: const HeaderTitle(
-                        title: 'Sex',
-                        icon: Icon(Icons.support_agent),
-                      ),
-                    ),
-                    const PropertyKey(
-                      propsKey: 'Male',
-                    ),
-                    // Container(
-                    //   margin: const EdgeInsets.only(top: 10),
-                    //   child: const HeaderTitle(
-                    //     title: 'Address',
-                    //   ),
-                    // ),
-
-                    // Container(
-                    //   margin: const EdgeInsets.only(
-                    //     left: 15,
-                    //     right: 15,
-                    //     bottom: 0,
-                    //   ),
-                    //   child: const Text(
-                    //     '10, Osemwengie street off akugbe road, off upper sakponba road benin city, edo state, Nigeria',
-                    //     style: TextStyle(fontSize: 20),
-                    //   ),
-                    // ),
-
-                    // const PropertyKey(
-                    //   propsKey:
-                    //       '10, Osemwengie street off akugbe road, off upper sakponba road benin city, edo state, Nigeria',
-                    // ),
-                    const SizedBox(
-                      height: 20,
                     ),
                   ],
                 );

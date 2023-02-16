@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../util/common.dart';
 
@@ -60,6 +62,33 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
     Stream<Future<List<dynamic>>> stream =
         Stream<Future<List<dynamic>>>.value(jsonx);
     return stream;
+  }
+
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  String? my_id, agent_id;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    initUserDetail();
+    super.initState();
   }
 
   @override
@@ -122,23 +151,57 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
                     ],
                   ),
                 ),
-                PopupMenuButton(
-                    icon: const Icon(
-                      Icons.more_vert_outlined,
-                      color: Colors.white,
-                    ),
-                    itemBuilder: (context) {
-                      return [
-                        const PopupMenuItem(
-                          value: 'payment',
-                          child: Text('Make Payment'),
+                (user_status == 'user')
+                    ? PopupMenuButton(
+                        icon: const Icon(
+                          Icons.more_vert_outlined,
+                          color: Colors.white,
                         ),
-                        const PopupMenuItem(
-                          value: 'Agreement',
-                          child: Text('Agreement'),
-                        ),
-                      ];
-                    })
+                        onSelected: (val) async {
+                          var sender = widget.sender;
+                          var receiver = widget.receiver;
+                          var propsId = widget.propsId;
+
+                          if (user_id == sender) {
+                            setState(() {
+                              my_id = sender;
+                              agent_id = receiver;
+                            });
+                          } else if (user_id == receiver) {
+                            setState(() {
+                              my_id = receiver;
+                              agent_id = sender;
+                            });
+                          }
+
+                          print('my_id $my_id');
+                          print('agent id $agent_id');
+
+                          String pay_link =
+                              'https://ogabliss.com/Transaction/app_pay';
+                          String agree_link =
+                              'https://ogabliss.com/Transaction/app_agree';
+                          if (val == 'payment') {
+                            await _launchInBrowser(Uri.parse(
+                                '$pay_link/$my_id/$agent_id/$propsId'));
+                          } else if (val == 'agreement') {
+                            await _launchInBrowser(Uri.parse(
+                                '$agree_link/$my_id/$agent_id/$propsId'));
+                          }
+                        },
+                        itemBuilder: (context) {
+                          return [
+                            const PopupMenuItem(
+                              value: 'payment',
+                              child: Text('Make Payment'),
+                            ),
+                            const PopupMenuItem(
+                              value: 'agreement',
+                              child: Text('Agreement'),
+                            ),
+                          ];
+                        })
+                    : Container(),
               ],
             ),
           ),
@@ -342,15 +405,7 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
                         return Column(
                           children: [
                             senderLayout(
-                                'Hey Buddy, there is no conversation between you and your prayer partner at the moment, start by Saying Hi',
-                                '',
-                                null),
-                            senderLayout(
-                                'Note: You need to AGREE on a Prayer Time and Prayer Routine with your Prayer Partner, so that you BOTH we know when to come online for PRAYER',
-                                '',
-                                null),
-                            senderLayout(
-                                'Note: Prayer Buddy won\'t store this chat message, it will be deleted once you are matched with a new Prayer Partner',
+                                'Hey, there is no conversation between you and this user at the moment, start by Saying Hi',
                                 '',
                                 null),
                           ],
@@ -646,12 +701,16 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

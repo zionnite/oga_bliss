@@ -33,6 +33,9 @@ class _ManageUsersState extends State<ManageUsers> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+
+      await usersController.getUsers(1);
+      await usersController.getLandlord(1);
     }
   }
 

@@ -38,6 +38,7 @@ class _RequestPageState extends State<RequestPage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+      await requestController.fetchRequest(1, user_id, admin_status);
     }
   }
 
@@ -77,7 +78,7 @@ class _RequestPageState extends State<RequestPage> {
         current_page++;
       });
 
-      requestController.fetchRequestMore(current_page);
+      requestController.fetchRequestMore(current_page, user_id, admin_status);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {

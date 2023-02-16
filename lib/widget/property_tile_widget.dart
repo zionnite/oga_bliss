@@ -51,6 +51,26 @@ class _PropertyTileWidgetState extends State<PropertyTileWidget> {
                 width: 100,
                 height: 150,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/a.jpeg',
+                    fit: BoxFit.fitWidth,
+                  );
+                },
+                loadingBuilder: (context, Widget child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return SizedBox(
+                    height: 300,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    ),
+                  );
+                },
               ),
               Expanded(
                 child: Column(

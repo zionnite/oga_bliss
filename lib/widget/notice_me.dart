@@ -96,7 +96,7 @@ class _NoticeMeState extends State<NoticeMe> {
 
   @override
   Widget build(BuildContext context) {
-    print('bank code $isbank_verify');
+    // print('bank code $isbank_verify');
     return (isbank_verify == 'yes')
         ? Container()
         : Card(

@@ -53,6 +53,8 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+
+      await propsController.getMyProduct(user_id);
     }
   }
 

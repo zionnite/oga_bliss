@@ -36,6 +36,8 @@ class _MessagePageState extends State<MessagePage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+
+      await chController.fetchChatHead(1, user_id);
     }
   }
 
@@ -75,7 +77,7 @@ class _MessagePageState extends State<MessagePage> {
         current_page++;
       });
 
-      chController.fetchChatHeadMore(current_page);
+      chController.fetchChatHeadMore(current_page, user_id);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {

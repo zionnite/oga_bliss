@@ -38,6 +38,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+      await conController.fetchConnection(1, user_id);
     }
   }
 
@@ -77,7 +78,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
         current_page++;
       });
 
-      conController.fetchConnectionMore(current_page);
+      conController.fetchConnectionMore(current_page, user_id);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {

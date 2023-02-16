@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/util/common.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/property_model.dart';
 import '../model/types_property_model.dart';
@@ -31,24 +30,25 @@ class PropertyController extends GetxController {
   var typesPropertyList = <TypesPropertyModel>[].obs;
   var imageList = <GetAllPropsImage>[].obs;
 
-  String? user_id;
-  String? user_status;
+  // String? user_id;
+  // String? user_status;
 
   @override
   void onInit() async {
     super.onInit();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = prefs.getString('user_id');
-    user_status = prefs.getString('user_status');
-    await getDetails(user_id);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // user_id = prefs.getString('user_id');
+    // user_status = prefs.getString('user_status');
+    // await getDetails(user_id);
     await fetchTypesProps();
 
-    fetch_favourite(page_num, user_id);
-    getMyProduct(user_id);
-    manageProduct(user_id, 'all');
-    manageProduct(user_id, 'pending');
-    manageProduct(user_id, 'approved');
-    manageProduct(user_id, 'rejected');
+    // await fetch_favourite(page_num, user_id);
+    // await getMyProduct(user_id);
+
+    // await manageProduct(user_id, 'all');
+    // await manageProduct(user_id, 'pending');
+    // await manageProduct(user_id, 'approved');
+    // await manageProduct(user_id, 'rejected');
 
     // fetchStateRegion();
   }
@@ -76,11 +76,11 @@ class PropertyController extends GetxController {
     }
   }
 
-  Future<bool> toggleLike(
-      var userId, var propsId, PropertyModel model, var route) async {
+  Future<bool> toggleLike(var userId, var propsId, PropertyModel model,
+      var route, user_status) async {
     //return await !status;
     String status = await ApiServices.toggleLike(userId, propsId);
-    if (user_id == null) {
+    if (userId == null) {
       showSnackBar(
         title: 'Oops!',
         msg: 'You need to Login before you can perform this action',
@@ -244,7 +244,7 @@ class PropertyController extends GetxController {
     }
   }
 
-  void fetch_favourite(var pageNum, var userId) async {
+  fetch_favourite(var pageNum, var userId) async {
     favPropertyList.clear();
     isSearchDataProcessing(true);
     var seeker = await ApiServices.getAllFav(pageNum, userId);
@@ -319,6 +319,7 @@ class PropertyController extends GetxController {
     required String pollution,
     required String education,
     required String health,
+    required String user_id,
   }) async {
     bool status = await ApiServices.addProduct(
       propsName: propsName,
@@ -377,7 +378,7 @@ class PropertyController extends GetxController {
       pollution: pollution,
       education: education,
       health: health,
-      user_id: user_id!,
+      user_id: user_id,
     );
 
     bool statusType;
@@ -396,6 +397,7 @@ class PropertyController extends GetxController {
   }
 
   getMyProduct(var userId) async {
+    // print('user id $userId');
     var seeker = await ApiServices.getMyProducts(page_num, userId);
     if (seeker != null) {
       isDataProcessing(true);
@@ -418,7 +420,7 @@ class PropertyController extends GetxController {
     }
   }
 
-  getDisProduct(var prodId) async {
+  getDisProduct(var prodId, user_id) async {
     var seeker = await ApiServices.getDisProduct(page_num, user_id, prodId);
     if (seeker != null) {
       isDataProcessing(true);
@@ -445,6 +447,7 @@ class PropertyController extends GetxController {
     required String propsYoutubeId,
     required String propsId,
     required PropertyModel model,
+    required String user_id,
   }) async {
     bool status = await ApiServices.editBasicDetail(
       propsName: propsName,
@@ -462,7 +465,7 @@ class PropertyController extends GetxController {
       props_mode: props_mode,
       propsYoutubeId: propsYoutubeId,
       propsId: propsId,
-      user_id: user_id!,
+      user_id: user_id,
     );
 
     bool statusType;
@@ -485,13 +488,14 @@ class PropertyController extends GetxController {
     required String propsCautionFee,
     required String selectedPref,
     required String propsId,
+    required String user_id,
   }) async {
     bool status = await ApiServices.editExtraDetail(
       propsCondition: propsCondition,
       propsCautionFee: propsCautionFee,
       selectedPref: selectedPref,
       propsId: propsId,
-      user_id: user_id!,
+      user_id: user_id,
     );
 
     bool statusType;
@@ -535,6 +539,7 @@ class PropertyController extends GetxController {
     required bool fireplace,
     required bool hot_tub,
     required String propsId,
+    required String user_id,
   }) async {
     bool status = await ApiServices.editAmenties(
       air_condition: air_condition,
@@ -562,7 +567,7 @@ class PropertyController extends GetxController {
       fireplace: fireplace,
       hot_tub: hot_tub,
       propsId: propsId,
-      user_id: user_id!,
+      user_id: user_id,
     );
 
     bool statusType;
@@ -589,6 +594,7 @@ class PropertyController extends GetxController {
     required String mosque,
     required String school,
     required String propsId,
+    required String user_id,
   }) async {
     // print('here');
     bool? status = await ApiServices.editFacilities(
@@ -600,7 +606,7 @@ class PropertyController extends GetxController {
       mosque: mosque,
       school: school,
       propsId: propsId,
-      user_id: user_id!,
+      user_id: user_id,
     );
 
     bool statusType;
@@ -626,6 +632,7 @@ class PropertyController extends GetxController {
     required String education,
     required String health,
     required String propsId,
+    required String user_id,
   }) async {
     bool status = await ApiServices.editValuation(
       crime: crime,
@@ -634,7 +641,7 @@ class PropertyController extends GetxController {
       education: education,
       health: health,
       propsId: propsId,
-      user_id: user_id!,
+      user_id: user_id,
     );
 
     bool statusType;

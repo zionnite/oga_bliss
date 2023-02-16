@@ -34,6 +34,8 @@ class _DashboardPageState extends State<DashboardPage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+
+      await dashController.getCounters(user_id, admin_status, user_status);
     }
   }
 

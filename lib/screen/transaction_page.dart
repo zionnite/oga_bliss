@@ -34,6 +34,8 @@ class _TransactionPageState extends State<TransactionPage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+
+      await transController.fetchTransaction(1, user_id, admin_status);
     }
   }
 
@@ -73,7 +75,7 @@ class _TransactionPageState extends State<TransactionPage> {
         current_page++;
       });
 
-      transController.fetchTransactionMore(current_page);
+      transController.fetchTransactionMore(current_page, user_id, admin_status);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {

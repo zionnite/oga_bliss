@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:oga_bliss/controller/dashboard_controller.dart';
+import 'package:oga_bliss/controller/redirect_controller.dart';
 import 'package:oga_bliss/screen/front/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +33,7 @@ void main() async {
   Get.put(WalletController());
   Get.put(UsersController());
   Get.put(DashboardController());
+  Get.put(RedirectController());
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var isUserLogin = prefs.getBool('isUserLogin');
@@ -39,16 +41,49 @@ void main() async {
   var userId1 = prefs.getString('user_id');
   var demoStatus = prefs.getBool("displayShowCase");
   runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp(
-        isUserLogin: isUserLogin,
-        isFirstTIme: isFirstTime,
-        userId: userId1,
-        demoStatus: demoStatus,
+    RestartWidget(
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyApp(
+          isUserLogin: isUserLogin,
+          isFirstTIme: isFirstTime,
+          userId: userId1,
+          demoStatus: demoStatus,
+        ),
       ),
     ),
   );
+}
+
+class RestartWidget extends StatefulWidget {
+  RestartWidget({required this.child});
+
+  final Widget child;
+
+  static void restartApp(BuildContext context) {
+    context.findAncestorStateOfType<_RestartWidgetState>()!.restartApp();
+  }
+
+  @override
+  State<RestartWidget> createState() => _RestartWidgetState();
+}
+
+class _RestartWidgetState extends State<RestartWidget> {
+  Key key = UniqueKey();
+
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyedSubtree(
+      key: key,
+      child: widget.child,
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {

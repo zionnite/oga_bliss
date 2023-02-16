@@ -149,7 +149,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
           padding: padding.add(const EdgeInsets.symmetric(vertical: 40)),
           child: Row(
             children: [
-              CircleAvatar(radius: 30, backgroundImage: NetworkImage(urlImage)),
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
+                  urlImage,
+                ),
+              ),
               const SizedBox(width: 20),
               Flexible(
                 child: Column(
@@ -182,7 +187,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       );
 
   Widget adminWidget() {
-    return (admin_status!)
+    return (admin_status == true)
         ? Column(
             children: [
               const SizedBox(height: 24),
@@ -207,17 +212,21 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget usersWidget() {
-    return (!admin_status!)
+    return (admin_status == false)
         ? Column(
             children: [
-              const SizedBox(height: 24),
-              buildMenuItem(
-                text: 'Product',
-                icon: Icons.shopping_bag,
-                onClicked: () => Get.to(
-                  () => const ProductPropertyPage(),
-                ),
-              ),
+              (user_status == 'agent' || user_status == 'landlord')
+                  ? const SizedBox(height: 24)
+                  : Container(),
+              (user_status == 'agent' || user_status == 'landlord')
+                  ? buildMenuItem(
+                      text: 'Product',
+                      icon: Icons.shopping_bag,
+                      onClicked: () => Get.to(
+                        () => const ProductPropertyPage(),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 16),
               buildMenuItem(
                 text: 'Wallet',
@@ -240,7 +249,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget bottomWidget() {
-    return (!admin_status!)
+    return (admin_status == false)
         ? Column(
             children: [
               const SizedBox(height: 24),

@@ -23,7 +23,7 @@ class PropertyKey extends StatelessWidget {
           Text(
             propsKey,
             style: const TextStyle(
-              fontSize: 20,
+              fontSize: 15,
             ),
           ),
         ],

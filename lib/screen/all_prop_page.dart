@@ -40,6 +40,8 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
         admin_status = admin_status1;
         isUserLogin = isUserLogin1;
       });
+
+      await propsController.getDetails(user_id);
     }
   }
 

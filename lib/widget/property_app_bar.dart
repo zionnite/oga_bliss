@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/controller/alert_controller.dart';
+import 'package:oga_bliss/controller/chat_head_controller.dart';
 import 'package:oga_bliss/screen/alert_page.dart';
 import 'package:oga_bliss/screen/message_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +19,8 @@ class PropertyAppBar extends StatefulWidget {
 }
 
 class _PropertyAppBarState extends State<PropertyAppBar> {
+  final alertController = AlertController().getXID;
+  final chController = ChatHeadController().getXID;
   String? user_id;
   String? user_status;
   bool? admin_status;
@@ -34,10 +40,18 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
     }
   }
 
+  Timer? timer;
+
   @override
   void initState() {
     initUserDetail();
     super.initState();
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => checkForUpdate());
+  }
+
+  checkForUpdate() async {
+    await alertController.checkForUpdate(user_id);
+    await chController.checkForUpdate(user_id);
   }
 
   @override
@@ -87,25 +101,54 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
                 onTap: () {
                   Get.to(() => const AlertPage());
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(30),
+                child: Stack(children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(30),
+                      ),
+                      border: Border.all(
+                        color: Colors.blue.shade100,
+                      ),
                     ),
-                    border: Border.all(
-                      color: Colors.blue.shade100,
+                    child: const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Icon(
+                        Icons.notifications_sharp,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: Icon(
-                      Icons.notifications_sharp,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                  Obx(
+                    () => (alertController.alertCounter > 0)
+                        ? Positioned(
+                            top: 3,
+                            right: 2,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 2,
+                                horizontal: 1,
+                              ),
+                              child: Text(
+                                '${alertController.alertCounter}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ),
-                ),
+                ]),
               ),
               const SizedBox(
                 width: 10,
@@ -116,25 +159,54 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
                       onTap: () {
                         Get.to(() => const MessagePage());
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(30),
+                      child: Stack(children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(30),
+                            ),
+                            border: Border.all(
+                              color: Colors.blue.shade100,
+                            ),
                           ),
-                          border: Border.all(
-                            color: Colors.blue.shade100,
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: Icon(
+                              Icons.message,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(4.0),
-                          child: Icon(
-                            Icons.message,
-                            color: Colors.white,
-                            size: 20,
-                          ),
+                        Obx(
+                          () => (chController.msgCounter > 0)
+                              ? Positioned(
+                                  top: 3,
+                                  right: 2,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 2,
+                                      horizontal: 1,
+                                    ),
+                                    child: Text(
+                                      '${chController.msgCounter}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ),
-                      ),
+                      ]),
                     ),
             ],
           ),
@@ -157,5 +229,11 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 }

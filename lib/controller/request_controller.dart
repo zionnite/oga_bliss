@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/request_model.dart';
 import '../services/api_services.dart';
@@ -14,19 +13,19 @@ class RequestController extends GetxController {
   var isMoreDataAvailable = true.obs;
   var requestList = <RequestModel>[].obs;
 
-  String? user_id;
-  bool? admin_status;
+  // String? user_id;
+  // bool? admin_status;
 
   @override
   void onInit() async {
     super.onInit();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = prefs.getString('user_id');
-    admin_status = prefs.getBool('admin_status');
-    await fetchRequest(page_num);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // user_id = prefs.getString('user_id');
+    // admin_status = prefs.getBool('admin_status');
+    // await fetchRequest(page_num);
   }
 
-  fetchRequest(pageNum) async {
+  fetchRequest(pageNum, user_id, admin_status) async {
     var seeker = await ApiServices.getRequest(pageNum, user_id, admin_status);
     if (seeker != null) {
       isDataProcessing(true);
@@ -36,7 +35,7 @@ class RequestController extends GetxController {
     }
   }
 
-  fetchRequestMore(pageNum) async {
+  fetchRequestMore(pageNum, user_id, admin_status) async {
     var seeker = await ApiServices.getRequest(pageNum, user_id, admin_status);
     if (seeker != null) {
       isDataProcessing(true);
@@ -69,6 +68,7 @@ class RequestController extends GetxController {
     required String disUserId,
     required String agentId,
     required String propsId,
+    required String user_id,
   }) async {
     String status = await ApiServices.setRequestSetup(
       id: id,
@@ -76,7 +76,7 @@ class RequestController extends GetxController {
       disUserId: disUserId,
       agentId: agentId,
       propsId: propsId,
-      user_id: user_id!,
+      user_id: user_id,
     );
 
     bool? status_type;

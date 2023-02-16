@@ -20,7 +20,7 @@ class HeaderTitle extends StatelessWidget {
             child: Text(
               '-$title-',
               style: const TextStyle(
-                fontSize: 25,
+                fontSize: 18,
                 fontFamily: 'Passion One',
               ),
             ),
@@ -38,7 +38,7 @@ class HeaderTitle extends StatelessWidget {
                 Text(
                   '$title',
                   style: const TextStyle(
-                    fontSize: 25,
+                    fontSize: 18,
                     fontFamily: 'Passion One',
                   ),
                 ),

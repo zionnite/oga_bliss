@@ -122,7 +122,7 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         child: Text(
                           'Region and Area',
                           style: TextStyle(
-                            // fontSize: 18,
+                            fontSize: 12,
                             fontFamily: 'RubikMonoOne-Regular',
                           ),
                         ),
@@ -213,7 +213,7 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         child: Text(
                           'Property Types',
                           style: TextStyle(
-                            // fontSize: 18,
+                            fontSize: 12,
                             fontFamily: 'RubikMonoOne-Regular',
                           ),
                         ),
@@ -272,12 +272,13 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         child: Text(
                           'Price',
                           style: TextStyle(
-                            // fontSize: 18,
+                            fontSize: 12,
                             fontFamily: 'RubikMonoOne-Regular',
                           ),
                         ),
                       ),
                       RangeSlider(
+
                         min: 5000,
                         max: 90000000,
                         divisions: 100000,

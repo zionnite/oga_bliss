@@ -50,11 +50,14 @@ class messageWidget extends StatelessWidget {
                           right: 0,
                           child: Container(
                             decoration: const BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                              color: Colors.blue,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
                             padding: const EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 8),
+                              vertical: 2,
+                              horizontal: 8,
+                            ),
                             child: Text(
                               counter,
                               style: const TextStyle(color: Colors.white),

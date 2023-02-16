@@ -37,6 +37,10 @@ class _ManagePropertyState extends State<ManageProperty> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+      await propsController.manageProduct(user_id, 'all');
+      await propsController.manageProduct(user_id, 'pending');
+      await propsController.manageProduct(user_id, 'approved');
+      await propsController.manageProduct(user_id, 'rejected');
     }
   }
 

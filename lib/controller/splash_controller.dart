@@ -26,17 +26,18 @@ class SplashController extends GetxController {
       var userId1 = prefs.getString('user_id');
       var demoStatus = prefs.getBool("displayShowCase");
 
+      // print('iS FIRST TIME $isFirstTime');
       if (isFirstTime == null) {
-        Get.offAll(() => OnboardingPage());
+        return Get.offAll(() => OnboardingPage());
       }
 
       if (isUserLogin != null) {
-        Get.offAll(() => const HomePage());
+        return Get.offAll(() => const HomePage());
       } else {
         if (isGuestLogin != null) {
-          Get.offAll(() => const HomePage());
+          return Get.offAll(() => const HomePage());
         } else {
-          Get.to(() => const WelcomePage());
+          return Get.to(() => const WelcomePage());
         }
       }
     }

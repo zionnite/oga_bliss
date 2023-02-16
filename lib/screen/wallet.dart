@@ -39,6 +39,8 @@ class _WalletPageState extends State<WalletPage> {
         user_status = user_status1;
         admin_status = admin_status1;
       });
+
+      await walletController.fetchWallet(1, user_id, user_status);
     }
   }
 
@@ -80,7 +82,7 @@ class _WalletPageState extends State<WalletPage> {
         current_page++;
       });
 
-      walletController.fetchWalletMore(current_page);
+      walletController.fetchWalletMore(current_page, user_id, user_status);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {

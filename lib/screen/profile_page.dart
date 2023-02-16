@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,12 +8,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/screen/front/login_page.dart';
-import 'package:oga_bliss/widget/profile_item.dart';
 import 'package:oga_bliss/widget/property_btn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../widget/property_key.dart';
 import 'edit_profile.dart';
-import 'verify_bank.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -80,18 +80,29 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   bool isLoading = false;
+  bool isEditing = false;
+  bool isVerify = false;
   final String width = '';
   File? _image;
   Future _pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
+      if (image == null) {
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
       File? img = File(image.path);
 
       setState(() {
         _image = img;
       });
-    } on PlatformException catch (e) {}
+    } on PlatformException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -103,6 +114,28 @@ class _ProfilePageState extends State<ProfilePage> {
   void logoutUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("isUserLogin");
+    prefs.remove("user_id");
+    prefs.remove("user_name");
+    prefs.remove("full_name");
+    prefs.remove("email");
+    prefs.remove("image_name");
+    prefs.remove("user_status");
+    prefs.remove("phone");
+    prefs.remove("age");
+    prefs.remove("sex");
+    prefs.remove("address");
+    prefs.remove("date_created");
+    prefs.remove("account_name");
+    prefs.remove("account_number");
+    prefs.remove("bank_name");
+    prefs.remove("bank_code");
+    prefs.remove("current_balance");
+    prefs.remove("prop_counter");
+    prefs.remove("admin_status");
+    prefs.remove("isbank_verify");
+    prefs.remove("login_status");
+    prefs.remove("isGuestLogin");
+
     Get.offAll(
       () => const LoginPage(),
       transition: Transition.rightToLeftWithFade,
@@ -116,16 +149,212 @@ class _ProfilePageState extends State<ProfilePage> {
       //   title: Text('Profile'),
       //   automaticallyImplyLeading: false,
       // ),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.blue.shade50,
       body: SingleChildScrollView(
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 190.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+            Stack(
+              children: [
+                Container(
+                  height: 280,
+                  decoration: const BoxDecoration(
+                    color: Colors.deepOrange,
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/a.jpeg'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Colors.black.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                ),
+                Stack(children: [
+                  Card(
+                    elevation: 5,
+                    margin: const EdgeInsets.only(
+                      top: 310,
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 40, left: 15),
+                            child: const Text(
+                              'Full Name',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Passion One',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PropertyKey(
+                            propsKey: '$full_name',
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Divider(height: 1, color: Colors.grey),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10, left: 15),
+                            child: const Text(
+                              'Email',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Passion One',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PropertyKey(
+                            propsKey: '$email',
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Divider(height: 1, color: Colors.grey),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10, left: 15),
+                            child: const Text(
+                              'Age',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Passion One',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PropertyKey(
+                            propsKey: '$age',
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Divider(height: 1, color: Colors.grey),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10, left: 15),
+                            child: const Text(
+                              'Gender',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Passion One',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PropertyKey(
+                            propsKey: '$sex',
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    elevation: 5,
+                    margin: const EdgeInsets.only(
+                        top: 630, left: 10, right: 10, bottom: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, left: 15),
+                          child: const Text(
+                            'Bank Name',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Passion One',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        PropertyKey(
+                          propsKey: '$bankName',
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Divider(height: 1, color: Colors.grey),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, left: 15),
+                          child: const Text(
+                            'Account Number',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Passion One',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        PropertyKey(
+                          propsKey: '$accountNum',
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Divider(height: 1, color: Colors.grey),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, left: 15),
+                          child: const Text(
+                            'Account Name',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Passion One',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        PropertyKey(
+                          propsKey: '$accountName',
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
+                    ),
+                  ),
                   Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(top: 210),
@@ -153,7 +382,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 : Container(),
                           ),
                           Positioned(
-                            bottom: 5,
+                            top: 5,
                             right: 4,
                             child: InkWell(
                               onTap: () async {
@@ -200,201 +429,81 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 28.0),
-                    child: Text(
-                      '$full_name',
-                      style: const TextStyle(
-                        fontSize: 30.0,
-                        fontFamily: 'Pacifico',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 28.0),
-                    child: Text(
-                      '$user_status'.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontFamily: 'SourceSansPro',
-                        color: Colors.teal.shade100,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.5,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 28.0),
-                    child: SizedBox(
-                      height: 20.0,
-                      width: 150,
-                      child: Divider(
-                        color: Colors.teal.shade100,
-                      ),
-                    ),
-                  ),
-                  ProfileItem(
+                ]),
+                Positioned(
+                  top: 60,
+                  right: 15,
+                  child: IconButton(
+                    onPressed: () {
+                      logoutUser();
+                    },
                     icon: const Icon(
-                      Icons.phone,
-                      color: Colors.blue,
-                    ),
-                    name: '$phone',
-                  ),
-                  ProfileItem(
-                    icon: const Icon(
-                      Icons.email,
-                      color: Colors.blue,
-                    ),
-                    name: '$email',
-                  ),
-                  ProfileItem(
-                    icon: const Icon(
-                      Icons.star_sharp,
-                      color: Colors.blue,
-                    ),
-                    name: '$age',
-                  ),
-                  ProfileItem(
-                    icon: const Icon(
-                      Icons.accessibility_new,
-                      color: Colors.blue,
-                    ),
-                    name: '$sex',
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: propertyBtn(
-                      onTap: () {
-                        Get.to(() => const EditProfile());
-                      },
-                      title: 'Edit Profile',
-                      bgColor: Colors.blue.shade700,
+                      Icons.logout_sharp,
+                      color: Colors.white,
+                      size: 25,
                     ),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 28.0),
-                    child: Text(
-                      'Bank Details',
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontFamily: 'Pacifico',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 28.0),
-                    child: SizedBox(
-                      height: 20.0,
-                      width: 150,
-                      child: Divider(
-                        color: Colors.teal.shade100,
-                      ),
-                    ),
-                  ),
-                  ProfileItem(
-                    icon: const Icon(
-                      Icons.food_bank,
-                      color: Colors.blue,
-                    ),
-                    name: '$accountName',
-                  ),
-                  ProfileItem(
-                    icon: const Icon(
-                      Icons.food_bank,
-                      color: Colors.blue,
-                    ),
-                    name: '$bankName - $accountNum',
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: propertyBtn(
-                          onTap: () {
-                            Get.to(() => const VerifyBank());
-                          },
-                          title: 'Edit Bank Detail',
-                          bgColor: Colors.blue.shade700,
-                          card_margin: const EdgeInsets.only(
-                            left: 15,
-                            right: 15,
-                            bottom: 0,
-                            top: 20,
-                          ),
-                        ),
-                      ),
-                      (isbank_verify == 'yes')
-                          ? Container()
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: propertyBtn(
-                                onTap: () async {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-
-                                  bool status =
-                                      await usersController.verifyBank(
-                                    accountNum: accountNum!,
-                                    bankCode: bankCode!,
-                                    my_id: user_id!,
-                                  );
-
-                                  if (status || !status) {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  }
-
-                                  if (status) {
-                                    SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    prefs.setString('isbank_verify', 'yes');
-
-                                    setState(() {
-                                      isbank_verify = 'yes';
-                                    });
-                                  }
-                                },
-                                title: 'Verify Bank',
-                                bgColor: Colors.blue.shade700,
-                                isLoading: isLoading,
-                              ),
-                            ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: 60,
-              right: 20,
-              child: IconButton(
-                onPressed: () {
-                  logoutUser();
-                },
-                icon: const Icon(
-                  Icons.logout_sharp,
-                  color: Colors.white,
-                  size: 25,
                 ),
+              ],
+            ),
+            propertyBtn(
+              onTap: () {
+                Get.to(() => const EditProfile());
+              },
+              title: 'Edit Profile',
+              bgColor: Colors.blue.shade700,
+              card_margin: const EdgeInsets.only(
+                top: 8,
+                bottom: 1,
+                right: 8,
+                left: 8,
               ),
             ),
+            (isbank_verify == 'yes')
+                ? const SizedBox(
+                    height: 150,
+                  )
+                : Container(),
+            (isbank_verify == 'yes')
+                ? Container()
+                : propertyBtn(
+                    onTap: () async {
+                      setState(() {
+                        isVerify = true;
+                      });
+
+                      bool status = await usersController.verifyBank(
+                        accountNum: accountNum!,
+                        bankCode: bankCode!,
+                        my_id: user_id!,
+                      );
+
+                      if (status || !status) {
+                        setState(() {
+                          isVerify = false;
+                        });
+                      }
+
+                      if (status) {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setString('isbank_verify', 'yes');
+
+                        setState(() {
+                          isbank_verify = 'yes';
+                        });
+                      }
+                    },
+                    title: 'Verify Bank',
+                    bgColor: Colors.blue.shade700,
+                    isLoading: isVerify,
+                    card_margin: const EdgeInsets.only(
+                      top: 8,
+                      bottom: 150,
+                      right: 8,
+                      left: 8,
+                    ),
+                  ),
           ],
         ),
       ),

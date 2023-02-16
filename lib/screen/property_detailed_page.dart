@@ -6,6 +6,7 @@ import 'package:oga_bliss/util/currency_formatter.dart';
 import 'package:oga_bliss/widget/header_title.dart';
 import 'package:oga_bliss/widget/property_key_and_value.dart';
 import 'package:popup_banner/popup_banner.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/favourite_controller.dart';
 import '../controller/property_controller.dart';
@@ -27,7 +28,25 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   final propsController = PropertyController().getXID;
   final favController = FavouriteController().getXID;
 
-  String user_id = '1';
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
   bool isLoading = false;
   List<String> images = [];
 
@@ -41,6 +60,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
 
   @override
   void initState() {
+    initUserDetail();
     super.initState();
     loopSlider();
   }
@@ -145,6 +165,26 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       width: double.infinity,
                       height: 350,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/a.jpeg',
+                          fit: BoxFit.fitWidth,
+                        );
+                      },
+                      loadingBuilder: (context, Widget child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return SizedBox(
+                          height: 300,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     Positioned(
                       top: 60,
@@ -188,11 +228,11 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                           InkWell(
                             onTap: () async {
                               bool status = await propsController.toggleLike(
-                                user_id,
-                                widget.propertyModel!.propsId,
-                                widget.propertyModel!,
-                                widget.route,
-                              );
+                                  user_id,
+                                  widget.propertyModel!.propsId,
+                                  widget.propertyModel!,
+                                  widget.route,
+                                  user_status);
 
                               setState(() {
                                 props!.favourite = status;

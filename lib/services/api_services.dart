@@ -78,6 +78,8 @@ class ApiServices {
   static const String _update_profile_image = 'update_profile_image';
   static const String _verify_bank_account = 'verify_bank_account';
   static const String _count_dashboard = 'count_dashboard';
+  static const String _count_alert = 'count_alert';
+  static const String _count_msg = 'count_msg';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -1901,9 +1903,10 @@ class ApiServices {
           prefs.setString('current_balance', current_balance);
           prefs.setString('login_status', login_status);
           prefs.setString('prop_counter', prop_counter);
-          prefs.setBool('isUserLogin', true);
           prefs.setBool('admin_status', admin_status);
           prefs.setString('isbank_verify', isbank_verify);
+          prefs.setBool('isUserLogin', true);
+          prefs.setBool('tempLoginStatus', true);
 
           return 'true';
         } else {
@@ -2326,6 +2329,60 @@ class ApiServices {
         // var body = result.body;
         // final data = dashboardModelToJson(json.decode(body));
         // return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
+    }
+  }
+
+  static Future countUnreadAlert(var userId) async {
+    try {
+      final result =
+          await client.get(Uri.parse('$_mybaseUrl$_count_alert/$userId'));
+
+      if (result.statusCode == 200) {
+        final j = json.decode(result.body) as Map<String, dynamic>;
+        int status = j['count_alert'];
+
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
+    }
+  }
+
+  static Future countUnreadMsg(var userId) async {
+    try {
+      final result =
+          await client.get(Uri.parse('$_mybaseUrl$_count_msg/$userId'));
+
+      if (result.statusCode == 200) {
+        final j = json.decode(result.body) as Map<String, dynamic>;
+        int status = j['count_msg'];
+
+        return status;
       } else {
         return showSnackBar(
           title: 'Oops!',

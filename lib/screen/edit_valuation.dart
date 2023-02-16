@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/model/property_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
 import '../model/property_type_model.dart';
@@ -95,8 +96,28 @@ class _EditValuationState extends State<EditValuation> {
 
   bool isLoading = false;
 
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+      });
+    }
+  }
+
   @override
   void initState() {
+    initUserDetail();
     super.initState();
     populateDropDown();
     setState(() {
@@ -262,6 +283,7 @@ class _EditValuationState extends State<EditValuation> {
               education: educationController.text,
               health: healthController.text,
               propsId: widget.model.propsId!,
+              user_id: user_id!,
             );
 
             // if (status) {

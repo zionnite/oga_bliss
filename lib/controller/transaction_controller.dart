@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/transaction_model.dart';
 import '../services/api_services.dart';
@@ -12,19 +11,19 @@ class TransactionController extends GetxController {
   var isMoreDataAvailable = true.obs;
   var transactionList = <TransactionModel>[].obs;
 
-  String? user_id;
-  bool? admin_status;
+  // String? user_id;
+  // bool? admin_status;
 
   @override
   void onInit() async {
     super.onInit();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    user_id = prefs.getString('user_id');
-    admin_status = prefs.getBool('admin_status');
-    await fetchTransaction(page_num);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // user_id = prefs.getString('user_id');
+    // admin_status = prefs.getBool('admin_status');
+    // await fetchTransaction(page_num);
   }
 
-  fetchTransaction(pageNum) async {
+  fetchTransaction(pageNum, user_id, admin_status) async {
     var seeker =
         await ApiServices.getTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {
@@ -35,7 +34,7 @@ class TransactionController extends GetxController {
     }
   }
 
-  fetchTransactionMore(pageNum) async {
+  fetchTransactionMore(pageNum, user_id, admin_status) async {
     var seeker =
         await ApiServices.getTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {

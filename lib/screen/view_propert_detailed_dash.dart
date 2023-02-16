@@ -43,6 +43,7 @@ class _ViewPropertyDetailedDashboardState
         user_status = user_status1;
         admin_status = admin_status1;
       });
+      propsController.getDisProduct(widget.propsId, user_id);
     }
   }
 
@@ -75,7 +76,6 @@ class _ViewPropertyDetailedDashboardState
     });
 
     // print(widget.propsId);
-    propsController.getDisProduct(widget.propsId);
   }
 
   void showPropertyImage() {
@@ -204,6 +204,29 @@ class _ViewPropertyDetailedDashboardState
                             width: double.infinity,
                             height: 350,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/images/a.jpeg',
+                                fit: BoxFit.fitWidth,
+                              );
+                            },
+                            loadingBuilder:
+                                (context, Widget child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return SizedBox(
+                                height: 300,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                           Positioned(
                             top: 60,
@@ -252,6 +275,7 @@ class _ViewPropertyDetailedDashboardState
                                       props.propsId.toString(),
                                       props,
                                       widget.route,
+                                      user_status,
                                     );
 
                                     setState(() {
