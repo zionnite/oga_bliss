@@ -7,6 +7,8 @@ class MyTextFieldIcon extends StatefulWidget {
     this.onChange,
     this.prefix,
     this.suffix,
+    this.enableDisable = true,
+    this.isPassword = false,
   });
 
   final TextEditingController myTextFormController;
@@ -14,6 +16,8 @@ class MyTextFieldIcon extends StatefulWidget {
   final ValueChanged<String>? onChange;
   final IconData? prefix;
   final IconData? suffix;
+  final bool enableDisable;
+  final bool isPassword;
 
   @override
   State<MyTextFieldIcon> createState() => _MyTextFieldIconState();
@@ -25,6 +29,7 @@ class _MyTextFieldIconState extends State<MyTextFieldIcon> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: TextFormField(
+        obscureText: widget.isPassword,
         onChanged: widget.onChange,
         controller: widget.myTextFormController,
         decoration: InputDecoration(
@@ -41,6 +46,7 @@ class _MyTextFieldIconState extends State<MyTextFieldIcon> {
           suffixIcon: (widget.suffix != '' && widget.suffix != null)
               ? Icon(widget.suffix)
               : null,
+          enabled: widget.enableDisable,
         ),
       ),
     );

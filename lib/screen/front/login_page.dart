@@ -63,7 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                       myTextFormController: passwordController,
                       fieldName: 'Password',
                       prefix: Icons.key_sharp,
-                      suffix: Icons.remove_red_eye,
+                      isPassword: true,
+                      // suffix: Icons.remove_red_eye,
                     ),
                     const SizedBox(
                       height: 15,

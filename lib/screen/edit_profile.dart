@@ -33,12 +33,15 @@ class _EditProfileState extends State<EditProfile> {
     var userId1 = prefs.getString('user_id');
     var user_status1 = prefs.getString('user_status');
     var admin_status1 = prefs.getBool('admin_status');
+    var email1 = prefs.getString('email');
 
     if (mounted) {
       setState(() {
         user_id = userId1;
         user_status = user_status1;
         admin_status = admin_status1;
+
+        emailController.text = email1!;
       });
     }
   }
@@ -80,6 +83,7 @@ class _EditProfileState extends State<EditProfile> {
                     myTextFormController: emailController,
                     fieldName: 'Email Address',
                     prefix: Icons.email,
+                    enableDisable: false,
                   ),
                   const SizedBox(
                     height: 10,
@@ -102,7 +106,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   MyDropDownField(
                     prefix: Icons.accessibility_new,
-                    labelText: 'Property Purpose',
+                    labelText: 'Gender',
                     value: sex,
                     dropDownList: List.generate(
                       _genderSelected.length,

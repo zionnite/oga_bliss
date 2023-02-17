@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/screen/front/login_page.dart';
 import 'package:oga_bliss/util/common.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/users_model.dart';
 import '../services/api_services.dart';
@@ -315,6 +317,44 @@ class UsersController extends GetxController {
           'Could not verify bank account detail, pls try updating your bank details and come try again';
       showSnackBar(title: 'Oops', msg: msg, backgroundColor: Colors.blue);
       return false;
+    }
+  }
+
+  void logoutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("isUserLogin");
+    prefs.remove("user_id");
+    prefs.remove("user_name");
+    prefs.remove("full_name");
+    prefs.remove("email");
+    prefs.remove("image_name");
+    prefs.remove("user_status");
+    prefs.remove("phone");
+    prefs.remove("age");
+    prefs.remove("sex");
+    prefs.remove("address");
+    prefs.remove("date_created");
+    prefs.remove("account_name");
+    prefs.remove("account_number");
+    prefs.remove("bank_name");
+    prefs.remove("bank_code");
+    prefs.remove("current_balance");
+    prefs.remove("prop_counter");
+    prefs.remove("admin_status");
+    prefs.remove("isbank_verify");
+    prefs.remove("login_status");
+    prefs.remove("isGuestLogin");
+
+    Get.offAll(() => const LoginPage());
+  }
+
+  checkForUpdate(var userId) async {
+    bool seeker = await ApiServices.checkIfBan(userId);
+    if (seeker) {
+      String msg =
+          'Your account has violated what we stand for as a result, your account its now Ban. If you think this is a glitch, try writing us';
+      showSnackBar(title: 'Oops', msg: msg, backgroundColor: Colors.red);
+      logoutUser();
     }
   }
 }

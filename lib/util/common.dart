@@ -33,15 +33,19 @@ Gradient bgColorGradient = const LinearGradient(
   colors: [Colors.purpleAccent, Colors.purple],
 );
 
-showSnackBar(
-    {required String title,
-    required String msg,
-    required Color backgroundColor}) {
+showSnackBar({
+  required String title,
+  required String msg,
+  required Color backgroundColor,
+  Duration duration = const Duration(seconds: 3),
+}) {
   Get.snackbar(
     title,
     msg,
     backgroundColor: backgroundColor,
     colorText: Colors.white,
     snackPosition: SnackPosition.BOTTOM,
+    duration: duration,
+    // duration:
   );
 }

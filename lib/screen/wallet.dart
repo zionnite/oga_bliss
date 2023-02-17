@@ -154,7 +154,7 @@ class _WalletPageState extends State<WalletPage> {
                 onTap: () {
                   setState(() {
                     walletController.isWalletProcessing.value = 'null';
-                    walletController.fetchWalletMore(1, user_id, user_status);
+                    walletController.fetchWallet(1, user_id, user_status);
                     walletController.walletList.refresh();
                   });
                 },

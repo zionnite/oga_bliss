@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/screen/front/login_page.dart';
+import 'package:oga_bliss/screen/verify_bank.dart';
 import 'package:oga_bliss/widget/property_btn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -451,6 +452,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 Get.to(() => const EditProfile());
               },
               title: 'Edit Profile',
+              bgColor: Colors.blue.shade700,
+              card_margin: const EdgeInsets.only(
+                top: 8,
+                bottom: 1,
+                right: 8,
+                left: 8,
+              ),
+            ),
+            propertyBtn(
+              onTap: () {
+                Get.to(() => const VerifyBank());
+              },
+              title: 'Edit Bank Detail',
               bgColor: Colors.blue.shade700,
               card_margin: const EdgeInsets.only(
                 top: 8,

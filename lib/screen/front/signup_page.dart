@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
-import 'package:oga_bliss/home_page.dart';
+import 'package:oga_bliss/screen/front/term_n_condition.dart';
+import 'package:oga_bliss/util/common.dart';
 
 import '../../widget/my_textfield_icon.dart';
 import 'login_page.dart';
@@ -113,6 +114,28 @@ class _SignupPageState extends State<SignupPage> {
                         child: const Text('Already have Account?'),
                       ),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => Terms_N_Conditions()));
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 23.0, bottom: 8),
+                        alignment: const Alignment(1.0, 0.0),
+                        padding: const EdgeInsets.only(top: 15.0, left: 50.0),
+                        child: const InkWell(
+                          child: Text(
+                            'By clicking on the SignUp Button you agree to our Term & Condition',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontFamily: 'Trueno',
+                                fontSize: 11.0,
+                                decoration: TextDecoration.underline),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -152,7 +175,13 @@ class _SignupPageState extends State<SignupPage> {
                                 isLoading = false;
                               });
 
-                              Get.offAll(() => const HomePage());
+                              showSnackBar(
+                                  title: 'Action Needed',
+                                  msg:
+                                      'An email has been sent to you please Verify the email',
+                                  backgroundColor: Colors.blue,
+                                  duration: const Duration(seconds: 45));
+                              Get.offAll(() => const LoginPage());
                             } else {
                               setState(() {
                                 isLoading = false;

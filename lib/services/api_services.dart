@@ -81,6 +81,7 @@ class ApiServices {
   static const String _count_dashboard = 'count_dashboard';
   static const String _count_alert = 'count_alert';
   static const String _count_msg = 'count_msg';
+  static const String _checkIfBan = 'check_ifBan';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -2383,6 +2384,33 @@ class ApiServices {
       if (result.statusCode == 200) {
         final j = json.decode(result.body) as Map<String, dynamic>;
         int status = j['count_msg'];
+
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
+    }
+  }
+
+  static Future checkIfBan(var userId) async {
+    try {
+      final result =
+          await client.get(Uri.parse('$_mybaseUrl$_checkIfBan/$userId'));
+
+      if (result.statusCode == 200) {
+        final j = json.decode(result.body) as Map<String, dynamic>;
+        bool status = j['status'];
 
         return status;
       } else {

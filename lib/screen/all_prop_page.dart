@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/screen/front/welcome_page.dart';
 import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
@@ -21,6 +22,7 @@ class AllPropertyPage extends StatefulWidget {
 
 class _AllPropertyPageState extends State<AllPropertyPage> {
   final propsController = PropertyController().getXID;
+  final usersController = UsersController().getXID;
   late ScrollController _controller;
 
   String? user_id;
@@ -44,6 +46,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
       });
 
       await propsController.getDetails(user_id);
+      await usersController.checkForUpdate(user_id);
     }
   }
 
@@ -182,36 +185,43 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
 
   Widget detail() {
     return (propsController.propertyList.isEmpty)
-        ? Stack(children: [
-            const ShowNotFound(),
-            Positioned(
-              bottom: 10,
-              right: 10,
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    propsController.isHomeFetchProcessing.value = 'null';
-                    propsController.getDetails(user_id);
-                    propsController.propertyList.refresh();
-                  });
-                },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 20,
-                  ),
-                  child: const Icon(
-                    Icons.refresh,
-                    color: Colors.white,
+        ? Column(
+            children: [
+              const SizedBox(
+                height: 380,
+              ),
+              Stack(children: [
+                const ShowNotFound(),
+                Positioned(
+                  bottom: 0,
+                  right: 10,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        propsController.isHomeFetchProcessing.value = 'null';
+                        propsController.getDetails(user_id);
+                        propsController.propertyList.refresh();
+                      });
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 20,
+                      ),
+                      child: const Icon(
+                        Icons.refresh,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ])
+              ]),
+            ],
+          )
         : Column(
             children: [
               const SizedBox(
