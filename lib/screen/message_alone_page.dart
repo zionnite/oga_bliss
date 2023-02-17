@@ -46,18 +46,14 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
   int msg_id = 0;
 
   Future<Stream<Future<List>>> handleRefresh() async {
-    var res = await http.post(
-        Uri.parse('http://localhost:8888/ogalandlord/Api/get_chat_msg'),
-        body: {
-          'sender': widget.receiver,
-          'reciever': widget.sender,
-          'props_id': widget.propsId,
-        });
+    var res = await http
+        .post(Uri.parse('https://ogabliss.com/Api/get_chat_msg'), body: {
+      'sender': widget.receiver,
+      'reciever': widget.sender,
+      'props_id': widget.propsId,
+    });
 
-    // print('jsonBODY ${res.body}');
     var jsonx = json.decode(res.body);
-
-    // return jsonx;
 
     Stream<Future<List<dynamic>>> stream =
         Stream<Future<List<dynamic>>>.value(jsonx);
@@ -173,9 +169,6 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
                               agent_id = sender;
                             });
                           }
-
-                          print('my_id $my_id');
-                          print('agent id $agent_id');
 
                           String pay_link =
                               'https://ogabliss.com/Transaction/app_pay';
