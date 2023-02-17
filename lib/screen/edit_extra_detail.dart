@@ -250,18 +250,27 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
         child: Column(
           children: [
             const PropertyAppBar(title: 'Edit Property -Extra Detail'),
-            OrientationBuilder(
-              builder: (BuildContext context, Orientation orientation) {
-                switch (orientation) {
-                  case Orientation.portrait:
-                    return _buildStepper(StepperType.vertical);
-                  case Orientation.landscape:
-                    return _buildStepper(StepperType.horizontal);
-                  default:
-                    throw UnimplementedError(orientation.toString());
-                }
-              },
-            ),
+            (isLoading)
+                ? Center(
+                    child: Container(
+                      child: LoadingAnimationWidget.inkDrop(
+                        size: 200,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  )
+                : OrientationBuilder(
+                    builder: (BuildContext context, Orientation orientation) {
+                      switch (orientation) {
+                        case Orientation.portrait:
+                          return _buildStepper(StepperType.vertical);
+                        case Orientation.landscape:
+                          return _buildStepper(StepperType.horizontal);
+                        default:
+                          throw UnimplementedError(orientation.toString());
+                      }
+                    },
+                  ),
           ],
         ),
       ),
@@ -323,39 +332,29 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
       },
       controlsBuilder: (context, ControlsDetails) {
         final isLastStep = _activeStepIndex == stepList().length - 1;
-        return (isLoading)
-            ? Center(
-                child: Container(
-                  child: LoadingAnimationWidget.inkDrop(
-                    size: 200,
-                    color: Colors.blue,
+        return Container(
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: ControlsDetails.onStepContinue,
+                  child:
+                      (isLastStep) ? const Text('Submit') : const Text('Next'),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              if (_activeStepIndex > 0)
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: ControlsDetails.onStepCancel,
+                    child: const Text('Back'),
                   ),
-                ),
-              )
-            : Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: ControlsDetails.onStepContinue,
-                        child: (isLastStep)
-                            ? const Text('Submit')
-                            : const Text('Next'),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    if (_activeStepIndex > 0)
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: ControlsDetails.onStepCancel,
-                          child: const Text('Back'),
-                        ),
-                      )
-                  ],
-                ),
-              );
+                )
+            ],
+          ),
+        );
       },
     );
   }

@@ -100,6 +100,7 @@ class _WalletPageState extends State<WalletPage> {
           const PropertyAppBar(title: 'Wallet'),
           Expanded(
             child: SingleChildScrollView(
+              controller: _controller,
               child: Column(
                 children: [
                   NoticeMe(
@@ -175,7 +176,6 @@ class _WalletPageState extends State<WalletPage> {
             ),
           ])
         : Obx(() => ListView.builder(
-              controller: _controller,
               padding: const EdgeInsets.only(bottom: 120),
               key: const PageStorageKey<String>('allWallet'),
               physics: const ClampingScrollPhysics(),

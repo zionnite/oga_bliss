@@ -4,6 +4,8 @@ import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/tab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:oga_bliss/screen/favourite.dart';
+import 'package:oga_bliss/screen/not_login_page.dart';
+import 'package:oga_bliss/screen/not_user_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controller/property_controller.dart';
@@ -31,12 +33,34 @@ class _HomePageState extends State<HomePage> {
   int android = 30;
   int ios = 30;
 
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+  bool? guestStatus;
+  bool? loginStatus;
+
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var tempLoginStatus = prefs.getBool("tempLoginStatus");
 
     if (tempLoginStatus == true) {
       prefs.remove("tempLoginStatus");
+    }
+
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+    var isGuestLogin = prefs.getBool('isGuestLogin');
+    var isUserLogin = prefs.getBool('isUserLogin');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+        guestStatus = isGuestLogin;
+        loginStatus = isUserLogin;
+      });
     }
   }
 
@@ -88,9 +112,9 @@ class _HomePageState extends State<HomePage> {
                 s_key: _key,
               ),
               const SearchAlonePage(),
-              const FavouritePage(),
+              FavouriteToView(),
               // RentPropertyPage(),
-              const ProfilePage()
+              ProfileToView()
             ],
           ),
           Align(
@@ -141,5 +165,21 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Widget FavouriteToView() {
+    if (user_status == 'user') {
+      return const FavouritePage();
+    } else {
+      return const NotUserPage();
+    }
+  }
+
+  Widget ProfileToView() {
+    if (loginStatus != null) {
+      return const ProfilePage();
+    } else {
+      return const NotLoginPage();
+    }
   }
 }

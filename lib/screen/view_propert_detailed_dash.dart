@@ -268,123 +268,138 @@ class _ViewPropertyDetailedDashboardState
                                 ],
                               ),
                             ),
-                            Positioned(
-                              top: 57,
-                              right: 15,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    onTap: () async {
-                                      bool status =
-                                          await propsController.toggleLike(
-                                        user_id,
-                                        props.propsId.toString(),
-                                        props,
-                                        widget.route,
-                                        user_status,
-                                      );
+                            (user_status == 'user')
+                                ? Positioned(
+                                    top: 57,
+                                    right: 15,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          onTap: () async {
+                                            bool status = await propsController
+                                                .toggleLike(
+                                              user_id,
+                                              props.propsId.toString(),
+                                              props,
+                                              widget.route,
+                                              user_status,
+                                            );
 
-                                      setState(() {
-                                        props.favourite = status;
-                                        if (widget.route == 'default') {
-                                          int index = propsController
-                                              .propertyList
-                                              .indexOf(props);
-                                          propsController.propertyList[index]
-                                              .favourite = status;
-                                        } else if (widget.route == 'search') {
-                                          int index = propsController
-                                              .searchPropertyList
-                                              .indexOf(props);
-                                          propsController
-                                              .searchPropertyList[index]
-                                              .favourite = status;
-                                        } else if (widget.route == 'fav') {
-                                          int index = propsController
-                                              .favPropertyList
-                                              .indexOf(props);
-                                          propsController.favPropertyList[index]
-                                              .favourite = status;
+                                            setState(() {
+                                              props.favourite = status;
+                                              if (widget.route == 'default') {
+                                                int index = propsController
+                                                    .propertyList
+                                                    .indexOf(props);
+                                                propsController
+                                                    .propertyList[index]
+                                                    .favourite = status;
+                                              } else if (widget.route ==
+                                                  'search') {
+                                                int index = propsController
+                                                    .searchPropertyList
+                                                    .indexOf(props);
+                                                propsController
+                                                    .searchPropertyList[index]
+                                                    .favourite = status;
+                                              } else if (widget.route ==
+                                                  'fav') {
+                                                int index = propsController
+                                                    .favPropertyList
+                                                    .indexOf(props);
+                                                propsController
+                                                    .favPropertyList[index]
+                                                    .favourite = status;
 
-                                          if (status == false) {
-                                            var propsId = propsController
-                                                .favPropertyList[index].propsId;
+                                                if (status == false) {
+                                                  var propsId = propsController
+                                                      .favPropertyList[index]
+                                                      .propsId;
 
-                                            var newPropId = propsController
-                                                .propertyList
-                                                .indexWhere(((p) =>
-                                                    p.propsId == propsId));
+                                                  var newPropId =
+                                                      propsController
+                                                          .propertyList
+                                                          .indexWhere(((p) =>
+                                                              p.propsId ==
+                                                              propsId));
 
-                                            if (newPropId != -1) {
-                                              propsController
-                                                  .propertyList[newPropId]
-                                                  .favourite = status;
-                                            }
+                                                  if (newPropId != -1) {
+                                                    propsController
+                                                        .propertyList[newPropId]
+                                                        .favourite = status;
+                                                  }
 
-                                            //remove from favPropertyList
-                                            propsController.favPropertyList
-                                                .removeAt(index);
-                                          }
-                                        } else if (widget.route ==
-                                            'dashboard') {
-                                          int index = propsController
-                                              .disPropertyList
-                                              .indexOf(props);
-                                          propsController.disPropertyList[index]
-                                              .favourite = status;
+                                                  //remove from favPropertyList
+                                                  propsController
+                                                      .favPropertyList
+                                                      .removeAt(index);
+                                                }
+                                              } else if (widget.route ==
+                                                  'dashboard') {
+                                                int index = propsController
+                                                    .disPropertyList
+                                                    .indexOf(props);
+                                                propsController
+                                                    .disPropertyList[index]
+                                                    .favourite = status;
 
-                                          if (status == false ||
-                                              status == true) {
-                                            var propsId = propsController
-                                                .disPropertyList[index].propsId;
+                                                if (status == false ||
+                                                    status == true) {
+                                                  var propsId = propsController
+                                                      .disPropertyList[index]
+                                                      .propsId;
 
-                                            var newPropId = propsController
-                                                .propertyList
-                                                .indexWhere(((p) =>
-                                                    p.propsId == propsId));
+                                                  var newPropId =
+                                                      propsController
+                                                          .propertyList
+                                                          .indexWhere(((p) =>
+                                                              p.propsId ==
+                                                              propsId));
 
-                                            if (newPropId != -1) {
-                                              propsController
-                                                  .propertyList[newPropId]
-                                                  .favourite = status;
-                                            }
+                                                  if (newPropId != -1) {
+                                                    propsController
+                                                        .propertyList[newPropId]
+                                                        .favourite = status;
+                                                  }
 
-                                            //update myPropertyList
-                                          }
-                                        }
-                                      });
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white70,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(35),
-                                        ),
-                                        border: Border.all(
-                                          color: Colors.blue.shade100,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: (props.favourite == true)
-                                            ? const Icon(
-                                                Icons.favorite,
-                                                color: Colors.blue,
-                                                size: 30,
-                                              )
-                                            : const Icon(
-                                                Icons.favorite_outline,
-                                                color: Colors.black54,
-                                                size: 30,
+                                                  //update myPropertyList
+                                                }
+                                              }
+                                            });
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white70,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(35),
                                               ),
-                                      ),
+                                              border: Border.all(
+                                                color: Colors.blue.shade100,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: (props.favourite == true)
+                                                  ? const Icon(
+                                                      Icons.favorite,
+                                                      color: Colors.blue,
+                                                      size: 30,
+                                                    )
+                                                  : const Icon(
+                                                      Icons.favorite_outline,
+                                                      color: Colors.black54,
+                                                      size: 30,
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
@@ -957,26 +972,28 @@ class _ViewPropertyDetailedDashboardState
                           ],
                         ),
                       ),
-                      propertyBtn(
-                        onTap: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          await propsController.requestInspection(
-                              user_id, props.propsId, props.propsAgentId);
+                      (user_status == 'user')
+                          ? propertyBtn(
+                              onTap: () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                await propsController.requestInspection(
+                                    user_id, props.propsId, props.propsAgentId);
 
-                          Future.delayed(const Duration(seconds: 2), () {
-                            if (mounted) {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          });
-                        },
-                        title: 'Request For Inspection',
-                        bgColor: Colors.blue,
-                        isLoading: isLoading,
-                      ),
+                                Future.delayed(const Duration(seconds: 2), () {
+                                  if (mounted) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+                                });
+                              },
+                              title: 'Request For Inspection',
+                              bgColor: Colors.blue,
+                              isLoading: isLoading,
+                            )
+                          : Container(),
                     ],
                   ),
                 );

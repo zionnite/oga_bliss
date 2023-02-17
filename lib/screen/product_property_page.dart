@@ -110,7 +110,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         onPressed: () {
           Get.to(
             () => AddPropertyPage(),
-            transition: Transition.upToDown,
+            transition: Transition.leftToRightWithFade,
           );
         },
         child: const Icon(Icons.add),
@@ -151,6 +151,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
             ),
           ])
         : SingleChildScrollView(
+            controller: _controller,
             child: Column(
               children: [
                 NoticeMe(

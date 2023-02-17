@@ -158,6 +158,7 @@ class _RequestPageState extends State<RequestPage> {
             bucket: pageBucket,
             child: Obx(
               () => ListView.builder(
+                controller: _controller,
                 padding: const EdgeInsets.only(bottom: 120),
                 key: const PageStorageKey<String>('allRequest'),
                 physics: const ClampingScrollPhysics(),

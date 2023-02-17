@@ -227,14 +227,18 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       ),
                     )
                   : Container(),
-              const SizedBox(height: 16),
-              buildMenuItem(
-                text: 'Wallet',
-                icon: Icons.wallet,
-                onClicked: () => Get.to(
-                  () => const WalletPage(),
-                ),
-              ),
+              (user_status == 'user')
+                  ? const SizedBox(height: 16)
+                  : Container(),
+              (user_status == 'user')
+                  ? buildMenuItem(
+                      text: 'Wallet',
+                      icon: Icons.wallet,
+                      onClicked: () => Get.to(
+                        () => const WalletPage(),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 16),
               buildMenuItem(
                 text: 'Connection',

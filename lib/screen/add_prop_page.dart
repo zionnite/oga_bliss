@@ -122,6 +122,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
     initUserDetail();
     super.initState();
     populateDropDown();
+    populateDropDown2();
     setState(() {
       propsCautionFee.text = '0';
       propsCondition.text = 'none';
@@ -135,6 +136,14 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       stateList = data.states;
       areaList = data.area;
       //
+      propertyList = rata.property!;
+      subPropertyList = rata.subProperty!;
+    });
+  }
+
+  populateDropDown2() async {
+    PropertyAndSubTypesModel rata = await ApiServices.getPropertyAndSubTypes();
+    setState(() {
       propertyList = rata.property!;
       subPropertyList = rata.subProperty!;
     });
@@ -173,7 +182,19 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         Step(
           state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 0,
-          title: const Text('Basic Information'),
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:  [
+              const Text('Basic Information'),
+              Text(
+                'all fields are required & must be filled out'.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
           content: Container(
             margin: const EdgeInsets.only(top: 8),
             child: Column(
@@ -1110,18 +1131,27 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         child: Column(
           children: [
             const PropertyAppBar(title: 'Add Property'),
-            OrientationBuilder(
-              builder: (BuildContext context, Orientation orientation) {
-                switch (orientation) {
-                  case Orientation.portrait:
-                    return _buildStepper(StepperType.vertical);
-                  case Orientation.landscape:
-                    return _buildStepper(StepperType.horizontal);
-                  default:
-                    throw UnimplementedError(orientation.toString());
-                }
-              },
-            ),
+            (isLoading)
+                ? Center(
+                    child: Container(
+                      child: LoadingAnimationWidget.inkDrop(
+                        size: 30,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  )
+                : OrientationBuilder(
+                    builder: (BuildContext context, Orientation orientation) {
+                      switch (orientation) {
+                        case Orientation.portrait:
+                          return _buildStepper(StepperType.vertical);
+                        case Orientation.landscape:
+                          return _buildStepper(StepperType.horizontal);
+                        default:
+                          throw UnimplementedError(orientation.toString());
+                      }
+                    },
+                  ),
           ],
         ),
       ),
@@ -1290,39 +1320,29 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       },
       controlsBuilder: (context, ControlsDetails) {
         final isLastStep = _activeStepIndex == stepList().length - 1;
-        return (isLoading)
-            ? Center(
-                child: Container(
-                  child: LoadingAnimationWidget.inkDrop(
-                    size: 200,
-                    color: Colors.blue,
+        return Container(
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: ControlsDetails.onStepContinue,
+                  child:
+                      (isLastStep) ? const Text('Submit') : const Text('Next'),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              if (_activeStepIndex > 0)
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: ControlsDetails.onStepCancel,
+                    child: const Text('Back'),
                   ),
-                ),
-              )
-            : Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: ControlsDetails.onStepContinue,
-                        child: (isLastStep)
-                            ? const Text('Submit')
-                            : const Text('Next'),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    if (_activeStepIndex > 0)
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: ControlsDetails.onStepCancel,
-                          child: const Text('Back'),
-                        ),
-                      )
-                  ],
-                ),
-              );
+                )
+            ],
+          ),
+        );
       },
     );
   }

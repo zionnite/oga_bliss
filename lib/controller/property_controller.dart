@@ -258,6 +258,7 @@ class PropertyController extends GetxController {
   }
 
   fetch_favourite(var pageNum, var userId) async {
+    isFavProcessing.value = 'null';
     favPropertyList.clear();
 
     var seeker = await ApiServices.getAllFav(pageNum, userId);
@@ -401,12 +402,14 @@ class PropertyController extends GetxController {
     if (status == true) {
       msg = 'Product Created';
       statusType = true;
+      showSnackBar(
+          title: 'Create Product', msg: msg, backgroundColor: Colors.blue);
     } else {
       msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
       statusType = false;
+      showSnackBar(
+          title: 'Create Product', msg: msg, backgroundColor: Colors.red);
     }
-    showSnackBar(
-        title: 'Create Product', msg: msg, backgroundColor: Colors.blue);
 
     return statusType;
   }

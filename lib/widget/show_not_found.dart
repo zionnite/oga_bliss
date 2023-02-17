@@ -5,25 +5,51 @@ class ShowNotFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
+    return Center(
+      child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 250,
-            ),
-            Image.asset(
-              'assets/images/data_not_found.png',
-              fit: BoxFit.fitWidth,
-            ),
-            const Text(
-              'Oops!... no data found',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontFamily: 'Lobster',
+            SizedBox(
+              height: 400,
+              width: double.infinity,
+              child: Card(
+                margin: const EdgeInsets.only(
+                    top: 5, left: 10, right: 10, bottom: 10),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/not_found.png',
+                      height: 290,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'Could not Fetch Data, below are reasons you are seeing this',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'Passion One',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Text(
+                      '1) There is no  data to fetch from database',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'Passion One',
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    const Text(
+                      '2) Your Internet it\'s weak',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'Passion One',
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

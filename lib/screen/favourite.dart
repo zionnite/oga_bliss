@@ -21,18 +21,21 @@ class _FavouritePageState extends State<FavouritePage> {
   String? user_id;
   String? user_status;
   bool? admin_status;
+  bool? guestStatus;
 
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId1 = prefs.getString('user_id');
     var user_status1 = prefs.getString('user_status');
     var admin_status1 = prefs.getBool('admin_status');
+    var isGuestLogin = prefs.getBool('isGuestLogin');
 
     if (mounted) {
       setState(() {
         user_id = userId1;
         user_status = user_status1;
         admin_status = admin_status1;
+        guestStatus = isGuestLogin;
       });
 
       propsController.fetch_favourite(1, user_id);
@@ -102,7 +105,7 @@ class _FavouritePageState extends State<FavouritePage> {
   }
 
   Widget detail() {
-    return (propsController.favPropertyList.isEmpty)
+    return (propsController.isFavProcessing == 'no')
         ? Stack(children: [
             const ShowNotFound(),
             Positioned(
