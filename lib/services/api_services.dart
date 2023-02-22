@@ -23,8 +23,8 @@ import '../widget/my_raidio_field.dart';
 
 class ApiServices {
   static var client = http.Client();
-  static const String _mybaseUrl = 'http://localhost:8888/ogalandlord/Api/';
-  // static const String _mybaseUrl = 'https://ogabliss.com/Api/';
+  // static const String _mybaseUrl = 'http://localhost:8888/ogalandlord/Api/';
+  static const String _mybaseUrl = 'https://ogabliss.com/Api/';
 
   static const String _all_product = 'get_all_product';
   static const String _toggle_product = 'toggle_product';
