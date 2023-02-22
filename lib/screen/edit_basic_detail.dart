@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/model/property_model.dart';
+import 'package:oga_bliss/widget/my_text_field_num.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -171,7 +172,19 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
         Step(
           state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 0,
-          title: const Text('Basic Information'),
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Basic Information'),
+              Text(
+                'all fields are required & must be filled out'.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
           content: Container(
             margin: const EdgeInsets.only(top: 8),
             child: Column(
@@ -255,23 +268,26 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                MyNumField(
                   myTextFormController: propsBed,
-                  fieldName: 'Bedrooms',
+                  fieldName: 'Bedroom',
+                  hintText: '3',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                MyNumField(
                   myTextFormController: propsBath,
                   fieldName: 'Bathrooms',
+                  hintText: '5',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                MyNumField(
                   myTextFormController: propsToilet,
                   fieldName: 'Toilets',
+                  hintText: '2',
                 ),
                 const SizedBox(
                   height: 8,
@@ -365,9 +381,31 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
-                  myTextFormController: propsDesc,
-                  fieldName: 'Property Desc',
+                TextField(
+                  controller: propsDesc,
+                  keyboardType: TextInputType.multiline,
+                  textInputAction: TextInputAction.newline,
+                  minLines: 1,
+                  maxLines: 20,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    labelText: 'Description',
+                    hintText: 'Product Description',
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'Write in details about this property',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 8,

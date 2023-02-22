@@ -170,7 +170,19 @@ class _EditFacilitiesState extends State<EditFacilities> {
         Step(
           state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 0,
-          title: const Text('Property Facilities'),
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Property Facilities'),
+              Text(
+                'all fields are required & must be filled out'.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
           content: Container(
             child: Column(
               children: [

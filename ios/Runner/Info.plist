@@ -9,9 +9,9 @@
     </array>
 
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>OgaBliss App require access to your photo Library, so you can be able to upload file to the server</string>
+    <string>This app requires access to the photo library to in order to upload Profile Photo to your account and also the app will requires Agent and LandLords to Upload Property Photos to your account, without allowing access to your photo library, App will not function properly</string>
     <key>NSCameraUsageDescription</key>
-    <string>OgaBliss App require access to your camera, so you can upload taken picture to the server</string>
+    <string>This App require access to your camera, so you can upload taken picture to the account, and as a agent or Landlord, the app will requires you to take take pictures of property. without allowing access to your camera, App will not function properly</string>
 
     <key>io.flutter.embedded_views_preview</key>
     <string>YES</string>

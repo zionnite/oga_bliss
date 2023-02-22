@@ -441,13 +441,12 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
   }
 
   Future<List<dynamic>> _getData(int value) async {
-    var res = await http.post(
-        Uri.parse('http://localhost:8888/ogalandlord/Api/get_chat_msg'),
-        body: {
-          'sender': widget.receiver,
-          'reciever': widget.sender,
-          'props_id': widget.propsId,
-        });
+    var res = await http
+        .post(Uri.parse('https://ogabliss.com/Api/get_chat_msg'), body: {
+      'sender': widget.receiver,
+      'reciever': widget.sender,
+      'props_id': widget.propsId,
+    });
 
     // print('jsonBODY ${res.body}');
     var jsonx = json.decode(res.body);
@@ -456,17 +455,16 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
   }
 
   _sendMess(String content) async {
-    // print('content $content');
-    var res = await http.post(
-        Uri.parse('http://localhost:8888/ogalandlord/Api/send_chat_msg'),
-        body: {
-          'sender': widget.receiver,
-          'reciever': widget.sender,
-          'message': content,
-          'props_id': widget.propsId,
-        });
+    print('content $content');
+    var res = await http
+        .post(Uri.parse('https://ogabliss.com/Api/send_chat_msg'), body: {
+      'sender': widget.receiver,
+      'reciever': widget.sender,
+      'message': content,
+      'props_id': widget.propsId,
+    });
 
-    //print('content ${content}');
+    print('content ${res.body}');
     var j = json.decode(res.body);
     String status = j['status'];
 

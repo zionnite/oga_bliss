@@ -357,4 +357,19 @@ class UsersController extends GetxController {
       logoutUser();
     }
   }
+
+  deleteAccount(var userId) async {
+    bool seeker = await ApiServices.deleteAccount(userId);
+    if (seeker) {
+      String msg = 'We are sad to see you go';
+      showSnackBar(
+          title: 'Account Deleted', msg: msg, backgroundColor: Colors.red);
+      logoutUser();
+      return true;
+    } else {
+      String msg = 'Could not perform operation, please try again later!';
+      showSnackBar(title: 'Oops!', msg: msg, backgroundColor: Colors.red);
+      return false;
+    }
+  }
 }

@@ -143,10 +143,13 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
-                                      'Add Feature Image',
-                                      style: TextStyle(
-                                        color: Colors.white,
+                                    Expanded(
+                                      child: Text(
+                                        'Add Feature Image',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -260,9 +263,10 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        'Add Image',
+                                        'Add Product Image',
                                         style: TextStyle(
                                           color: Colors.white,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ),

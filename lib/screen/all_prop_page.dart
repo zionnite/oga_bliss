@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:giff_dialog/giff_dialog.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/screen/front/welcome_page.dart';
+import 'package:oga_bliss/services/api_services.dart';
 import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controller/property_controller.dart';
 import '../widget/property_widget.dart';
@@ -21,6 +26,8 @@ class AllPropertyPage extends StatefulWidget {
 }
 
 class _AllPropertyPageState extends State<AllPropertyPage> {
+  GlobalKey<ScaffoldState> fancyDialog = GlobalKey();
+
   final propsController = PropertyController().getXID;
   final usersController = UsersController().getXID;
   late ScrollController _controller;
@@ -59,6 +66,8 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
     initUserDetail();
     super.initState();
     _controller = ScrollController()..addListener(_scrollListener);
+
+    showPop();
   }
 
   void _scrollListener() {
@@ -220,6 +229,9 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                   ),
                 ),
               ]),
+              const SizedBox(
+                height: 250,
+              ),
             ],
           )
         : Column(
@@ -229,7 +241,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 8.0, right: 20.0, left: 20.0, bottom: 120),
+                    top: 8.0, right: 10.0, left: 10.0, bottom: 120),
                 child: Obx(
                   () => ListView.builder(
                     key: const PageStorageKey<String>('allProperty'),
@@ -268,5 +280,66 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
               ),
             ],
           );
+  }
+
+  showPop() async {
+    final int UPDATEDAPPVERSION = await ApiServices.isAppHasNewUpdate();
+    var AndroidAppLink = await ApiServices.androidStoreLink();
+    var iosAppLink = await ApiServices.iosStoreLink();
+
+    if (UPDATEDAPPVERSION > CURRENT_APP_VERSION) {
+      return (mounted)
+          ? showDialog(
+              context: context,
+              builder: (_) => AssetGiffDialog(
+                key: fancyDialog,
+                image: Image.asset(
+                  'assets/images/gif2.gif',
+                  fit: BoxFit.cover,
+                ),
+                title: const Text(
+                  'New App Update!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
+                ),
+                entryAnimation: EntryAnimation.bottomLeft,
+                description: const Text(
+                  'New App Update is available on the Store, click on the Button to update to the new version',
+                  textAlign: TextAlign.center,
+                ),
+                buttonOkText: const Text(
+                  'Update Now',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                buttonOkColor: Colors.blue,
+                onOkButtonPressed: () {
+                  if (Platform.isIOS) {
+                    _launchUniversalLinkIos(iosAppLink);
+                  }
+                  if (Platform.isAndroid) {
+                    _launchUniversalLinkIos(AndroidAppLink);
+                  }
+                },
+              ),
+            )
+          : Container();
+    }
+  }
+}
+
+Future<void> _launchUniversalLinkIos(String link) async {
+  if (await canLaunchUrl(Uri.parse(link))) {
+    final bool nativeAppLaunchSucceeded = await launchUrl(
+      Uri.parse(link),
+      mode: LaunchMode.externalNonBrowserApplication,
+    );
+    if (!nativeAppLaunchSucceeded) {
+      await launchUrl(
+        Uri.parse(link),
+        mode: LaunchMode.inAppWebView,
+      );
+    }
   }
 }

@@ -48,8 +48,6 @@ class _WalletPageState extends State<WalletPage> {
   bool isLoading = false;
   bool widgetLoading = true;
 
-  String link = 'https://ogabliss.com/Wallet/auth_user';
-
   checkIfListLoaded() {
     var loading = walletController.isWalletProcessing;
     if (loading == 'yes' || loading == 'no') {
@@ -115,6 +113,8 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                   PropertyBtnIcon(
                     onTap: () {
+                      String link =
+                          'https://ogabliss.com/Wallet/auth_user/$user_id';
                       _launchInBrowser(Uri.parse(link));
                     },
                     title: 'Fund Wallet',

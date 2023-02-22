@@ -185,7 +185,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
           title: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children:  [
+            children: [
               const Text('Basic Information'),
               Text(
                 'all fields are required & must be filled out'.toUpperCase(),
@@ -278,23 +278,26 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                MyNumField(
                   myTextFormController: propsBed,
-                  fieldName: 'Bedrooms',
+                  fieldName: 'Bedroom',
+                  hintText: '3',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                MyNumField(
                   myTextFormController: propsBath,
                   fieldName: 'Bathrooms',
+                  hintText: '5',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                MyNumField(
                   myTextFormController: propsToilet,
                   fieldName: 'Toilets',
+                  hintText: '2',
                 ),
                 const SizedBox(
                   height: 8,
@@ -381,16 +384,39 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                MyNumField(
                   myTextFormController: propsPrice,
                   fieldName: 'Price',
+                  hintText: '100000000',
                 ),
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
-                  myTextFormController: propsDesc,
-                  fieldName: 'Property Desc',
+                TextField(
+                  controller: propsDesc,
+                  keyboardType: TextInputType.multiline,
+                  textInputAction: TextInputAction.newline,
+                  minLines: 1,
+                  maxLines: 20,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    labelText: 'Description',
+                    hintText: 'Product Description',
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'Write in details about this property',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 8,
@@ -873,7 +899,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   height: 10,
                 ),
                 FlutterInputChips(
-                  initialValue: const ['none'],
+                  initialValue: const [],
                   // maxChips: 5,
                   onChanged: (v) {
                     setState(() {
@@ -901,7 +927,16 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    'use comma (,) to enter list of preference',
+                    'use comma (,) to enter list of preference,',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'or type \'none,\' if there is no preference ',
                     style: TextStyle(
                       color: Colors.red,
                     ),

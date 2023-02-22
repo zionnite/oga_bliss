@@ -410,7 +410,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
               ),
               Positioned(
                 top: 10,
-                right: 10,
+                right: 0,
                 child: (widget.adminStatus)
                     ? AdminPopupMenu(model: widget.propertyModel!)
                     : PopupMenuButton(

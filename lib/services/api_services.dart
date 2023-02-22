@@ -23,8 +23,8 @@ import '../widget/my_raidio_field.dart';
 
 class ApiServices {
   static var client = http.Client();
-  // static const String _mybaseUrl = 'http://localhost:8888/ogalandlord/Api/';
-  static const String _mybaseUrl = 'https://ogabliss.com/Api/';
+  static const String _mybaseUrl = 'http://localhost:8888/ogalandlord/Api/';
+  // static const String _mybaseUrl = 'https://ogabliss.com/Api/';
 
   static const String _all_product = 'get_all_product';
   static const String _toggle_product = 'toggle_product';
@@ -82,6 +82,10 @@ class ApiServices {
   static const String _count_alert = 'count_alert';
   static const String _count_msg = 'count_msg';
   static const String _checkIfBan = 'check_ifBan';
+  static const String _deleteAccount = 'delete_account';
+  static String _has_new_update = 'has_new_update';
+  static String _ios_store_link = 'ios_store_link';
+  static String _android_store_link = 'android_store_link';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -2428,5 +2432,57 @@ class ApiServices {
       //   backgroundColor: Colors.red,
       // );
     }
+  }
+
+  static Future deleteAccount(var userId) async {
+    try {
+      final result =
+          await client.get(Uri.parse('$_mybaseUrl$_deleteAccount/$userId'));
+
+      if (result.statusCode == 200) {
+        final j = json.decode(result.body) as Map<String, dynamic>;
+        bool status = j['status'];
+
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
+    }
+  }
+
+  static Future<int> isAppHasNewUpdate() async {
+    final response = await http.get(Uri.parse('$_mybaseUrl$_has_new_update/'));
+
+    Map<String, dynamic> j = json.decode(response.body);
+    int counter = j['counter'];
+    return counter;
+  }
+
+  static Future<String> iosStoreLink() async {
+    final response = await http.get(Uri.parse('$_mybaseUrl$_ios_store_link/'));
+
+    Map<String, dynamic> j = json.decode(response.body);
+    String counter = j['link'];
+    return counter;
+  }
+
+  static Future<String> androidStoreLink() async {
+    final response =
+        await http.get(Uri.parse('$_mybaseUrl$_android_store_link/'));
+
+    Map<String, dynamic> j = json.decode(response.body);
+    String counter = j['link'];
+    return counter;
   }
 }

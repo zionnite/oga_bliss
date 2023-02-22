@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/screen/alert_page.dart';
 import 'package:oga_bliss/screen/connection_page.dart';
 import 'package:oga_bliss/screen/favourite.dart';
@@ -10,6 +11,7 @@ import 'package:oga_bliss/screen/profile_page.dart';
 import 'package:oga_bliss/screen/request_page.dart';
 import 'package:oga_bliss/screen/transaction_page.dart';
 import 'package:oga_bliss/screen/wallet.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screen/dashboard.dart';
@@ -25,6 +27,8 @@ class NavigationDrawerWidget extends StatefulWidget {
 }
 
 class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
+  final usersController = UsersController().getXID;
+
   final padding = const EdgeInsets.symmetric(horizontal: 20);
   String? user_id;
   String? user_status;
@@ -127,7 +131,43 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     ),
                   ),
                   // extraWidget(),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 24),
+                  (admin_status == false)
+                      ? const Divider(color: Colors.white70)
+                      : Container(),
+
+                  (admin_status == false)
+                      ? buildMenuItem(
+                          text: 'Delete Account',
+                          icon: Icons.delete,
+                          onClicked: () {
+                            // Navigator.pop(context);
+                            PanaraConfirmDialog.show(
+                              context,
+                              title: "Are You Sure?",
+                              message:
+                                  "Do you really want to Delete your account?, you will not be able to undo this action.",
+                              confirmButtonText: "Confirm",
+                              cancelButtonText: "Cancel",
+                              onTapCancel: () {
+                                Navigator.pop(context);
+                              },
+                              onTapConfirm: () async {
+                                bool status = await usersController
+                                    .deleteAccount(user_id);
+                                if (status || !status) {
+                                  if (mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                              panaraDialogType: PanaraDialogType.normal,
+                              barrierDismissible:
+                                  false, // optional parameter (default is true)
+                            );
+                          },
+                        )
+                      : Container(),
                 ],
               ),
             ),

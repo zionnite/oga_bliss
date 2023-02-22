@@ -49,3 +49,5 @@ showSnackBar({
     // duration:
   );
 }
+
+final int CURRENT_APP_VERSION = 1;

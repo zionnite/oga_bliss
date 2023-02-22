@@ -172,7 +172,19 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
         Step(
           state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 0,
-          title: const Text('Property Extra Details'),
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Property Extra Details'),
+              Text(
+                'all fields are required & must be filled out'.toUpperCase(),
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
           content: Container(
             child: Column(
               children: [
@@ -194,7 +206,7 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
                   height: 10,
                 ),
                 FlutterInputChips(
-                  initialValue: const ['none'],
+                  initialValue: const [],
                   // maxChips: 5,
                   onChanged: (v) {
                     setState(() {
@@ -222,7 +234,16 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
                 const Align(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    'use comma (,) to enter list of preference',
+                    'use comma (,) to enter list of preference,',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                const Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'or type \'none,\' if there is no preference ',
                     style: TextStyle(
                       color: Colors.red,
                     ),
