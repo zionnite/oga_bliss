@@ -168,6 +168,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                           },
                         )
                       : Container(),
+
+                  (admin_status == false)
+                      ? const SizedBox(height: 35)
+                      : Container(),
                 ],
               ),
             ),
