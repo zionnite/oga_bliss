@@ -229,6 +229,7 @@ class UsersController extends GetxController {
     required String sex,
     required String my_id,
   }) async {
+    print('Sex ${sex}');
     String? msg;
     String status = await ApiServices.updateUserBio(
       fullName: fullName,

@@ -7,10 +7,10 @@ class CurrencyFormatter {
     if (amount.toString() == null ||
         amount.toString() == '' ||
         amount.toString() == 'false') {
-      return '$NGN ' +
+      return '$NGN' +
           currencyFormat(int.parse('0'), locale: 'en_US', symbol: "");
     } else {
-      return '$NGN ' +
+      return '$NGN' +
           currencyFormat(int.parse(amount), locale: 'en_US', symbol: "");
     }
   }

@@ -42,6 +42,9 @@ dependencies:
   panara_dialogs: ^0.1.4
   giff_dialog: ^1.0.1
 
+
+  #Bliss Legacy
+  flutterme_credit_card: ^1.0.2
   #  another_xlider: ^1.1.2
 
 

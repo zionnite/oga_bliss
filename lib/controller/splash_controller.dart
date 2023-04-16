@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:oga_bliss/screen/front/welcome_page.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home_page.dart';
@@ -35,9 +35,11 @@ class SplashController extends GetxController {
         return Get.offAll(() => const HomePage());
       } else {
         if (isGuestLogin != null) {
-          return Get.offAll(() => const HomePage());
+          // return Get.offAll(() => const HomePage());
+          return Get.offAll(() => const BlissHome());
         } else {
-          return Get.to(() => const WelcomePage());
+          // return Get.to(() => const WelcomePage());
+          return Get.offAll(() => const BlissHome());
         }
       }
     }
