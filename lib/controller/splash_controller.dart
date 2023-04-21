@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../home_page.dart';
 import '../screen/front/onboarding_screen.dart';
 
 class SplashController extends GetxController {
@@ -32,7 +31,8 @@ class SplashController extends GetxController {
       }
 
       if (isUserLogin != null) {
-        return Get.offAll(() => const HomePage());
+        // return Get.offAll(() => const HomePage());
+        return Get.offAll(() => const BlissHome());
       } else {
         if (isGuestLogin != null) {
           // return Get.offAll(() => const HomePage());

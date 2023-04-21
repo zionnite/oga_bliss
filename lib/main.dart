@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_controller/count_subscription_item_controller.dart';
 import 'package:oga_bliss/controller/dashboard_controller.dart';
 import 'package:oga_bliss/controller/redirect_controller.dart';
 import 'package:oga_bliss/screen/front/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bliss_legacy/bliss_controller/account_report_controller.dart';
+import 'bliss_legacy/bliss_controller/bliss_downline_controller.dart';
+import 'bliss_legacy/bliss_controller/bliss_transaction_controller.dart';
+import 'bliss_legacy/bliss_controller/shop_controller.dart';
+import 'bliss_legacy/bliss_controller/subscription_controller.dart';
 import 'controller/alert_controller.dart';
 import 'controller/chat_head_controller.dart';
 import 'controller/connection_controller.dart';
@@ -34,6 +40,12 @@ void main() async {
   Get.put(UsersController());
   Get.put(DashboardController());
   Get.put(RedirectController());
+  Get.put(BlissTransactionController());
+  Get.put(AccountReportController());
+  Get.put(BlissDownlineController());
+  Get.put(ShopController());
+  Get.put(SubscriptionController());
+  Get.put(CountSubscriptionItemController());
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var isUserLogin = prefs.getBool('isUserLogin');

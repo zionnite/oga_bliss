@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_controller/shop_controller.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_widget/clipper_object.dart';
-import 'package:oga_bliss/util/currency_formatter.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_widget/shop_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BlissShop extends StatefulWidget {
   const BlissShop({Key? key}) : super(key: key);
@@ -10,10 +13,75 @@ class BlissShop extends StatefulWidget {
 }
 
 class _BlissShopState extends State<BlissShop> {
+  final shopController = ShopController().getXID;
+
+  late ScrollController _controller;
+
+  String? user_id;
+  String? user_name;
+  String? user_status;
+  bool? admin_status;
+  bool? isUserLogin;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var userName1 = prefs.getString('user_name');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+    var isUserLogin1 = prefs.getBool('isUserLogin');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_name = userName1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+        isUserLogin = isUserLogin1;
+
+        //TODO: COME HERE AND DELETE THIS
+        user_id = '1';
+        admin_status = false;
+      });
+
+      await shopController.getPlans(1, user_id);
+    }
+  }
+
+  var current_page = 1;
+  bool isLoading = false;
+  bool widgetLoading = true;
+  String? payableBalance;
+
+  @override
+  void initState() {
+    initUserDetail();
+    super.initState();
+    _controller = ScrollController()..addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      setState(() {
+        isLoading = true;
+        current_page++;
+      });
+
+      shopController.getPlansMore(current_page, user_id);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        controller: _controller,
         child: Column(
           children: [
             const SizedBox(
@@ -34,438 +102,25 @@ class _BlissShopState extends State<BlissShop> {
                   BlissClipperObject(
                     marginVal: 0,
                   ),
-                  ListView(
-                    padding: const EdgeInsets.only(top: 0, bottom: 20),
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    children: [
-                      Column(
-                        children: [
-                          Card(
-                            margin: const EdgeInsets.all(0),
-                            color: Colors.white,
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              height: 200,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 180,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      image: const DecorationImage(
-                                        image:
-                                            AssetImage("assets/images/a.jpeg"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'EATING COMPETITION',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('OUTRIGHT Plan'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('1 Invoice Limit'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          CurrencyFormatter
-                                              .getCurrencyFormatter(
-                                            amount: '1000',
-                                          ),
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.all(9),
-                                          color: Colors.blue.shade900,
-                                          child: const Text(
-                                            'Subscribe Now',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Card(
-                            margin: const EdgeInsets.all(0),
-                            color: Colors.white,
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              height: 200,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 180,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      image: const DecorationImage(
-                                        image:
-                                            AssetImage("assets/images/a.jpeg"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'EATING COMPETITION',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('OUTRIGHT Plan'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('1 Invoice Limit'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          CurrencyFormatter
-                                              .getCurrencyFormatter(
-                                            amount: '1000',
-                                          ),
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.all(9),
-                                          color: Colors.blue.shade900,
-                                          child: const Text(
-                                            'Subscribe Now',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Card(
-                            margin: const EdgeInsets.all(0),
-                            color: Colors.white,
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              height: 200,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 180,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      image: const DecorationImage(
-                                        image:
-                                            AssetImage("assets/images/a.jpeg"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'EATING COMPETITION',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('OUTRIGHT Plan'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('1 Invoice Limit'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          CurrencyFormatter
-                                              .getCurrencyFormatter(
-                                            amount: '1000',
-                                          ),
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.all(9),
-                                          color: Colors.blue.shade900,
-                                          child: const Text(
-                                            'Subscribe Now',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Card(
-                            margin: const EdgeInsets.all(0),
-                            color: Colors.white,
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              height: 200,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 180,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      image: const DecorationImage(
-                                        image:
-                                            AssetImage("assets/images/a.jpeg"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'EATING COMPETITION',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('OUTRIGHT Plan'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('1 Invoice Limit'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          CurrencyFormatter
-                                              .getCurrencyFormatter(
-                                            amount: '1000',
-                                          ),
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.all(9),
-                                          color: Colors.blue.shade900,
-                                          child: const Text(
-                                            'Subscribe Now',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Card(
-                            margin: const EdgeInsets.all(0),
-                            color: Colors.white,
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              height: 200,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 180,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      image: const DecorationImage(
-                                        image:
-                                            AssetImage("assets/images/a.jpeg"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'EATING COMPETITION',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('OUTRIGHT Plan'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Text('1 Invoice Limit'),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          CurrencyFormatter
-                                              .getCurrencyFormatter(
-                                            amount: '1000',
-                                          ),
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.all(9),
-                                          color: Colors.blue.shade900,
-                                          child: const Text(
-                                            'Subscribe Now',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
+                  Obx(() => ListView.builder(
+                        padding: const EdgeInsets.only(top: 0, bottom: 20),
+                        shrinkWrap: true,
+                        itemCount: shopController.plansList.length,
+                        physics: const ClampingScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          var data = shopController.plansList[index];
+                          return shopWidget(
+                            onTap: () {
+                              print('this clicked');
+                            },
+                            planImg: '${data.planImage}',
+                            planName: '${data.planName}',
+                            planInterval: '${data.planInterval}',
+                            planLimit: '${data.planLimit}',
+                            planAmount: '${data.planAmount}',
+                          );
+                        },
+                      )),
                 ],
               ),
             ),

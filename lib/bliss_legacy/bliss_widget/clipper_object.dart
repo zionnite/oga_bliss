@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_widget/customer_clipper.dart';
+import 'package:oga_bliss/bliss_legacy/screen/shop_plan_type.dart';
 
 class BlissClipperObject extends StatefulWidget {
-  BlissClipperObject({this.marginVal = 188.0});
+  BlissClipperObject({this.marginVal = 188.0, this.isSelected = false});
   final double marginVal;
+  final bool isSelected;
 
   @override
   State<BlissClipperObject> createState() => _BlissClipperObjectState();
@@ -21,11 +24,72 @@ class _BlissClipperObjectState extends State<BlissClipperObject> {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: const [
-              BlissCustomClipper(name: 'Building Plan'),
-              BlissCustomClipper(name: 'Lands Plan'),
-              BlissCustomClipper(name: 'Daily Plan'),
-              BlissCustomClipper(name: 'Weekly Plan'),
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.to(
+                    () => ShopPlanType(
+                      planId: 'building',
+                    ),
+                  );
+                },
+                child: BlissCustomClipper(
+                  name: 'Building Plan',
+                  isSelected: widget.isSelected,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.to(
+                    () => ShopPlanType(
+                      planId: 'land',
+                    ),
+                  );
+                },
+                child: BlissCustomClipper(
+                  name: 'Lands Plan',
+                  isSelected: widget.isSelected,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.to(
+                    () => ShopPlanType(
+                      planId: 'daily',
+                    ),
+                  );
+                },
+                child: BlissCustomClipper(
+                  name: 'Daily Plan',
+                  isSelected: widget.isSelected,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.to(
+                    () => ShopPlanType(
+                      planId: 'weekly',
+                    ),
+                  );
+                },
+                child: BlissCustomClipper(
+                  name: 'Weekly Plan',
+                  isSelected: widget.isSelected,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.to(
+                    () => ShopPlanType(
+                      planId: 'monthly',
+                    ),
+                  );
+                },
+                child: BlissCustomClipper(
+                  name: 'Monthly Plan',
+                  isSelected: widget.isSelected,
+                ),
+              ),
             ],
           ),
         ),

@@ -41,6 +41,7 @@ dependencies:
   flutter_phoenix: ^1.1.0
   panara_dialogs: ^0.1.4
   giff_dialog: ^1.0.1
+  intl: ^0.17.0
 
 
   #Bliss Legacy

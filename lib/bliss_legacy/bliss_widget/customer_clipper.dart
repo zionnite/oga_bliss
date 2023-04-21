@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BlissCustomClipper extends StatefulWidget {
-  const BlissCustomClipper({required this.name});
+  const BlissCustomClipper({required this.name, required this.isSelected});
   final String name;
+  final bool isSelected;
 
   @override
   State<BlissCustomClipper> createState() => _BlissCustomClipperState();
@@ -17,7 +18,7 @@ class _BlissCustomClipperState extends State<BlissCustomClipper> {
       margin: const EdgeInsets.only(right: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
-        color: Colors.blue.shade900,
+        color: (widget.isSelected) ? Colors.white : Colors.blue.shade900,
         border: Border.all(
           color: Colors.blue,
         ),
@@ -26,8 +27,8 @@ class _BlissCustomClipperState extends State<BlissCustomClipper> {
         padding: const EdgeInsets.all(8.0),
         child: Text(
           widget.name,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: (widget.isSelected) ? Colors.blue : Colors.white,
           ),
           textAlign: TextAlign.center,
         ),

@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutterme_credit_card/flutterme_credit_card.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_controller/count_subscription_item_controller.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_controller/subscription_controller.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_model/subscription_list_model.dart';
-import 'package:oga_bliss/bliss_legacy/bliss_widget/rounded_button.dart';
 import 'package:oga_bliss/util/currency_formatter.dart';
+import 'package:oga_bliss/widget/property_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../widget/property_card.dart';
-import '../bliss_controller/account_report_controller.dart';
-import '../bliss_controller/subscription_controller.dart';
 import 'land_transaction.dart';
 
-class ManageSubscription extends StatefulWidget {
-  ManageSubscription({required this.data});
+class ManageUserSubscription extends StatefulWidget {
+  const ManageUserSubscription({required this.data});
+
   final MyPlanList data;
 
   @override
-  State<ManageSubscription> createState() => _ManageSubscriptionState();
+  State<ManageUserSubscription> createState() => _ManageUserSubscriptionState();
 }
 
-class _ManageSubscriptionState extends State<ManageSubscription> {
-  final accountReportController = AccountReportController().getXID;
+class _ManageUserSubscriptionState extends State<ManageUserSubscription> {
   final subscriptionController = SubscriptionController().getXID;
   final countSubscriptionItemController =
       CountSubscriptionItemController().getXID;
@@ -58,21 +55,13 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
         admin_status = admin_status1;
         isUserLogin = isUserLogin1;
         full_name = fullName1;
-
-        //TODO:// come to delete it
-        user_id = '35';
       });
 
-      await accountReportController.getCounters(
-          user_id, admin_status, user_status);
+      await subscriptionController.getUserCardActivities(
+          1, widget.data.planId, widget.data.userId);
 
-      await subscriptionController.getPlanList(1, user_id);
-
-      await subscriptionController.getCardActivities(
-          1, widget.data.planId, user_id);
-
-      await countSubscriptionItemController.getCountSubscriptionItems(
-        user_id,
+      await countSubscriptionItemController.getUserCountSubscriptionItems(
+        widget.data.userId,
         widget.data.planId,
       );
     }
@@ -95,8 +84,8 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
         current_page++;
       });
 
-      subscriptionController.getCardActivitiesMore(
-          current_page, widget.data.planId, user_id);
+      subscriptionController.getUserCardActivitiesMore(
+          current_page, widget.data.planId, widget.data.userId);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
@@ -113,10 +102,10 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
         physics: const ClampingScrollPhysics(),
         shrinkWrap: true,
         itemCount:
-            countSubscriptionItemController.subscriptionItemCounter.length,
+            countSubscriptionItemController.userSubscriptionItemCounter.length,
         itemBuilder: (BuildContext context, int index) {
-          var data =
-              countSubscriptionItemController.subscriptionItemCounter[index];
+          var data = countSubscriptionItemController
+              .userSubscriptionItemCounter[index];
 
           return Column(
             children: [
@@ -214,133 +203,6 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  FMCreditCard(
-                    margin: const EdgeInsets.all(0),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.blue.shade900,
-                        Colors.blue,
-                      ],
-                    ),
-                    number: '${data.authBin}384736${data.authLast4}',
-                    numberMaskType: FMMaskType.first6last2,
-                    cvv: '***',
-                    cvvMaskType: FMMaskType.full,
-                    validThru: '${data.authExpMonth}/${data.authExpYear}',
-                    validThruMaskType: FMMaskType.none,
-                    holder: full_name!,
-                    title: 'Bliss Legacy | Subscription Card',
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RoundedButton(
-                        title: 'Disable Subscription',
-                        txtColor: Colors.white,
-                        bgColor: Colors.blue.shade900,
-                        isLoading: isLoading,
-                        onTap: () async {
-                          Get.defaultDialog(
-                            title: "Action Needed",
-                            middleText:
-                                "Are you sure you want to disable this subscription?",
-                            radius: 5,
-                            textConfirm: "Yes, Disable",
-                            confirmTextColor: Colors.white,
-                            onConfirm: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-
-                              String status = await subscriptionController
-                                  .toggleDisableButton(
-                                user_id,
-                                data.planCode,
-                                data.subscriptionCode,
-                                data.emailToken,
-                              );
-                              if (status == 'false_0' ||
-                                  status == 'false_1' ||
-                                  status == 'false_2' ||
-                                  status == 'true') {
-                                setState(() {
-                                  isLoading = false;
-                                  // Get.back();
-                                });
-                              } else {
-                                setState(() {
-                                  isLoading = false;
-                                });
-                                // Get.back();
-                              }
-                            },
-                            textCancel: "No, Cancel",
-                            cancelTextColor: Colors.blue.shade900,
-                            onCancel: () {},
-                          );
-                        },
-                      ),
-                      const SizedBox(
-                        width: 3,
-                      ),
-                      RoundedButton(
-                        title: 'Update Card',
-                        txtColor: Colors.blue,
-                        bgColor: Colors.white,
-                        isLoading: isCardLoading,
-                        onTap: () async {
-                          Get.defaultDialog(
-                            title: "Action Needed",
-                            middleText:
-                                "Are you sure you want to Update Card for this subscription?",
-                            radius: 5,
-                            textConfirm: "Yes, Update",
-                            confirmTextColor: Colors.white,
-                            onConfirm: () async {
-                              setState(() {
-                                isCardLoading = true;
-                              });
-
-                              String status =
-                                  await subscriptionController.updateCard(
-                                user_id,
-                                data.subscriptionCode,
-                              );
-                              if (status == 'false_0' ||
-                                  status == 'false_1' ||
-                                  status == 'false_2' ||
-                                  status == 'true') {
-                                setState(() {
-                                  isCardLoading = false;
-                                  // Get.back();
-                                });
-                              } else {
-                                setState(() {
-                                  isCardLoading = false;
-                                });
-                                // Get.back();
-                              }
-                            },
-                            textCancel: "No, Cancel",
-                            cancelTextColor: Colors.blue.shade900,
-                            onCancel: () {},
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   getCounters(),
                   const SizedBox(
                     height: 20,
@@ -388,11 +250,11 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                           physics: const ClampingScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          itemCount:
-                              subscriptionController.cardActivitiesList.length,
+                          itemCount: subscriptionController
+                              .userCardActivitiesList.length,
                           itemBuilder: (BuildContext context, int index) {
                             var fata = subscriptionController
-                                .cardActivitiesList[index];
+                                .userCardActivitiesList[index];
 
                             // String paidDate = DateFormat('EEEE, MMM d, yyyy')
                             //     .format(fata.paidDate!);

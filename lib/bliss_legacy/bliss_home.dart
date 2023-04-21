@@ -6,7 +6,9 @@ import 'package:oga_bliss/bliss_legacy/screen/bliss_plan.dart';
 import 'package:oga_bliss/bliss_legacy/screen/bliss_profile.dart';
 import 'package:oga_bliss/bliss_legacy/screen/bliss_shop.dart';
 import 'package:oga_bliss/util/currency_formatter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../screen/not_login_page.dart';
 import 'screen/bliss_dashboard.dart';
 
 class BlissHome extends StatefulWidget {
@@ -34,16 +36,49 @@ class _BlissHomeState extends State<BlissHome> {
     const TabItem(
       icon: Icons.account_tree_sharp,
       title: 'Downline',
-      count: Text(
-        '0',
-        style: TextStyle(color: Colors.red, fontSize: 18),
-      ),
     ),
     const TabItem(
       icon: Icons.account_box,
       title: 'profile',
     ),
   ];
+
+  String? user_id;
+  String? user_status;
+  bool? admin_status;
+  bool? guestStatus;
+  bool? loginStatus;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tempLoginStatus = prefs.getBool("tempLoginStatus");
+
+    if (tempLoginStatus == true) {
+      prefs.remove("tempLoginStatus");
+    }
+
+    var userId1 = prefs.getString('user_id');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+    var isGuestLogin = prefs.getBool('isGuestLogin');
+    var isUserLogin = prefs.getBool('isUserLogin');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+        guestStatus = isGuestLogin;
+        loginStatus = isUserLogin;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    initUserDetail();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +93,13 @@ class _BlissHomeState extends State<BlissHome> {
                 _currentPage = newIndex;
               });
             },
-            children: const [
-              BlissDashboard(),
-              BlissShop(),
-              BlissPlan(),
-              BlissDownline(),
-              BlissProfile(),
+            children: [
+              const BlissDashboard(),
+              const BlissShop(),
+              const BlissPlan(),
+              const BlissDownline(),
+              // BlissProfile(),
+              ProfileToView(),
             ],
           ),
         ],
@@ -116,6 +152,14 @@ class _BlissHomeState extends State<BlissHome> {
         // ),
       ),
     );
+  }
+
+  Widget ProfileToView() {
+    if (loginStatus != null) {
+      return const ProfilePage();
+    } else {
+      return const NotLoginPage();
+    }
   }
 }
 

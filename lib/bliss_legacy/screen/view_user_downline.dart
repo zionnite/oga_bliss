@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_controller/bliss_downline_controller.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_model/bliss_downline_model.dart';
 import 'package:oga_bliss/bliss_legacy/screen/downline_detail.dart';
-import 'package:oga_bliss/widget/message_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class BlissDownline extends StatefulWidget {
-  const BlissDownline({Key? key}) : super(key: key);
+import '../../widget/message_widget.dart';
+
+class ViewUserDownline extends StatefulWidget {
+  const ViewUserDownline({required this.downlineData});
+  final User downlineData;
 
   @override
-  State<BlissDownline> createState() => _BlissDownlineState();
+  State<ViewUserDownline> createState() => _ViewUserDownlineState();
 }
 
-class _BlissDownlineState extends State<BlissDownline> {
+class _ViewUserDownlineState extends State<ViewUserDownline> {
   final blissDownlineController = BlissDownlineController().getXID;
 
   late ScrollController _controller;
@@ -33,19 +36,8 @@ class _BlissDownlineState extends State<BlissDownline> {
     var isUserLogin1 = prefs.getBool('isUserLogin');
 
     if (mounted) {
-      setState(() {
-        user_id = userId1;
-        user_name = userName1;
-        user_status = user_status1;
-        admin_status = admin_status1;
-        isUserLogin = isUserLogin1;
-
-        //TODO: COME HERE AND DELETE THIS
-        user_id = '38';
-        admin_status = false;
-      });
-
-      await blissDownlineController.getUsers(1, user_id);
+      await blissDownlineController.getUsersDownline(
+          1, widget.downlineData.agentId);
     }
   }
 
@@ -68,7 +60,8 @@ class _BlissDownlineState extends State<BlissDownline> {
         current_page++;
       });
 
-      blissDownlineController.getUsersMore(current_page, user_id);
+      blissDownlineController.getUsersDownlineMore(
+          current_page, widget.downlineData.agentId);
 
       Future.delayed(const Duration(seconds: 1), () {
         setState(() {
@@ -84,19 +77,47 @@ class _BlissDownlineState extends State<BlissDownline> {
       body: SingleChildScrollView(
           controller: _controller,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 70,
               ),
               Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade900,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(35),
+                      ),
+                      border: Border.all(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.only(right: 160.0, top: 20.0),
+                      padding: const EdgeInsets.only(right: 160.0, top: 20.0),
                       child: Text(
-                        'Your Downline & Generation',
-                        style: TextStyle(
+                        '${widget.downlineData.agentFullName} Downline',
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w900),
                       ),
                     ),
@@ -112,9 +133,9 @@ class _BlissDownlineState extends State<BlissDownline> {
                       top: 0, left: 0, right: 0, bottom: 80),
                   physics: const ClampingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: blissDownlineController.usersList.length,
+                  itemCount: blissDownlineController.viewUsersList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    var data = blissDownlineController.usersList[index];
+                    var data = blissDownlineController.viewUsersList[index];
                     String startDate = DateFormat('EEEE, MMM d, yyyy')
                         .format(data.agentDateCreated!);
                     return Column(
@@ -124,7 +145,7 @@ class _BlissDownlineState extends State<BlissDownline> {
                           name: data.agentFullName!,
                           status: data.agentSex!,
                           onTap: () {
-                            Get.to(
+                            Get.off(
                               () => DownlineDetail(
                                 data: data,
                               ),

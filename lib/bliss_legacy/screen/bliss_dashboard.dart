@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_controller/bliss_downline_controller.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_widget/clipper_object.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../util/currency_formatter.dart';
+import '../bliss_controller/account_report_controller.dart';
+import '../bliss_controller/bliss_transaction_controller.dart';
 import 'land_transaction.dart';
 
 class BlissDashboard extends StatefulWidget {
@@ -13,18 +18,170 @@ class BlissDashboard extends StatefulWidget {
 }
 
 class _BlissDashboardState extends State<BlissDashboard> {
-  List RandomImages = [
-    'https://images.unsplash.com/photo-1597223557154-721c1cecc4b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW4lMjBmYWNlfGVufDB8fDB8fA%3D%3D&w=1000&q=80',
-    'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg',
-    'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8ZmFjZXxlbnwwfHwwfHw%3D&w=1000&q=80',
-    'https://i0.wp.com/post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/03/GettyImages-1092658864_hero-1024x575.jpg?w=1155&h=1528'
-  ];
+  final blissTransactionController = BlissTransactionController().getXID;
+  final accountReportController = AccountReportController().getXID;
+  final blissDownlineController = BlissDownlineController().getXID;
+
+  late ScrollController _controller;
+
+  String? user_id;
+  String? user_name;
+  String? user_status;
+  bool? admin_status;
+  bool? isUserLogin;
+
+  initUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var userId1 = prefs.getString('user_id');
+    var userName1 = prefs.getString('user_name');
+    var user_status1 = prefs.getString('user_status');
+    var admin_status1 = prefs.getBool('admin_status');
+    var isUserLogin1 = prefs.getBool('isUserLogin');
+
+    if (mounted) {
+      setState(() {
+        user_id = userId1;
+        user_name = userName1;
+        user_status = user_status1;
+        admin_status = admin_status1;
+        isUserLogin = isUserLogin1;
+      });
+
+      await blissTransactionController.fetchTransaction(
+          1, user_id, admin_status);
+
+      await accountReportController.getCounters(
+          user_id, admin_status, user_status);
+      await blissDownlineController.getUsers('1', user_id);
+    }
+  }
+
+  var current_page = 1;
+  bool isLoading = false;
+  bool widgetLoading = true;
+  String? payableBalance;
+
+  @override
+  void initState() {
+    initUserDetail();
+    super.initState();
+    //_controller = ScrollController()..addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+      setState(() {
+        isLoading = true;
+        current_page++;
+      });
+
+      blissTransactionController.fetchTransactionMore(
+          current_page, user_id, admin_status);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+  }
+
+  List _imgs = [];
+
+  getDownlines() {
+    _imgs.clear();
+    for (var i = 0; i < blissDownlineController.usersList.length; i++) {
+      _imgs.add(blissDownlineController.usersList[i].agentImageName);
+    }
+
+    if (_imgs.isEmpty) {
+      return const Align(
+        alignment: Alignment.topLeft,
+        child: Text('You have no Downline at the moment'),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.only(left: 15),
+      // parent row
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          for (int i = 0; i < _imgs.length; i++)
+            Align(
+              widthFactor: 0.8,
+              // parent circle avatar.
+              // We defined this for better UI
+              child: CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.blue.shade900,
+                // Child circle avatar
+                child: CircleAvatar(
+                  radius: 38,
+                  backgroundImage: NetworkImage(_imgs[i]),
+                ),
+              ),
+            )
+        ],
+      ),
+    );
+  }
+
+  getCounters() {
+    return Obx(
+      () => Container(
+        width: 300,
+        child: ListView.builder(
+          padding: EdgeInsets.all(0),
+          physics: const ClampingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: accountReportController.accountStatusCounter.length,
+          itemBuilder: (BuildContext context, int index) {
+            var data = accountReportController.accountStatusCounter[index];
+
+            var pBalance = data.payableBalance.toString();
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Payable Balance:',
+                  style: TextStyle(
+                    // fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: (pBalance != null)
+                        ? Text(
+                            CurrencyFormatter.getCurrencyFormatter(
+                              amount: pBalance,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          )
+                        : const Text(
+                            'xxxxx',
+                          ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
               height: 70,
@@ -32,6 +189,8 @@ class _BlissDashboardState extends State<BlissDashboard> {
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const CircleAvatar(
                     radius: 20,
@@ -45,32 +204,27 @@ class _BlissDashboardState extends State<BlissDashboard> {
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Welcome Zionnite,',
-                        style: TextStyle(
+                      Text(
+                        '${'Welcome $user_name'},',
+                        style: const TextStyle(
                             // fontSize: 15,
                             ),
                       ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Payable Balance:',
-                            style: TextStyle(
-                              // fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          shortenMoney('1000000000'),
-                        ],
-                      ),
+                      Obx(() => (accountReportController
+                              .accountStatusCounter.isEmpty)
+                          ? Center(
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: Colors.blue,
+                                size: 30,
+                              ),
+                            )
+                          : getCounters()),
                     ],
                   )
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 15,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -205,31 +359,15 @@ class _BlissDashboardState extends State<BlissDashboard> {
                       const SizedBox(
                         height: 15,
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 15),
-                        // parent row
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            for (int i = 0; i < RandomImages.length; i++)
-                              Align(
-                                widthFactor: 0.8,
-                                // parent circle avatar.
-                                // We defined this for better UI
-                                child: CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: Colors.blue.shade900,
-                                  // Child circle avatar
-                                  child: CircleAvatar(
-                                    radius: 38,
-                                    backgroundImage:
-                                        NetworkImage(RandomImages[i]),
-                                  ),
-                                ),
-                              )
-                          ],
-                        ),
-                      ),
+                      Obx(() => (blissDownlineController.isBUProcessing.value ==
+                              'null')
+                          ? Center(
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: Colors.blue,
+                                size: 30,
+                              ),
+                            )
+                          : getDownlines()),
                     ],
                   ),
                   const SizedBox(
@@ -272,78 +410,45 @@ class _BlissDashboardState extends State<BlissDashboard> {
                       const SizedBox(
                         height: 10,
                       ),
-                      ListView(
-                        padding: const EdgeInsets.only(top: 0, bottom: 120),
-                        physics: const ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        children: [
-                          Card(
-                            child: ListTile(
-                              title: Text(
-                                CurrencyFormatter.getCurrencyFormatter(
-                                  amount: '2000',
+                      Obx(
+                        () => (blissTransactionController
+                                    .isBlissTransactionProcessing.value ==
+                                'null')
+                            ? Center(
+                                child: LoadingAnimationWidget.staggeredDotsWave(
+                                  color: Colors.blue,
+                                  size: 30,
                                 ),
-                              ),
-                              subtitle: const Text(
-                                'Card debited for Oka Community Daily Plan',
-                              ),
-                              leading: Icon(
-                                Icons.dark_mode,
-                                color: Colors.blue.shade900,
-                              ),
-                            ),
-                          ),
-                          Card(
-                            child: ListTile(
-                              title: Text(
-                                CurrencyFormatter.getCurrencyFormatter(
-                                  amount: '2000',
-                                ),
-                              ),
-                              subtitle: const Text(
-                                'Card debited for Oka Community Daily Plan',
-                              ),
-                              leading: Icon(
-                                Icons.dark_mode,
-                                color: Colors.blue.shade900,
-                              ),
-                            ),
-                          ),
-                          Card(
-                            child: ListTile(
-                              title: Text(
-                                CurrencyFormatter.getCurrencyFormatter(
-                                  amount: '2000',
-                                ),
-                              ),
-                              subtitle: const Text(
-                                'Card debited for Oka Community Daily Plan',
-                              ),
-                              leading: Icon(
-                                Icons.dark_mode,
-                                color: Colors.blue.shade900,
-                              ),
-                            ),
-                          ),
-                          Card(
-                            child: ListTile(
-                              title: Text(
-                                CurrencyFormatter.getCurrencyFormatter(
-                                  amount: '2000',
-                                ),
-                              ),
-                              subtitle: const Text(
-                                'Card debited for Oka Community Daily Plan',
-                              ),
-                              leading: Icon(
-                                Icons.dark_mode,
-                                color: Colors.blue.shade900,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
+                              )
+                            : (blissTransactionController
+                                        .isBlissTransactionProcessing.value ==
+                                    'no')
+                                ? const Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                        'You have no transaction history at the moment'),
+                                  )
+                                : ListView.builder(
+                                    padding: const EdgeInsets.only(
+                                        top: 0, bottom: 120),
+                                    physics: const ClampingScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: blissTransactionController
+                                        .transactionList.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      var data = blissTransactionController
+                                          .transactionList[index];
+
+                                      return blissTransactionWidget(
+                                        amount: data.disAmount.toString(),
+                                        desc: data.description.toString(),
+                                        status: data.disStatus.toString(),
+                                      );
+                                    },
+                                  ),
+                      ),
                     ],
                   ),
                 ],
@@ -351,6 +456,44 @@ class _BlissDashboardState extends State<BlissDashboard> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class blissTransactionWidget extends StatelessWidget {
+  const blissTransactionWidget({
+    Key? key,
+    required this.amount,
+    required this.desc,
+    required this.status,
+  }) : super(key: key);
+
+  final String amount;
+  final String desc;
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(
+          CurrencyFormatter.getCurrencyFormatter(
+            amount: amount,
+          ),
+        ),
+        subtitle: Text(
+          desc,
+        ),
+        leading: (status == 'pending' || status == 'cancel')
+            ? Icon(
+                Icons.dark_mode,
+                color: Colors.blue.shade500,
+              )
+            : Icon(
+                Icons.dark_mode,
+                color: Colors.blue.shade900,
+              ),
       ),
     );
   }
