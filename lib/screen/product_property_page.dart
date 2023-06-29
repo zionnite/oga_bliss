@@ -212,12 +212,34 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         if (val == 'submit') {
           if (props.propsLiveStatus == 'new' ||
               props.propsLiveStatus == 'rejected') {
-            bool status = await propsController.submitProperty(props.propsId);
-            setState(() {
-              int index = propsController.myPropertyList.indexOf(props);
-              propsController.myPropertyList[index].propsLiveStatus = 'pending';
-              propsController.myPropertyList.refresh();
-            });
+            //show diolog
+            Get.defaultDialog(
+              title: "Action Needed",
+              middleText:
+                  "By continuing the Property Submit process, you agree to all our terms & conditions",
+              radius: 5,
+              textConfirm: "Yes, Continue",
+              confirmTextColor: Colors.white,
+              onConfirm: () async {
+                setState(() {
+                  Get.back();
+                });
+
+                bool status =
+                    await propsController.submitProperty(props.propsId);
+                if (status) {
+                  setState(() {
+                    int index = propsController.myPropertyList.indexOf(props);
+                    propsController.myPropertyList[index].propsLiveStatus =
+                        'pending';
+                    propsController.myPropertyList.refresh();
+                  });
+                }
+              },
+              textCancel: "No, Cancel",
+              cancelTextColor: Colors.blue.shade900,
+              onCancel: () {},
+            );
           }
         } else if (val == 'edit') {
           Get.bottomSheet(
