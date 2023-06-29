@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/view_user_profile.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/connection_controller.dart';
-import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/small_btn_icon.dart';
 import 'message_alone_page.dart';
@@ -99,16 +97,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  NoticeMe(
-                    title: 'Oops!',
-                    desc: 'Your bank account is not yet verify!',
-                    icon: Icons.warning,
-                    icon_color: Colors.red,
-                    border_color: Colors.red,
-                    btnTitle: 'Verify Now',
-                    btnColor: Colors.blue,
-                    onTap: () {},
-                  ),
                   Obx(
                     () => (conController.isConnectionProcessing == 'null')
                         ? Center(

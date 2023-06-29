@@ -9,7 +9,7 @@ class BlissTransactionController extends GetxController {
 
   var page_num = 1;
   var isBlissTransactionProcessing = 'null'.obs;
-  var transactionList = <Transaction>[].obs;
+  var transactionList = <MlmTransaction>[].obs;
 
   @override
   void onInit() async {
@@ -21,7 +21,7 @@ class BlissTransactionController extends GetxController {
         await ApiServices.getBlissTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {
       isBlissTransactionProcessing.value = 'yes';
-      transactionList.value = seeker.cast<Transaction>();
+      transactionList.value = seeker.cast<MlmTransaction>();
     } else {
       isBlissTransactionProcessing.value = 'no';
     }
@@ -31,7 +31,7 @@ class BlissTransactionController extends GetxController {
     var seeker =
         await ApiServices.getBlissTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {
-      transactionList.addAll(seeker.cast<Transaction>());
+      transactionList.addAll(seeker.cast<MlmTransaction>());
     } else {}
   }
 }

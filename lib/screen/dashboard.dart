@@ -5,7 +5,6 @@ import 'package:oga_bliss/controller/dashboard_controller.dart';
 import 'package:oga_bliss/model/dashboard_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_card.dart';
 import '../widget/show_not_found.dart';
@@ -105,6 +104,7 @@ class _DashboardPageState extends State<DashboardPage> {
             child: SingleChildScrollView(
               child: Obx(
                 () => ListView.builder(
+                  padding: EdgeInsets.all(0),
                   physics: const ClampingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -115,17 +115,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         adminWidget(model: dash),
                         agentWidget(model: dash),
-                        userWidget(model: dash),
-                        NoticeMe(
-                          title: 'Oops!',
-                          desc: 'Your bank account is not yet verify!',
-                          icon: Icons.warning,
-                          icon_color: Colors.red,
-                          border_color: Colors.red,
-                          btnTitle: 'Verify Now',
-                          btnColor: Colors.blue,
-                          onTap: () {},
-                        ),
                       ],
                     );
                   },
@@ -153,8 +142,8 @@ class _DashboardPageState extends State<DashboardPage> {
               propertyCard(
                 bgColor1: Colors.blue,
                 bgColor2: Colors.blue.shade400,
-                title: 'Insurance Balance',
-                value: '${model.insuranceEarning}',
+                title: 'Total Transaction',
+                value: '${model.totalTransaction}',
                 icon: const Icon(
                   Icons.cases_outlined,
                   color: Colors.white,
@@ -174,10 +163,34 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               propertyCard(
+                bgColor1: Colors.orange,
+                bgColor2: Colors.orange.shade400,
+                title: 'Payable Balance',
+                value: '${model.payableBalance}',
+                isNaira: false,
+                icon: const Icon(
+                  Icons.wallet,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              propertyCard(
+                bgColor1: Colors.purple,
+                bgColor2: Colors.blue.shade400,
+                title: 'Total Alert',
+                value: '${model.countAlert}',
+                isNaira: false,
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              propertyCard(
                 bgColor1: Colors.green,
                 bgColor2: Colors.green.shade400,
-                title: 'Total Transaction',
-                value: '${model.totalTransaction}',
+                title: 'Total Request',
+                value: '${model.totalRequest}',
                 isNaira: false,
                 icon: const Icon(
                   Icons.trending_up_rounded,
@@ -188,8 +201,44 @@ class _DashboardPageState extends State<DashboardPage> {
               propertyCard(
                 bgColor1: Colors.orange,
                 bgColor2: Colors.orange.shade400,
-                title: 'Total Connection',
-                value: '${model.totalConnection}',
+                title: 'Overall Amount Transacted',
+                value: '${model.totalAmountTransacted}',
+                isNaira: false,
+                icon: const Icon(
+                  Icons.wallet,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              propertyCard(
+                bgColor1: Colors.orange,
+                bgColor2: Colors.orange.shade400,
+                title: 'Referral Balance',
+                value: '${model.referalBalance}',
+                isNaira: false,
+                icon: const Icon(
+                  Icons.wallet,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              propertyCard(
+                bgColor1: Colors.orange,
+                bgColor2: Colors.orange.shade400,
+                title: 'Total Amount Subscribed',
+                value: '${model.totalAmountSubscribed}',
+                isNaira: false,
+                icon: const Icon(
+                  Icons.wallet,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              propertyCard(
+                bgColor1: Colors.orange,
+                bgColor2: Colors.orange.shade400,
+                title: 'Count All User',
+                value: '${model.allUsers}',
                 isNaira: false,
                 icon: const Icon(
                   Icons.people_outline,
@@ -203,7 +252,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget agentWidget({required DashboardModel model}) {
-    return (user_status == 'agent' || user_status == 'landlord')
+    return (user_status != 'admin' || user_status != 'super_admin')
         ? Column(
             children: [
               propertyCard(
@@ -220,8 +269,8 @@ class _DashboardPageState extends State<DashboardPage> {
               propertyCard(
                 bgColor1: Colors.blue,
                 bgColor2: Colors.blue.shade400,
-                title: 'Wallet Balance',
-                value: '${model.walletBalance}',
+                title: 'Total Transaction',
+                value: '${model.totalTransaction}',
                 icon: const Icon(
                   Icons.cases_outlined,
                   color: Colors.white,
@@ -241,43 +290,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               propertyCard(
-                bgColor1: Colors.green,
-                bgColor2: Colors.green.shade400,
-                title: 'Total Transaction',
-                value: '${model.totalTransaction}',
-                isNaira: false,
-                icon: const Icon(
-                  Icons.trending_up_rounded,
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
-              propertyCard(
                 bgColor1: Colors.orange,
-                bgColor2: Colors.orange.shade400,
-                title: 'Total Connection',
-                value: '${model.totalConnection}',
+                bgColor2: Colors.red,
+                title: 'Payable Balance',
+                value: '${model.payableBalance}',
                 isNaira: false,
-                icon: const Icon(
-                  Icons.people_outline,
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
-            ],
-          )
-        : Container();
-  }
-
-  Widget userWidget({required DashboardModel model}) {
-    return (user_status == 'user')
-        ? Column(
-            children: [
-              propertyCard(
-                bgColor1: Colors.red,
-                bgColor2: Colors.orange,
-                title: 'Total Earning',
-                value: '${model.totalEarning}',
                 icon: const Icon(
                   Icons.wallet,
                   color: Colors.white,
@@ -285,24 +302,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               propertyCard(
-                bgColor1: Colors.blue,
-                bgColor2: Colors.blue.shade400,
-                title: 'Wallet Balance',
-                value: '${model.walletBalance}',
-                icon: const Icon(
-                  Icons.cases_outlined,
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
-              propertyCard(
                 bgColor1: Colors.green,
                 bgColor2: Colors.green.shade400,
-                title: 'Total Transaction',
-                value: '${model.totalTransaction}',
+                title: 'Total Alert',
+                value: '${model.countAlert}',
                 isNaira: false,
                 icon: const Icon(
-                  Icons.trending_up_rounded,
+                  Icons.notifications_outlined,
                   color: Colors.white,
                   size: 30,
                 ),
@@ -310,11 +316,23 @@ class _DashboardPageState extends State<DashboardPage> {
               propertyCard(
                 bgColor1: Colors.orange,
                 bgColor2: Colors.orange.shade400,
-                title: 'Total Connection',
-                value: '${model.totalConnection}',
+                title: 'Count Referral',
+                value: '${model.countReferaal}',
                 isNaira: false,
                 icon: const Icon(
-                  Icons.people_outline,
+                  Icons.groups_2_sharp,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              propertyCard(
+                bgColor1: Colors.black54,
+                bgColor2: Colors.black,
+                title: 'Count Downline',
+                value: '${model.countDownlines}',
+                isNaira: false,
+                icon: const Icon(
+                  Icons.lan_rounded,
                   color: Colors.white,
                   size: 30,
                 ),

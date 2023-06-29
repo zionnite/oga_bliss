@@ -12,49 +12,61 @@ String dashboardModelToJson(List<DashboardModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class DashboardModel {
-  DashboardModel({
-    this.totalEarning,
-    this.walletBalance,
-    this.insuranceEarning,
-    this.totalTransaction,
-    this.totalConnection,
-    this.totalProperty,
-    this.totalRequest,
-    this.countMsg,
-    this.countAlert,
-  });
-
   String? totalEarning;
-  String? walletBalance;
-  String? insuranceEarning;
   String? totalTransaction;
-  String? totalConnection;
   String? totalProperty;
   String? totalRequest;
-  String? countMsg;
   String? countAlert;
+  String? totalAmountTransacted;
+  String? payableBalance;
+  String? referalBalance;
+  String? totalAmountSubscribed;
+  String? allUsers;
+  String? countReferaal;
+  String? countDownlines;
+
+  DashboardModel({
+    this.totalEarning,
+    this.totalTransaction,
+    this.totalProperty,
+    this.totalRequest,
+    this.countAlert,
+    this.totalAmountTransacted,
+    this.payableBalance,
+    this.referalBalance,
+    this.totalAmountSubscribed,
+    this.allUsers,
+    this.countReferaal,
+    this.countDownlines,
+  });
 
   factory DashboardModel.fromJson(Map<String, dynamic> json) => DashboardModel(
         totalEarning: json["total_earning"],
-        walletBalance: json["wallet_balance"],
-        insuranceEarning: json["insurance_earning"],
         totalTransaction: json["total_transaction"],
-        totalConnection: json["total_connection"],
         totalProperty: json["total_property"],
         totalRequest: json["total_request"],
-        countMsg: json["count_msg"],
         countAlert: json["count_alert"],
+        totalAmountTransacted: json["total_amount_transacted"],
+        payableBalance: json["payable_balance"],
+        referalBalance: json["referal_balance"],
+        totalAmountSubscribed: json["total_amount_subscribed"],
+        allUsers: json["all_users"],
+        countReferaal: json["count_referaal"],
+        countDownlines: json["count_downlines"],
       );
 
   Map<String, dynamic> toJson() => {
         "total_earning": totalEarning,
-        "wallet_balance": walletBalance,
-        "insurance_earning": insuranceEarning,
         "total_transaction": totalTransaction,
-        "total_connection": totalConnection,
         "total_property": totalProperty,
         "total_request": totalRequest,
-        "count_msg": countMsg,
         "count_alert": countAlert,
+        "total_amount_transacted": totalAmountTransacted,
+        "payable_balance": payableBalance,
+        "referal_balance": referalBalance,
+        "total_amount_subscribed": totalAmountSubscribed,
+        "all_users": allUsers,
+        "count_referaal": countReferaal,
+        "count_downlines": countDownlines,
       };
 }

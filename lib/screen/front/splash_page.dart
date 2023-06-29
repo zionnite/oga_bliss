@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/home_page.dart';
+import 'package:oga_bliss/util/common.dart';
 
 import '../../controller/splash_controller.dart';
 
@@ -30,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
     splashController.startAnimation();
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: backgroundColorPrimary,
       body: Stack(
         children: [
           Obx(
@@ -65,7 +66,7 @@ class _SplashPageState extends State<SplashPage> {
                             child: const Text(
                               'OgaBliss',
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 35,
                                 fontFamily: 'Passion One',
                                 color: Colors.white,
                               ),
@@ -74,10 +75,10 @@ class _SplashPageState extends State<SplashPage> {
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 12.0),
                             child: Text(
-                              'Bridging the Gap between Tenant and Landlord',
+                              'Oga for property matter',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                // fontSize: 15,
+                                fontSize: 18,
                                 color: Colors.white,
                               ),
                             ),

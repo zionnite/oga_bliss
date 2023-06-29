@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -92,6 +93,7 @@ class _AlertPageState extends State<AlertPage> {
         title: const Text(
           'Alert',
         ),
+        backgroundColor: backgroundColorPrimary,
       ),
       body: Obx(
         () => (alertController.isAlertProcessing == 'null')
@@ -122,7 +124,7 @@ class _AlertPageState extends State<AlertPage> {
                   });
                 },
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Colors.blue,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),

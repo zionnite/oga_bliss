@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/front/signup_page.dart';
+import 'package:oga_bliss/util/common.dart';
 
 class DecidePage extends StatefulWidget {
   const DecidePage({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _DecidePageState extends State<DecidePage> {
     // splashController.startAnimation();
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: backgroundColorPrimary,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(30),
@@ -88,7 +89,7 @@ class _DecidePageState extends State<DecidePage> {
                   foregroundColor: Colors.white,
                   shape: const RoundedRectangleBorder(),
                   side: const BorderSide(color: Colors.white),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Colors.blue.shade900,
                   padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
                 onPressed: () {

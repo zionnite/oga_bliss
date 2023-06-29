@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/bliss_legacy/screen/bliss_downline.dart';
+import 'package:oga_bliss/bliss_legacy/screen/bliss_earning.dart';
+import 'package:oga_bliss/bliss_legacy/screen/bliss_plan.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/screen/alert_page.dart';
-import 'package:oga_bliss/screen/connection_page.dart';
+import 'package:oga_bliss/screen/book_specification.dart';
 import 'package:oga_bliss/screen/favourite.dart';
 import 'package:oga_bliss/screen/front/decide_page.dart';
 import 'package:oga_bliss/screen/front/login_page.dart';
-import 'package:oga_bliss/screen/message_page.dart';
+import 'package:oga_bliss/screen/market_page.dart';
+import 'package:oga_bliss/screen/payout_transaction_page.dart';
 import 'package:oga_bliss/screen/profile_page.dart';
-import 'package:oga_bliss/screen/request_page.dart';
+import 'package:oga_bliss/screen/purchase_property.dart';
+import 'package:oga_bliss/screen/referal_page.dart';
 import 'package:oga_bliss/screen/transaction_page.dart';
-import 'package:oga_bliss/screen/wallet.dart';
+import 'package:oga_bliss/screen/withdrawal_page.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,7 +74,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: Colors.blue,
+        color: backgroundColorPrimary,
         child: ListView(
           children: <Widget>[
             buildHeader(
@@ -94,29 +100,89 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       );
                     },
                   ),
+                  buildMenuItem(
+                    text: 'My Plan',
+                    icon: Icons.all_inclusive_rounded,
+                    onClicked: () {
+                      Get.to(
+                        () => const BlissPlan(),
+                      );
+                    },
+                  ),
 
                   /*Admin*/
                   adminWidget(),
                   usersWidget(),
 
-                  /*End Admin*/
-                  const SizedBox(height: 24),
                   buildMenuItem(
-                    text: 'Request',
-                    icon: Icons.waving_hand_sharp,
+                    text: 'Property Marketing',
+                    icon: Icons.campaign_sharp,
                     onClicked: () => Get.to(
-                      () => const RequestPage(),
+                      () => const MarketPage(),
                     ),
                   ),
+                  buildMenuItem(
+                    text: 'Purchase Property',
+                    icon: Icons.card_giftcard_sharp,
+                    onClicked: () {
+                      Get.to(
+                        () => const PurchaseProperty(),
+                      );
+                    },
+                  ),
+                  buildMenuItem(
+                    text: 'My Referral',
+                    icon: Icons.groups_2_sharp,
+                    onClicked: () {
+                      Get.to(
+                        () => const ReferalPage(),
+                      );
+                    },
+                  ),
+
+                  buildMenuItem(
+                    text: 'My Downline',
+                    icon: Icons.lan_rounded,
+                    onClicked: () {
+                      Get.to(
+                        () => const BlissDownline(),
+                      );
+                    },
+                  ),
+
+                  /*End Admin*/
 
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Transaction',
-                    icon: Icons.receipt_long,
+                    text: 'Property Transaction',
+                    icon: Icons.moving,
                     onClicked: () => Get.to(
                       () => const TransactionPage(),
                     ),
                   ),
+                  buildMenuItem(
+                    text: 'Payout Transaction',
+                    icon: Icons.receipt_long,
+                    onClicked: () => Get.to(
+                      () => const PayoutTransactionPage(),
+                    ),
+                  ),
+
+                  buildMenuItem(
+                    text: 'Book Specification',
+                    icon: Icons.event_rounded,
+                    onClicked: () => Get.to(
+                      () => const BookSpecification(),
+                    ),
+                  ),
+                  buildMenuItem(
+                    text: 'Withdrawal',
+                    icon: Icons.account_balance_wallet_rounded,
+                    onClicked: () => Get.to(
+                      () => const WithdrawalPage(),
+                    ),
+                  ),
+
                   const SizedBox(height: 24),
                   const Divider(color: Colors.white70),
 
@@ -128,6 +194,13 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                     icon: Icons.notifications_outlined,
                     onClicked: () => Get.to(
                       () => const AlertPage(),
+                    ),
+                  ),
+                  buildMenuItem(
+                    text: 'Bonus Point',
+                    icon: Icons.egg_rounded,
+                    onClicked: () => Get.to(
+                      () => const BlissEarning(),
                     ),
                   ),
                   // extraWidget(),
@@ -236,7 +309,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             children: [
               const SizedBox(height: 24),
               buildMenuItem(
-                text: 'Manage Product',
+                text: 'Manage Property',
                 icon: Icons.shopping_bag,
                 onClicked: () => Get.to(
                   () => const ManageProperty(),
@@ -256,61 +329,21 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget usersWidget() {
-    return (admin_status == false)
-        ? Column(
-            children: [
-              (user_status == 'agent' || user_status == 'landlord')
-                  ? const SizedBox(height: 24)
-                  : Container(),
-              (user_status == 'agent' || user_status == 'landlord')
-                  ? buildMenuItem(
-                      text: 'Product',
-                      icon: Icons.shopping_bag,
-                      onClicked: () => Get.to(
-                        () => const ProductPropertyPage(),
-                      ),
-                    )
-                  : Container(),
-              (user_status == 'user')
-                  ? const SizedBox(height: 16)
-                  : Container(),
-              (user_status == 'user')
-                  ? buildMenuItem(
-                      text: 'Wallet',
-                      icon: Icons.wallet,
-                      onClicked: () => Get.to(
-                        () => const WalletPage(),
-                      ),
-                    )
-                  : Container(),
-              const SizedBox(height: 16),
-              buildMenuItem(
-                text: 'Connection',
-                icon: Icons.account_tree_outlined,
-                onClicked: () => Get.to(
-                  () => const ConnectionPage(),
-                ),
-              ),
-            ],
-          )
-        : Container();
+    return Column(
+      children: [
+        buildMenuItem(
+          text: 'My Property',
+          icon: Icons.shopping_bag,
+          onClicked: () => Get.to(
+            () => const ProductPropertyPage(),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget bottomWidget() {
-    return (admin_status == false)
-        ? Column(
-            children: [
-              const SizedBox(height: 24),
-              buildMenuItem(
-                text: 'Message',
-                icon: Icons.message,
-                onClicked: () => Get.to(
-                  () => const MessagePage(),
-                ),
-              ),
-            ],
-          )
-        : Container();
+    return Container();
   }
 
   Widget buildSearchField() {

@@ -4,15 +4,58 @@
 
 import 'dart:convert';
 
-List<TransactionModel> transactionModelFromJson(String str) =>
-    List<TransactionModel>.from(
-        json.decode(str).map((x) => TransactionModel.fromJson(x)));
+TransactionModel transactionModelFromJson(String str) =>
+    TransactionModel.fromJson(json.decode(str));
 
-String transactionModelToJson(List<TransactionModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String transactionModelToJson(TransactionModel data) =>
+    json.encode(data.toJson());
 
 class TransactionModel {
+  String? status;
+  List<PropertyTransaction>? propertyTransaction;
+
   TransactionModel({
+    this.status,
+    this.propertyTransaction,
+  });
+
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      TransactionModel(
+        status: json["status"],
+        propertyTransaction: json["property_transaction"] == null
+            ? []
+            : List<PropertyTransaction>.from(json["property_transaction"]!
+                .map((x) => PropertyTransaction.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "property_transaction": propertyTransaction == null
+            ? []
+            : List<dynamic>.from(propertyTransaction!.map((x) => x.toJson())),
+      };
+}
+
+class PropertyTransaction {
+  String? id;
+  String? propsId;
+  String? disUserId;
+  String? disAmount;
+  String? transType;
+  String? disBalance;
+  String? description;
+  String? refNo;
+  String? disStatus;
+  DateTime? dateCreated;
+  String? time;
+  String? propsName;
+  String? propsImage;
+  String? getPropsStateId;
+  dynamic getStateName;
+  String? getPropsSubStateId;
+  dynamic getSubStateName;
+
+  PropertyTransaction({
     this.id,
     this.propsId,
     this.disUserId,
@@ -32,26 +75,8 @@ class TransactionModel {
     this.getSubStateName,
   });
 
-  String? id;
-  String? propsId;
-  String? disUserId;
-  String? disAmount;
-  String? transType;
-  String? disBalance;
-  String? description;
-  String? refNo;
-  String? disStatus;
-  DateTime? dateCreated;
-  String? time;
-  String? propsName;
-  String? propsImage;
-  String? getPropsStateId;
-  String? getStateName;
-  String? getPropsSubStateId;
-  String? getSubStateName;
-
-  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
-      TransactionModel(
+  factory PropertyTransaction.fromJson(Map<String, dynamic> json) =>
+      PropertyTransaction(
         id: json["id"],
         propsId: json["props_id"],
         disUserId: json["dis_user_id"],

@@ -11,33 +11,43 @@ String blissTransactionModelToJson(BlissTransactionModel data) =>
     json.encode(data.toJson());
 
 class BlissTransactionModel {
+  String? status;
+  List<MlmTransaction>? mlmTransaction;
+
   BlissTransactionModel({
     this.status,
-    this.transaction,
+    this.mlmTransaction,
   });
-
-  String? status;
-  List<Transaction>? transaction;
 
   factory BlissTransactionModel.fromJson(Map<String, dynamic> json) =>
       BlissTransactionModel(
         status: json["status"],
-        transaction: json["transaction"] == null
+        mlmTransaction: json["mlm_transaction"] == null
             ? []
-            : List<Transaction>.from(
-                json["transaction"]!.map((x) => Transaction.fromJson(x))),
+            : List<MlmTransaction>.from(json["mlm_transaction"]!
+                .map((x) => MlmTransaction.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "transaction": transaction == null
+        "mlm_transaction": mlmTransaction == null
             ? []
-            : List<dynamic>.from(transaction!.map((x) => x.toJson())),
+            : List<dynamic>.from(mlmTransaction!.map((x) => x.toJson())),
       };
 }
 
-class Transaction {
-  Transaction({
+class MlmTransaction {
+  String? id;
+  String? disUserId;
+  String? disAmount;
+  String? transType;
+  String? description;
+  String? refNo;
+  String? disStatus;
+  String? dateCreated;
+  String? time;
+
+  MlmTransaction({
     this.id,
     this.disUserId,
     this.disAmount,
@@ -49,17 +59,7 @@ class Transaction {
     this.time,
   });
 
-  String? id;
-  String? disUserId;
-  String? disAmount;
-  String? transType;
-  String? description;
-  String? refNo;
-  String? disStatus;
-  DateTime? dateCreated;
-  String? time;
-
-  factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
+  factory MlmTransaction.fromJson(Map<String, dynamic> json) => MlmTransaction(
         id: json["id"],
         disUserId: json["dis_user_id"],
         disAmount: json["dis_amount"],
@@ -67,9 +67,7 @@ class Transaction {
         description: json["description"],
         refNo: json["ref_no"],
         disStatus: json["dis_status"],
-        dateCreated: json["date_created"] == null
-            ? null
-            : DateTime.parse(json["date_created"]),
+        dateCreated: json["date_created"],
         time: json["time"],
       );
 
@@ -81,8 +79,7 @@ class Transaction {
         "description": description,
         "ref_no": refNo,
         "dis_status": disStatus,
-        "date_created":
-            "${dateCreated!.year.toString().padLeft(4, '0')}-${dateCreated!.month.toString().padLeft(2, '0')}-${dateCreated!.day.toString().padLeft(2, '0')}",
+        "date_created": dateCreated,
         "time": time,
       };
 }

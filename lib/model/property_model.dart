@@ -95,6 +95,9 @@ class PropertyModel {
     this.agentUserName,
     this.agentUserPhone,
     this.agentPropCounter,
+    this.propsNegotiable,
+    this.isPromotingProduct,
+    this.urlCode,
   });
 
   String? propsId;
@@ -177,6 +180,9 @@ class PropertyModel {
   String? agentUserName;
   String? agentUserPhone;
   int? agentPropCounter;
+  String? propsNegotiable;
+  bool? isPromotingProduct;
+  String? urlCode;
 
   factory PropertyModel.fromJson(Map<String, dynamic> json) => PropertyModel(
         propsId: json["props_id"],
@@ -262,6 +268,9 @@ class PropertyModel {
         agentUserName: json["agent_user_name"],
         agentUserPhone: json["agent_user_phone"],
         agentPropCounter: json["agent_prop_counter"],
+        propsNegotiable: json["props_negotiable"],
+        isPromotingProduct: json["is_promoting_product"],
+        urlCode: json["url_code"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -347,6 +356,9 @@ class PropertyModel {
         "agent_user_name": agentUserName,
         "agent_user_phone": agentUserPhone,
         "agent_prop_counter": agentPropCounter,
+        "props_negotiable": propsNegotiable,
+        "is_promoting_product": isPromotingProduct,
+        "url_code": urlCode,
       };
 }
 

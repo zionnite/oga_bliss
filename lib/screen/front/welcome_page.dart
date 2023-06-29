@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/home_page.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'decide_page.dart';
@@ -21,7 +22,7 @@ class _WelcomePageState extends State<WelcomePage> {
     // splashController.startAnimation();
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: backgroundColorPrimary,
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(30),
@@ -68,7 +69,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       Expanded(
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.blue.shade700,
+                            foregroundColor: Colors.blue.shade900,
                             backgroundColor: Colors.white,
                             shape: const RoundedRectangleBorder(),
                             side: const BorderSide(color: Colors.blue),
@@ -95,7 +96,7 @@ class _WelcomePageState extends State<WelcomePage> {
                             foregroundColor: Colors.white,
                             shape: const RoundedRectangleBorder(),
                             side: const BorderSide(color: Colors.white),
-                            backgroundColor: Colors.blue,
+                            backgroundColor: Colors.blue.shade900,
                             padding: const EdgeInsets.symmetric(vertical: 20),
                           ),
                           onPressed: () {

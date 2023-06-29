@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:oga_bliss/model/transaction_model.dart';
 
-import '../model/transaction_model.dart';
 import '../services/api_services.dart';
 
 class TransactionController extends GetxController {
@@ -9,7 +9,7 @@ class TransactionController extends GetxController {
   var page_num = 1;
   var isTransactionProcessing = 'null'.obs;
   var isMoreDataAvailable = true.obs;
-  var transactionList = <TransactionModel>[].obs;
+  var propsTransactionList = <PropertyTransaction>[].obs;
 
   // String? user_id;
   // bool? admin_status;
@@ -28,8 +28,10 @@ class TransactionController extends GetxController {
         await ApiServices.getTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {
       isTransactionProcessing.value = 'yes';
-      transactionList.value = seeker.cast<TransactionModel>();
+      propsTransactionList.value = seeker.cast<PropertyTransaction>();
+      print('came here ');
     } else {
+      print('came there');
       isTransactionProcessing.value = 'no';
     }
   }
@@ -38,7 +40,7 @@ class TransactionController extends GetxController {
     var seeker =
         await ApiServices.getTransaction(pageNum, user_id, admin_status);
     if (seeker != null) {
-      transactionList.addAll(seeker.cast<TransactionModel>());
+      propsTransactionList.addAll(seeker.cast<PropertyTransaction>());
     } else {}
   }
 }

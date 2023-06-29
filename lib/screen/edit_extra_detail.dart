@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:currency_symbols/currency_symbols.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/model/property_model.dart';
+import 'package:oga_bliss/widget/my_money_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -168,6 +171,14 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
     }
   }
 
+  final String NGN = cSymbol("NGN");
+  static const _locale = 'en';
+  String _formatNumber(String s) =>
+      NumberFormat.decimalPattern(_locale).format(int.parse(s));
+  String get _currency =>
+      NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
+
+  String disCautionFee = "0";
   List<Step> stepList() => [
         Step(
           state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
@@ -198,9 +209,27 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextField(
+                MyMoneyField(
                   myTextFormController: propsCautionFee,
                   fieldName: 'Caution / Damage Fee',
+                  prefix: Icons.attach_money,
+                  onChange: (string) {
+                    if (propsCautionFee.text.isNotEmpty) {
+                      string = '${_formatNumber(string.replaceAll(',', ''))}';
+                      propsCautionFee.value = TextEditingValue(
+                        text: string,
+                        selection:
+                            TextSelection.collapsed(offset: string.length),
+                      );
+                    } else {
+                      setState(() {
+                        string = '0';
+                      });
+                    }
+                    setState(() {
+                      disCautionFee = string;
+                    });
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -275,7 +304,7 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
                 ? Center(
                     child: Container(
                       child: LoadingAnimationWidget.inkDrop(
-                        size: 200,
+                        size: 30,
                         color: Colors.blue,
                       ),
                     ),
@@ -311,7 +340,7 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
           });
         } else {
           if (propsCondition != '' &&
-              propsCautionFee != '' &&
+              disCautionFee != '' &&
               selectedPref != '') {
             setState(() {
               isLoading = true;
@@ -319,7 +348,7 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
             // print('form its filled');
             bool status = await propsController.editExtraDetail(
                 propsCondition: propsCondition.text,
-                propsCautionFee: propsCautionFee.text,
+                propsCautionFee: disCautionFee,
                 selectedPref: selectedPref,
                 propsId: widget.model.propsId!,
                 user_id: user_id!);

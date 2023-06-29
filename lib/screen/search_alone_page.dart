@@ -1,8 +1,11 @@
+import 'package:bootstrap_alert/bootstrap_alert.dart';
 import 'package:currency_symbols/currency_symbols.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/screen/book_specification.dart';
 import 'package:oga_bliss/services/api_services.dart';
 import 'package:oga_bliss/widget/my_dropdown_field.dart';
+import 'package:oga_bliss/widget/property_btn.dart';
 import 'package:simple_currency_format/simple_currency_format.dart';
 
 import '../controller/property_controller.dart';
@@ -28,6 +31,7 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
 
   String? states_id;
   String? area_id;
+  bool isLoading = false;
 
   populateDropDown() async {
     LocationModel data = await ApiServices.getStateRegion();
@@ -278,7 +282,6 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         ),
                       ),
                       RangeSlider(
-
                         min: 5000,
                         max: 90000000,
                         divisions: 100000,
@@ -373,6 +376,36 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                     ],
                   ),
                 ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 8, right: 8.0),
+                child: BootstrapAlert(
+                  visible: true,
+                  status: AlertStatus.warning,
+                  leadingIcon: AlertIcons.warning,
+                  text:
+                      'Didn\'t get your kind of house/land?\nDon\'t worry Bliss Legacy got you covered, Kindly click on the button below to tell us your specifications.',
+                ),
+              ),
+              propertyBtn(
+                card_margin: EdgeInsets.only(left: 8, right: 8, bottom: 50),
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  Future.delayed(const Duration(seconds: 2), () async {
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                    Get.to(() => const BookSpecification());
+                  });
+                },
+                title: 'Book Specification',
+                bgColor: Colors.blue.shade900,
+                isLoading: isLoading,
               )
             ],
           ),

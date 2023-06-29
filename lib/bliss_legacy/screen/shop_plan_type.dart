@@ -4,6 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_controller/shop_controller.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../bliss_widget/shop_widget.dart';
 
@@ -26,6 +27,7 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
   String? user_status;
   bool? admin_status;
   bool? isUserLogin;
+  String? isbank_verify;
 
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -34,6 +36,7 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
     var user_status1 = prefs.getString('user_status');
     var admin_status1 = prefs.getBool('admin_status');
     var isUserLogin1 = prefs.getBool('isUserLogin');
+    var isbank_verify1 = prefs.getString('isbank_verify');
 
     if (mounted) {
       setState(() {
@@ -42,14 +45,11 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
         user_status = user_status1;
         admin_status = admin_status1;
         isUserLogin = isUserLogin1;
-
-        //TODO: COME HERE AND DELETE THIS
-        user_id = '1';
-        admin_status = false;
+        isbank_verify = isbank_verify1;
       });
 
       if (widget.planId == 'building' || widget.planId == 'land') {
-        await shopController.getDisPlansType(1, widget.planId, user_id);
+        await (shopController).getDisPlansType(1, widget.planId, user_id);
       } else {
         await shopController.getDisPlansInterval(1, widget.planId, user_id);
       }
@@ -60,6 +60,8 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
   bool isLoading = false;
   bool widgetLoading = true;
   String? payableBalance;
+  bool isJoin = false;
+  int? disId;
 
   @override
   void initState() {
@@ -74,12 +76,13 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
         isLoading = true;
         current_page++;
       });
-      print('Scroolsup');
 
       if (widget.planId == 'building' || widget.planId == 'land') {
-        await shopController.getDisPlansTypeMore(1, widget.planId, user_id);
+        await shopController.getDisPlansTypeMore(
+            current_page, widget.planId, user_id);
       } else {
-        await shopController.getDisPlansIntervalMore(1, widget.planId, user_id);
+        await shopController.getDisPlansIntervalMore(
+            current_page, widget.planId, user_id);
       }
 
       Future.delayed(const Duration(seconds: 1), () {
@@ -173,6 +176,69 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
     );
   }
 
+  fabButtonClicked() async {
+    if (widget.planId == 'building' || widget.planId == 'land') {
+      return Obx(
+        () => (shopController.disPlansList.isNotEmpty)
+            ? Container()
+            : InkWell(
+                onTap: () {
+                  setState(() {
+                    shopController.isShopIntervalProcessing.value = 'null';
+                    shopController.getDisPlansType(1, widget.planId, user_id);
+                    shopController.disPlansList.refresh();
+                  });
+                },
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  color: Colors.blue.shade900,
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                  ),
+                ),
+              ),
+      );
+    } else {
+      return Obx(
+        () => (shopController.disPlansList.isNotEmpty)
+            ? Container()
+            : InkWell(
+                onTap: () {
+                  setState(() {
+                    shopController.isShopIntervalProcessing.value = 'null';
+                    shopController.getDisPlansInterval(
+                        1, widget.planId, user_id);
+                    shopController.disPlansList.refresh();
+                  });
+                },
+                child: Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  color: Colors.blue.shade900,
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                      size: 25,
+                    ),
+                  ),
+                ),
+              ),
+      );
+    }
+  }
+
   getData() {
     return (shopController.disPlansList.isEmpty)
         ? Stack(children: [
@@ -222,17 +288,63 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
               itemBuilder: (BuildContext context, int index) {
                 var data = shopController.disPlansList[index];
                 return shopWidget(
-                  onTap: () {
-                    print('this clicked');
+                  onTap: () async {
+                    if (isbank_verify == 'yes') {
+                      setState(() {
+                        //isJoin = true;
+                        disId = int.parse(data.disId!);
+                      });
+
+                      var planId = data.planId;
+                      var planCode = data.planCode;
+
+                      var link =
+                          'https://ogabliss.com/Subscription/join_sub/$user_id/$planId/$planCode';
+
+                      Future.delayed(
+                        const Duration(seconds: 1),
+                        () async {
+                          setState(() {
+                            isJoin = false;
+                          });
+                          await _launchInBrowser(Uri.parse(link));
+                        },
+                      );
+                    } else {
+                      Get.defaultDialog(
+                        title: 'Action Required',
+                        middleText: '',
+                        content: const Padding(
+                          padding: EdgeInsets.only(left: 18.0, right: 18),
+                          child: Text(
+                            'Your Bank account it\'s not verify, please go to your profile to edit your bank details and click verify',
+                            style: TextStyle(),
+                          ),
+                        ),
+                        textCancel: 'Cancel',
+                        onCancel: () {},
+                        radius: 5,
+                      );
+                    }
                   },
                   planImg: '${data.planImage}',
                   planName: '${data.planName}',
                   planInterval: '${data.planInterval}',
                   planLimit: '${data.planLimit}',
                   planAmount: '${data.planAmount}',
+                  isSubscribe: data.isSubscribe!,
                 );
               },
             ),
           );
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

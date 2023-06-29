@@ -95,59 +95,68 @@ class SubscriptionController extends GetxController {
     } else {}
   }
 
-  toggleDisableButton(userId, planCode, subCode, emailToken) async {
+  toggleDisableButton({
+    required String disId,
+    required String userId,
+    required String planId,
+    required String planCode,
+    required String subCode,
+    required String emailToken,
+    required MyPlanList planList,
+  }) async {
     String status = await ApiServices.toggleDisableButton(
-        userId, planCode, subCode, emailToken);
-    if (userId == null) {
+      disId: disId,
+      userId: userId,
+      planId: planId,
+      planCode: planCode,
+      subCode: subCode,
+      emailToken: emailToken,
+    );
+
+    if (status == 'true_1') {
+      // int index = myPlanList.indexOf(planList);
+      // print(index);
+      // print('count ${myPlanList.length}');
+      //myPlanList.removeAt(index);
+      //myPlanList.refresh();
+
+      // var id = myPlanList[index].id;
+      // var newPropId = myPlanList.indexWhere(((p) => p.id == id));
+      // if (newPropId != -1) {
+      //   myPlanList.removeAt(newPropId);
+      // }
+
       showSnackBar(
-        title: 'Oops!',
-        msg: 'You need to Login before you can perform this action',
+        title: "Result",
+        msg: 'Since Plan is INACTIVE we removed it from list',
         backgroundColor: Colors.blue.shade900,
       );
-      return 'false';
+    } else if (status == 'true_2') {
+      showSnackBar(
+        title: "Result",
+        msg: 'Request submitted awaiting Admin approval',
+        backgroundColor: Colors.blue.shade900,
+      );
+    } else if (status == 'false' || status == 'false_2') {
+      showSnackBar(
+        title: "Result",
+        msg: 'Database busy, please try again later',
+        backgroundColor: Colors.blue.shade900,
+      );
+    } else {
+      showSnackBar(
+        title: "Result",
+        msg: 'You already initiated this request with this subscription plan',
+        backgroundColor: Colors.blue.shade900,
+      );
     }
 
-    if (status == 'true') {
-      showSnackBar(
-        title: "Note",
-        msg: 'Subscription Disable',
-        backgroundColor: Colors.blue.shade900,
-      );
-      return 'true';
-    } else if (status == 'false_0') {
-      showSnackBar(
-        title: "Note",
-        msg: 'You already disable this subscription',
-        backgroundColor: Colors.red,
-      );
-      return 'false_0';
-    } else if (status == 'false_1') {
-      showSnackBar(
-        title: "Note",
-        msg: 'Could not disable subscription please try again later!',
-        backgroundColor: Colors.red,
-      );
-      return 'false_1';
-    } else if (status == 'false_2') {
-      showSnackBar(
-        title: "Note",
-        msg: 'Your subscription is disabled but could not update your profile',
-        backgroundColor: Colors.red,
-      );
-      return 'false_2';
-    }
+    return status;
   }
 
+  //$dis_id = NULL, $user_id = NULL, $plan_id = NULL, $plan_code = NULL, $sub_code = NULL, $email_token = NULL
   updateCard(userId, subCode) async {
     String status = await ApiServices.toggleUpdateCard(userId, subCode);
-    if (userId == null) {
-      showSnackBar(
-        title: 'Oops!',
-        msg: 'You need to Login before you can perform this action',
-        backgroundColor: Colors.blue.shade900,
-      );
-      return 'false';
-    }
 
     if (status == 'true') {
       showSnackBar(

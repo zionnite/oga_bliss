@@ -8,6 +8,7 @@ class RoundedButton extends StatefulWidget {
     required this.title,
     required this.onTap,
     this.isLoading = false,
+    this.isLoadingColor = Colors.white,
   });
 
   final Color bgColor;
@@ -15,6 +16,7 @@ class RoundedButton extends StatefulWidget {
   final String title;
   final VoidCallback onTap;
   final isLoading;
+  Color isLoadingColor;
 
   @override
   State<RoundedButton> createState() => _RoundedButtonState();
@@ -51,7 +53,7 @@ class _RoundedButtonState extends State<RoundedButton> {
               child: (widget.isLoading)
                   ? Center(
                       child: LoadingAnimationWidget.inkDrop(
-                        color: Colors.white,
+                        color: widget.isLoadingColor,
                         size: 15,
                       ),
                     )

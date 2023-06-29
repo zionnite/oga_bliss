@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -81,7 +82,7 @@ class _FavouritePageState extends State<FavouritePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue,
+        backgroundColor: backgroundColorPrimary,
         title: const Text('Favourite'),
       ),
       body: Padding(

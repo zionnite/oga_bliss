@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:oga_bliss/util/common.dart';
 
 class Terms_N_Conditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: backgroundColorPrimary,
         title: const Text(
           'End-User License Agreement',
           style: TextStyle(

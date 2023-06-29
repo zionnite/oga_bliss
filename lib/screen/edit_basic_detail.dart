@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:currency_symbols/currency_symbols.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/model/property_model.dart';
+import 'package:oga_bliss/widget/my_money_field.dart';
+import 'package:oga_bliss/widget/my_slide_checkbox.dart';
 import 'package:oga_bliss/widget/my_text_field_num.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,6 +84,8 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
   bool gym = false;
   bool fireplace = false;
   bool hot_tub = false;
+  //
+  bool slightNegotiate = false;
 
   propertyModeEnum? _props_mode;
 
@@ -114,6 +120,7 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
         admin_status = admin_status1;
       });
     }
+    print(widget.model.propsId);
   }
 
   @override
@@ -141,7 +148,7 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
 
   // final _propsPurposeList = ["Buy", "Rent"];
   final _propsPurposeList = [
-    {"value": "buy", "name": "Buy"},
+    {"value": "sale", "name": "Buy"},
     {"value": "rent", "name": "Rent"},
   ];
   String? props_purpose;
@@ -167,6 +174,37 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
       // Navigator.of(context).pop();
     }
   }
+
+  final String NGN = cSymbol("NGN");
+  static const _locale = 'en';
+  String _formatNumber(String s) =>
+      NumberFormat.decimalPattern(_locale).format(int.parse(s));
+  String get _currency =>
+      NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
+
+  String disAmount = "0";
+
+  //year property built
+  final _yearBuiltList = [
+    {"value": "1 month", "name": "1 Month"},
+    {"value": "2 month", "name": "2 Months"},
+    {"value": "3 month", "name": "3 Months"},
+    {"value": "4 month", "name": "4 Months"},
+    {"value": "5 month", "name": "5 Months"},
+    {"value": "6 month+", "name": "6 Months+"},
+    {"value": "1 Year", "name": "1 Year"},
+    {"value": "2 Year", "name": "2 Year"},
+    {"value": "3 Year", "name": "3 Year"},
+    {"value": "4 Year", "name": "4 Year"},
+    {"value": "5 Year", "name": "5 Year"},
+    {"value": "6 Year", "name": "6 Year"},
+    {"value": "7 Year", "name": "7 Year"},
+    {"value": "8 Year", "name": "8 Year"},
+    {"value": "9 Year", "name": "9 Year"},
+    {"value": "10 Year+", "name": "10 Year+"},
+    {"value": "20 Year+", "name": "10 Year+"},
+  ];
+  String? selectedYearBuilt;
 
   List<Step> stepList() => [
         Step(
@@ -374,9 +412,47 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
+                // MyTextField(
+                //   myTextFormController: propsPrice,
+                //   fieldName: 'Price',
+                // ),
+                MyMoneyField(
                   myTextFormController: propsPrice,
-                  fieldName: 'Price',
+                  fieldName: 'Amount',
+                  prefix: Icons.attach_money,
+                  onChange: (string) {
+                    if (propsPrice.text.isNotEmpty) {
+                      string = '${_formatNumber(string.replaceAll(',', ''))}';
+                      propsPrice.value = TextEditingValue(
+                        text: string,
+                        selection:
+                            TextSelection.collapsed(offset: string.length),
+                      );
+                    } else {
+                      setState(() {
+                        string = '0';
+                      });
+                    }
+                    setState(() {
+                      disAmount = string;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    MySlideCheckBox(
+                      isSwitched: slightNegotiate,
+                      onChanged: (value) {
+                        setState(() {
+                          slightNegotiate = value;
+                        });
+                      },
+                    ),
+                    const Text('Slightly Negotiable?'),
+                  ],
                 ),
                 const SizedBox(
                   height: 8,
@@ -410,9 +486,21 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
-                  myTextFormController: propsYearBuilt,
-                  fieldName: 'Year Built',
+                MyDropDownField(
+                  labelText: 'How old is the Property',
+                  value: selectedYearBuilt,
+                  dropDownList: List.generate(
+                    _yearBuiltList.length,
+                    (i) => DropdownMenuItem(
+                      value: _yearBuiltList[i]["value"],
+                      child: Text("${_yearBuiltList[i]["name"]}"),
+                    ),
+                  ),
+                  onChanged: (Object? value) {
+                    setState(() {
+                      selectedYearBuilt = value.toString();
+                    });
+                  },
                 ),
               ],
             ),
@@ -495,7 +583,7 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
                 ? Center(
                     child: Container(
                       child: LoadingAnimationWidget.inkDrop(
-                        size: 200,
+                        size: 30,
                         color: Colors.blue,
                       ),
                     ),
@@ -539,11 +627,12 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
               propsToilet != '' &&
               states_id != '' &&
               area_id != '' &&
-              propsPrice != '' &&
+              disAmount != '' &&
               propsDesc != '' &&
-              propsYearBuilt != '' &&
+              selectedYearBuilt != '' &&
               _props_mode != '' &&
-              propsYoutubeId != '') {
+              propsYoutubeId != '' &&
+              slightNegotiate != '') {
             setState(() {
               isLoading = true;
             });
@@ -558,13 +647,14 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
               propsToilet: propsToilet.text,
               state_id: states_id!,
               area_id: area_id!,
-              propsPrice: propsPrice.text,
+              propsPrice: disAmount,
               propsDesc: propsDesc.text,
-              propsYearBuilt: propsYearBuilt.text,
+              propsYearBuilt: selectedYearBuilt!,
               props_mode: _props_mode!,
               propsYoutubeId: propsYoutubeId.text,
               propsId: widget.model.propsId!,
               model: widget.model,
+              slightNegotiate: slightNegotiate.toString(),
               user_id: user_id!,
             );
 

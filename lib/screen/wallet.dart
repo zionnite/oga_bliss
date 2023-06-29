@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../controller/wallet_controller.dart';
 import '../widget/fund_wallet.dart';
-import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_btn_icon.dart';
 
@@ -101,16 +100,6 @@ class _WalletPageState extends State<WalletPage> {
               controller: _controller,
               child: Column(
                 children: [
-                  NoticeMe(
-                    title: 'Oops!',
-                    desc: 'Your bank account is not yet verify!',
-                    icon: Icons.warning,
-                    icon_color: Colors.red,
-                    border_color: Colors.red,
-                    btnTitle: 'Verify Now',
-                    btnColor: Colors.blue,
-                    onTap: () {},
-                  ),
                   PropertyBtnIcon(
                     onTap: () {
                       String link =

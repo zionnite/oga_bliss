@@ -21,6 +21,10 @@ class UsersController extends GetxController {
   var disUsersList = <UsersModel>[].obs;
   var landLordList = <UsersModel>[].obs;
 
+  //Referal
+  var isReferalFetchProcessing = 'null'.obs;
+  var referalList = <UsersModel>[].obs;
+
   // String? user_id;
   // bool? admin_status;
   // String? user_status;
@@ -144,17 +148,20 @@ class UsersController extends GetxController {
     required String email,
     required String phone,
     required String password,
-    required String usersType,
+    required String referalCode,
+    required String isMlm,
   }) async {
     String? msg;
     String status = await ApiServices.signUp(
-      userName: userName,
-      fullName: fullName,
-      email: email,
-      phone: phone,
-      password: password,
-      userType: usersType,
-    );
+        userName: userName,
+        fullName: fullName,
+        email: email,
+        phone: phone,
+        password: password,
+        referalCode: referalCode,
+        isMlm: isMlm
+        // userType: usersType,
+        );
     if (status == 'true') {
       msg = 'Account Creation was successful...';
       showSnackBar(
@@ -372,5 +379,22 @@ class UsersController extends GetxController {
       showSnackBar(title: 'Oops!', msg: msg, backgroundColor: Colors.red);
       return false;
     }
+  }
+
+  getReferal(pageNum, var userId) async {
+    var seeker = await ApiServices.getReferal(pageNum, userId);
+    if (seeker != null) {
+      isReferalFetchProcessing.value = 'yes';
+      referalList.value = seeker.cast<UsersModel>();
+    } else {
+      isReferalFetchProcessing.value = 'no';
+    }
+  }
+
+  getReferalMore(pageNum, var userId) async {
+    var seeker = await ApiServices.getReferal(pageNum, userId);
+    if (seeker != null) {
+      referalList.addAll(seeker.cast<UsersModel>());
+    } else {}
   }
 }

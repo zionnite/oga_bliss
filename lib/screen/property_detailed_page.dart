@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_youtube_view/flutter_youtube_view.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/model/property_model.dart';
+import 'package:oga_bliss/screen/book_inspection.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/util/currency_formatter.dart';
 import 'package:oga_bliss/widget/header_title.dart';
 import 'package:oga_bliss/widget/property_key_and_value.dart';
+import 'package:oga_bliss/widget/small_btn_icon.dart';
 import 'package:popup_banner/popup_banner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controller/favourite_controller.dart';
 import '../controller/property_controller.dart';
@@ -45,9 +51,13 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
         admin_status = admin_status1;
       });
     }
+
+    await propsController.getPropertyDocument(
+        user_id, widget.propertyModel!.propsId!);
   }
 
   bool isLoading = false;
+  bool isPayLoading = false;
   List<String> images = [];
 
   loopSlider() {
@@ -642,6 +652,119 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   ),
                 ),
               ),
+              (props.propsNegotiable == 'yes')
+                  ? Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          left: 15,
+                          right: 15,
+                        ),
+                        child: const Text(
+                          '-Negotiable-',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontFamily: 'Passion One',
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              (props.propsNegotiable == 'yes')
+                  ? Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          left: 15,
+                          right: 15,
+                        ),
+                        child: const Text(
+                          'Slighty Negotiable',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                child: Row(
+                  children: [
+                    smallBtnIcon(
+                      onTap: () async {
+                        if (props.propsStatus == 'available') {
+                          setState(() {
+                            isPayLoading = true;
+                          });
+
+                          Future.delayed(const Duration(seconds: 2), () {
+                            if (mounted) {
+                              setState(() {
+                                isPayLoading = false;
+                              });
+                            }
+                          });
+                          Future.delayed(const Duration(seconds: 3), () async {
+                            /*Guest*/
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            var isGuestLogin = prefs.getBool('isGuestLogin');
+                            var isUserLogin = prefs.getBool('isUserLogin');
+
+                            if (isGuestLogin == true) {
+                              var link =
+                                  '${baseDomain}Visitor/purchase_app_property/${props.propsId}/${props.propsAgentId}';
+                              _launchInBrowser(Uri.parse(link));
+                            } else if (isUserLogin == true) {
+                              var link =
+                                  '${baseDomain}Transaction/purchase_app_property/${props.propsId}/${props.propsAgentId}/${user_id}';
+                              _launchInBrowser(Uri.parse(link));
+                            }
+                          });
+                        }
+                      },
+                      isLoading: isPayLoading,
+                      btnName: (props.propsStatus == 'unavailable')
+                          ? 'Sold Out'
+                          : 'Make Payment',
+                      btnColor: (props.propsStatus == 'unavailable')
+                          ? Colors.grey
+                          : Colors.blue.shade900,
+                      icon: Icons.monetization_on,
+                      icon_color: Colors.white,
+                    ),
+                    smallBtnIcon(
+                      onTap: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        // await propsController.requestInspection(
+                        //     user_id, props.propsId, props.propsAgentId);
+
+                        Future.delayed(const Duration(seconds: 2), () {
+                          if (mounted) {
+                            setState(() {
+                              isLoading = false;
+                            });
+                            Get.to(
+                              () => BookInspection(
+                                props_id: props.propsId!,
+                                agent_id: props.propsAgentId!,
+                              ),
+                            );
+                          }
+                        });
+                      },
+                      isLoading: isLoading,
+                      btnName: 'Request Inspection',
+                      btnColor: Colors.blue.shade900,
+                      icon: Icons.home_work_outlined,
+                      icon_color: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
               const Padding(
                 padding: EdgeInsets.all(18.0),
                 child: Divider(
@@ -904,32 +1027,211 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   ],
                 ),
               ),
-              (user_status == 'user')
-                  ? propertyBtn(
-                      onTap: () async {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        await propsController.requestInspection(
-                            user_id, props.propsId, props.propsAgentId);
+              const Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Divider(
+                  height: 1,
+                  color: Colors.black54,
+                ),
+              ),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: HeaderTitle(
+                  title: 'TITLE DOCUMENT',
+                ),
+              ),
+              Obx(
+                () => (propsController.isDocProcessing == 'null')
+                    ? Center(
+                        child: LoadingAnimationWidget.staggeredDotsWave(
+                          color: Colors.blue,
+                          size: 20,
+                        ),
+                      )
+                    : loadDocFile(),
+              ),
+              propertyBtn(
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
 
-                        Future.delayed(const Duration(seconds: 2), () {
-                          if (mounted) {
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
+                  Future.delayed(const Duration(seconds: 2), () async {
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+
+                    if (props.isPromotingProduct!) {
+                      //Copy Link
+                      if (props.urlCode!.isEmpty) {
+                        String status = await propsController.copyProductLink(
+                            userId: user_id!, propsId: props.propsId!);
+                        if (status != 'false') {
+                          setState(() {
+                            props.urlCode = status;
+                          });
+                        } else {
+                          showSnackBar(
+                            title: 'Oops',
+                            msg: 'Could not fetch Product Link, please Refresh',
+                            backgroundColor: Colors.blue.shade900,
+                          );
+                        }
+                      }
+                      var link =
+                          '${baseDomain}Product/view_product/${props.propsId}/${props.urlCode}';
+                      Clipboard.setData(ClipboardData(text: link)).then((_) {
+                        showSnackBar(
+                          title: 'Link',
+                          msg: 'Property Link Copied',
+                          backgroundColor: Colors.blue.shade900,
+                        );
+                      });
+                    } else {
+                      //Market Product
+
+                      String status = await propsController.promoteProperty(
+                          userId: user_id!, propsId: props.propsId!);
+
+                      if (status == 'true') {
+                        setState(() {
+                          props.isPromotingProduct = true;
                         });
-                      },
-                      title: 'Request For Inspection',
-                      bgColor: Colors.blue,
-                      isLoading: isLoading,
-                    )
-                  : Container(),
+                        await propsController.getDetails(user_id);
+                        showSnackBar(
+                          title: 'Result',
+                          msg:
+                              'Property Added to List of Item you are promoting',
+                          backgroundColor: Colors.blue.shade900,
+                        );
+                      } else if (status == 'false') {
+                        showSnackBar(
+                          title: 'Result',
+                          msg:
+                              'Database Busy, Could not perform operation, Pls Try Again Later!',
+                          backgroundColor: Colors.blue.shade900,
+                        );
+                      } else {
+                        showSnackBar(
+                          title: 'Result',
+                          msg: 'You already promoting this product',
+                          backgroundColor: Colors.blue.shade900,
+                        );
+                      }
+                    }
+                  });
+                },
+                title: (props.isPromotingProduct!)
+                    ? 'Copy Link'
+                    : 'Market Product',
+                bgColor: Colors.blue.shade900,
+                isLoading: isLoading,
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget loadDocFile() {
+    return (propsController.docList.isNotEmpty)
+        ? SingleChildScrollView(
+            child: Column(
+              children: [
+                Obx(
+                  () => ListView.builder(
+                    padding: const EdgeInsets.all(0),
+                    key: const PageStorageKey<String>('myProperty'),
+                    physics: const ClampingScrollPhysics(),
+                    // itemExtent: 350,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: propsController.docList.length,
+
+                    itemBuilder: (BuildContext context, int index) {
+                      var props = propsController.docList[index];
+
+                      if (propsController.docList[index].id == null) {
+                        return Container();
+                      }
+
+                      return Card(
+                        child: ListTile(
+                          leading: InkWell(
+                            onTap: () {
+                              String link = '${props.fileName}';
+                              _launchInBrowser(Uri.parse(link));
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                image: (props.fileExt == 'pdf')
+                                    ? const DecorationImage(
+                                        image: AssetImage(
+                                          'assets/images/pdf.png',
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : DecorationImage(
+                                        image: NetworkImage(
+                                          props.fileName!,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          title: InkWell(
+                            onTap: () {
+                              String link = '${props.fileName}';
+                              _launchInBrowser(Uri.parse(link));
+                            },
+                            child: Text(
+                              props.title!,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          subtitle: InkWell(
+                            onTap: () {
+                              String link = '${props.fileName}';
+                              _launchInBrowser(Uri.parse(link));
+                            },
+                            child: const Text(
+                              'Open file',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          )
+        : const Text(
+            'Title Document not available',
+            textAlign: TextAlign.left,
+          );
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

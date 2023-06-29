@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:oga_bliss/controller/alert_controller.dart';
 import 'package:oga_bliss/controller/chat_head_controller.dart';
 import 'package:oga_bliss/screen/alert_page.dart';
-import 'package:oga_bliss/screen/message_page.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PropertyAppBar extends StatefulWidget {
@@ -24,18 +24,22 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
   String? user_id;
   String? user_status;
   bool? admin_status;
+  bool? isUserLogin;
 
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId1 = prefs.getString('user_id');
     var user_status1 = prefs.getString('user_status');
     var admin_status1 = prefs.getBool('admin_status');
+    var isGuestLogin1 = prefs.getBool('isGuestLogin');
+    var isUserLogin1 = prefs.getBool('isUserLogin');
 
     if (mounted) {
       setState(() {
         user_id = userId1;
         user_status = user_status1;
         admin_status = admin_status1;
+        isUserLogin = isUserLogin1;
       });
     }
   }
@@ -61,7 +65,7 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
         Container(
           width: double.infinity,
           height: 170,
-          decoration: BoxDecoration(color: Colors.blue.shade600),
+          decoration: BoxDecoration(color: backgroundColorPrimary),
           child: SizedBox(),
         ),
         Positioned(
@@ -73,7 +77,7 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: backgroundColorPrimary,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(30),
                 ),
@@ -92,77 +96,20 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
             ),
           ),
         ),
-        Positioned(
-          top: 60,
-          right: 15,
-          child: Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  Get.to(() => const AlertPage());
-                },
-                child: Stack(children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                      border: Border.all(
-                        color: Colors.blue.shade100,
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(4.0),
-                      child: Icon(
-                        Icons.notifications_sharp,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  Obx(
-                    () => (alertController.alertCounter > 0)
-                        ? Positioned(
-                            top: 3,
-                            right: 2,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 2,
-                                horizontal: 1,
-                              ),
-                              child: Text(
-                                '${alertController.alertCounter}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  ),
-                ]),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              (user_status == 'admin' || user_status == 'super_admin')
-                  ? Container()
-                  : InkWell(
+        (isUserLogin == true)
+            ? Positioned(
+                top: 60,
+                right: 8,
+                child: Row(
+                  children: [
+                    InkWell(
                       onTap: () {
-                        Get.to(() => const MessagePage());
+                        Get.to(() => const AlertPage());
                       },
                       child: Stack(children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.blue,
+                            color: backgroundColorPrimary,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(30),
                             ),
@@ -173,14 +120,14 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
                           child: const Padding(
                             padding: EdgeInsets.all(4.0),
                             child: Icon(
-                              Icons.message,
+                              Icons.notifications_sharp,
                               color: Colors.white,
                               size: 20,
                             ),
                           ),
                         ),
                         Obx(
-                          () => (chController.msgCounter > 0)
+                          () => (alertController.alertCounter > 0)
                               ? Positioned(
                                   top: 3,
                                   right: 2,
@@ -195,7 +142,7 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
                                       horizontal: 1,
                                     ),
                                     child: Text(
-                                      '${chController.msgCounter}',
+                                      '${alertController.alertCounter}',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 8,
@@ -208,9 +155,10 @@ class _PropertyAppBarState extends State<PropertyAppBar> {
                         ),
                       ]),
                     ),
-            ],
-          ),
-        ),
+                  ],
+                ),
+              )
+            : Container(),
         Positioned(
           top: 140,
           left: 15,

@@ -41,6 +41,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String? image_name;
   String? isbank_verify;
+  String? m_ref_code;
+  String? m_ref_link;
 
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -60,6 +62,9 @@ class _ProfilePageState extends State<ProfilePage> {
     var fullName1 = prefs.getString('full_name');
     var bankCode1 = prefs.getString('bank_code');
 
+    var m_ref_code1 = prefs.getString('m_ref_code');
+    var m_ref_link1 = prefs.getString('m_ref_link');
+
     if (mounted) {
       setState(() {
         user_id = userId1;
@@ -76,6 +81,9 @@ class _ProfilePageState extends State<ProfilePage> {
         isbank_verify = isbank_verify1;
         full_name = fullName1!;
         bankCode = bankCode1;
+
+        m_ref_code = m_ref_code1;
+        m_ref_link = m_ref_link1;
       });
     }
   }
@@ -356,6 +364,58 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
+                  Card(
+                    elevation: 5,
+                    margin: const EdgeInsets.only(
+                        top: 845, left: 10, right: 10, bottom: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, left: 15),
+                          child: const Text(
+                            'Referral Code',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Passion One',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        PropertyKey(
+                          propsKey: '$m_ref_code',
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: Divider(height: 1, color: Colors.grey),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 10, left: 15),
+                          child: const Text(
+                            'Referral Link',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Passion One',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        PropertyKey(
+                          propsKey: '$m_ref_link',
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
                   Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(top: 210),
@@ -513,11 +573,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     isLoading: isVerify,
                     card_margin: const EdgeInsets.only(
                       top: 8,
-                      bottom: 150,
+                      bottom: 10,
                       right: 8,
                       left: 8,
                     ),
                   ),
+            const SizedBox(
+              height: 40,
+            ),
           ],
         ),
       ),

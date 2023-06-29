@@ -25,6 +25,8 @@ class _SignupPageState extends State<SignupPage> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  final referalController = TextEditingController();
+  String isMlm = 'false';
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -105,6 +107,21 @@ class _SignupPageState extends State<SignupPage> {
                     const SizedBox(
                       height: 15,
                     ),
+                    const Text(
+                      'Optional',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
+                    ),
+                    MyTextFieldIcon(
+                      myTextFormController: referalController,
+                      fieldName: 'Referral Code',
+                      prefix: Icons.scatter_plot,
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -144,7 +161,7 @@ class _SignupPageState extends State<SignupPage> {
                           foregroundColor: Colors.white,
                           shape: const RoundedRectangleBorder(),
                           side: const BorderSide(color: Colors.white),
-                          backgroundColor: Colors.blue,
+                          backgroundColor: backgroundColorPrimary,
                           padding: const EdgeInsets.symmetric(vertical: 20),
                         ),
                         onPressed: () async {
@@ -156,13 +173,20 @@ class _SignupPageState extends State<SignupPage> {
                             setState(() {
                               isLoading = true;
                             });
+
+                            if (referalController.text != '') {
+                              setState(() {
+                                isMlm = 'true';
+                              });
+                            }
                             bool status = await usersController.signUp(
                               userName: userNameController.text,
                               fullName: fullnameController.text,
                               email: emailController.text,
                               phone: phoneController.text,
                               password: passwordController.text,
-                              usersType: widget.usersType,
+                              referalCode: referalController.text,
+                              isMlm: isMlm,
                             );
 
                             if (status) {
@@ -172,6 +196,7 @@ class _SignupPageState extends State<SignupPage> {
                                 emailController.text = '';
                                 phoneController.text = '';
                                 passwordController.text = '';
+                                referalController.text = '';
                                 isLoading = false;
                               });
 

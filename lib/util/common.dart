@@ -1,9 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Color backgroundColorPrimary = const Color(0xff673AB7);
+Color backgroundColorPrimary = Colors.blue.shade900;
 Color backgroundColorLight = const Color(0xff7c43bd);
 Color backgroundColorDark = const Color(0xff512DA8);
 Color backgroundColorAccent = Colors.purple;
@@ -50,4 +48,10 @@ showSnackBar({
   );
 }
 
-final int CURRENT_APP_VERSION = 1;
+const int CURRENT_APP_VERSION = 1;
+const String baseDomain = 'http://localhost:8888/ogalandlord/';
+const String baseUrl = '${baseDomain}Api/';
+const String baseUrlSec = '${baseDomain}ApiMlm/';
+
+// const String baseUrl  = 'https://ogabliss.com/Api/';
+// const String baseUrlSec  = 'https://ogabliss.com/ApiMlm/';

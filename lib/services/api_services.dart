@@ -1,15 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:oga_bliss/bliss_legacy/bliss_model/account_report.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_model/card_activities.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_model/count_subscription_item.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_model/join_subscription.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_model/my_point_item.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_model/point_items.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_model/subscription_list_model.dart';
+import 'package:oga_bliss/controller/property_doc.dart';
 import 'package:oga_bliss/model/banklist_model.dart';
 import 'package:oga_bliss/model/dashboard_model.dart';
+import 'package:oga_bliss/model/link_activity_model.dart';
+import 'package:oga_bliss/model/marketing_model.dart';
+import 'package:oga_bliss/model/property_purchase.dart';
 import 'package:oga_bliss/model/property_type_model.dart';
+import 'package:oga_bliss/model/withdrawal_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bliss_legacy/bliss_model/bliss_downline_model.dart';
@@ -30,14 +39,21 @@ import '../widget/my_raidio_field.dart';
 
 class ApiServices {
   static var client = http.Client();
-  static const String _mybaseUrl = 'http://localhost:8888/ogalandlord/Api/';
-  static const String _mybaseUrlSec =
-      'http://localhost:8888/ogalandlord/ApiMlm/';
-  // static const String _mybaseUrl = 'https://ogabliss.com/Api/';
+  static const String _mybaseUrl = baseUrl;
+  static const String _mybaseUrlSec = baseUrlSec;
+
+  /***
+   * below relife start
+   */
+  // static const String _mybaseUrl = baseUrl;
+  // static const String _mybaseUrlSec = baseUrlSec;
 
   static const String _all_product = 'get_all_product';
   static const String _toggle_product = 'toggle_product';
   static const String _request_inspection = 'request_inspection';
+  static const String _make_inspection_request = 'make_inspection_request';
+  static const String _make_request_specification =
+      'make_request_specification';
   static const String _search_product = 'search_product';
   static const String _get_state = 'get_state_and_area';
   static const String _type_property = 'get_types_property';
@@ -57,6 +73,7 @@ class ApiServices {
   static const String _pull_out = 'pull_out_payment';
   static const String _props_and_sub = 'get_props_type_and_sub_type';
   static const String _add_product = 'add_product';
+  static const String _upload_title_document = 'upload_title_document';
   static const String _my_product = 'get_my_product';
   static const String _dis_product = 'get_dis_product';
   static const String _edit_basic = 'edit_basic';
@@ -64,7 +81,9 @@ class ApiServices {
   static const String _edit_amenities = 'edit_amenities';
   static const String _edit_facilities = 'edit_facilities';
   static const String _edit_valuation = 'edit_valuation';
+  static const String _edit_ownership = 'edit_ownership';
   static const String _delete_props = 'delete_props';
+  static const String _delete_doc_file = 'delete_doc_file';
   static const String _update_image = 'update_image';
   static const String _update_feature_image = 'update_feature_image';
   static const String _submit_property = 'submit_property';
@@ -107,6 +126,20 @@ class ApiServices {
   static const String _get_subscription_counting = 'get_subscription_counting';
   static const String _toggle_disable_button = 'toggle_disable_button';
   static const String _send_request_to_email = 'send_request_to_email';
+  static const String _join_sub = 'join_sub';
+  static const String _get_all_point_items = 'get_all_point_items';
+  static const String _get_my_point_items = 'get_my_point_items';
+  static const String _all_purchase_product = 'get_all_purchase_product';
+  static const String _get_doc_file = 'get_doc_file';
+  static const String _get_referal = 'get_my_referal';
+  static const String _get_withdrawal = 'get_withdrawal';
+  static const String _request_withdrawal = 'request_withdrawal';
+  static const String _approve_withdrawal = 'approve_withdrawal';
+  static const String _reject_withdrawal = 'reject_withdrawal';
+  static const String _promote_product = 'promote_product';
+  static const String _copy_product_link = 'copy_product_link';
+  static const String _get_product_promoting = 'get_product_promoting';
+  static const String _get_link_activity = 'get_link_activity';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -374,6 +407,9 @@ class ApiServices {
 
   static getFilterProductPrice(
       var page_num, var userId, var start_price, var end_price) async {
+    print('start price ${start_price}');
+    print('end price ${end_price}');
+
     try {
       final uri = Uri.parse('$_mybaseUrl$_filter_price/$page_num/$userId');
 
@@ -387,6 +423,7 @@ class ApiServices {
         // return data;
 
         var body = response.body;
+        print(body);
         final j = json.decode(body) as Map<String, dynamic>;
         String status = j['status'];
         if (status == 'success') {
@@ -597,12 +634,10 @@ class ApiServices {
       }
     } catch (ex) {
       // print(ex);
-
     }
   }
 
-  static Future<List<TransactionModel?>?> getTransaction(
-      var pageNum, var userId, var adminStatus) async {
+  static Future getTransaction(var pageNum, var userId, var adminStatus) async {
     try {
       final uri = Uri.parse('$_mybaseUrl$_get_transaction/$pageNum/$userId');
 
@@ -612,13 +647,15 @@ class ApiServices {
 
       if (response.statusCode == 200) {
         var body = response.body;
+
         final j = json.decode(body) as Map<String, dynamic>;
         String status = j['status'];
         if (status == 'success') {
-          var disData = j['transaction'] as List;
+          var disData = j['property_transaction'] as List;
 
           final data = disData
-              .map<TransactionModel>((json) => TransactionModel.fromJson(json))
+              .map<PropertyTransaction>(
+                  (json) => PropertyTransaction.fromJson(json))
               .toList();
           return data;
         }
@@ -629,14 +666,7 @@ class ApiServices {
           backgroundColor: Colors.red,
         );
       }
-    } catch (ex) {
-      // print(ex.toString());
-      // return showSnackBar(
-      //   title: 'Oops!',
-      //   msg: ex.toString(),
-      //   backgroundColor: Colors.red,
-      // );
-    }
+    } catch (ex) {}
   }
 
   static Future<List<AlertModel?>?> getAlerts(var page_num, var userId) async {
@@ -892,6 +922,15 @@ class ApiServices {
     required String pollution,
     required String education,
     required String health,
+
+    //
+    required String docName,
+    required PlatformFile docFile,
+    required String ownerStatus,
+    required String ownerName,
+    required String ownerPhone,
+    required String ownerEmail,
+    required String slightNegotiate,
     required String user_id,
   }) async {
     String? newMode;
@@ -962,10 +1001,21 @@ class ApiServices {
       request.fields['pollution'] = pollution.toString();
       request.fields['education'] = education.toString();
       request.fields['health'] = health.toString();
+      //
+      request.fields['doc_name'] = docName.toString();
+
+      request.fields['owner_status'] = ownerStatus.toString();
+      request.fields['owner_name'] = ownerName.toString();
+      request.fields['owner_phone'] = ownerPhone.toString();
+      request.fields['owner_email'] = ownerEmail.toString();
+      request.fields['slight_negotiate'] = slightNegotiate.toString();
 
       var productImage =
           await http.MultipartFile.fromPath('property_image', image.path);
+      var productDoc =
+          await http.MultipartFile.fromPath('doc_file', docFile.path!);
       request.files.add(productImage);
+      request.files.add(productDoc);
 
       var respond = await request.send();
 
@@ -978,19 +1028,22 @@ class ApiServices {
         // });
         return true;
       } else {
-        return showSnackBar(
+        showSnackBar(
           title: 'Oops!',
           msg: 'could not connect to server',
           backgroundColor: Colors.red,
         );
+        return false;
       }
     } catch (ex) {
-      // print(ex.toString());
-      return showSnackBar(
+      print(ex.toString());
+      showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),
         backgroundColor: Colors.red,
       );
+
+      return false;
     }
   }
 
@@ -1080,6 +1133,7 @@ class ApiServices {
     required propertyModeEnum props_mode,
     required String propsYoutubeId,
     required String propsId,
+    required String slightNegotiate,
     required String user_id,
   }) async {
     String? newMode;
@@ -1109,6 +1163,7 @@ class ApiServices {
       request.fields['props_mode'] = newMode;
       request.fields['propsYoutubeId'] = propsYoutubeId;
       request.fields['propsId'] = propsId;
+      request.fields['slight_negotiate'] = slightNegotiate.toString();
 
       var respond = await request.send();
 
@@ -1335,6 +1390,51 @@ class ApiServices {
       request.fields['pollution'] = pollution.toString();
       request.fields['education'] = education.toString();
       request.fields['health'] = health.toString();
+      request.fields['propsId'] = propsId.toString();
+
+      var respond = await request.send();
+
+      if (respond.statusCode == 200) {
+        // respond.stream.transform(utf8.decoder).listen((value) {
+        //   final j = json.decode(value) as Map<String, dynamic>;
+        //   var status = j['status'];
+        //
+        //   return status;
+        // });
+        return true;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex.toString());
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<bool> editOwnershipStatus({
+    required String owner_status,
+    required String owner_name,
+    required String owner_phone,
+    required String owner_email,
+    required String propsId,
+    required String user_id,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_edit_ownership/$user_id');
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['owner_status'] = owner_status.toString();
+      request.fields['owner_name'] = owner_name.toString();
+      request.fields['owner_phone'] = owner_phone.toString();
+      request.fields['owner_email'] = owner_email.toString();
       request.fields['propsId'] = propsId.toString();
 
       var respond = await request.send();
@@ -1832,10 +1932,11 @@ class ApiServices {
     required String email,
     required String phone,
     required String password,
-    required String userType,
+    required String referalCode,
+    required String isMlm,
   }) async {
     try {
-      final uri = Uri.parse('$_mybaseUrl$_signup');
+      final uri = Uri.parse('$_mybaseUrlSec$_signup');
 
       var response = await http.post(uri, body: {
         'user_name': userName.toString(),
@@ -1843,7 +1944,8 @@ class ApiServices {
         'email': email.toString(),
         'phone': phone.toString(),
         'password': password.toString(),
-        'user_type': userType.toString(),
+        'is_mlm': isMlm.toString(),
+        'mlm_ref_code': referalCode.toString(), //todo: come here zionnite
       });
       if (response.statusCode == 200) {
         var body = response.body;
@@ -1878,7 +1980,7 @@ class ApiServices {
     required String password,
   }) async {
     try {
-      final uri = Uri.parse('$_mybaseUrl$_login');
+      final uri = Uri.parse('$_mybaseUrlSec$_login');
 
       var response = await http.post(uri, body: {
         'email': email.toString(),
@@ -1912,6 +2014,8 @@ class ApiServices {
           String prop_counter = j['agent_prop_counter'];
           bool admin_status = j['admin_status'];
           String isbank_verify = j['isbank_verify'];
+          String m_ref_code = j['m_ref_code'];
+          String m_ref_link = j['m_ref_link'];
 
           prefs.setString('user_id', user_id);
           prefs.setString('user_name', user_name);
@@ -1935,6 +2039,8 @@ class ApiServices {
           prefs.setString('isbank_verify', isbank_verify);
           prefs.setBool('isUserLogin', true);
           prefs.setBool('tempLoginStatus', true);
+          prefs.setString('m_ref_code', m_ref_code);
+          prefs.setString('m_ref_link', m_ref_link);
 
           return 'true';
         } else {
@@ -1960,7 +2066,7 @@ class ApiServices {
 
   static Future<String> resetPassword({required String email}) async {
     try {
-      final uri = Uri.parse('$_mybaseUrl$_resetPassword');
+      final uri = Uri.parse('$_mybaseUrlSec$_resetPassword');
 
       var response = await http.post(uri, body: {
         'email': email.toString(),
@@ -2511,7 +2617,7 @@ class ApiServices {
    * Subscription Model
    */
 
-  static Future<List<Transaction?>?> getBlissTransaction(
+  static Future<List<MlmTransaction?>?> getBlissTransaction(
       var pageNum, var userId, var adminStatus) async {
     try {
       final uri =
@@ -2523,13 +2629,14 @@ class ApiServices {
 
       if (response.statusCode == 200) {
         var body = response.body;
+        print(body);
         final j = json.decode(body) as Map<String, dynamic>;
         String status = j['status'];
         if (status == 'success') {
-          var disData = j['transaction'] as List;
+          var disData = j['mlm_transaction'] as List;
 
           final data = disData
-              .map<Transaction>((json) => Transaction.fromJson(json))
+              .map<MlmTransaction>((json) => MlmTransaction.fromJson(json))
               .toList();
           return data;
         }
@@ -2821,16 +2928,24 @@ class ApiServices {
     }
   }
 
-  static Future<String> toggleDisableButton(
-      var userId, var planCode, var subCode, var emailToken) async {
+  static Future<String> toggleDisableButton({
+    required String disId,
+    required String userId,
+    required String planId,
+    required String planCode,
+    required String subCode,
+    required String emailToken,
+  }) async {
     try {
       final uri = Uri.parse('$_mybaseUrlSec$_toggle_disable_button');
 
       var response = await http.post(uri, body: {
+        'dis_id': disId.toString(),
         'user_id': userId.toString(),
+        'plan_id': planId.toString(),
         'plan_code': planCode.toString(),
         'sub_code': subCode.toString(),
-        'email_token': emailToken.toString()
+        'email_token': emailToken.toString(),
       });
 
       if (response.statusCode == 200) {
@@ -2880,6 +2995,646 @@ class ApiServices {
         );
       }
     } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future joinSubscription(var userId, var planId, var planCode) async {
+    try {
+      final uri = Uri.parse(
+          '$_mybaseUrlSec$_send_request_to_email/$userId/$planId/$planCode');
+
+      var response = await http.post(uri, body: {
+        'user_id': userId.toString(),
+        'plan_id': planId.toString(),
+        'plan_code': planCode.toString(),
+      });
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        var link = j['link'];
+        JoinSubscription(status: status, link: link);
+        if (status == 'success') {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<JoinSubscription?>?> joinSub(
+      var userId, var planId, var plancode) async {
+    try {
+      final uri = Uri.parse(
+          '$_mybaseUrlSec$_get_my_subscription/$userId/$planId/$plancode');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        final data = joinSubscriptionFromJson(result.body);
+        return data;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<PointItem?>?> getAllPointItem(
+      var pageNum, var userId) async {
+    try {
+      final uri =
+          Uri.parse('$_mybaseUrlSec$_get_all_point_items/$pageNum/$userId');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        var body = result.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['point_item'] as List;
+
+          final data = disData
+              .map<PointItem>((json) => PointItem.fromJson(json))
+              .toList();
+
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<List<MyPointItem?>?> getMyPointItem(
+      var pageNum, var userId) async {
+    try {
+      final uri =
+          Uri.parse('$_mybaseUrlSec$_get_my_point_items/$pageNum/$userId');
+
+      final result = await client.get(uri);
+
+      if (result.statusCode == 200) {
+        var body = result.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['my_point_item'] as List;
+
+          final data = disData
+              .map<MyPointItem>((json) => MyPointItem.fromJson(json))
+              .toList();
+
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future getPurchaseProduct(
+      var page_num, var userId, var adminStatus) async {
+    try {
+      final result = await client.get(Uri.parse(
+          '$_mybaseUrl$_all_purchase_product/$page_num/$userId/$adminStatus'));
+      // print(result.body);
+      if (result.statusCode == 200) {
+        // final data = propertyModelFromJson(result.body);
+        // retur data;
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['purchase_property'] as List;
+
+          final data = disData
+              .map<PurchaseProperty>((json) => PurchaseProperty.fromJson(json))
+              .toList();
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
+    }
+  }
+
+  static Future getReferal(var page_num, var userId) async {
+    try {
+      final result = await client
+          .get(Uri.parse('$_mybaseUrl$_get_referal/$page_num/$userId'));
+
+      if (result.statusCode == 200) {
+        var body = result.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['users'] as List;
+
+          final data = disData
+              .map<UsersModel>((json) => UsersModel.fromJson(json))
+              .toList();
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {}
+  }
+
+  static Future<String> makeRequestInspection(
+      var name, var phone, var date, var time, var propsId, var agentId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_make_inspection_request');
+
+      var response = await http.post(uri, body: {
+        'props_id': propsId,
+        'agent_id': agentId,
+        'name': name,
+        'phone': phone,
+        'date': date,
+        'time': time,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> makeRequestSpecification(var name, var phone, var desc,
+      var location, var area, var budFrom, var budTo) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_make_request_specification');
+
+      var response = await http.post(uri, body: {
+        'name': name,
+        'phone': phone,
+        'description': desc,
+        'location': location,
+        'area': area,
+        'budget_from': budFrom,
+        'budget_to': budTo,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future getWithdrawal(var pageNum, var userId, var adminStatus) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_get_withdrawal/$pageNum/$userId');
+
+      var response = await http.post(uri, body: {
+        'admin_status': adminStatus.toString(),
+      });
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['withdrawal'] as List;
+
+          final data = disData
+              .map<Withdrawal>((json) => Withdrawal.fromJson(json))
+              .toList();
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {}
+  }
+
+  static Future<String> requestWithdrawal(
+      {required String userId, required String amount}) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_request_withdrawal');
+
+      var response = await http.post(uri, body: {
+        'user_id': userId,
+        'amount': amount,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        Map<String, dynamic> j = json.decode(body);
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> approveWithdrawalRequest(
+      {required String disUserId, required String Id}) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_approve_withdrawal');
+
+      var response = await http.post(uri, body: {
+        'user_id': disUserId,
+        'id': Id,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        Map<String, dynamic> j = json.decode(body);
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> rejectWithdrawalRequest(
+      {required String disUserId, required String Id}) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_reject_withdrawal');
+
+      var response = await http.post(uri, body: {
+        'user_id': disUserId,
+        'id': Id,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        Map<String, dynamic> j = json.decode(body);
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> promoteProduct({
+    required String userId,
+    required String propsId,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_promote_product');
+
+      var response = await http.post(uri, body: {
+        'user_id': userId,
+        'props_id': propsId,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future<String> copyProductLink({
+    required String userId,
+    required String propsId,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_copy_product_link');
+
+      var response = await http.post(uri, body: {
+        'user_id': userId,
+        'props_id': propsId,
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      return showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+    }
+  }
+
+  static Future getProductPromoting({
+    required int pageNum,
+    required String userId,
+  }) async {
+    try {
+      final response = await client.get(
+          Uri.parse('$_mybaseUrl$_get_product_promoting/$pageNum/$userId'));
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['product_promoting'] as List;
+
+          final data = disData
+              .map<ProductPromoting>((json) => ProductPromoting.fromJson(json))
+              .toList();
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {}
+  }
+
+  static Future getLinkActivity({
+    required int pageNum,
+    required String userId,
+    required String propsId,
+  }) async {
+    try {
+      final response = await client.get(Uri.parse(
+          '$_mybaseUrl$_get_link_activity/$pageNum/$userId/$propsId'));
+
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['link_activity'] as List;
+
+          final data = disData
+              .map<LinkActivity>((json) => LinkActivity.fromJson(json))
+              .toList();
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {}
+  }
+
+  static Future getPropertyDoc(var page_num, var userId, var propsId) async {
+    try {
+      final result = await client.get(
+          Uri.parse('$_mybaseUrl$_get_doc_file/$page_num/$userId/$propsId'));
+      if (result.statusCode == 200) {
+        var body = result.body;
+        final j = json.decode(body) as Map<String, dynamic>;
+        String status = j['status'];
+        if (status == 'success') {
+          var disData = j['property_doc'] as List;
+
+          final data = disData
+              .map<PropertyDoc>((json) => PropertyDoc.fromJson(json))
+              .toList();
+          return data;
+        }
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
+      // return showSnackBar(
+      //   title: 'Oops!',
+      //   msg: ex.toString(),
+      //   backgroundColor: Colors.red,
+      // );
+    }
+  }
+
+  static Future<bool> uploadTitleDocument({
+    String? doc_name,
+    PlatformFile? doc_file,
+    String? propsId,
+    String? userId,
+  }) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_upload_title_document/$userId');
+      var request = http.MultipartRequest('POST', uri);
+      request.fields['propsId'] = propsId.toString();
+      request.fields['doc_name'] = doc_name.toString();
+
+      var productDoc =
+          await http.MultipartFile.fromPath('doc_file', doc_file!.path!);
+      request.files.add(productDoc);
+
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+        return false;
+      }
+    } catch (ex) {
+      // print(ex);
+      showSnackBar(
+        title: 'Oops!',
+        msg: ex.toString(),
+        backgroundColor: Colors.red,
+      );
+      return false;
+    }
+  }
+
+  static Future<bool> deleteDocFile(var userId, var fileId) async {
+    try {
+      final uri = Uri.parse('$_mybaseUrl$_delete_doc_file');
+
+      var response = await http.post(uri, body: {
+        'user_id': userId.toString(),
+        'file_id': fileId.toString(),
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
+
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
+        return status;
+      } else {
+        return showSnackBar(
+          title: 'Oops!',
+          msg: 'could not connect to server',
+          backgroundColor: Colors.red,
+        );
+      }
+    } catch (ex) {
+      // print(ex);
       return showSnackBar(
         title: 'Oops!',
         msg: ex.toString(),

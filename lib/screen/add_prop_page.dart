@@ -1,12 +1,15 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+import 'package:currency_symbols/currency_symbols.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/property_controller.dart';
+import 'package:oga_bliss/widget/my_money_field.dart';
 import 'package:oga_bliss/widget/my_raidio_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,6 +60,12 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   TextEditingController educationController = TextEditingController();
   TextEditingController healthController = TextEditingController();
 
+  //
+  TextEditingController docFileNameController = TextEditingController();
+  TextEditingController owenerNameController = TextEditingController();
+  TextEditingController owenerPhoneController = TextEditingController();
+  TextEditingController owenerEmailController = TextEditingController();
+
   bool air_condition = false;
   bool balcony = false;
   bool bedding = false;
@@ -81,6 +90,9 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   bool gym = false;
   bool fireplace = false;
   bool hot_tub = false;
+
+  //
+  bool slightNegotiate = false;
 
   propertyModeEnum? _props_mode;
 
@@ -151,7 +163,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
 
   // final _propsPurposeList = ["Buy", "Rent"];
   final _propsPurposeList = [
-    {"value": "buy", "name": "Buy"},
+    {"value": "sale", "name": "Buy"},
     {"value": "rent", "name": "Rent"},
   ];
   String? props_purpose;
@@ -177,6 +189,63 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       // Navigator.of(context).pop();
     }
   }
+
+  PlatformFile? _doc_file;
+  String? _doc_ext;
+  Future _getDocFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
+      );
+      if (result == null) return;
+
+      setState(() {
+        _doc_file = result.files.first;
+        _doc_ext = _doc_file!.extension;
+      });
+    } on PlatformException catch (e) {}
+  }
+
+  //owner of this property
+  final _whoOwnPropertyList = [
+    {"value": "no", "name": "No"},
+    {"value": "yes", "name": "Yes"},
+  ];
+  String? props_ownership;
+  //
+
+  final String NGN = cSymbol("NGN");
+  static const _locale = 'en';
+  String _formatNumber(String s) =>
+      NumberFormat.decimalPattern(_locale).format(int.parse(s));
+  String get _currency =>
+      NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
+
+  String disAmount = "0";
+  String disCautionFee = "0";
+
+  //year property built
+  final _yearBuiltList = [
+    {"value": "1 month", "name": "1 Month"},
+    {"value": "2 month", "name": "2 Months"},
+    {"value": "3 month", "name": "3 Months"},
+    {"value": "4 month", "name": "4 Months"},
+    {"value": "5 month", "name": "5 Months"},
+    {"value": "6 month+", "name": "6 Months+"},
+    {"value": "1 Year", "name": "1 Year"},
+    {"value": "2 Year", "name": "2 Year"},
+    {"value": "3 Year", "name": "3 Year"},
+    {"value": "4 Year", "name": "4 Year"},
+    {"value": "5 Year", "name": "5 Year"},
+    {"value": "6 Year", "name": "6 Year"},
+    {"value": "7 Year", "name": "7 Year"},
+    {"value": "8 Year", "name": "8 Year"},
+    {"value": "9 Year", "name": "9 Year"},
+    {"value": "10 Year+", "name": "10 Year+"},
+    {"value": "20 Year+", "name": "10 Year+"},
+  ];
+  String? selectedYearBuilt;
 
   List<Step> stepList() => [
         Step(
@@ -384,10 +453,48 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyNumField(
+                // MyNumField(
+                //   myTextFormController: propsPrice,
+                //   fieldName: 'Price',
+                //   hintText: '100000000',
+                // ),
+                MyMoneyField(
                   myTextFormController: propsPrice,
-                  fieldName: 'Price',
-                  hintText: '100000000',
+                  fieldName: 'Amount',
+                  prefix: Icons.attach_money,
+                  onChange: (string) {
+                    if (propsPrice.text.isNotEmpty) {
+                      string = '${_formatNumber(string.replaceAll(',', ''))}';
+                      propsPrice.value = TextEditingValue(
+                        text: string,
+                        selection:
+                            TextSelection.collapsed(offset: string.length),
+                      );
+                    } else {
+                      setState(() {
+                        string = '0';
+                      });
+                    }
+                    setState(() {
+                      disAmount = string;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    MySlideCheckBox(
+                      isSwitched: slightNegotiate,
+                      onChanged: (value) {
+                        setState(() {
+                          slightNegotiate = value;
+                        });
+                      },
+                    ),
+                    const Text('Slightly Negotiable?'),
+                  ],
                 ),
                 const SizedBox(
                   height: 8,
@@ -421,9 +528,25 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
-                  myTextFormController: propsYearBuilt,
-                  fieldName: 'Year Built',
+                // MyTextField(
+                //   myTextFormController: propsYearBuilt,
+                //   fieldName: 'Year Built',
+                // ),
+                MyDropDownField(
+                  labelText: 'How old is the Property',
+                  value: selectedYearBuilt,
+                  dropDownList: List.generate(
+                    _yearBuiltList.length,
+                    (i) => DropdownMenuItem(
+                      value: _yearBuiltList[i]["value"],
+                      child: Text("${_yearBuiltList[i]["name"]}"),
+                    ),
+                  ),
+                  onChanged: (Object? value) {
+                    setState(() {
+                      selectedYearBuilt = value.toString();
+                    });
+                  },
                 ),
               ],
             ),
@@ -891,9 +1014,31 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                MyTextField(
+                // MyTextField(
+                //   myTextFormController: propsCautionFee,
+                //   fieldName: 'Caution / Damage Fee',
+                // ),
+                MyMoneyField(
                   myTextFormController: propsCautionFee,
                   fieldName: 'Caution / Damage Fee',
+                  prefix: Icons.attach_money,
+                  onChange: (string) {
+                    if (propsCautionFee.text.isNotEmpty) {
+                      string = '${_formatNumber(string.replaceAll(',', ''))}';
+                      propsCautionFee.value = TextEditingValue(
+                        text: string,
+                        selection:
+                            TextSelection.collapsed(offset: string.length),
+                      );
+                    } else {
+                      setState(() {
+                        string = '0';
+                      });
+                    }
+                    setState(() {
+                      disCautionFee = string;
+                    });
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -952,7 +1097,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         Step(
           state: _activeStepIndex <= 4 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 4,
-          title: const Text('Property Facilities'),
+          title: const Text('Distance to these Facilities'),
           content: Container(
             child: Column(
               children: [
@@ -1076,7 +1221,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         Step(
           state: _activeStepIndex <= 6 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 6,
-          title: const Text('Add Image'),
+          title: const Text('Property Image'),
           content: Container(
             child: Column(
               children: [
@@ -1089,13 +1234,14 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                   },
                   child: Card(
                     child: Container(
+                      padding: const EdgeInsets.only(top: 0),
                       width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.image,
                               color: Colors.blue,
@@ -1132,8 +1278,168 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                     ),
                   ),
                 ),
+                const Text(
+                  'you can add more picture later to your property',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Step(
+          state: _activeStepIndex <= 7 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 7,
+          title: const Text('Property Document'),
+          content: Container(
+            child: Column(
+              children: [
                 const SizedBox(
                   height: 8,
+                ),
+                MyTextField(
+                  myTextFormController: docFileNameController,
+                  fieldName: 'Document Name',
+                  hintName: 'e.g C.F.O, Governor Permit,etc',
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                InkWell(
+                  onTap: _getDocFile,
+                  child: Card(
+                    child: Container(
+                      width: double.infinity,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.file_open,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Select Document',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    height: 200.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Center(
+                      child: _doc_file == null
+                          ? const Text(
+                              'No Document selected',
+                              style: TextStyle(fontSize: 20),
+                            )
+                          : (_doc_ext == 'pdf')
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Image.asset(
+                                        'assets/images/pdf.png',
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Text(_doc_file!.name)
+                                  ],
+                                )
+                              : Image.file(
+                                  File(_doc_file!.path!),
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Text(
+                  'you can add more document later to your property',
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Step(
+          state: _activeStepIndex <= 8 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 8,
+          title: const Text('Property Ownership'),
+          content: Container(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                MyDropDownField(
+                  labelText: 'you owned this property?',
+                  value: props_ownership,
+                  dropDownList: List.generate(
+                    _whoOwnPropertyList.length,
+                    (i) => DropdownMenuItem(
+                      value: _whoOwnPropertyList[i]["value"],
+                      child: Text("${_whoOwnPropertyList[i]["name"]}"),
+                    ),
+                  ),
+                  onChanged: (Object? value) {
+                    setState(() {
+                      props_ownership = value.toString();
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                MyTextField(
+                  myTextFormController: owenerNameController,
+                  fieldName:
+                      (props_ownership == 'yes') ? 'Your Name' : 'Agent Name',
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                MyTextField(
+                  myTextFormController: owenerPhoneController,
+                  fieldName: (props_ownership == 'yes')
+                      ? 'Your Phone Number'
+                      : 'Agent Phone Number',
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                MyTextField(
+                  myTextFormController: owenerEmailController,
+                  fieldName: (props_ownership == 'yes')
+                      ? 'Your Email Address'
+                      : 'Agent Email Address',
+                ),
+                const SizedBox(
+                  height: 15,
                 ),
               ],
             ),
@@ -1141,20 +1447,18 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         ),
         Step(
           state: StepState.complete,
-          isActive: _activeStepIndex >= 7,
+          isActive: _activeStepIndex >= 9,
           title: const Text('Confirm'),
-          content: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                // Text('Name: ${air_condition}'),
-                // Text('Email: ${propsDesc.text}'),
-                // const Text('Password: *****'),
-                // Text('Address : ${propsYearBuilt.text}'),
-                // Text('PinCode : ${propsPrice.text}'),
-              ],
-            ),
+          content: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // Text('Name: ${air_condition}'),
+              // Text('Email: ${propsDesc.text}'),
+              // const Text('Password: *****'),
+              // Text('Address : ${propsYearBuilt.text}'),
+              // Text('PinCode : ${propsPrice.text}'),
+            ],
           ),
         ),
       ];
@@ -1214,9 +1518,9 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               propsToilet != '' &&
               states_id != '' &&
               area_id != '' &&
-              propsPrice != '' &&
+              disAmount != '' &&
               propsDesc != '' &&
-              propsYearBuilt != '' &&
+              selectedYearBuilt != '' &&
               _props_mode != '' &&
               propsYoutubeId != '' &&
               air_condition != '' &&
@@ -1244,7 +1548,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               fireplace != '' &&
               hot_tub != '' &&
               propsCondition != '' &&
-              propsCautionFee != '' &&
+              disCautionFee != '' &&
               selectedPref != '' &&
               _image != null &&
               //
@@ -1260,11 +1564,20 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               trafficController != '' &&
               pollutionController != '' &&
               educationController != '' &&
-              healthController != '') {
+              healthController != '' &&
+
+              //
+              docFileNameController.text != '' &&
+              _doc_file != null &&
+              props_ownership != null &&
+              owenerNameController.text != '' &&
+              owenerPhoneController.text != '' &&
+              owenerEmailController.text != '' &&
+              slightNegotiate != '') {
             setState(() {
               isLoading = true;
             });
-            print('form its filled');
+            //print('form its filled');
             bool status = await propsController.addProduct(
               propsName: propsName.text,
               props_purpose: props_purpose!,
@@ -1275,9 +1588,9 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               propsToilet: propsToilet.text,
               state_id: states_id!,
               area_id: area_id!,
-              propsPrice: propsPrice.text,
+              propsPrice: disAmount,
               propsDesc: propsDesc.text,
-              propsYearBuilt: propsYearBuilt.text,
+              propsYearBuilt: selectedYearBuilt!,
               props_mode: _props_mode!,
               propsYoutubeId: propsYoutubeId.text,
               air_condition: air_condition,
@@ -1305,7 +1618,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               fireplace: fireplace,
               hot_tub: hot_tub,
               propsCondition: propsCondition.text,
-              propsCautionFee: propsCautionFee.text,
+              propsCautionFee: disCautionFee,
               selectedPref: selectedPref,
               image: _image!,
               //
@@ -1323,6 +1636,16 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
               pollution: pollutionController.text,
               education: educationController.text,
               health: healthController.text,
+
+              //
+              docName: docFileNameController.text,
+              docFile: _doc_file!,
+              ownerStatus: props_ownership!,
+              ownerName: owenerNameController.text,
+              ownerPhone: owenerPhoneController.text,
+              ownerEmail: owenerEmailController.text,
+              slightNegotiate: slightNegotiate.toString(),
+
               user_id: user_id!,
             );
 
@@ -1332,11 +1655,11 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
             });
             // }
           } else {
-            print('form not filled');
+            //print('form not filled');
           }
 
-          print('form selected == ${selectedPref}');
-          print('Submited');
+          //print('form selected == ${selectedPref}');
+          //print('Submited');
         }
       },
       onStepCancel: () {

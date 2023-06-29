@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/chat_head_controller.dart';
 import '../widget/message_widget.dart';
-import '../widget/notice_me.dart';
 import 'message_alone_page.dart';
 
 class MessagePage extends StatefulWidget {
@@ -93,16 +92,6 @@ class _MessagePageState extends State<MessagePage> {
       body: Column(
         children: [
           const PropertyAppBar(title: 'Conversation'),
-          NoticeMe(
-            title: 'Oops!',
-            desc: 'Your bank account is not yet verify!',
-            icon: Icons.warning,
-            icon_color: Colors.red,
-            border_color: Colors.red,
-            btnTitle: 'Verify Now',
-            btnColor: Colors.blue,
-            onTap: () {},
-          ),
           Obx(
             () => (chController.isChatHeadProcessing == 'null')
                 ? Center(
@@ -134,8 +123,8 @@ class _MessagePageState extends State<MessagePage> {
                   });
                 },
                 child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade900,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
                   padding: const EdgeInsets.symmetric(

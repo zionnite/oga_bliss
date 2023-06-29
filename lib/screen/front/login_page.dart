@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/home_page.dart';
+import 'package:oga_bliss/util/common.dart';
 
 import '../../widget/my_textfield_icon.dart';
 import 'decide_page.dart';
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                           foregroundColor: Colors.white,
                           shape: const RoundedRectangleBorder(),
                           side: const BorderSide(color: Colors.white),
-                          backgroundColor: Colors.blue,
+                          backgroundColor: backgroundColorPrimary,
                           padding: const EdgeInsets.symmetric(vertical: 20),
                         ),
                         onPressed: () async {

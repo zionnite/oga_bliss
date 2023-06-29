@@ -3,6 +3,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class smallBtnIcon extends StatelessWidget {
   smallBtnIcon({
+    Key? key,
     required this.btnName,
     required this.btnColor,
     required this.onTap,
@@ -11,7 +12,10 @@ class smallBtnIcon extends StatelessWidget {
     this.icon_size,
     this.font_size,
     this.isLoading = false,
-  });
+    this.item = -1,
+    this.selecteditem = -1,
+  }) : super(key: key);
+
   final String btnName;
   final Color btnColor;
   final VoidCallback onTap;
@@ -20,6 +24,8 @@ class smallBtnIcon extends StatelessWidget {
   final double? icon_size;
   final double? font_size;
   final bool isLoading;
+  final int? item;
+  final int? selecteditem;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -35,7 +41,7 @@ class smallBtnIcon extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: (isLoading)
+            child: (isLoading && item == selecteditem)
                 ? Center(
                     child: LoadingAnimationWidget.staggeredDotsWave(
                       color: Colors.white,

@@ -266,7 +266,7 @@ class _MessageAlonePageState extends State<MessageAlonePage> {
             skinToneDialogBgColor: Colors.white,
             skinToneIndicatorColor: Colors.grey,
             enableSkinTones: true,
-            showRecentsTab: true,
+            // showRecentsTab: true,
             recentsLimit: 28,
             noRecents: const Text(
               'No Recents',

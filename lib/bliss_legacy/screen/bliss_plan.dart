@@ -46,9 +46,6 @@ class _BlissPlanState extends State<BlissPlan> {
         user_status = user_status1;
         admin_status = admin_status1;
         isUserLogin = isUserLogin1;
-
-        //TODO:// come to delete it
-        user_id = '35';
       });
 
       await accountReportController.getCounters(
@@ -71,18 +68,22 @@ class _BlissPlanState extends State<BlissPlan> {
 
   void _scrollListener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      setState(() {
-        isLoading = true;
-        current_page++;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+          current_page++;
+        });
+      }
 
       subscriptionController.getPlanListMore(current_page, user_id);
 
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          isLoading = false;
+      if (mounted) {
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            isLoading = false;
+          });
         });
-      });
+      }
     }
   }
 
@@ -136,9 +137,37 @@ class _BlissPlanState extends State<BlissPlan> {
       body: SingleChildScrollView(
         controller: _controller,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
               height: 70,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white70,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(35),
+                    ),
+                    border: Border.all(
+                      color: Colors.blue.shade100,
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.blue,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -205,8 +234,11 @@ class _BlissPlanState extends State<BlissPlan> {
     return (subscriptionController.myPlanList.isEmpty)
         ? const Align(
             alignment: Alignment.topLeft,
-            child: Text(
-              'Your Plan will appear yer',
+            child: Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: Text(
+                'Your Plan will appear yer',
+              ),
             ),
           )
         : Obx(

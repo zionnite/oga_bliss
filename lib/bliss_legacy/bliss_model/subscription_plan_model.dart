@@ -50,6 +50,8 @@ class Plan {
     this.status,
     this.planImage,
     this.isSubscribe,
+    this.planType,
+    this.expectedAmount,
   });
 
   String? disId;
@@ -65,6 +67,8 @@ class Plan {
   String? status;
   String? planImage;
   bool? isSubscribe;
+  String? planType;
+  String? expectedAmount;
 
   factory Plan.fromJson(Map<String, dynamic> json) => Plan(
         disId: json["dis_id"],
@@ -80,6 +84,8 @@ class Plan {
         status: json["status"],
         planImage: json["plan_image"],
         isSubscribe: json["is_subscribe"],
+        planType: json["plan_type"],
+        expectedAmount: json["expected_amount"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -96,5 +102,7 @@ class Plan {
         "status": status,
         "plan_image": planImage,
         "is_subscribe": isSubscribe,
+        "plan_type": planType,
+        "expected_amount": expectedAmount,
       };
 }

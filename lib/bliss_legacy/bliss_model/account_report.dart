@@ -16,22 +16,26 @@ class AccountReportModel {
     this.payableBalance,
     this.totalBalance,
     this.directDownline,
+    this.countMyPoint,
   });
 
   int? payableBalance;
   int? totalBalance;
   int? directDownline;
+  int? countMyPoint;
 
   factory AccountReportModel.fromJson(Map<String, dynamic> json) =>
       AccountReportModel(
         payableBalance: json["payable_balance"],
         totalBalance: json["total_balance"],
         directDownline: json["direct_downline"],
+        countMyPoint: json["countMyPoint"],
       );
 
   Map<String, dynamic> toJson() => {
         "payable_balance": payableBalance,
         "total_balance": totalBalance,
         "direct_downline": directDownline,
+        "countMyPoint": countMyPoint,
       };
 }

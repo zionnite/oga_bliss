@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/transaction_controller.dart';
-import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/transaction_widget.dart';
 
@@ -44,29 +44,12 @@ class _TransactionPageState extends State<TransactionPage> {
   bool isLoading = false;
   bool widgetLoading = true;
 
-  checkIfListLoaded() {
-    var loading = transController.isTransactionProcessing;
-    if (loading == 'yes' || loading == 'no') {
-      setState(() {
-        widgetLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     initUserDetail();
     super.initState();
 
     _controller = ScrollController()..addListener(_scrollListener);
-
-    Future.delayed(const Duration(seconds: 4), () {
-      if (mounted) {
-        setState(() {
-          checkIfListLoaded();
-        });
-      }
-    });
   }
 
   void _scrollListener() {
@@ -92,16 +75,6 @@ class _TransactionPageState extends State<TransactionPage> {
       body: Column(
         children: [
           const PropertyAppBar(title: 'Transactions'),
-          NoticeMe(
-            title: 'Oops!',
-            desc: 'Your bank account is not yet verify!',
-            icon: Icons.warning,
-            icon_color: Colors.red,
-            border_color: Colors.red,
-            btnTitle: 'Verify Now',
-            btnColor: Colors.blue,
-            onTap: () {},
-          ),
           Expanded(
             child: Obx(
               () => (transController.isTransactionProcessing == 'null')
@@ -120,7 +93,8 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   Widget detail() {
-    return (transController.transactionList.isEmpty)
+    print('this - ${transController.propsTransactionList}');
+    return (transController.propsTransactionList.isEmpty)
         ? Stack(children: [
             const ShowNotFound(),
             Positioned(
@@ -131,7 +105,7 @@ class _TransactionPageState extends State<TransactionPage> {
                   setState(() {
                     transController.isTransactionProcessing.value = 'null';
                     transController.fetchTransaction(1, user_id, admin_status);
-                    transController.transactionList.refresh();
+                    transController.propsTransactionList.refresh();
                   });
                 },
                 child: Container(
@@ -160,12 +134,15 @@ class _TransactionPageState extends State<TransactionPage> {
               // itemExtent: 350,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: transController.transactionList.length,
+              itemCount: transController.propsTransactionList.length,
               itemBuilder: (BuildContext context, int index) {
-                var trans = transController.transactionList[index];
-                if (transController.transactionList[index].id == null) {
+                var trans = transController.propsTransactionList[index];
+                if (transController.propsTransactionList[index].id == null) {
                   return Container();
                 }
+
+                String startDate =
+                    DateFormat('EEEE, MMM d, yyyy').format(trans.dateCreated!);
 
                 if (trans.disStatus == 'success') {
                   return transactionWidget(
@@ -180,7 +157,7 @@ class _TransactionPageState extends State<TransactionPage> {
                             color: Colors.red,
                           ),
                     amount: trans.disAmount.toString(),
-                    date: trans.dateCreated.toString(),
+                    date: startDate,
                     trailingIcon: const Icon(
                       Icons.check,
                       color: Colors.green,
@@ -198,8 +175,8 @@ class _TransactionPageState extends State<TransactionPage> {
                             Icons.trending_down,
                             color: Colors.red,
                           ),
-                    amount: trans.disAmount.toString()!,
-                    date: trans.dateCreated.toString()!,
+                    amount: trans.disAmount.toString(),
+                    date: startDate,
                     trailingIcon: const Icon(
                       Icons.cancel_outlined,
                       color: Colors.red,
@@ -217,8 +194,8 @@ class _TransactionPageState extends State<TransactionPage> {
                             Icons.trending_down,
                             color: Colors.red,
                           ),
-                    amount: trans.disAmount.toString()!,
-                    date: trans.dateCreated.toString()!,
+                    amount: trans.disAmount.toString(),
+                    date: startDate,
                     trailingIcon: const Icon(
                       Icons.fiber_manual_record_outlined,
                       color: Colors.blue,

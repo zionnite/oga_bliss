@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -88,7 +89,7 @@ class _FilterByPriceState extends State<FilterByPrice> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: backgroundColorPrimary,
       ),
       body: Obx(
         () => (propsController.isPriceProcessing == 'null')

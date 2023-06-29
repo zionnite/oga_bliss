@@ -11,6 +11,7 @@ class PropertyBtnIcon extends StatefulWidget {
     required this.icon_size,
     this.isSuffix = false,
     this.isLoading = false,
+    this.elevation = 10,
   });
 
   final VoidCallback onTap;
@@ -21,6 +22,7 @@ class PropertyBtnIcon extends StatefulWidget {
   final double icon_size;
   final bool isSuffix;
   final bool isLoading;
+  final double elevation;
 
   @override
   State<PropertyBtnIcon> createState() => _PropertyBtnIconState();
@@ -29,7 +31,6 @@ class PropertyBtnIcon extends StatefulWidget {
 class _PropertyBtnIconState extends State<PropertyBtnIcon> {
   @override
   Widget build(BuildContext context) {
-    print('sdfd ${widget.isLoading}');
     return InkWell(
       onTap: widget.onTap,
       child: Card(
@@ -39,7 +40,7 @@ class _PropertyBtnIconState extends State<PropertyBtnIcon> {
           bottom: 10,
           top: 10,
         ),
-        elevation: 10,
+        elevation: widget.elevation,
         child: Ink(
           color: widget.bgColor,
           child: Container(

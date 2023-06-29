@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterme_credit_card/flutterme_credit_card.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_controller/count_subscription_item_controller.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_model/subscription_list_model.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_widget/rounded_button.dart';
@@ -10,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../widget/property_card.dart';
 import '../bliss_controller/account_report_controller.dart';
 import '../bliss_controller/subscription_controller.dart';
-import 'land_transaction.dart';
 
 class ManageSubscription extends StatefulWidget {
   ManageSubscription({required this.data});
@@ -37,6 +37,7 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
   String? totalBalance;
   String? desc;
   bool isLoading = false;
+  bool isDisableLoading = false;
   bool isCardLoading = false;
 
   late ScrollController _controller;
@@ -58,9 +59,6 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
         admin_status = admin_status1;
         isUserLogin = isUserLogin1;
         full_name = fullName1;
-
-        //TODO:// come to delete it
-        user_id = '35';
       });
 
       await accountReportController.getCounters(
@@ -90,18 +88,22 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
 
   void _scrollListener() {
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      setState(() {
-        isLoading = true;
-        current_page++;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+          current_page++;
+        });
+      }
 
       subscriptionController.getCardActivitiesMore(
           current_page, widget.data.planId, user_id);
 
       Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
       });
     }
   }
@@ -210,8 +212,8 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                     padding: const EdgeInsets.only(right: 160.0, top: 20.0),
                     child: Text(
                       '${data.planInterval} Plan',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                   ),
                   const SizedBox(
@@ -233,8 +235,8 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                     cvvMaskType: FMMaskType.full,
                     validThru: '${data.authExpMonth}/${data.authExpYear}',
                     validThruMaskType: FMMaskType.none,
-                    holder: full_name!,
-                    title: 'Bliss Legacy | Subscription Card',
+                    holder: '${full_name}',
+                    title: 'OgaBliss | Subscription Card',
                   ),
                   const SizedBox(
                     height: 20,
@@ -247,7 +249,7 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                         title: 'Disable Subscription',
                         txtColor: Colors.white,
                         bgColor: Colors.blue.shade900,
-                        isLoading: isLoading,
+                        isLoading: isDisableLoading,
                         onTap: () async {
                           Get.defaultDialog(
                             title: "Action Needed",
@@ -258,27 +260,31 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                             confirmTextColor: Colors.white,
                             onConfirm: () async {
                               setState(() {
-                                isLoading = true;
+                                isDisableLoading = true;
+                                Get.back();
                               });
 
                               String status = await subscriptionController
                                   .toggleDisableButton(
-                                user_id,
-                                data.planCode,
-                                data.subscriptionCode,
-                                data.emailToken,
+                                disId: data.id ?? '',
+                                userId: user_id ?? '',
+                                planId: data.planId ?? '',
+                                planCode: data.planCode ?? '',
+                                subCode: data.subscriptionCode ?? '',
+                                emailToken: data.emailToken ?? '',
+                                planList: data,
                               );
-                              if (status == 'false_0' ||
-                                  status == 'false_1' ||
-                                  status == 'false_2' ||
-                                  status == 'true') {
+                              if (status == 'true_1' ||
+                                  status == 'true_2' ||
+                                  status == 'false' ||
+                                  status == 'false_2') {
                                 setState(() {
-                                  isLoading = false;
+                                  isDisableLoading = false;
                                   // Get.back();
                                 });
                               } else {
                                 setState(() {
-                                  isLoading = false;
+                                  isDisableLoading = false;
                                 });
                                 // Get.back();
                               }
@@ -297,6 +303,7 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                         txtColor: Colors.blue,
                         bgColor: Colors.white,
                         isLoading: isCardLoading,
+                        isLoadingColor: Colors.blue.shade900,
                         onTap: () async {
                           Get.defaultDialog(
                             title: "Action Needed",
@@ -308,6 +315,7 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                             onConfirm: () async {
                               setState(() {
                                 isCardLoading = true;
+                                Get.back();
                               });
 
                               String status =
@@ -349,8 +357,8 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
+                        children: const [
+                          Text(
                             'Card Transaction Activities',
                             style: TextStyle(
                               color: Colors.black,
@@ -358,70 +366,38 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              Get.to(() => const LandTransaction());
-                            },
-                            child: Row(
-                              children: const [
-                                // Text(
-                                //   'View All',
-                                //   style: TextStyle(
-                                //     color: Colors.blue,
-                                //   ),
-                                // ),
-                                // Icon(
-                                //   Icons.chevron_right_outlined,
-                                //   color: Colors.blue,
-                                // )
-                              ],
-                            ),
-                          ),
+                          // InkWell(
+                          //   onTap: () {
+                          //     Get.to(() => const LandTransaction());
+                          //   },
+                          //   child: Row(
+                          //     children: const [
+                          //       Text(
+                          //         'View All',
+                          //         style: TextStyle(
+                          //           color: Colors.blue,
+                          //         ),
+                          //       ),
+                          //       Icon(
+                          //         Icons.chevron_right_outlined,
+                          //         color: Colors.blue,
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       Obx(
-                        () => ListView.builder(
-                          padding: const EdgeInsets.only(top: 0, bottom: 120),
-                          physics: const ClampingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount:
-                              subscriptionController.cardActivitiesList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var fata = subscriptionController
-                                .cardActivitiesList[index];
-
-                            // String paidDate = DateFormat('EEEE, MMM d, yyyy')
-                            //     .format(fata.paidDate!);
-
-                            return Card(
-                              child: ListTile(
-                                title: Text(
-                                  CurrencyFormatter.getCurrencyFormatter(
-                                    amount: fata.amount!,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  children: [
-                                    Text(
-                                      fata.description!,
-                                    ),
-                                    Text(fata.paidDate!),
-                                  ],
-                                ),
-                                leading: Icon(
-                                  Icons.dark_mode,
-                                  color: (fata.status == 'success')
-                                      ? Colors.blue.shade900
-                                      : Colors.blue.shade300,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                        () => (subscriptionController
+                                .cardActivitiesList.isEmpty)
+                            ? const Align(
+                                alignment: Alignment.topLeft,
+                                child: Text('Card activities will appear here'),
+                              )
+                            : getTrans(),
                       ),
                     ],
                   ),
@@ -432,5 +408,60 @@ class _ManageSubscriptionState extends State<ManageSubscription> {
         ),
       ),
     );
+  }
+
+  getTrans() {
+    return Obx(
+      () => ListView.builder(
+        padding: const EdgeInsets.only(top: 0, bottom: 120),
+        physics: const ClampingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: subscriptionController.cardActivitiesList.length,
+        itemBuilder: (BuildContext context, int index) {
+          var fata = subscriptionController.cardActivitiesList[index];
+
+          // String paidDate = DateFormat('EEEE, MMM d, yyyy')
+          //     .format(fata.paidDate!);
+
+          var dateTime = DateTime.parse('${fata.paidDate}');
+          String paidDate = DateFormat('EEEE, MMM d, yyyy').format(dateTime);
+
+          return Card(
+            child: ListTile(
+              title: Text(
+                CurrencyFormatter.getCurrencyFormatter(
+                  amount: fata.amount!,
+                ),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    fata.description!,
+                  ),
+                  Text(
+                    paidDate,
+                    style: const TextStyle(),
+                  ),
+                ],
+              ),
+              leading: Icon(
+                Icons.dark_mode,
+                color: (fata.status == 'success')
+                    ? Colors.blue.shade900
+                    : Colors.blue.shade300,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

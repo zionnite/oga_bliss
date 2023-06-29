@@ -174,7 +174,7 @@ class _EditFacilitiesState extends State<EditFacilities> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Property Facilities'),
+              const Text('Close to these Facilities'),
               Text(
                 'all fields are required & must be filled out'.toUpperCase(),
                 style: const TextStyle(
@@ -263,12 +263,13 @@ class _EditFacilitiesState extends State<EditFacilities> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const PropertyAppBar(title: 'Edit Property - Facilities'),
+            const PropertyAppBar(
+                title: 'Edit Property - Closed to these Facilities'),
             (isLoading)
                 ? Center(
                     child: Container(
                       child: LoadingAnimationWidget.inkDrop(
-                        size: 200,
+                        size: 30,
                         color: Colors.blue,
                       ),
                     ),

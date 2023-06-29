@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oga_bliss/controller/property_doc.dart';
+import 'package:oga_bliss/model/property_purchase.dart';
 import 'package:oga_bliss/util/common.dart';
 
 import '../model/property_model.dart';
@@ -41,6 +44,13 @@ class PropertyController extends GetxController {
   var favPropertyList = <PropertyModel>[].obs;
   var typesPropertyList = <TypesPropertyModel>[].obs;
   var imageList = <GetAllPropsImage>[].obs;
+
+  //purchase property
+  var isPurchasePropertyProcessing = 'null'.obs;
+  var purchasePropertyList = <PurchaseProperty>[].obs;
+  //property document
+  var isDocProcessing = 'null'.obs;
+  var docList = <PropertyDoc>[].obs;
 
   // String? user_id;
   // String? user_status;
@@ -97,14 +107,14 @@ class PropertyController extends GetxController {
       return false;
     }
 
-    if (user_status != 'user') {
-      showSnackBar(
-        title: 'Oops!',
-        msg: 'This action is only for Users not Landlord or Agent',
-        backgroundColor: Colors.red,
-      );
-      return false;
-    }
+    // if (user_status != 'user') {
+    //   showSnackBar(
+    //     title: 'Oops!',
+    //     msg: 'This action is only for Users not Landlord or Agent',
+    //     backgroundColor: Colors.red,
+    //   );
+    //   return false;
+    // }
 
     if (status == 'liked') {
       if (route == 'default') {
@@ -162,7 +172,6 @@ class PropertyController extends GetxController {
     var seeker =
         await ApiServices.getSearchProduct(pageNum, userId, searchTerm);
 
-    isSearchDataProcessing(true);
     if (seeker != null) {
       isSearchProcessing.value = 'yes';
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
@@ -218,10 +227,10 @@ class PropertyController extends GetxController {
         await ApiServices.getFilterProductType(pageNum, userId, typeId);
 
     if (seeker != null) {
-      isTypeProcessing.value = 'null';
+      isTypeProcessing.value = 'yes';
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
     } else {
-      isTypeProcessing.value = 'null';
+      isTypeProcessing.value = 'no';
     }
   }
 
@@ -243,7 +252,10 @@ class PropertyController extends GetxController {
 
     isSearchDataProcessing(true);
     if (seeker != null) {
+      isPriceProcessing.value = 'yes';
       searchPropertyList.addAll(seeker.cast<PropertyModel>());
+    } else {
+      isPriceProcessing.value = 'no';
     }
   }
 
@@ -335,6 +347,14 @@ class PropertyController extends GetxController {
     required String pollution,
     required String education,
     required String health,
+    //
+    required String docName,
+    required PlatformFile docFile,
+    required String ownerStatus,
+    required String ownerName,
+    required String ownerPhone,
+    required String ownerEmail,
+    required String slightNegotiate,
     required String user_id,
   }) async {
     bool status = await ApiServices.addProduct(
@@ -394,6 +414,14 @@ class PropertyController extends GetxController {
       pollution: pollution,
       education: education,
       health: health,
+      //
+      docName: docName,
+      docFile: docFile,
+      ownerStatus: ownerStatus,
+      ownerName: ownerName,
+      ownerPhone: ownerPhone,
+      ownerEmail: ownerEmail,
+      slightNegotiate: slightNegotiate,
       user_id: user_id,
     );
 
@@ -460,6 +488,7 @@ class PropertyController extends GetxController {
     required String propsYoutubeId,
     required String propsId,
     required PropertyModel model,
+    required String slightNegotiate,
     required String user_id,
   }) async {
     bool status = await ApiServices.editBasicDetail(
@@ -478,6 +507,7 @@ class PropertyController extends GetxController {
       props_mode: props_mode,
       propsYoutubeId: propsYoutubeId,
       propsId: propsId,
+      slightNegotiate: slightNegotiate,
       user_id: user_id,
     );
 
@@ -653,6 +683,39 @@ class PropertyController extends GetxController {
       pollution: pollution,
       education: education,
       health: health,
+      propsId: propsId,
+      user_id: user_id,
+    );
+
+    bool statusType;
+    String? msg;
+
+    if (status == true) {
+      msg =
+          'Product Information Updated..., Changes will take effect in the next few min.';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
+  }
+
+  editOwnership({
+    required String owner_status,
+    required String owner_name,
+    required String owner_phone,
+    required String owner_email,
+    required String propsId,
+    required String user_id,
+  }) async {
+    bool status = await ApiServices.editOwnershipStatus(
+      owner_status: owner_status,
+      owner_name: owner_name,
+      owner_phone: owner_phone,
+      owner_email: owner_email,
       propsId: propsId,
       user_id: user_id,
     );
@@ -867,5 +930,131 @@ class PropertyController extends GetxController {
       showSnackBar(title: 'Property', msg: msg, backgroundColor: Colors.blue);
       return false;
     }
+  }
+
+  getPropertyPurchase(var userId, var adminStatus) async {
+    var seeker =
+        await ApiServices.getPurchaseProduct(page_num, userId, adminStatus);
+
+    if (seeker != null) {
+      isPurchasePropertyProcessing.value = 'yes';
+      purchasePropertyList.value = seeker.cast<PurchaseProperty>();
+    } else {
+      isPurchasePropertyProcessing.value = 'no';
+    }
+  }
+
+  void getMorePropertyPurchase(var pageNum, var userId, var adminStatus) async {
+    var seeker =
+        await ApiServices.getPurchaseProduct(pageNum, userId, adminStatus);
+
+    if (seeker != null) {
+      purchasePropertyList.addAll(seeker.cast<PurchaseProperty>());
+    } else {}
+  }
+
+  Future<void> makeRequestInspection(
+      {String? name,
+      String? phone,
+      String? date,
+      String? time,
+      String? propsId,
+      String? agentId}) async {
+    String status = await ApiServices.makeRequestInspection(
+        name, phone, date, time, propsId, agentId);
+    showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
+  }
+
+  Future<void> makeRequestSpecification({
+    String? name,
+    String? phone,
+    String? desc,
+    String? location,
+    String? area,
+    String? budFrom,
+    String? budTo,
+  }) async {
+    String status = await ApiServices.makeRequestSpecification(
+        name, phone, desc, location, area, budFrom, budTo);
+    showSnackBar(title: 'Request', msg: status, backgroundColor: Colors.blue);
+  }
+
+  Future<String> promoteProperty({
+    required String userId,
+    required String propsId,
+  }) async {
+    String status =
+        await ApiServices.promoteProduct(userId: userId, propsId: propsId);
+
+    return status;
+  }
+
+  Future<String> copyProductLink({
+    required String userId,
+    required String propsId,
+  }) async {
+    String status =
+        await ApiServices.copyProductLink(userId: userId, propsId: propsId);
+
+    return status;
+  }
+
+  getPropertyDocument(var userId, var propsId) async {
+    print('here loaded');
+    var seeker = await ApiServices.getPropertyDoc(page_num, userId, propsId);
+    isDocProcessing.value = 'null';
+    if (seeker != null) {
+      print('not empty');
+      isDocProcessing.value = 'yes';
+      docList.value = seeker.cast<PropertyDoc>();
+    } else {
+      print('very empty');
+      docList.clear();
+      isDocProcessing.value = 'no';
+    }
+  }
+
+  void getMorePropertyDocument(var pageNum, var userId, var propsId) async {
+    var seeker = await ApiServices.getPropertyDoc(pageNum, userId, propsId);
+
+    if (seeker != null) {
+      docList.addAll(seeker.cast<PropertyDoc>());
+    } else {}
+  }
+
+  Future<void> uploadTitleDocument({
+    String? doc_name,
+    PlatformFile? doc_file,
+    String? propsId,
+    String? userId,
+  }) async {
+    bool status = await ApiServices.uploadTitleDocument(
+        doc_name: doc_name,
+        doc_file: doc_file,
+        propsId: propsId,
+        userId: userId);
+    if (status) {
+      showSnackBar(
+          title: 'Request',
+          msg: 'Titled Document added to list',
+          backgroundColor: Colors.blue);
+    }
+  }
+
+  Future<bool> deleteDocFile(var userId, var fileId) async {
+    bool status = await ApiServices.deleteDocFile(userId, fileId);
+    bool statusType;
+    String? msg;
+
+    if (status == true) {
+      msg = 'File Deleted from List';
+      statusType = true;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      statusType = false;
+    }
+    showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+    return statusType;
   }
 }

@@ -573,7 +573,7 @@ class _EditAmenitiesState extends State<EditAmenities> {
                 ? Center(
                     child: Container(
                       child: LoadingAnimationWidget.inkDrop(
-                        size: 200,
+                        size: 30,
                         color: Colors.blue,
                       ),
                     ),

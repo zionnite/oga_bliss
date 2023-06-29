@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
-import 'package:awesome_bottom_bar/tab_item.dart';
 import 'package:flutter/material.dart';
+import 'package:oga_bliss/bliss_legacy/screen/bliss_profile.dart';
+import 'package:oga_bliss/bliss_legacy/screen/bliss_shop.dart';
 import 'package:oga_bliss/screen/favourite.dart';
 import 'package:oga_bliss/screen/not_login_page.dart';
 import 'package:oga_bliss/screen/not_user_page.dart';
@@ -10,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controller/property_controller.dart';
 import 'screen/all_prop_page.dart';
-import 'screen/profile_page.dart';
 import 'screen/search_alone_page.dart';
 import 'widget/navigation_drawer.dart';
 
@@ -80,8 +78,13 @@ class _HomePageState extends State<HomePage> {
       title: 'Search',
     ),
     const TabItem(
+      icon: Icons.shopping_cart,
+      title: 'Shop',
+    ),
+    const TabItem(
       icon: Icons.favorite_outlined,
       title: 'Favourite',
+      // title: 'Bliss Plan',
     ),
     const TabItem(
       icon: Icons.account_box,
@@ -112,63 +115,47 @@ class _HomePageState extends State<HomePage> {
                 s_key: _key,
               ),
               const SearchAlonePage(),
+              const BlissShop(),
               FavouriteToView(),
               // RentPropertyPage(),
+              // ProfileToView()
               ProfileToView()
             ],
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.maxFinite,
-              height: (Platform.isAndroid) ? 90 : 95,
-              padding:
-                  const EdgeInsets.only(top: 0, bottom: 0, right: 0, left: 0),
-              margin: (Platform.isAndroid)
-                  ? const EdgeInsets.only(
-                      top: 0,
-                      bottom: 20,
-                      right: 30,
-                      left: 30,
-                    )
-                  : const EdgeInsets.only(
-                      top: 10,
-                      bottom: 20,
-                      right: 30,
-                      left: 30,
-                    ),
-              child: BottomBarSalomon(
-                // titleStyle: TextStyle(fontSize: 20),
-                bottom: 0,
-                top: Platform.isAndroid ? 10 : 35,
-                iconSize: 28,
-                items: items,
-                color: Colors.blue,
-                animated: true,
-                heightItem: 40,
-                // radiusSalomon: BorderRadius.circular(3),
-                backgroundColor: Colors.white,
-                colorSelected: Colors.white,
-                backgroundSelected: Colors.blue,
-                borderRadius: BorderRadius.circular(9),
-                indexSelected: _currentPage,
-                onTap: (index) => setState(() {
-                  pageController.animateToPage(
-                    index,
-                    duration: Duration(microseconds: 500),
-                    curve: Curves.bounceIn,
-                  );
-                }),
-              ),
-            ),
-          ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        child: BottomBarCreative(
+          top: 12,
+          bottom: 12,
+          pad: 4,
+          items: items,
+          backgroundColor: Colors.white,
+          color: Colors.black,
+          colorSelected: Colors.blue.shade900,
+          indexSelected: _currentPage,
+          isFloating: true,
+          highlightStyle: const HighlightStyle(
+            sizeLarge: true,
+            isHexagon: true,
+            elevation: 12,
+          ),
+          onTap: (index) => setState(
+            () {
+              pageController.animateToPage(
+                index,
+                duration: const Duration(microseconds: 500),
+                curve: Curves.bounceIn,
+              );
+            },
+          ),
+        ),
       ),
     );
   }
 
   Widget FavouriteToView() {
-    if (user_status == 'user') {
+    if (loginStatus != null) {
       return const FavouritePage();
     } else {
       return const NotUserPage();

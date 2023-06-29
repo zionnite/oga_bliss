@@ -199,8 +199,8 @@ class _ManageUserSubscriptionState extends State<ManageUserSubscription> {
                     padding: const EdgeInsets.only(right: 160.0, top: 20.0),
                     child: Text(
                       '${data.planInterval} Plan',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                   ),
                   getCounters(),
@@ -245,45 +245,13 @@ class _ManageUserSubscriptionState extends State<ManageUserSubscription> {
                         height: 10,
                       ),
                       Obx(
-                        () => ListView.builder(
-                          padding: const EdgeInsets.only(top: 0, bottom: 120),
-                          physics: const ClampingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: subscriptionController
-                              .userCardActivitiesList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var fata = subscriptionController
-                                .userCardActivitiesList[index];
-
-                            // String paidDate = DateFormat('EEEE, MMM d, yyyy')
-                            //     .format(fata.paidDate!);
-
-                            return Card(
-                              child: ListTile(
-                                title: Text(
-                                  CurrencyFormatter.getCurrencyFormatter(
-                                    amount: fata.amount!,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  children: [
-                                    Text(
-                                      fata.description!,
-                                    ),
-                                    Text(fata.paidDate!),
-                                  ],
-                                ),
-                                leading: Icon(
-                                  Icons.dark_mode,
-                                  color: (fata.status == 'success')
-                                      ? Colors.blue.shade900
-                                      : Colors.blue.shade300,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+                        () => (subscriptionController
+                                .userCardActivitiesList.isEmpty)
+                            ? const Align(
+                                alignment: Alignment.topLeft,
+                                child: Text('Card activities will appear here'),
+                              )
+                            : getTrans(),
                       ),
                     ],
                   ),
@@ -292,6 +260,48 @@ class _ManageUserSubscriptionState extends State<ManageUserSubscription> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  getTrans() {
+    return Obx(
+      () => ListView.builder(
+        padding: const EdgeInsets.only(top: 0, bottom: 120),
+        physics: const ClampingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: subscriptionController.userCardActivitiesList.length,
+        itemBuilder: (BuildContext context, int index) {
+          var fata = subscriptionController.userCardActivitiesList[index];
+
+          // String paidDate = DateFormat('EEEE, MMM d, yyyy')
+          //     .format(fata.paidDate!);
+
+          return Card(
+            child: ListTile(
+              title: Text(
+                CurrencyFormatter.getCurrencyFormatter(
+                  amount: fata.amount!,
+                ),
+              ),
+              subtitle: Column(
+                children: [
+                  Text(
+                    fata.description!,
+                  ),
+                  Text(fata.paidDate!),
+                ],
+              ),
+              leading: Icon(
+                Icons.dark_mode,
+                color: (fata.status == 'success')
+                    ? Colors.blue.shade900
+                    : Colors.blue.shade300,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

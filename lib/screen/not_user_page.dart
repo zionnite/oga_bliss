@@ -64,11 +64,9 @@ class _NotUserPageState extends State<NotUserPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      (loginStatus == null)
-                          ? 'Only Login Members with Status (User) can view this page'
-                          : 'Only Members with Status (User) can view this page',
-                      style: const TextStyle(
+                    const Text(
+                      'Only Login Members with Status (User) can view this page',
+                      style: TextStyle(
                         fontSize: 15,
                         fontFamily: 'Passion One',
                       ),

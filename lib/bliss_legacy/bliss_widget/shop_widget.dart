@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../util/currency_formatter.dart';
 
@@ -10,6 +11,10 @@ class shopWidget extends StatefulWidget {
     required this.planLimit,
     required this.planAmount,
     required this.onTap,
+    this.isLoading = false,
+    required this.isSubscribe,
+    this.item = -1,
+    this.selectedItem = -1,
   });
 
   final String planImg;
@@ -18,6 +23,10 @@ class shopWidget extends StatefulWidget {
   final String planLimit;
   final String planAmount;
   final VoidCallback onTap;
+  final bool isLoading;
+  final bool isSubscribe;
+  final int item;
+  final int selectedItem;
 
   @override
   State<shopWidget> createState() => _shopWidgetState();
@@ -87,20 +96,49 @@ class _shopWidgetState extends State<shopWidget> {
                       const SizedBox(
                         height: 5,
                       ),
-                      InkWell(
-                        onTap: widget.onTap,
-                        child: Container(
-                          padding: const EdgeInsets.all(9),
-                          color: Colors.blue.shade900,
-                          child: const Text(
-                            'Subscribe Now',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      )
+                      (widget.isSubscribe)
+                          ? Container(
+                              padding: const EdgeInsets.all(9),
+                              color: Colors.blueAccent,
+                              child: const Text(
+                                'Subscribed',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : InkWell(
+                              onTap: widget.onTap,
+                              child: Container(
+                                padding: const EdgeInsets.all(9),
+                                color: Colors.blue.shade900,
+                                child: Row(
+                                  children: [
+                                    const Expanded(
+                                      child: Text(
+                                        'Subscribe Now',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    (widget.isLoading &&
+                                            widget.item == widget.selectedItem)
+                                        ? Center(
+                                            child: LoadingAnimationWidget
+                                                .staggeredDotsWave(
+                                              color: Colors.white,
+                                              size: 13,
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
+                                ),
+                              ),
+                            )
                     ],
                   ),
                 )

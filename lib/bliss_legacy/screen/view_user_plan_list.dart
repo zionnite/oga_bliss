@@ -6,6 +6,8 @@ import 'package:oga_bliss/bliss_legacy/bliss_controller/subscription_controller.
 import 'package:oga_bliss/bliss_legacy/screen/manage_user_subscription.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widget/show_not_found.dart';
+
 class ViewUserPlanList extends StatefulWidget {
   ViewUserPlanList({required this.disUserId, required this.disUserFullName});
 
@@ -168,13 +170,8 @@ class _ViewUserPlanListState extends State<ViewUserPlanList> {
   }
 
   getData() {
-    return (subscriptionController.isUserPlaProcessing.isEmpty)
-        ? const Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              'Your Plan will appear yer',
-            ),
-          )
+    return (subscriptionController.userPlanList.isEmpty)
+        ? const ShowNotFound()
         : Obx(
             () => ListView.builder(
               padding: const EdgeInsets.only(top: 5, bottom: 20),

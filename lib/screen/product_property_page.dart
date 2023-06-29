@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/screen/add_prop_page.dart';
+import 'package:oga_bliss/screen/edit_ownership.dart';
 import 'package:oga_bliss/screen/view_my_product.dart';
+import 'package:oga_bliss/screen/view_product_document.dart';
 import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
 import 'package:oga_bliss/widget/property_btn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../controller/property_controller.dart';
 import '../model/property_model.dart';
 import '../util/common.dart';
-import '../widget/notice_me.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
 import '../widget/show_not_found.dart';
@@ -154,18 +155,9 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
             controller: _controller,
             child: Column(
               children: [
-                NoticeMe(
-                  title: 'Oops!',
-                  desc: 'Your bank account is not yet verify!',
-                  icon: Icons.warning,
-                  icon_color: Colors.red,
-                  border_color: Colors.red,
-                  btnTitle: 'Verify Now',
-                  btnColor: Colors.blue,
-                  onTap: () {},
-                ),
                 Obx(
                   () => ListView.builder(
+                    padding: const EdgeInsets.only(top: 10),
                     key: const PageStorageKey<String>('myProperty'),
                     physics: const ClampingScrollPhysics(),
                     // itemExtent: 350,
@@ -293,6 +285,15 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     card_margin: const EdgeInsets.all(10),
                     container_margin: const EdgeInsets.all(10),
                   ),
+                  propertyBtn(
+                    onTap: () {
+                      Get.to(() => EditOwnership(model: props));
+                    },
+                    title: 'Edit Ownership',
+                    bgColor: Colors.blue.shade900,
+                    card_margin: const EdgeInsets.all(10),
+                    container_margin: const EdgeInsets.all(10),
+                  ),
                 ],
               ),
             ),
@@ -308,6 +309,9 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         } else if (val == 'image') {
           Get.to(
               () => ViewMyProduct(model: props, user_id: user_id.toString()));
+        } else if (val == 'doc') {
+          Get.to(() =>
+              ViewMyProductDocument(model: props, user_id: user_id.toString()));
         } else if (val == 'already') {
           showSnackBar(
             title: 'Property',
@@ -331,6 +335,10 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
           const PopupMenuItem(
             value: "image",
             child: Text('View Image'),
+          ),
+          const PopupMenuItem(
+            value: "doc",
+            child: Text('View Document'),
           ),
           const PopupMenuItem(
             value: "edit",

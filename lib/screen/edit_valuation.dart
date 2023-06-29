@@ -140,7 +140,7 @@ class _EditValuationState extends State<EditValuation> {
 
   // final _propsPurposeList = ["Buy", "Rent"];
   final _propsPurposeList = [
-    {"value": "buy", "name": "Buy"},
+    {"value": "sale", "name": "Buy"},
     {"value": "rent", "name": "Rent"},
   ];
   String? props_purpose;
@@ -241,7 +241,7 @@ class _EditValuationState extends State<EditValuation> {
                 ? Center(
                     child: Container(
                       child: LoadingAnimationWidget.inkDrop(
-                        size: 200,
+                        size: 30,
                         color: Colors.blue,
                       ),
                     ),

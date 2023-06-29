@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:giff_dialog/giff_dialog.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:oga_bliss/bliss_legacy/bliss_controller/account_report_controller.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
 import 'package:oga_bliss/screen/front/welcome_page.dart';
 import 'package:oga_bliss/services/api_services.dart';
@@ -30,6 +31,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
 
   final propsController = PropertyController().getXID;
   final usersController = UsersController().getXID;
+  final accountReportController = AccountReportController().getXID;
   late ScrollController _controller;
 
   String? user_id;
@@ -54,6 +56,8 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
 
       await propsController.getDetails(user_id);
       await usersController.checkForUpdate(user_id);
+      await accountReportController.getCounters(
+          user_id, admin_status, user_status);
     }
   }
 
@@ -104,7 +108,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
               Container(
                 width: double.infinity,
                 height: 450,
-                color: Colors.blue,
+                color: backgroundColorPrimary,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -313,7 +317,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                     color: Colors.white,
                   ),
                 ),
-                buttonOkColor: Colors.blue,
+                buttonOkColor: backgroundColorPrimary,
                 onOkButtonPressed: () {
                   if (Platform.isIOS) {
                     _launchUniversalLinkIos(iosAppLink);
