@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:popup_banner/popup_banner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controller/property_controller.dart';
 import '../util/currency_formatter.dart';
@@ -46,6 +47,8 @@ class _ViewPropertyDetailedDashboardState
         admin_status = admin_status1;
       });
       propsController.getDisProduct(widget.propsId, user_id);
+
+      await propsController.getPropertyDocument(user_id, widget.propsId);
     }
   }
 
@@ -972,6 +975,29 @@ class _ViewPropertyDetailedDashboardState
                           ],
                         ),
                       ),
+                      const Padding(
+                        padding: EdgeInsets.all(18.0),
+                        child: Divider(
+                          height: 1,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const Align(
+                        alignment: Alignment.topLeft,
+                        child: HeaderTitle(
+                          title: 'TITLE DOCUMENT',
+                        ),
+                      ),
+                      Obx(
+                        () => (propsController.isDocProcessing == 'null')
+                            ? Center(
+                                child: LoadingAnimationWidget.staggeredDotsWave(
+                                  color: Colors.blue,
+                                  size: 20,
+                                ),
+                              )
+                            : loadDocFile(),
+                      ),
                       (user_status == 'user')
                           ? propertyBtn(
                               onTap: () async {
@@ -999,5 +1025,104 @@ class _ViewPropertyDetailedDashboardState
                 );
               },
             ));
+  }
+
+  Widget loadDocFile() {
+    return (propsController.docList.isNotEmpty)
+        ? SingleChildScrollView(
+            child: Column(
+              children: [
+                Obx(
+                  () => ListView.builder(
+                    padding: const EdgeInsets.all(0),
+                    key: const PageStorageKey<String>('myProperty'),
+                    physics: const ClampingScrollPhysics(),
+                    // itemExtent: 350,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: propsController.docList.length,
+
+                    itemBuilder: (BuildContext context, int index) {
+                      var props = propsController.docList[index];
+
+                      if (propsController.docList[index].id == null) {
+                        return Container();
+                      }
+
+                      return Card(
+                        child: ListTile(
+                          leading: InkWell(
+                            onTap: () {
+                              String link = '${props.fileName}';
+                              _launchInBrowser(Uri.parse(link));
+                            },
+                            child: Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                image: (props.fileExt == 'pdf')
+                                    ? const DecorationImage(
+                                        image: AssetImage(
+                                          'assets/images/pdf.png',
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : DecorationImage(
+                                        image: NetworkImage(
+                                          props.fileName!,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                          ),
+                          title: InkWell(
+                            onTap: () {
+                              String link = '${props.fileName}';
+                              _launchInBrowser(Uri.parse(link));
+                            },
+                            child: Text(
+                              props.title!,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          subtitle: InkWell(
+                            onTap: () {
+                              String link = '${props.fileName}';
+                              _launchInBrowser(Uri.parse(link));
+                            },
+                            child: const Text(
+                              'Open file',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
+          )
+        : const Text(
+            'Title Document not available',
+            textAlign: TextAlign.left,
+          );
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
