@@ -37,18 +37,21 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   String? user_id;
   String? user_status;
   bool? admin_status;
+  bool? loginStatus;
 
   initUserDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId1 = prefs.getString('user_id');
     var user_status1 = prefs.getString('user_status');
     var admin_status1 = prefs.getBool('admin_status');
+    var isUserLogin = prefs.getBool('isUserLogin');
 
     if (mounted) {
       setState(() {
         user_id = userId1;
         user_status = user_status1;
         admin_status = admin_status1;
+        loginStatus = isUserLogin;
       });
     }
 
@@ -1050,85 +1053,96 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       )
                     : loadDocFile(),
               ),
-              propertyBtn(
-                onTap: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
+              (loginStatus != null)
+                  ? (admin_status == false)
+                      ? propertyBtn(
+                          onTap: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
 
-                  Future.delayed(const Duration(seconds: 2), () async {
-                    if (mounted) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
+                            Future.delayed(const Duration(seconds: 2),
+                                () async {
+                              if (mounted) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
 
-                    if (props.isPromotingProduct!) {
-                      //Copy Link
-                      if (props.urlCode!.isEmpty) {
-                        String status = await propsController.copyProductLink(
-                            userId: user_id!, propsId: props.propsId!);
-                        if (status != 'false') {
-                          setState(() {
-                            props.urlCode = status;
-                          });
-                        } else {
-                          showSnackBar(
-                            title: 'Oops',
-                            msg: 'Could not fetch Product Link, please Refresh',
-                            backgroundColor: Colors.blue.shade900,
-                          );
-                        }
-                      }
-                      var link =
-                          '${baseDomain}Product/view_product/${props.propsId}/${props.urlCode}';
-                      Clipboard.setData(ClipboardData(text: link)).then((_) {
-                        showSnackBar(
-                          title: 'Link',
-                          msg: 'Property Link Copied',
-                          backgroundColor: Colors.blue.shade900,
-                        );
-                      });
-                    } else {
-                      //Market Product
+                              if (props.isPromotingProduct!) {
+                                //Copy Link
+                                if (props.urlCode!.isEmpty) {
+                                  String status =
+                                      await propsController.copyProductLink(
+                                          userId: user_id!,
+                                          propsId: props.propsId!);
+                                  if (status != 'false') {
+                                    setState(() {
+                                      props.urlCode = status;
+                                    });
+                                  } else {
+                                    showSnackBar(
+                                      title: 'Oops',
+                                      msg:
+                                          'Could not fetch Product Link, please Refresh',
+                                      backgroundColor: Colors.blue.shade900,
+                                    );
+                                  }
+                                }
+                                var link =
+                                    '${baseDomain}Product/view_product/${props.propsId}/${props.urlCode}';
+                                Clipboard.setData(ClipboardData(text: link))
+                                    .then((_) {
+                                  showSnackBar(
+                                    title: 'Link',
+                                    msg: 'Property Link Copied',
+                                    backgroundColor: Colors.blue.shade900,
+                                  );
+                                });
+                              } else {
+                                //Market Product
 
-                      String status = await propsController.promoteProperty(
-                          userId: user_id!, propsId: props.propsId!);
+                                String status =
+                                    await propsController.promoteProperty(
+                                        userId: user_id!,
+                                        propsId: props.propsId!);
 
-                      if (status == 'true') {
-                        setState(() {
-                          props.isPromotingProduct = true;
-                        });
-                        await propsController.getDetails(user_id);
-                        showSnackBar(
-                          title: 'Result',
-                          msg:
-                              'Property Added to List of Item you are promoting',
-                          backgroundColor: Colors.blue.shade900,
-                        );
-                      } else if (status == 'false') {
-                        showSnackBar(
-                          title: 'Result',
-                          msg:
-                              'Database Busy, Could not perform operation, Pls Try Again Later!',
-                          backgroundColor: Colors.blue.shade900,
-                        );
-                      } else {
-                        showSnackBar(
-                          title: 'Result',
-                          msg: 'You already promoting this product',
-                          backgroundColor: Colors.blue.shade900,
-                        );
-                      }
-                    }
-                  });
-                },
-                title: (props.isPromotingProduct!)
-                    ? 'Copy Link'
-                    : 'Market Product',
-                bgColor: Colors.blue.shade900,
-                isLoading: isLoading,
-              )
+                                if (status == 'true') {
+                                  setState(() {
+                                    props.isPromotingProduct = true;
+                                  });
+                                  await propsController.getDetails(user_id);
+                                  showSnackBar(
+                                    title: 'Result',
+                                    msg:
+                                        'Property Added to List of Item you are promoting',
+                                    backgroundColor: Colors.blue.shade900,
+                                  );
+                                } else if (status == 'false') {
+                                  showSnackBar(
+                                    title: 'Result',
+                                    msg:
+                                        'Database Busy, Could not perform operation, Pls Try Again Later!',
+                                    backgroundColor: Colors.blue.shade900,
+                                  );
+                                } else {
+                                  showSnackBar(
+                                    title: 'Result',
+                                    msg: 'You already promoting this product',
+                                    backgroundColor: Colors.blue.shade900,
+                                  );
+                                }
+                              }
+                            });
+                          },
+                          title: (props.isPromotingProduct!)
+                              ? 'Copy Link'
+                              : 'Market Product',
+                          bgColor: Colors.blue.shade900,
+                          isLoading: isLoading,
+                        )
+                      : Container()
+                  : Container(),
             ],
           ),
         ),

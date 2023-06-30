@@ -24,7 +24,7 @@ class onboardingWidget extends StatelessWidget {
             ),
             height: height * 0.5,
             fit: BoxFit.contain,
-            color: Colors.blue.withOpacity(1),
+            color: Colors.blue.shade900.withOpacity(1),
             colorBlendMode: BlendMode.color,
           ),
           Column(

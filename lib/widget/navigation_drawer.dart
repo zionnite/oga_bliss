@@ -11,7 +11,6 @@ import 'package:oga_bliss/screen/front/decide_page.dart';
 import 'package:oga_bliss/screen/front/login_page.dart';
 import 'package:oga_bliss/screen/market_page.dart';
 import 'package:oga_bliss/screen/payout_transaction_page.dart';
-import 'package:oga_bliss/screen/profile_page.dart';
 import 'package:oga_bliss/screen/purchase_property.dart';
 import 'package:oga_bliss/screen/referal_page.dart';
 import 'package:oga_bliss/screen/transaction_page.dart';
@@ -81,9 +80,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               urlImage: '${image_name}',
               name: '${fullName}',
               email: '${user_name}',
-              onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ProfilePage(),
-              )),
+              onClicked: () {},
             ),
             Container(
               padding: padding,
@@ -100,36 +97,43 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       );
                     },
                   ),
-                  buildMenuItem(
-                    text: 'My Plan',
-                    icon: Icons.all_inclusive_rounded,
-                    onClicked: () {
-                      Get.to(
-                        () => const BlissPlan(),
-                      );
-                    },
-                  ),
+                  (admin_status == false)
+                      ? buildMenuItem(
+                          text: 'My Plan',
+                          icon: Icons.all_inclusive_rounded,
+                          onClicked: () {
+                            Get.to(
+                              () => const BlissPlan(),
+                            );
+                          },
+                        )
+                      : Container(),
 
                   /*Admin*/
                   adminWidget(),
                   usersWidget(),
 
-                  buildMenuItem(
-                    text: 'Property Marketing',
-                    icon: Icons.campaign_sharp,
-                    onClicked: () => Get.to(
-                      () => const MarketPage(),
-                    ),
-                  ),
-                  buildMenuItem(
-                    text: 'Purchase Property',
-                    icon: Icons.card_giftcard_sharp,
-                    onClicked: () {
-                      Get.to(
-                        () => const PurchaseProperty(),
-                      );
-                    },
-                  ),
+                  (admin_status == false)
+                      ? buildMenuItem(
+                          text: 'Property Marketing',
+                          icon: Icons.campaign_sharp,
+                          onClicked: () => Get.to(
+                            () => const MarketPage(),
+                          ),
+                        )
+                      : Container(),
+                  (admin_status == false)
+                      ? buildMenuItem(
+                          text: 'Purchase Property',
+                          icon: Icons.card_giftcard_sharp,
+                          onClicked: () {
+                            Get.to(
+                              () => const PurchaseProperty(),
+                            );
+                          },
+                        )
+                      : Container(),
+
                   buildMenuItem(
                     text: 'My Referral',
                     icon: Icons.groups_2_sharp,
@@ -167,14 +171,15 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       () => const PayoutTransactionPage(),
                     ),
                   ),
-
-                  buildMenuItem(
-                    text: 'Book Specification',
-                    icon: Icons.event_rounded,
-                    onClicked: () => Get.to(
-                      () => const BookSpecification(),
-                    ),
-                  ),
+                  (admin_status == false)
+                      ? buildMenuItem(
+                          text: 'Book Specification',
+                          icon: Icons.event_rounded,
+                          onClicked: () => Get.to(
+                            () => const BookSpecification(),
+                          ),
+                        )
+                      : Container(),
                   buildMenuItem(
                     text: 'Withdrawal',
                     icon: Icons.account_balance_wallet_rounded,

@@ -34,7 +34,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                        Colors.blue.withOpacity(0.9), BlendMode.color),
+                        Colors.blue.shade900.withOpacity(0.9), BlendMode.color),
                     fit: BoxFit.fitWidth,
                     image: const AssetImage('assets/images/connect_home.png'),
                   ),

@@ -51,7 +51,7 @@ class _SplashPageState extends State<SplashPage> {
                       image: const AssetImage('assets/images/happy_family.png'),
                       height: height * 0.6,
                       // width: 500,
-                      color: Colors.blue.withOpacity(1),
+                      color: Colors.blue.shade900.withOpacity(1),
                       colorBlendMode: BlendMode.color,
                     ),
                   ),
