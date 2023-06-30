@@ -58,8 +58,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        versionCode 6
-        versionName "6.0"
+        versionCode 7
+        versionName "7.0"
         multiDexEnabled true
     }
 
@@ -79,6 +79,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
+            crunchPngs false // or true
         }
     }
 }
