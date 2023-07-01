@@ -2042,6 +2042,11 @@ class ApiServices {
           prefs.setString('m_ref_code', m_ref_code);
           prefs.setString('m_ref_link', m_ref_link);
 
+          var isGuestLogin = prefs.getBool('isGuestLogin');
+          if (isGuestLogin != null) {
+            prefs.remove("isGuestLogin");
+          }
+
           return 'true';
         } else {
           String msg = j['status_msg'];

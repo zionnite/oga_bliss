@@ -181,8 +181,8 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                                 horizontal: 15, vertical: 3),
                             decoration: BoxDecoration(
                               color: (widget.props_type.toLowerCase() == "buy")
-                                  ? Colors.red
-                                  : Colors.green,
+                                  ? Colors.blue.shade900
+                                  : Colors.blue.shade900,
                               borderRadius: BorderRadius.circular(3),
                             ),
                             child: Text(
@@ -359,9 +359,9 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                                 });
                               },
                               child: (widget.propertyModel?.favourite == true)
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.favorite_outlined,
-                                      color: Colors.blue,
+                                      color: Colors.blue.shade900,
                                     )
                                   : const Icon(
                                       Icons.favorite_outlined,

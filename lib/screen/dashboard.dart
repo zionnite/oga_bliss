@@ -132,6 +132,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor1: Colors.red,
                 bgColor2: Colors.orange,
                 title: 'Total Earning',
+                isNaira: true,
                 value: '${model.totalEarning}',
                 icon: const Icon(
                   Icons.wallet,
@@ -143,6 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor1: Colors.blue,
                 bgColor2: Colors.blue.shade400,
                 title: 'Total Transaction',
+                isNaira: false,
                 value: '${model.totalTransaction}',
                 icon: const Icon(
                   Icons.cases_outlined,
@@ -167,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor2: Colors.orange.shade400,
                 title: 'Payable Balance',
                 value: '${model.payableBalance}',
-                isNaira: false,
+                isNaira: true,
                 icon: const Icon(
                   Icons.wallet,
                   color: Colors.white,
@@ -203,7 +205,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor2: Colors.orange.shade400,
                 title: 'Overall Amount Transacted',
                 value: '${model.totalAmountTransacted}',
-                isNaira: false,
+                isNaira: true,
                 icon: const Icon(
                   Icons.wallet,
                   color: Colors.white,
@@ -215,7 +217,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor2: Colors.orange.shade400,
                 title: 'Referral Balance',
                 value: '${model.referalBalance}',
-                isNaira: false,
+                isNaira: true,
                 icon: const Icon(
                   Icons.wallet,
                   color: Colors.white,
@@ -227,7 +229,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor2: Colors.orange.shade400,
                 title: 'Total Amount Subscribed',
                 value: '${model.totalAmountSubscribed}',
-                isNaira: false,
+                isNaira: true,
                 icon: const Icon(
                   Icons.wallet,
                   color: Colors.white,
@@ -252,13 +254,14 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget agentWidget({required DashboardModel model}) {
-    return (user_status != 'admin' || user_status != 'super_admin')
+    return (admin_status != true)
         ? Column(
             children: [
               propertyCard(
                 bgColor1: Colors.red,
                 bgColor2: Colors.orange,
                 title: 'Total Earning',
+                isNaira: true,
                 value: '${model.totalEarning}',
                 icon: const Icon(
                   Icons.wallet,
@@ -270,6 +273,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor1: Colors.blue,
                 bgColor2: Colors.blue.shade400,
                 title: 'Total Transaction',
+                isNaira: false,
                 value: '${model.totalTransaction}',
                 icon: const Icon(
                   Icons.cases_outlined,
@@ -294,7 +298,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 bgColor2: Colors.red,
                 title: 'Payable Balance',
                 value: '${model.payableBalance}',
-                isNaira: false,
+                isNaira: true,
                 icon: const Icon(
                   Icons.wallet,
                   color: Colors.white,

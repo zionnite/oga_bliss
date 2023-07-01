@@ -120,6 +120,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       prefs.setBool('isGuestLogin', true);
+                      var isUserLogin = prefs.getBool('isUserLogin');
+                      if (isUserLogin != null) {
+                        prefs.remove("isUserLogin");
+                      }
                       Get.offAll(() => const HomePage());
                     },
                     child: const Text(

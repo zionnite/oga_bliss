@@ -244,7 +244,7 @@ class _WithdrawalPageState extends State<WithdrawalPage> {
                                 children: [
                                   smallBtnIcon(
                                     btnName: 'Approve',
-                                    btnColor: Colors.blue,
+                                    btnColor: Colors.blue.shade900,
                                     onTap: () async {
                                       setState(() {
                                         isApproveLoading = true;
@@ -301,7 +301,7 @@ class _WithdrawalPageState extends State<WithdrawalPage> {
                                   ),
                                   smallBtnIcon(
                                     btnName: 'Reject',
-                                    btnColor: Colors.red,
+                                    btnColor: Colors.blue.shade900,
                                     onTap: () async {
                                       setState(() {
                                         isRejectLoading = true;

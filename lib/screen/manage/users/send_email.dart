@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/widget/my_text_field.dart';
 import 'package:oga_bliss/widget/property_btn_icon.dart';
 
@@ -28,6 +29,7 @@ class _SendEmailState extends State<SendEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: backgroundColorPrimary,
         title: const Text('Send Email to User'),
       ),
       body: Column(
@@ -92,7 +94,7 @@ class _SendEmailState extends State<SendEmail> {
               }
             },
             title: 'Send Message',
-            bgColor: Colors.blue,
+            bgColor: Colors.blue.shade900,
             icon: Icons.send,
             icon_color: Colors.white,
             icon_size: 20,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oga_bliss/bliss_legacy/bliss_controller/shop_controller.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/widget/show_not_found.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -62,6 +63,7 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
   String? payableBalance;
   bool isJoin = false;
   int? disId;
+  int selectedItem = -1;
 
   @override
   void initState() {
@@ -289,43 +291,58 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
                 var data = shopController.disPlansList[index];
                 return shopWidget(
                   onTap: () async {
-                    if (isbank_verify == 'yes') {
-                      setState(() {
-                        //isJoin = true;
-                        disId = int.parse(data.disId!);
-                      });
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    var isGuestLogin = prefs.getBool('isGuestLogin');
+                    var isUserLogin = prefs.getBool('isUserLogin');
 
+                    setState(() {
+                      isJoin = true;
+                      selectedItem = index;
+                    });
+
+                    Future.delayed(
+                      const Duration(seconds: 2),
+                      () async {
+                        setState(() {
+                          isJoin = false;
+                          selectedItem = -1;
+                        });
+                      },
+                    );
+
+                    Future.delayed(const Duration(seconds: 3), () async {
                       var planId = data.planId;
                       var planCode = data.planCode;
+                      print('Guest ${isGuestLogin}');
+                      print('User ${isUserLogin}');
 
-                      var link =
-                          'https://ogabliss.com/Subscription/join_sub/$user_id/$planId/$planCode';
-
-                      Future.delayed(
-                        const Duration(seconds: 1),
-                        () async {
-                          setState(() {
-                            isJoin = false;
-                          });
+                      print('plan type ${data.planType}');
+                      if (isGuestLogin == true) {
+                        if (data.planType == 'building') {
+                          var link =
+                              '${baseDomain}Visitor/guest_sub_2/$planId/$planCode';
                           await _launchInBrowser(Uri.parse(link));
-                        },
-                      );
-                    } else {
-                      Get.defaultDialog(
-                        title: 'Action Required',
-                        middleText: '',
-                        content: const Padding(
-                          padding: EdgeInsets.only(left: 18.0, right: 18),
-                          child: Text(
-                            'Your Bank account it\'s not verify, please go to your profile to edit your bank details and click verify',
-                            style: TextStyle(),
-                          ),
-                        ),
-                        textCancel: 'Cancel',
-                        onCancel: () {},
-                        radius: 5,
-                      );
-                    }
+                        } else {
+                          var link =
+                              '${baseDomain}Visitor/guest_sub/$planId/$planCode';
+                          await _launchInBrowser(Uri.parse(link));
+                        }
+                      }
+                      //
+
+                      else if (isUserLogin == true) {
+                        if (data.planType == 'building') {
+                          var link =
+                              '${baseDomain}Subscription/join_sub_2/$user_id/$planId/$planCode';
+                          await _launchInBrowser(Uri.parse(link));
+                        } else {
+                          var link =
+                              '${baseDomain}Subscription/join_sub/$user_id/$planId/$planCode';
+                          await _launchInBrowser(Uri.parse(link));
+                        }
+                      }
+                    });
                   },
                   planImg: '${data.planImage}',
                   planName: '${data.planName}',
@@ -333,6 +350,9 @@ class _ShopPlanTypeState extends State<ShopPlanType> {
                   planLimit: '${data.planLimit}',
                   planAmount: '${data.planAmount}',
                   isSubscribe: data.isSubscribe!,
+                  item: index,
+                  selectedItem: selectedItem,
+                  isLoading: isJoin,
                 );
               },
             ),

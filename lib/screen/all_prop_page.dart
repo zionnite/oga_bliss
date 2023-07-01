@@ -102,7 +102,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
         bucket: pageBucket,
         child: SingleChildScrollView(
           controller: _controller,
-          key: const PageStorageKey<String>('allProperty'),
+          // key: const PageStorageKey<String>('allProperty'),
           child: Stack(
             children: [
               Container(
@@ -248,7 +248,7 @@ class _AllPropertyPageState extends State<AllPropertyPage> {
                     top: 8.0, right: 10.0, left: 10.0, bottom: 120),
                 child: Obx(
                   () => ListView.builder(
-                    key: const PageStorageKey<String>('allProperty'),
+                    //key: const PageStorageKey<String>('allProperty'),
                     physics: const ClampingScrollPhysics(),
                     // itemExtent: 350,
                     scrollDirection: Axis.vertical,

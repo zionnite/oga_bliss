@@ -115,7 +115,7 @@ class _UsersWidgetState extends State<UsersWidget> {
                   btnName: (model.agentLoginStatus == 'ban')
                       ? 'UnBan User'
                       : 'Ban User',
-                  btnColor: Colors.blue,
+                  btnColor: Colors.blue.shade900,
                   isLoading: isLoading,
                   onTap: () {
                     Get.defaultDialog(
@@ -181,7 +181,7 @@ class _UsersWidgetState extends State<UsersWidget> {
                 ),
                 smallBtnIcon(
                   btnName: 'Delete User',
-                  btnColor: Colors.red,
+                  btnColor: Colors.blue.shade900,
                   onTap: () {
                     Get.defaultDialog(
                       title: 'Delete User',
@@ -228,7 +228,7 @@ class _UsersWidgetState extends State<UsersWidget> {
                 ),
                 smallBtnIcon(
                   btnName: 'Send Email',
-                  btnColor: Colors.green,
+                  btnColor: Colors.blue.shade900,
                   onTap: widget.onMessageTap,
                   icon: Icons.email,
                   icon_color: Colors.white,

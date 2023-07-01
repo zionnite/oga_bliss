@@ -220,57 +220,18 @@ class _MarketPageState extends State<MarketPage> {
                                         ),
                                         Row(
                                           children: [
-                                            const Text(
-                                              'commission:',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
                                             Expanded(
-                                              child: Text(
-                                                '${m_data.propsComm}%',
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500,
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    top: 1, left: 2, right: 2),
+                                                color: Colors.blue.shade50,
+                                                child: Text(
+                                                  'for marketing property Your get: ${CurrencyFormatter.getCurrencyFormatter(amount: '${m_data.promoterPerc}')}',
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
                                                 ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Your Cut:',
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                CurrencyFormatter
-                                                    .getCurrencyFormatter(
-                                                        amount:
-                                                            '${m_data.promoterPerc}'),
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
                                           ],

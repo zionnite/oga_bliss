@@ -45,123 +45,126 @@ class _UploadTitleDocumentState extends State<UploadTitleDocument> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const PropertyAppBar(title: 'Upload Title Document'),
-          Container(
-            padding: const EdgeInsets.only(top: 0, left: 8, right: 8),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                MyTextField(
-                  myTextFormController: docFileNameController,
-                  fieldName: 'Document Name',
-                  hintName: 'e.g C.F.O, Governor Permit,etc',
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                InkWell(
-                  onTap: _getDocFile,
-                  child: Card(
-                    child: Container(
-                      width: double.infinity,
-                      child: const Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.file_open,
-                              color: Colors.blue,
-                            ),
-                            Text(
-                              'Select Document',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const PropertyAppBar(title: 'Upload Title Document'),
+            Container(
+              padding: const EdgeInsets.only(top: 0, left: 8, right: 8),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  MyTextField(
+                    myTextFormController: docFileNameController,
+                    fieldName: 'Document Name',
+                    hintName: 'e.g C.F.O, Governor Permit,etc',
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  InkWell(
+                    onTap: _getDocFile,
+                    child: Card(
+                      child: Container(
+                        width: double.infinity,
+                        child: const Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.file_open,
+                                color: Colors.blue,
+                              ),
+                              Text(
+                                'Select Document',
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Center(
-                  child: Container(
-                    height: 200.0,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.grey.shade200,
-                    ),
-                    child: Center(
-                      child: _doc_file == null
-                          ? const Text(
-                              'No Document selected',
-                              style: TextStyle(fontSize: 20),
-                            )
-                          : (_doc_ext == 'pdf')
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Image.asset(
-                                        'assets/images/pdf.png',
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
+                  Center(
+                    child: Container(
+                      height: 200.0,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: Colors.grey.shade200,
+                      ),
+                      child: Center(
+                        child: _doc_file == null
+                            ? const Text(
+                                'No Document selected',
+                                style: TextStyle(fontSize: 20),
+                              )
+                            : (_doc_ext == 'pdf')
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Image.asset(
+                                          'assets/images/pdf.png',
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                    ),
-                                    Text(_doc_file!.name)
-                                  ],
-                                )
-                              : Image.file(
-                                  File(_doc_file!.path!),
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
+                                      Text(_doc_file!.name)
+                                    ],
+                                  )
+                                : Image.file(
+                                    File(_doc_file!.path!),
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-              ],
+                  const SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0),
-            child: propertyBtn(
-              card_margin: EdgeInsets.only(top: 12, left: 8, right: 8),
-              onTap: () async {
-                setState(() {
-                  isLoading = true;
-                });
-
-                if (docFileNameController.text != '' && _doc_file != null) {
-                  await propsController.uploadTitleDocument(
-                    doc_name: docFileNameController.text,
-                    doc_file: _doc_file,
-                    propsId: widget.props_id,
-                    userId: widget.user_id,
-                  );
-
-                  Future.delayed(const Duration(seconds: 1), () {
-                    setState(() {
-                      docFileNameController.text = '';
-                      _doc_file = null;
-                      isLoading = false;
-                    });
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0.0),
+              child: propertyBtn(
+                card_margin: EdgeInsets.only(top: 12, left: 8, right: 8),
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
                   });
-                }
-              },
-              title: 'Submit',
-              bgColor: Colors.blue.shade700,
-              isLoading: isLoading,
+
+                  if (docFileNameController.text != '' && _doc_file != null) {
+                    await propsController.uploadTitleDocument(
+                      doc_name: docFileNameController.text,
+                      doc_file: _doc_file,
+                      propsId: widget.props_id,
+                      userId: widget.user_id,
+                    );
+
+                    Future.delayed(const Duration(seconds: 1), () {
+                      setState(() {
+                        docFileNameController.text = '';
+                        _doc_file = null;
+                        isLoading = false;
+                      });
+                    });
+                  }
+                },
+                title: 'Submit',
+                bgColor: Colors.blue.shade700,
+                isLoading: isLoading,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

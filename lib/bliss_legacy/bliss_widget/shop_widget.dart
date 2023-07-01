@@ -80,7 +80,7 @@ class _shopWidgetState extends State<shopWidget> {
                       const SizedBox(
                         height: 5,
                       ),
-                      Text(widget.planLimit),
+                      Text('Invoice Limit: ${widget.planLimit}'),
                       const SizedBox(
                         height: 5,
                       ),

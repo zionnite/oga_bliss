@@ -147,7 +147,10 @@ class _BlissShopState extends State<BlissShop> {
                                   () async {
                                 var planId = data.planId;
                                 var planCode = data.planCode;
+                                print('Guest ${isGuestLogin}');
+                                print('User ${isUserLogin}');
 
+                                print('plan type ${data.planType}');
                                 if (isGuestLogin == true) {
                                   if (data.planType == 'building') {
                                     var link =
@@ -158,7 +161,10 @@ class _BlissShopState extends State<BlissShop> {
                                         '${baseDomain}Visitor/guest_sub/$planId/$planCode';
                                     await _launchInBrowser(Uri.parse(link));
                                   }
-                                } else if (isUserLogin == true) {
+                                }
+                                //
+
+                                else if (isUserLogin == true) {
                                   if (data.planType == 'building') {
                                     var link =
                                         '${baseDomain}Subscription/join_sub_2/$user_id/$planId/$planCode';
