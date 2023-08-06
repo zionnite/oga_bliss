@@ -304,37 +304,27 @@ class _EditFacilitiesState extends State<EditFacilities> {
             _activeStepIndex += 1;
           });
         } else {
-          if (shoppingController != '' &&
-              hospitalController != '' &&
-              petrolController != '' &&
-              airportController != '' &&
-              churchController != '' &&
-              mosqueController != '' &&
-              schoolController != '') {
-            setState(() {
-              isLoading = true;
-            });
-            // print('form its filled');
-            bool status = await propsController.editFacilities(
-              shopping: shoppingController.text,
-              hospital: hospitalController.text,
-              petrol: petrolController.text,
-              airport: airportController.text,
-              church: churchController.text,
-              mosque: mosqueController.text,
-              school: schoolController.text,
-              propsId: widget.model.propsId!,
-              user_id: user_id!,
-            );
+          setState(() {
+            isLoading = true;
+          });
+          // print('form its filled');
+          bool status = await propsController.editFacilities(
+            shopping: shoppingController.text,
+            hospital: hospitalController.text,
+            petrol: petrolController.text,
+            airport: airportController.text,
+            church: churchController.text,
+            mosque: mosqueController.text,
+            school: schoolController.text,
+            propsId: widget.model.propsId!,
+            user_id: user_id!,
+          );
 
-            // if (status) {
-            setState(() {
-              isLoading = false;
-            });
-            // }
-          } else {
-            // print('form not filled');
-          }
+          // if (status) {
+          setState(() {
+            isLoading = false;
+          });
+          // }
 
           // print('form selected == ${selectedPref}');
           // print('Submited');

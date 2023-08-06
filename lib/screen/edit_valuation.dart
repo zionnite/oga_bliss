@@ -276,33 +276,25 @@ class _EditValuationState extends State<EditValuation> {
             _activeStepIndex += 1;
           });
         } else {
-          if (crimeController != '' &&
-              trafficController != '' &&
-              pollutionController != '' &&
-              educationController != '' &&
-              healthController != '') {
-            setState(() {
-              isLoading = true;
-            });
-            // print('form its filled');
-            bool status = await propsController.editValuation(
-              crime: crimeController.text,
-              traffic: trafficController.text,
-              pollution: pollutionController.text,
-              education: educationController.text,
-              health: healthController.text,
-              propsId: widget.model.propsId!,
-              user_id: user_id!,
-            );
+          setState(() {
+            isLoading = true;
+          });
+          // print('form its filled');
+          bool status = await propsController.editValuation(
+            crime: crimeController.text,
+            traffic: trafficController.text,
+            pollution: pollutionController.text,
+            education: educationController.text,
+            health: healthController.text,
+            propsId: widget.model.propsId!,
+            user_id: user_id!,
+          );
 
-            // if (status) {
-            setState(() {
-              isLoading = false;
-            });
-            // }
-          } else {
-            // print('form not filled');
-          }
+          // if (status) {
+          setState(() {
+            isLoading = false;
+          });
+          // }
 
           // print('form selected == ${selectedPref}');
           // print('Submited');

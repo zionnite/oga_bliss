@@ -618,54 +618,36 @@ class _EditBasicDetailState extends State<EditBasicDetail> {
             _activeStepIndex += 1;
           });
         } else {
-          if (propsName != '' &&
-              props_purpose != '' &&
-              props_type != '' &&
-              sub_props_type != '' &&
-              propsBed != '' &&
-              propsBath != '' &&
-              propsToilet != '' &&
-              states_id != '' &&
-              area_id != '' &&
-              disAmount != '' &&
-              propsDesc != '' &&
-              selectedYearBuilt != '' &&
-              _props_mode != '' &&
-              propsYoutubeId != '' &&
-              slightNegotiate != '') {
-            setState(() {
-              isLoading = true;
-            });
-            // print('form its filled');
-            bool status = await propsController.editBasicDetail(
-              propsName: propsName.text,
-              props_purpose: props_purpose!,
-              props_type: props_type!,
-              sub_props_type: sub_props_type!,
-              propsBed: propsBed.text,
-              propsBath: propsBath.text,
-              propsToilet: propsToilet.text,
-              state_id: states_id!,
-              area_id: area_id!,
-              propsPrice: disAmount,
-              propsDesc: propsDesc.text,
-              propsYearBuilt: selectedYearBuilt!,
-              props_mode: _props_mode!,
-              propsYoutubeId: propsYoutubeId.text,
-              propsId: widget.model.propsId!,
-              model: widget.model,
-              slightNegotiate: slightNegotiate.toString(),
-              user_id: user_id!,
-            );
+          setState(() {
+            isLoading = true;
+          });
+          // print('form its filled');
+          bool status = await propsController.editBasicDetail(
+            propsName: propsName.text,
+            props_purpose: props_purpose ?? "",
+            props_type: props_type ?? "",
+            sub_props_type: sub_props_type ?? "",
+            propsBed: propsBed.text,
+            propsBath: propsBath.text,
+            propsToilet: propsToilet.text,
+            state_id: states_id ?? "",
+            area_id: area_id ?? "",
+            propsPrice: disAmount,
+            propsDesc: propsDesc.text,
+            propsYearBuilt: selectedYearBuilt ?? "",
+            props_mode: _props_mode.toString() ?? "",
+            propsYoutubeId: propsYoutubeId.text,
+            propsId: widget.model.propsId ?? "",
+            model: widget.model,
+            slightNegotiate: slightNegotiate.toString(),
+            user_id: user_id!,
+          );
 
-            // if (status) {
-            setState(() {
-              isLoading = false;
-            });
-            // }
-          } else {
-            // print('form not filled');
-          }
+          // if (status) {
+          setState(() {
+            isLoading = false;
+          });
+          // }
 
           // print('form selected == ${selectedPref}');
           // print('Submited');

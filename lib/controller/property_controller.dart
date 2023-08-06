@@ -10,7 +10,6 @@ import 'package:oga_bliss/util/common.dart';
 import '../model/property_model.dart';
 import '../model/types_property_model.dart';
 import '../services/api_services.dart';
-import '../widget/my_raidio_field.dart';
 
 class PropertyController extends GetxController {
   PropertyController get getXID => Get.find<PropertyController>();
@@ -303,7 +302,7 @@ class PropertyController extends GetxController {
     required String propsPrice,
     required String propsDesc,
     required String propsYearBuilt,
-    required propertyModeEnum props_mode,
+    required String props_mode,
     required String propsYoutubeId,
     required bool air_condition,
     required bool balcony,
@@ -332,7 +331,7 @@ class PropertyController extends GetxController {
     required String propsCondition,
     required String propsCautionFee,
     required String selectedPref,
-    required File image,
+    //required File image,
     //
     required String shopping,
     required String hospital,
@@ -348,8 +347,8 @@ class PropertyController extends GetxController {
     required String education,
     required String health,
     //
-    required String docName,
-    required PlatformFile docFile,
+    // required String docName,
+    // required PlatformFile docFile,
     required String ownerStatus,
     required String ownerName,
     required String ownerPhone,
@@ -399,7 +398,7 @@ class PropertyController extends GetxController {
       propsCondition: propsCondition,
       propsCautionFee: propsCautionFee,
       selectedPref: selectedPref,
-      image: image,
+      //image: image,
       //
       shopping: shopping,
       hospital: hospital,
@@ -415,8 +414,8 @@ class PropertyController extends GetxController {
       education: education,
       health: health,
       //
-      docName: docName,
-      docFile: docFile,
+      // docName: docName,
+      // docFile: docFile,
       ownerStatus: ownerStatus,
       ownerName: ownerName,
       ownerPhone: ownerPhone,
@@ -484,7 +483,7 @@ class PropertyController extends GetxController {
     required String propsPrice,
     required String propsDesc,
     required String propsYearBuilt,
-    required propertyModeEnum props_mode,
+    required String props_mode,
     required String propsYoutubeId,
     required String propsId,
     required PropertyModel model,

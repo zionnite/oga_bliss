@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_loading/card_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,34 +107,18 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                       },
                       child: Stack(
                         children: [
-                          Image.network(
-                            widget.props_image,
+                          CachedNetworkImage(
+                            imageUrl: widget.props_image,
                             fit: BoxFit.cover,
                             height: 150,
                             width: double.infinity,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                'assets/images/a.jpeg',
-                                fit: BoxFit.fitWidth,
-                              );
-                            },
-                            loadingBuilder:
-                                (context, Widget child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return SizedBox(
-                                height: 300,
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
-                                  ),
-                                ),
-                              );
-                            },
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/a.jpeg',
+                              fit: BoxFit.fitWidth,
+                            ),
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
                           (isReportLoading)
                               ? Positioned(

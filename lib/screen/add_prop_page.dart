@@ -1218,177 +1218,181 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
             ),
           ),
         ),
+
+        // Step(
+        //   state: _activeStepIndex <= 6 ? StepState.editing : StepState.complete,
+        //   isActive: _activeStepIndex >= 6,
+        //   title: const Text('Property Image'),
+        //   content: Container(
+        //     child: Column(
+        //       children: [
+        //         const SizedBox(
+        //           height: 8,
+        //         ),
+        //         InkWell(
+        //           onTap: () {
+        //             _pickImage(ImageSource.gallery);
+        //           },
+        //           child: Card(
+        //             child: Container(
+        //               padding: const EdgeInsets.only(top: 0),
+        //               width: double.infinity,
+        //               child: const Padding(
+        //                 padding: EdgeInsets.all(15.0),
+        //                 child: Row(
+        //                   crossAxisAlignment: CrossAxisAlignment.center,
+        //                   mainAxisAlignment: MainAxisAlignment.center,
+        //                   children: [
+        //                     Icon(
+        //                       Icons.image,
+        //                       color: Colors.blue,
+        //                     ),
+        //                     Text(
+        //                       'Select Image',
+        //                       textAlign: TextAlign.center,
+        //                     ),
+        //                   ],
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //         Center(
+        //           child: Container(
+        //             height: 200.0,
+        //             width: double.infinity,
+        //             decoration: BoxDecoration(
+        //               shape: BoxShape.rectangle,
+        //               color: Colors.grey.shade200,
+        //             ),
+        //             child: Center(
+        //               child: _image == null
+        //                   ? const Text(
+        //                       'No image selected',
+        //                       style: TextStyle(fontSize: 20),
+        //                     )
+        //                   : Image(
+        //                       width: double.infinity,
+        //                       height: 200,
+        //                       image: FileImage(_image!),
+        //                     ),
+        //             ),
+        //           ),
+        //         ),
+        //         const Text(
+        //           'you can add more picture later to your property',
+        //           style: TextStyle(
+        //             color: Colors.red,
+        //           ),
+        //         ),
+        //         const SizedBox(
+        //           height: 15,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        //
+        //
+        // Step(
+        //   state: _activeStepIndex <= 7 ? StepState.editing : StepState.complete,
+        //   isActive: _activeStepIndex >= 7,
+        //   title: const Text('Property Document'),
+        //   content: Container(
+        //     child: Column(
+        //       children: [
+        //         const SizedBox(
+        //           height: 8,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: docFileNameController,
+        //           fieldName: 'Document Name',
+        //           hintName: 'e.g C.F.O, Governor Permit,etc',
+        //         ),
+        //         const SizedBox(
+        //           height: 8,
+        //         ),
+        //         InkWell(
+        //           onTap: _getDocFile,
+        //           child: Card(
+        //             child: Container(
+        //               width: double.infinity,
+        //               child: const Padding(
+        //                 padding: EdgeInsets.all(15.0),
+        //                 child: Row(
+        //                   crossAxisAlignment: CrossAxisAlignment.center,
+        //                   mainAxisAlignment: MainAxisAlignment.center,
+        //                   children: [
+        //                     Icon(
+        //                       Icons.file_open,
+        //                       color: Colors.blue,
+        //                     ),
+        //                     Text(
+        //                       'Select Document',
+        //                       textAlign: TextAlign.center,
+        //                     ),
+        //                   ],
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //         Center(
+        //           child: Container(
+        //             height: 200.0,
+        //             width: double.infinity,
+        //             decoration: BoxDecoration(
+        //               shape: BoxShape.rectangle,
+        //               color: Colors.grey.shade200,
+        //             ),
+        //             child: Center(
+        //               child: _doc_file == null
+        //                   ? const Text(
+        //                       'No Document selected',
+        //                       style: TextStyle(fontSize: 20),
+        //                     )
+        //                   : (_doc_ext == 'pdf')
+        //                       ? Column(
+        //                           crossAxisAlignment: CrossAxisAlignment.start,
+        //                           children: [
+        //                             Expanded(
+        //                               child: Image.asset(
+        //                                 'assets/images/pdf.png',
+        //                                 width: double.infinity,
+        //                                 fit: BoxFit.cover,
+        //                               ),
+        //                             ),
+        //                             Text(_doc_file!.name)
+        //                           ],
+        //                         )
+        //                       : Image.file(
+        //                           File(_doc_file!.path!),
+        //                           width: double.infinity,
+        //                           fit: BoxFit.cover,
+        //                         ),
+        //             ),
+        //           ),
+        //         ),
+        //         const SizedBox(
+        //           height: 8,
+        //         ),
+        //         const Text(
+        //           'you can add more document later to your property',
+        //           style: TextStyle(
+        //             color: Colors.red,
+        //           ),
+        //         ),
+        //         const SizedBox(
+        //           height: 15,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+
         Step(
           state: _activeStepIndex <= 6 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 6,
-          title: const Text('Property Image'),
-          content: Container(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                InkWell(
-                  onTap: () {
-                    _pickImage(ImageSource.gallery);
-                  },
-                  child: Card(
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 0),
-                      width: double.infinity,
-                      child: const Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image,
-                              color: Colors.blue,
-                            ),
-                            Text(
-                              'Select Image',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    height: 200.0,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.grey.shade200,
-                    ),
-                    child: Center(
-                      child: _image == null
-                          ? const Text(
-                              'No image selected',
-                              style: TextStyle(fontSize: 20),
-                            )
-                          : Image(
-                              width: double.infinity,
-                              height: 200,
-                              image: FileImage(_image!),
-                            ),
-                    ),
-                  ),
-                ),
-                const Text(
-                  'you can add more picture later to your property',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Step(
-          state: _activeStepIndex <= 7 ? StepState.editing : StepState.complete,
-          isActive: _activeStepIndex >= 7,
-          title: const Text('Property Document'),
-          content: Container(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                MyTextField(
-                  myTextFormController: docFileNameController,
-                  fieldName: 'Document Name',
-                  hintName: 'e.g C.F.O, Governor Permit,etc',
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                InkWell(
-                  onTap: _getDocFile,
-                  child: Card(
-                    child: Container(
-                      width: double.infinity,
-                      child: const Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.file_open,
-                              color: Colors.blue,
-                            ),
-                            Text(
-                              'Select Document',
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    height: 200.0,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.grey.shade200,
-                    ),
-                    child: Center(
-                      child: _doc_file == null
-                          ? const Text(
-                              'No Document selected',
-                              style: TextStyle(fontSize: 20),
-                            )
-                          : (_doc_ext == 'pdf')
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Image.asset(
-                                        'assets/images/pdf.png',
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Text(_doc_file!.name)
-                                  ],
-                                )
-                              : Image.file(
-                                  File(_doc_file!.path!),
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Text(
-                  'you can add more document later to your property',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Step(
-          state: _activeStepIndex <= 8 ? StepState.editing : StepState.complete,
-          isActive: _activeStepIndex >= 8,
           title: const Text('Property Ownership'),
           content: Container(
             child: Column(
@@ -1447,7 +1451,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         ),
         Step(
           state: StepState.complete,
-          isActive: _activeStepIndex >= 9,
+          isActive: _activeStepIndex >= 7,
           title: const Text('Confirm'),
           content: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1509,154 +1513,86 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
             _activeStepIndex += 1;
           });
         } else {
-          if (propsName != '' &&
-              props_purpose != '' &&
-              props_type != '' &&
-              sub_props_type != '' &&
-              propsBed != '' &&
-              propsBath != '' &&
-              propsToilet != '' &&
-              states_id != '' &&
-              area_id != '' &&
-              disAmount != '' &&
-              propsDesc != '' &&
-              selectedYearBuilt != '' &&
-              _props_mode != '' &&
-              propsYoutubeId != '' &&
-              air_condition != '' &&
-              balcony != '' &&
-              bedding != '' &&
-              cable_tv != '' &&
-              cleaning_after_exist != '' &&
-              coffee_pot != '' &&
-              computer != '' &&
-              cot != '' &&
-              dishwasher != '' &&
-              dvd != '' &&
-              fan != '' &&
-              fridge != '' &&
-              grill != '' &&
-              hairdryer != '' &&
-              heater != '' &&
-              hi_fi != '' &&
-              internet != '' &&
-              iron != '' &&
-              juicer != '' &&
-              lift != '' &&
-              microwave != '' &&
-              gym != '' &&
-              fireplace != '' &&
-              hot_tub != '' &&
-              propsCondition != '' &&
-              disCautionFee != '' &&
-              selectedPref != '' &&
-              _image != null &&
-              //
-              shoppingController != '' &&
-              hospitalController != '' &&
-              petrolController != '' &&
-              airportController != '' &&
-              churchController != '' &&
-              mosqueController != '' &&
-              schoolController != '' &&
-              //
-              crimeController != '' &&
-              trafficController != '' &&
-              pollutionController != '' &&
-              educationController != '' &&
-              healthController != '' &&
+          setState(() {
+            isLoading = true;
+          });
 
-              //
-              docFileNameController.text != '' &&
-              _doc_file != null &&
-              props_ownership != null &&
-              owenerNameController.text != '' &&
-              owenerPhoneController.text != '' &&
-              owenerEmailController.text != '' &&
-              slightNegotiate != '') {
-            setState(() {
-              isLoading = true;
-            });
-            //print('form its filled');
-            bool status = await propsController.addProduct(
-              propsName: propsName.text,
-              props_purpose: props_purpose!,
-              props_type: props_type!,
-              sub_props_type: sub_props_type!,
-              propsBed: propsBed.text,
-              propsBath: propsBath.text,
-              propsToilet: propsToilet.text,
-              state_id: states_id!,
-              area_id: area_id!,
-              propsPrice: disAmount,
-              propsDesc: propsDesc.text,
-              propsYearBuilt: selectedYearBuilt!,
-              props_mode: _props_mode!,
-              propsYoutubeId: propsYoutubeId.text,
-              air_condition: air_condition,
-              balcony: balcony,
-              bedding: bedding,
-              cable_tv: cable_tv,
-              cleaning_after_exist: cleaning_after_exist,
-              coffee_pot: coffee_pot,
-              computer: computer,
-              cot: cot,
-              dishwasher: dishwasher,
-              dvd: dvd,
-              fan: fan,
-              fridge: fridge,
-              grill: grill,
-              hairdryer: hairdryer,
-              heater: heater,
-              hi_fi: hi_fi,
-              internet: internet,
-              iron: iron,
-              juicer: juicer,
-              lift: lift,
-              microwave: microwave,
-              gym: gym,
-              fireplace: fireplace,
-              hot_tub: hot_tub,
-              propsCondition: propsCondition.text,
-              propsCautionFee: disCautionFee,
-              selectedPref: selectedPref,
-              image: _image!,
-              //
-              shopping: shoppingController.text,
-              hospital: hospitalController.text,
-              petrol: petrolController.text,
-              airport: airportController.text,
-              church: churchController.text,
-              mosque: mosqueController.text,
-              school: schoolController.text,
-              //
+          bool status = await propsController.addProduct(
+            propsName: propsName.text,
+            props_purpose: props_purpose ?? "",
+            props_type: props_type ?? "",
+            sub_props_type: sub_props_type ?? "",
+            propsBed: propsBed.text,
+            propsBath: propsBath.text,
+            propsToilet: propsToilet.text,
+            state_id: states_id ?? "",
+            area_id: area_id ?? "",
+            propsPrice: disAmount,
+            propsDesc: propsDesc.text,
+            propsYearBuilt: selectedYearBuilt ?? "",
+            props_mode: _props_mode.toString() ?? "",
+            propsYoutubeId: propsYoutubeId.text,
+            air_condition: air_condition,
+            balcony: balcony,
+            bedding: bedding,
+            cable_tv: cable_tv,
+            cleaning_after_exist: cleaning_after_exist,
+            coffee_pot: coffee_pot,
+            computer: computer,
+            cot: cot,
+            dishwasher: dishwasher,
+            dvd: dvd,
+            fan: fan,
+            fridge: fridge,
+            grill: grill,
+            hairdryer: hairdryer,
+            heater: heater,
+            hi_fi: hi_fi,
+            internet: internet,
+            iron: iron,
+            juicer: juicer,
+            lift: lift,
+            microwave: microwave,
+            gym: gym,
+            fireplace: fireplace,
+            hot_tub: hot_tub,
+            propsCondition: propsCondition.text,
+            propsCautionFee: disCautionFee,
+            selectedPref: selectedPref,
+            //image: _image!,
+            //
+            shopping: shoppingController.text,
+            hospital: hospitalController.text,
+            petrol: petrolController.text,
+            airport: airportController.text,
+            church: churchController.text,
+            mosque: mosqueController.text,
+            school: schoolController.text,
+            //
 
-              crime: crimeController.text,
-              traffic: trafficController.text,
-              pollution: pollutionController.text,
-              education: educationController.text,
-              health: healthController.text,
+            crime: crimeController.text,
+            traffic: trafficController.text,
+            pollution: pollutionController.text,
+            education: educationController.text,
+            health: healthController.text,
 
-              //
-              docName: docFileNameController.text,
-              docFile: _doc_file!,
-              ownerStatus: props_ownership!,
-              ownerName: owenerNameController.text,
-              ownerPhone: owenerPhoneController.text,
-              ownerEmail: owenerEmailController.text,
-              slightNegotiate: slightNegotiate.toString(),
+            //
+            // docName: docFileNameController.text,
+            // docFile: _doc_file!,
+            ownerStatus: props_ownership ?? "",
+            ownerName: owenerNameController.text,
+            ownerPhone: owenerPhoneController.text,
+            ownerEmail: owenerEmailController.text,
+            slightNegotiate: slightNegotiate.toString(),
 
-              user_id: user_id!,
-            );
+            user_id: user_id!,
+          );
 
-            // if (status) {
-            setState(() {
-              isLoading = false;
-            });
-            // }
-          } else {
-            //print('form not filled');
-          }
+          // if (status) {
+          setState(() {
+            isLoading = false;
+          });
+          // }
 
           //print('form selected == ${selectedPref}');
           //print('Submited');

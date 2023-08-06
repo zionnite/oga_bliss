@@ -339,28 +339,22 @@ class _EditExtraDetailState extends State<EditExtraDetail> {
             _activeStepIndex += 1;
           });
         } else {
-          if (propsCondition != '' &&
-              disCautionFee != '' &&
-              selectedPref != '') {
-            setState(() {
-              isLoading = true;
-            });
-            // print('form its filled');
-            bool status = await propsController.editExtraDetail(
-                propsCondition: propsCondition.text,
-                propsCautionFee: disCautionFee,
-                selectedPref: selectedPref,
-                propsId: widget.model.propsId!,
-                user_id: user_id!);
+          setState(() {
+            isLoading = true;
+          });
+          // print('form its filled');
+          bool status = await propsController.editExtraDetail(
+              propsCondition: propsCondition.text,
+              propsCautionFee: disCautionFee,
+              selectedPref: selectedPref,
+              propsId: widget.model.propsId!,
+              user_id: user_id!);
 
-            // if (status) {
-            setState(() {
-              isLoading = false;
-            });
-            // }
-          } else {
-            // print('form not filled');
-          }
+          // if (status) {
+          setState(() {
+            isLoading = false;
+          });
+          // }
 
           // print('form selected == ${selectedPref}');
           // print('Submited');

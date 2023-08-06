@@ -170,31 +170,24 @@ class _EditOwnershipState extends State<EditOwnership> {
             _activeStepIndex += 1;
           });
         } else {
-          if (props_ownership != '' &&
-              owenerNameController != '' &&
-              owenerPhoneController != '' &&
-              owenerEmailController != '') {
-            setState(() {
-              isLoading = true;
-            });
-            // print('form its filled');
-            bool status = await propsController.editOwnership(
-              owner_status: props_ownership!,
-              owner_name: owenerNameController.text,
-              owner_phone: owenerPhoneController.text,
-              owner_email: owenerEmailController.text,
-              propsId: widget.model.propsId!,
-              user_id: user_id!,
-            );
+          setState(() {
+            isLoading = true;
+          });
+          // print('form its filled');
+          bool status = await propsController.editOwnership(
+            owner_status: props_ownership ?? "",
+            owner_name: owenerNameController.text,
+            owner_phone: owenerPhoneController.text,
+            owner_email: owenerEmailController.text,
+            propsId: widget.model.propsId!,
+            user_id: user_id!,
+          );
 
-            // if (status) {
-            setState(() {
-              isLoading = false;
-            });
-            // }
-          } else {
-            // print('form not filled');
-          }
+          // if (status) {
+          setState(() {
+            isLoading = false;
+          });
+          // }
 
           // print('form selected == ${selectedPref}');
           // print('Submited');

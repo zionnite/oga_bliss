@@ -48,7 +48,7 @@ showSnackBar({
   );
 }
 
-const int CURRENT_APP_VERSION = 1;
+const int CURRENT_APP_VERSION = 2;
 const String baseDomain = 'https://ogabliss.com/';
 const String baseUrl = '${baseDomain}Api/';
 const String baseUrlSec = '${baseDomain}ApiMlm/';

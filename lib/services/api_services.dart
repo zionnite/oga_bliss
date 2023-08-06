@@ -35,7 +35,6 @@ import '../model/types_property_model.dart';
 import '../model/users_model.dart';
 import '../model/wallet_model.dart';
 import '../util/common.dart';
-import '../widget/my_raidio_field.dart';
 
 class ApiServices {
   static var client = http.Client();
@@ -878,7 +877,7 @@ class ApiServices {
     required String propsPrice,
     required String propsDesc,
     required String propsYearBuilt,
-    required propertyModeEnum props_mode,
+    required String props_mode,
     required String propsYoutubeId,
     required bool air_condition,
     required bool balcony,
@@ -907,7 +906,7 @@ class ApiServices {
     required String propsCondition,
     required String propsCautionFee,
     required String selectedPref,
-    required File image,
+    //required File image,
     //
     required String shopping,
     required String hospital,
@@ -924,8 +923,8 @@ class ApiServices {
     required String health,
 
     //
-    required String docName,
-    required PlatformFile docFile,
+    // required String docName,
+    // required PlatformFile docFile,
     required String ownerStatus,
     required String ownerName,
     required String ownerPhone,
@@ -1002,7 +1001,7 @@ class ApiServices {
       request.fields['education'] = education.toString();
       request.fields['health'] = health.toString();
       //
-      request.fields['doc_name'] = docName.toString();
+      //request.fields['doc_name'] = docName.toString();
 
       request.fields['owner_status'] = ownerStatus.toString();
       request.fields['owner_name'] = ownerName.toString();
@@ -1010,12 +1009,12 @@ class ApiServices {
       request.fields['owner_email'] = ownerEmail.toString();
       request.fields['slight_negotiate'] = slightNegotiate.toString();
 
-      var productImage =
-          await http.MultipartFile.fromPath('property_image', image.path);
-      var productDoc =
-          await http.MultipartFile.fromPath('doc_file', docFile.path!);
-      request.files.add(productImage);
-      request.files.add(productDoc);
+      // var productImage =
+      //     await http.MultipartFile.fromPath('property_image', image.path);
+      // var productDoc =
+      //     await http.MultipartFile.fromPath('doc_file', docFile.path!);
+      // request.files.add(productImage);
+      // request.files.add(productDoc);
 
       var respond = await request.send();
 
@@ -1066,11 +1065,11 @@ class ApiServices {
           return data;
         }
       } else {
-        return showSnackBar(
-          title: 'Oops!',
-          msg: 'could not connect to server',
-          backgroundColor: Colors.red,
-        );
+        // return showSnackBar(
+        //   title: 'Oops!',
+        //   msg: 'could not connect to server',
+        //   backgroundColor: Colors.red,
+        // );
       }
     } catch (ex) {
       // print(ex);
@@ -1130,7 +1129,7 @@ class ApiServices {
     required String propsPrice,
     required String propsDesc,
     required String propsYearBuilt,
-    required propertyModeEnum props_mode,
+    required String props_mode,
     required String propsYoutubeId,
     required String propsId,
     required String slightNegotiate,
