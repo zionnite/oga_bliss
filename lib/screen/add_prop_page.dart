@@ -1596,6 +1596,14 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
 
           //print('form selected == ${selectedPref}');
           //print('Submited');
+
+          if (status) {
+            setState(() {
+              propsController.isMyProductProcessing.value = 'null';
+              propsController.getMyProduct(user_id);
+              propsController.myPropertyList.refresh();
+            });
+          }
         }
       },
       onStepCancel: () {

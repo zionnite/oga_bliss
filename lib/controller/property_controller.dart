@@ -752,9 +752,30 @@ class PropertyController extends GetxController {
     return statusType;
   }
 
-  uploadImage(var userId, var propsId, File imageName, var model) async {
-    var status = await ApiServices.uploadImage(
-        userId: userId, propsId: propsId, image: imageName);
+  uploadImage(var userId, var propsId, List<File> imageName, var model) async {
+    // var status = await ApiServices.uploadImage(
+    //     userId: userId, propsId: propsId, image: imageName);
+
+    var status = await ApiServices.uploadMultiImage(
+        userId: userId, propsId: propsId, imgFiles: imageName);
+
+    String? msg;
+
+    if (status != false) {
+      msg = 'Image Uploaded';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+
+      return status;
+    } else {
+      msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
+      showSnackBar(title: 'Product', msg: msg, backgroundColor: Colors.blue);
+      return false;
+    }
+  }
+
+  uploadMultiImage(var userId, var propsId, List<File> imageName) async {
+    var status = await ApiServices.uploadMultiImage(
+        userId: userId, propsId: propsId, imgFiles: imageName);
 
     String? msg;
 

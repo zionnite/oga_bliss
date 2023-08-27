@@ -186,6 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Stack(children: [
                   Card(
+                    color: Colors.white,
                     elevation: 5,
                     margin: const EdgeInsets.only(
                       top: 310,
@@ -290,9 +291,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Card(
+                    color: Colors.white,
                     elevation: 5,
                     margin: const EdgeInsets.only(
-                        top: 630, left: 10, right: 10, bottom: 0),
+                        top: 670, left: 10, right: 10, bottom: 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -365,9 +367,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Card(
+                    color: Colors.white,
                     elevation: 5,
                     margin: const EdgeInsets.only(
-                        top: 845, left: 10, right: 10, bottom: 0),
+                        top: 915, left: 10, right: 10, bottom: 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -27,7 +27,7 @@ dependencies:
   flutter_youtube_view: ^2.0.4
   text_chip_field: ^0.0.7
   flutter_input_chips: ^1.0.3
-  image_picker: ^0.8.6
+  image_picker: ^1.0.2
   flutter_slidable: ^2.0.0
   transparent_image: ^2.0.0
   liquid_swipe: ^3.0.0
@@ -50,6 +50,7 @@ dependencies:
   datetime_picker_formfield_new: ^2.1.0
   file_picker: ^5.3.2
   bootstrap_alert: ^1.0.1
+  dio: ^5.3.2
 #  currency_textfield: ^4.0.0
 
 

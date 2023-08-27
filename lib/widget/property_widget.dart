@@ -94,6 +94,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
             children: [
               Card(
                 elevation: 5,
+                color: Colors.white,
                 child: Column(
                   children: [
                     InkWell(

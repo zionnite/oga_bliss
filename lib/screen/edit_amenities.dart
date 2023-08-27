@@ -665,11 +665,21 @@ class _EditAmenitiesState extends State<EditAmenities> {
               user_id: user_id!,
             );
 
-            // if (status) {
             setState(() {
               isLoading = false;
             });
-            // }
+
+            if (status) {
+              setState(() {
+                propsController.isMyProductProcessing.value = 'null';
+                propsController.getMyProduct(user_id);
+                propsController.myPropertyList.refresh();
+                //
+                propsController.disProductProcessing.value = 'null';
+                propsController.getDisProduct(widget.model.propsId, user_id);
+                propsController.disPropertyList.refresh();
+              });
+            }    
           } else {
             // print('form not filled');
           }

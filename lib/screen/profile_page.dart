@@ -179,6 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Stack(children: [
                   Card(
                     elevation: 5,
+                    color: Colors.white,
                     margin: const EdgeInsets.only(
                       top: 310,
                       left: 10,
@@ -281,10 +282,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Card(
                     elevation: 5,
+                    color: Colors.white,
                     margin: const EdgeInsets.only(
-                        top: 630, left: 10, right: 10, bottom: 0),
+                        top: 640, left: 10, right: 10, bottom: 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

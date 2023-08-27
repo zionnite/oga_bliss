@@ -23,6 +23,7 @@ class _UploadTitleDocumentState extends State<UploadTitleDocument> {
 
   TextEditingController docFileNameController = TextEditingController();
 
+  bool showError = false;
   PlatformFile? _doc_file;
   String? _doc_ext;
   Future _getDocFile() async {
@@ -132,29 +133,51 @@ class _UploadTitleDocumentState extends State<UploadTitleDocument> {
                 ],
               ),
             ),
+            (showError)
+                ? const Text(
+                    'No File was selected.\nYou cann\'t upload empty document\n Or Document Name is empty',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 17,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                : Container(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: propertyBtn(
                 card_margin: EdgeInsets.only(top: 12, left: 8, right: 8),
                 onTap: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
+                  if (_doc_file != null && docFileNameController.text != '') {
+                    setState(() {
+                      isLoading = true;
+                      showError = false;
+                    });
 
-                  if (docFileNameController.text != '' && _doc_file != null) {
-                    await propsController.uploadTitleDocument(
-                      doc_name: docFileNameController.text,
-                      doc_file: _doc_file,
-                      propsId: widget.props_id,
-                      userId: widget.user_id,
-                    );
+                    if (docFileNameController.text != '' && _doc_file != null) {
+                      await propsController.uploadTitleDocument(
+                        doc_name: docFileNameController.text,
+                        doc_file: _doc_file,
+                        propsId: widget.props_id,
+                        userId: widget.user_id,
+                      );
 
-                    Future.delayed(const Duration(seconds: 1), () {
-                      setState(() {
-                        docFileNameController.text = '';
-                        _doc_file = null;
-                        isLoading = false;
+                      Future.delayed(const Duration(seconds: 1), () {
+                        setState(() {
+                          docFileNameController.text = '';
+                          _doc_file = null;
+                          isLoading = false;
+
+                          propsController.getPropertyDocument(
+                              widget.user_id, widget.props_id);
+                          propsController.isDocProcessing.value = 'null';
+                          propsController.docList.refresh();
+                        });
                       });
+                    }
+                  } else {
+                    setState(() {
+                      showError = true;
                     });
                   }
                 },

@@ -7,6 +7,7 @@ import 'package:oga_bliss/screen/view_my_product.dart';
 import 'package:oga_bliss/screen/view_product_document.dart';
 import 'package:oga_bliss/screen/view_propert_detailed_dash.dart';
 import 'package:oga_bliss/widget/property_btn.dart';
+import 'package:oga_bliss/widget/property_btn_icon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/property_controller.dart';
@@ -131,7 +132,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                   setState(() {
                     propsController.isMyProductProcessing.value = 'null';
                     propsController.getMyProduct(user_id);
-                    propsController.searchPropertyList.refresh();
+                    propsController.myPropertyList.refresh();
                   });
                 },
                 child: Container(
@@ -155,6 +156,20 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
             controller: _controller,
             child: Column(
               children: [
+                PropertyBtnIcon(
+                  title: 'Refresh',
+                  onTap: () {
+                    setState(() {
+                      propsController.isMyProductProcessing.value = 'null';
+                      propsController.getMyProduct(user_id);
+                      propsController.myPropertyList.refresh();
+                    });
+                  },
+                  bgColor: Colors.blue.shade900,
+                  icon: Icons.refresh,
+                  icon_color: Colors.white,
+                  icon_size: 20,
+                ),
                 Obx(
                   () => ListView.builder(
                     padding: const EdgeInsets.only(top: 10),

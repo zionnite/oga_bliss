@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -139,6 +140,7 @@ class ApiServices {
   static const String _copy_product_link = 'copy_product_link';
   static const String _get_product_promoting = 'get_product_promoting';
   static const String _get_link_activity = 'get_link_activity';
+  static const String _upload_multi_image = 'upload_multi_image';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -1530,7 +1532,6 @@ class ApiServices {
           imageList.add(disImage);
           return imageList;
         }
-        // print('fallout');
         return false;
       } else {
         return showSnackBar(
@@ -3644,6 +3645,93 @@ class ApiServices {
         msg: ex.toString(),
         backgroundColor: Colors.red,
       );
+    }
+  }
+
+  static Future uploadMultiImage(
+      {required String userId,
+      required String propsId,
+      required List<File> imgFiles,}) async {
+    List<MultipartFile> fileList = [];
+    FormData formData = FormData();
+    final String url = '$_mybaseUrl$_upload_multi_image/$userId/$propsId';
+    for (final file in imgFiles) {
+
+      String filePath = file.path;
+      String fileName = file.path.split('/').last;
+
+      formData.files.addAll([
+        MapEntry("image_file[]",
+            await MultipartFile.fromFile(filePath, filename: fileName)),
+      ]);
+    }
+
+    try {
+      final dio = Dio();
+      final response = await dio.post(url, data: formData);
+
+      var body = response.data;
+      final j = json.decode(body) as Map<String, dynamic>;
+      String status = j['status'];
+
+      if (status == 'success') {
+        var disData = j['images'] as List;
+
+        final data = disData
+            .map<GetAllPropsImage>((json) => GetAllPropsImage.fromJson(json))
+            .toList();
+        return data;
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+      // print('upload error ${e.toString()}');
+    }
+  }
+
+  static Future uploadMultiImageX(
+      {required String userId,
+      required String propsId,
+      required List<File> files}) async {
+    print('Image uploaded started');
+
+    List<MultipartFile> fileList = [];
+    final String url = '$_mybaseUrl$_upload_multi_image/$userId/$propsId';
+    for (final file in files) {
+      // ======
+      String filePath = file.path;
+      String fileName = file.path.split('/').last;
+
+      print('file name ${fileName}');
+
+      try {
+        FormData formData = FormData.fromMap({
+          "image_file":
+              await MultipartFile.fromFile(filePath, filename: fileName),
+        });
+        final dio = Dio();
+        final response = await dio.post(url, data: formData);
+
+        var body = response.data;
+        print('image body ${body}');
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
+
+        if (status == 'success') {
+          var disData = j['images'] as List;
+
+          final data = disData
+              .map<GetAllPropsImage>((json) => GetAllPropsImage.fromJson(json))
+              .toList();
+          return data;
+        }
+
+        return false;
+      } catch (e) {
+        // return false;
+        print('upload error ${e.toString()}');
+      }
     }
   }
 }

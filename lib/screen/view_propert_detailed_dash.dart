@@ -157,6 +157,7 @@ class _ViewPropertyDetailedDashboardState
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 1,
+        backgroundColor: Colors.blue.shade900,
       ),
       body: Obx(
         () => (propsController.disProductProcessing == 'null')

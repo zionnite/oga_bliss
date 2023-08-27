@@ -24,6 +24,7 @@ class _ViewMyProductState extends State<ViewMyProduct> {
 
   File? _image, _sliderImg;
   File? imageName;
+  List<File> images = [];
 
   Future _pickImage(ImageSource source) async {
     try {
@@ -51,6 +52,17 @@ class _ViewMyProductState extends State<ViewMyProduct> {
     } on PlatformException catch (e) {}
   }
 
+  Future _pickMultImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final imageFiles = await picker.pickMultiImage();
+    if (imageFiles.isNotEmpty) {
+      for (final image in imageFiles) {
+        images.add(File(image.path));
+      }
+    }
+    return images;
+  }
+
   @override
   Widget build(BuildContext context) {
     var model = widget.model;
@@ -67,102 +79,102 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 8,
-                          right: 8,
-                          bottom: 10,
-                          top: 10,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Get.defaultDialog(
-                              radius: 5,
-                              title: 'Upload Feature Image',
-                              content: Column(
-                                children: const [
-                                  Text(
-                                    'We recommend image to be in the following dimension for your property to be approve on our platform.\n\nwidth=1300px By height=450px respectively',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              textConfirm: 'Upload Image',
-                              onConfirm: () async {
-                                await _pickSliderImage(
-                                  ImageSource.gallery,
-                                );
-
-                                var status =
-                                    await propsController.uploadFeatureImage(
-                                  widget.user_id,
-                                  model.propsId,
-                                  _sliderImg!,
-                                  widget.model,
-                                );
-
-                                if (status != false) {
-                                  setState(() {
-                                    int index = propsController.myPropertyList
-                                        .indexOf(model);
-                                    propsController.myPropertyList[index]
-                                        .sliderImg = status;
-                                    propsController.myPropertyList.refresh();
-                                  });
-                                }
-
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop();
-                              },
-                              textCancel: 'No, later',
-                              onCancel: () {},
-                            );
-                          },
-                          child: Card(
-                            elevation: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.blue[800],
-                                border: Border.all(
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      Icons.image,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        'Add Feature Image',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 1,
-                    ),
+                    // Expanded(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.only(
+                    //       left: 8,
+                    //       right: 8,
+                    //       bottom: 10,
+                    //       top: 10,
+                    //     ),
+                    //     child: InkWell(
+                    //       onTap: () {
+                    //         Get.defaultDialog(
+                    //           radius: 5,
+                    //           title: 'Upload Feature Image',
+                    //           content: Column(
+                    //             children: const [
+                    //               Text(
+                    //                 'We recommend image to be in the following dimension for your property to be approve on our platform.\n\nwidth=1300px By height=450px respectively',
+                    //                 style: TextStyle(
+                    //                   fontSize: 13,
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //           textConfirm: 'Upload Image',
+                    //           onConfirm: () async {
+                    //             await _pickSliderImage(
+                    //               ImageSource.gallery,
+                    //             );
+                    //
+                    //             var status =
+                    //                 await propsController.uploadFeatureImage(
+                    //               widget.user_id,
+                    //               model.propsId,
+                    //               _sliderImg!,
+                    //               widget.model,
+                    //             );
+                    //
+                    //             if (status != false) {
+                    //               setState(() {
+                    //                 int index = propsController.myPropertyList
+                    //                     .indexOf(model);
+                    //                 propsController.myPropertyList[index]
+                    //                     .sliderImg = status;
+                    //                 propsController.myPropertyList.refresh();
+                    //               });
+                    //             }
+                    //
+                    //             Navigator.of(context, rootNavigator: true)
+                    //                 .pop();
+                    //           },
+                    //           textCancel: 'No, later',
+                    //           onCancel: () {},
+                    //         );
+                    //       },
+                    //       child: Card(
+                    //         elevation: 2,
+                    //         child: Container(
+                    //           decoration: BoxDecoration(
+                    //             color: Colors.blue[800],
+                    //             border: Border.all(
+                    //               color: Colors.blue,
+                    //             ),
+                    //           ),
+                    //           child: const Padding(
+                    //             padding: EdgeInsets.all(8.0),
+                    //             child: Row(
+                    //               crossAxisAlignment: CrossAxisAlignment.center,
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: [
+                    //                 Icon(
+                    //                   Icons.image,
+                    //                   color: Colors.white,
+                    //                 ),
+                    //                 SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //                 Expanded(
+                    //                   child: Text(
+                    //                     'Add Feature Image',
+                    //                     style: TextStyle(
+                    //                       color: Colors.white,
+                    //                       fontSize: 12,
+                    //                     ),
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   width: 1,
+                    // ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -176,10 +188,10 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                             Get.defaultDialog(
                               radius: 5,
                               title: 'Upload Image',
-                              content: Column(
-                                children: const [
+                              content: const Column(
+                                children: [
                                   Text(
-                                    'We recommend image to be in the following dimension for your property to be approve on our platform.\n\nwidth=800px By height=500px respectively',
+                                    'We recommend image to be in the following dimension for your property to be approve on our platform',
                                     style: TextStyle(
                                       fontSize: 13,
                                     ),
@@ -188,14 +200,21 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                               ),
                               textConfirm: 'Upload Image',
                               onConfirm: () async {
-                                await _pickImage(
+                                await _pickMultImage(
                                   ImageSource.gallery,
                                 );
+
+                                // var status =
+                                //     await propsController.uploadMultiImage(
+                                //   widget.user_id,
+                                //   model.propsId,
+                                //   images,
+                                // );
 
                                 var status = await propsController.uploadImage(
                                   widget.user_id,
                                   model.propsId,
-                                  _image!,
+                                  images,
                                   widget.model,
                                 );
 
@@ -210,21 +229,17 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                                         .myPropertyList[index].getAllPropsImage!
                                         .addAll(propsController.imageList);
                                     propsController.myPropertyList.refresh();
+
+                                    propsController
+                                        .isMyProductProcessing.value = 'null';
+                                    propsController
+                                        .getMyProduct(widget.user_id);
+                                    propsController.myPropertyList.refresh();
                                   });
+
+                                  // setState(() {});
                                 }
 
-                                // int rootIndex = imgList!.indexOf(imgList[]);
-                                // imgList.removeAt(rootIndex);
-
-                                final rootIndex = imgList!.indexWhere(
-                                    (element) =>
-                                        element!.propId == model.propsId);
-                                if (rootIndex != -1) {
-                                  // imgList.add(imageName);
-                                  // print("Index $index1: ${people[index1]}");
-                                }
-
-                                // print('refresh');
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
 
@@ -248,12 +263,12 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                                   color: Colors.blue,
                                 ),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Icon(
                                       Icons.image,
                                       color: Colors.white,
@@ -261,13 +276,11 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Expanded(
-                                      child: Text(
-                                        'Add Product Image',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                        ),
+                                    Text(
+                                      'Add Product Image',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
                                       ),
                                     ),
                                   ],
@@ -280,36 +293,36 @@ class _ViewMyProductState extends State<ViewMyProduct> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: Image.network(
-                    '${widget.model.sliderImg}',
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/a.jpeg',
-                        fit: BoxFit.fitWidth,
-                      );
-                    },
-                    loadingBuilder: (context, Widget child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return SizedBox(
-                        height: 300,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                //   child: Image.network(
+                //     '${widget.model.sliderImg}',
+                //     width: double.infinity,
+                //     errorBuilder: (context, error, stackTrace) {
+                //       return Image.asset(
+                //         'assets/images/a.jpeg',
+                //         fit: BoxFit.fitWidth,
+                //       );
+                //     },
+                //     loadingBuilder: (context, Widget child, loadingProgress) {
+                //       if (loadingProgress == null) return child;
+                //       return SizedBox(
+                //         height: 300,
+                //         child: Center(
+                //           child: CircularProgressIndicator(
+                //             value: loadingProgress.expectedTotalBytes != null
+                //                 ? loadingProgress.cumulativeBytesLoaded /
+                //                     loadingProgress.expectedTotalBytes!
+                //                 : null,
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Align(
