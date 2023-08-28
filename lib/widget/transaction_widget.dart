@@ -24,6 +24,7 @@ class transactionWidget extends StatelessWidget {
         bottom: 5,
       ),
       child: Container(
+        color: Colors.white,
         child: Column(
           children: [
             ListTile(

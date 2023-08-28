@@ -269,6 +269,7 @@ class _EditValuationState extends State<EditValuation> {
       physics: const ClampingScrollPhysics(),
       type: StepperType.vertical,
       currentStep: _activeStepIndex,
+      connectorColor: MaterialStateProperty.all<Color>(Colors.blue),
       steps: stepList(),
       onStepContinue: () async {
         if (_activeStepIndex < (stepList().length - 1)) {

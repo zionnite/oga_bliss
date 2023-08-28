@@ -84,6 +84,10 @@ class _FavouritePageState extends State<FavouritePage> {
         automaticallyImplyLeading: false,
         backgroundColor: backgroundColorPrimary,
         title: const Text('Favourite'),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.only(

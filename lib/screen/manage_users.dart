@@ -168,11 +168,15 @@ class _ManageUsersState extends State<ManageUsers> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: backgroundColorPrimary,
+          iconTheme: const IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          foregroundColor: Colors.white,
           centerTitle: false,
-          title: Column(
+          title: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
+            children: [
               Text('Users'),
               SizedBox(
                 height: 3,
@@ -186,9 +190,11 @@ class _ManageUsersState extends State<ManageUsers> {
               ),
             ],
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: Colors.white,
-            tabs: [
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey.shade400,
+            tabs: const [
               Tab(
                 icon: Icon(Icons.person),
                 text: 'Users',

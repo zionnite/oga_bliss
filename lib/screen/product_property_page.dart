@@ -109,9 +109,11 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: backgroundColorPrimary,
+        foregroundColor: textColorWhite,
         onPressed: () {
           Get.to(
-            () => AddPropertyPage(),
+            () => const AddPropertyPage(),
             transition: Transition.leftToRightWithFade,
           );
         },
@@ -220,8 +222,10 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
   Widget _popUpButton(PropertyModel props) {
     return PopupMenuButton<String>(
       enabled: true,
+      color: Colors.black,
       icon: const Icon(
-        Icons.more_vert_rounded,
+        Icons.more_vert_outlined,
+        color: Colors.black,
       ),
       onSelected: (val) async {
         if (val == 'submit') {
@@ -363,27 +367,57 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                   props.propsLiveStatus == 'rejected')
               ? const PopupMenuItem(
                   value: "submit",
-                  child: Text('Submit'),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 )
               : const PopupMenuItem(
                   value: "already",
-                  child: Text('Already Submitted'),
+                  child: Text(
+                    'Already Submitted',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
           const PopupMenuItem(
             value: "image",
-            child: Text('View Image'),
+            child: Text(
+              'View Image',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
           const PopupMenuItem(
             value: "doc",
-            child: Text('View Document'),
+            child: Text(
+              'View Document',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
           const PopupMenuItem(
             value: "edit",
-            child: Text('Edit'),
+            child: Text(
+              'Edit',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
           const PopupMenuItem(
             value: "delete",
-            child: Text('Delete'),
+            child: Text(
+              'Delete',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ];
       },

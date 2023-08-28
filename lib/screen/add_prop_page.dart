@@ -1507,6 +1507,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       type: StepperType.vertical,
       currentStep: _activeStepIndex,
       steps: stepList(),
+      connectorColor: MaterialStateProperty.all<Color>(Colors.blue),
       onStepContinue: () async {
         if (_activeStepIndex < (stepList().length - 1)) {
           setState(() {

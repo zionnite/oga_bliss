@@ -193,15 +193,120 @@ class _ProfilePageState extends State<ProfilePage> {
                       left: 10,
                       right: 10,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
+                    child: Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 40, left: 15),
+                              child: const Text(
+                                'Full Name',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Passion One',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            PropertyKey(
+                              propsKey: '$full_name',
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Divider(height: 1, color: Colors.grey),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 10, left: 15),
+                              child: const Text(
+                                'Email',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Passion One',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            PropertyKey(
+                              propsKey: '$email',
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Divider(height: 1, color: Colors.grey),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 10, left: 15),
+                              child: const Text(
+                                'Age',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Passion One',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            PropertyKey(
+                              propsKey: '$age',
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Divider(height: 1, color: Colors.grey),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 10, left: 15),
+                              child: const Text(
+                                'Gender',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Passion One',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            PropertyKey(
+                              propsKey: '$sex',
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    elevation: 5,
+                    margin: const EdgeInsets.only(
+                        top: 670, left: 10, right: 10, bottom: 0),
+                    child: Container(
+                      color: Colors.white,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(top: 40, left: 15),
+                            margin: const EdgeInsets.only(top: 10, left: 15),
                             child: const Text(
-                              'Full Name',
+                              'Bank Name',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: 'Passion One',
@@ -212,7 +317,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 5,
                           ),
                           PropertyKey(
-                            propsKey: '$full_name',
+                            propsKey: '$bankName',
                           ),
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -224,7 +329,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Container(
                             margin: const EdgeInsets.only(top: 10, left: 15),
                             child: const Text(
-                              'Email',
+                              'Account Number',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: 'Passion One',
@@ -235,7 +340,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 5,
                           ),
                           PropertyKey(
-                            propsKey: '$email',
+                            propsKey: '$accountNum',
                           ),
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -247,7 +352,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Container(
                             margin: const EdgeInsets.only(top: 10, left: 15),
                             child: const Text(
-                              'Age',
+                              'Account Name',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: 'Passion One',
@@ -258,30 +363,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 5,
                           ),
                           PropertyKey(
-                            propsKey: '$age',
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Divider(height: 1, color: Colors.grey),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 10, left: 15),
-                            child: const Text(
-                              'Gender',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'Passion One',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          PropertyKey(
-                            propsKey: '$sex',
+                            propsKey: '$accountName',
                           ),
                           const SizedBox(
                             height: 20,
@@ -294,129 +376,56 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.white,
                     elevation: 5,
                     margin: const EdgeInsets.only(
-                        top: 670, left: 10, right: 10, bottom: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 10, left: 15),
-                          child: const Text(
-                            'Bank Name',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Passion One',
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        PropertyKey(
-                          propsKey: '$bankName',
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Divider(height: 1, color: Colors.grey),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10, left: 15),
-                          child: const Text(
-                            'Account Number',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Passion One',
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        PropertyKey(
-                          propsKey: '$accountNum',
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Divider(height: 1, color: Colors.grey),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10, left: 15),
-                          child: const Text(
-                            'Account Name',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Passion One',
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        PropertyKey(
-                          propsKey: '$accountName',
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    color: Colors.white,
-                    elevation: 5,
-                    margin: const EdgeInsets.only(
                         top: 915, left: 10, right: 10, bottom: 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 10, left: 15),
-                          child: const Text(
-                            'Referral Code',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Passion One',
+                    child: Container(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 10, left: 15),
+                            child: const Text(
+                              'Referral Code',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Passion One',
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        PropertyKey(
-                          propsKey: '$m_ref_code',
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Divider(height: 1, color: Colors.grey),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10, left: 15),
-                          child: const Text(
-                            'Referral Link',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Passion One',
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PropertyKey(
+                            propsKey: '$m_ref_code',
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 15.0),
+                            child: Divider(height: 1, color: Colors.grey),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 10, left: 15),
+                            child: const Text(
+                              'Referral Link',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Passion One',
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        PropertyKey(
-                          propsKey: '$m_ref_link',
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ],
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          PropertyKey(
+                            propsKey: '$m_ref_link',
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Container(

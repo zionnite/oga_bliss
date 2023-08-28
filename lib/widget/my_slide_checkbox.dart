@@ -20,7 +20,7 @@ class _MySlideCheckBoxState extends State<MySlideCheckBox> {
       value: widget.isSwitched,
       onChanged: widget.onChanged,
       activeTrackColor: Colors.blue,
-      activeColor: Colors.blue,
+      activeColor: Colors.white,
     );
   }
 }

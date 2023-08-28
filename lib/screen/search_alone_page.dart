@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oga_bliss/screen/book_specification.dart';
 import 'package:oga_bliss/services/api_services.dart';
+import 'package:oga_bliss/util/common.dart';
 import 'package:oga_bliss/widget/my_dropdown_field.dart';
 import 'package:oga_bliss/widget/property_btn.dart';
 import 'package:simple_currency_format/simple_currency_format.dart';
@@ -229,42 +230,46 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                           top: 15,
                         ),
                         color: Colors.white,
-                        child: Obx(
-                          () => ListView.builder(
-                            itemCount: propsController.typesPropertyList.length,
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 0, right: 0),
-                            physics: const ClampingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              var type =
-                                  propsController.typesPropertyList[index];
-                              return Column(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Get.to(
-                                        () => FilterByType(
-                                          typeId: type.id,
+                        child: Container(
+                          color: Colors.white,
+                          child: Obx(
+                            () => ListView.builder(
+                              itemCount:
+                                  propsController.typesPropertyList.length,
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 0, right: 0),
+                              physics: const ClampingScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                var type =
+                                    propsController.typesPropertyList[index];
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Get.to(
+                                          () => FilterByType(
+                                            typeId: type.id,
+                                          ),
+                                        );
+                                      },
+                                      child: ListTile(
+                                        title: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(type.name),
                                         ),
-                                      );
-                                    },
-                                    child: ListTile(
-                                      title: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(type.name),
+                                        trailing: const Icon(Icons.send),
                                       ),
-                                      trailing: const Icon(Icons.send),
                                     ),
-                                  ),
-                                  const Divider(
-                                    height: 1,
-                                    color: Colors.black38,
-                                  ),
-                                ],
-                              );
-                            },
+                                    const Divider(
+                                      height: 1,
+                                      color: Colors.black38,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -285,6 +290,7 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                         min: 5000,
                         max: 90000000,
                         divisions: 100000,
+                        activeColor: backgroundColorPrimary,
                         // labels: _rangeLabels,
                         values: _rangeValues,
                         onChanged: (val) {
@@ -344,31 +350,33 @@ class _SearchAlonePageState extends State<SearchAlonePage> {
                           ],
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          Get.to(
-                            () => FilterByPrice(
-                              startPrice: _rangeValues.start.toString(),
-                              endPrice: _rangeValues.end.toString(),
-                            ),
-                          );
-                        },
-                        child: Align(
-                          alignment: Alignment.center,
+                      Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(
+                              () => FilterByPrice(
+                                startPrice: _rangeValues.start.toString(),
+                                endPrice: _rangeValues.end.toString(),
+                              ),
+                            );
+                          },
                           child: Card(
+                            color: Colors.white,
                             margin: const EdgeInsets.only(top: 15, bottom: 15),
                             elevation: 5,
-                            child: Padding(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(0),
+                              ),
                               padding: const EdgeInsets.only(
                                 top: 13.0,
                                 bottom: 13.0,
                                 right: 25,
                                 left: 25,
                               ),
-                              child: Ink(
-                                color: Colors.white,
-                                child: const Text('Filter by Price'),
-                              ),
+                              child: const Text('Filter by Price'),
                             ),
                           ),
                         ),

@@ -49,6 +49,7 @@ class _UsersWidgetState extends State<UsersWidget> {
         bottom: 5,
       ),
       child: Container(
+        color: Colors.white,
         padding: const EdgeInsets.only(
           left: 10,
           right: 10,

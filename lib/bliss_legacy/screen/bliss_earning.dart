@@ -209,30 +209,33 @@ class _BlissEarningState extends State<BlissEarning> {
                 return Column(
                   children: [
                     Card(
-                      child: ListTile(
-                        leading: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            image: DecorationImage(
-                              image: NetworkImage(data.pointImage!),
-                              fit: BoxFit.cover,
+                      child: Container(
+                        color: Colors.white,
+                        child: ListTile(
+                          leading: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: DecorationImage(
+                                image: NetworkImage(data.pointImage!),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        title: Text(
-                          data.pointName!,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
+                          title: Text(
+                            data.pointName!,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          data.point!,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
+                          subtitle: Text(
+                            data.point!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),

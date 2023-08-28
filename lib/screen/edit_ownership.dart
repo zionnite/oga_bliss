@@ -163,6 +163,7 @@ class _EditOwnershipState extends State<EditOwnership> {
       physics: const ClampingScrollPhysics(),
       type: StepperType.vertical,
       currentStep: _activeStepIndex,
+      connectorColor: MaterialStateProperty.all<Color>(Colors.blue),
       steps: stepList(),
       onStepContinue: () async {
         if (_activeStepIndex < (stepList().length - 1)) {

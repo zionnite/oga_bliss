@@ -94,6 +94,11 @@ class _AlertPageState extends State<AlertPage> {
           'Alert',
         ),
         backgroundColor: backgroundColorPrimary,
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        foregroundColor: Colors.white,
+        centerTitle: false,
       ),
       body: Obx(
         () => (alertController.isAlertProcessing == 'null')
@@ -179,18 +184,21 @@ class _AlertPageState extends State<AlertPage> {
                       ],
                     ),
                     child: Card(
-                      child: Padding(
+                      child: Container(
+                        color: Colors.white,
                         padding: const EdgeInsets.only(
                           left: 8.0,
                           right: 8.0,
                         ),
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.warning_sharp,
-                            color: Colors.red,
-                          ),
-                          title: Text(
-                            '${alertController.alertList[index].description!}',
+                        child: Container(
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.warning_sharp,
+                              color: Colors.red,
+                            ),
+                            title: Text(
+                              '${alertController.alertList[index].description!}',
+                            ),
                           ),
                         ),
                       ),

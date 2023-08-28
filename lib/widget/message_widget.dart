@@ -26,9 +26,11 @@ class messageWidget extends StatelessWidget {
         margin: const EdgeInsets.only(
           left: 10,
           right: 10,
+          bottom: 2,
         ),
         child: Container(
-          padding: EdgeInsets.all(10),
+          color: Colors.white,
+          padding: const EdgeInsets.all(10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

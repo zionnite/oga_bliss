@@ -31,6 +31,11 @@ class _SendEmailState extends State<SendEmail> {
       appBar: AppBar(
         backgroundColor: backgroundColorPrimary,
         title: const Text('Send Email to User'),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        foregroundColor: Colors.white,
+        centerTitle: false,
       ),
       body: Column(
         children: [

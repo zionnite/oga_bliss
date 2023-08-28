@@ -1173,56 +1173,59 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       }
 
                       return Card(
-                        child: ListTile(
-                          leading: InkWell(
-                            onTap: () {
-                              String link = '${props.fileName}';
-                              _launchInBrowser(Uri.parse(link));
-                            },
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                image: (props.fileExt == 'pdf')
-                                    ? const DecorationImage(
-                                        image: AssetImage(
-                                          'assets/images/pdf.png',
+                        child: Container(
+                          color: Colors.white,
+                          child: ListTile(
+                            leading: InkWell(
+                              onTap: () {
+                                String link = '${props.fileName}';
+                                _launchInBrowser(Uri.parse(link));
+                              },
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  image: (props.fileExt == 'pdf')
+                                      ? const DecorationImage(
+                                          image: AssetImage(
+                                            'assets/images/pdf.png',
+                                          ),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : DecorationImage(
+                                          image: NetworkImage(
+                                            props.fileName!,
+                                          ),
+                                          fit: BoxFit.cover,
                                         ),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : DecorationImage(
-                                        image: NetworkImage(
-                                          props.fileName!,
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
+                                ),
                               ),
                             ),
-                          ),
-                          title: InkWell(
-                            onTap: () {
-                              String link = '${props.fileName}';
-                              _launchInBrowser(Uri.parse(link));
-                            },
-                            child: Text(
-                              props.title!,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
+                            title: InkWell(
+                              onTap: () {
+                                String link = '${props.fileName}';
+                                _launchInBrowser(Uri.parse(link));
+                              },
+                              child: Text(
+                                props.title!,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          subtitle: InkWell(
-                            onTap: () {
-                              String link = '${props.fileName}';
-                              _launchInBrowser(Uri.parse(link));
-                            },
-                            child: const Text(
-                              'Open file',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                            subtitle: InkWell(
+                              onTap: () {
+                                String link = '${props.fileName}';
+                                _launchInBrowser(Uri.parse(link));
+                              },
+                              child: const Text(
+                                'Open file',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                           ),

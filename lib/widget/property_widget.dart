@@ -95,267 +95,278 @@ class _PropertyWidgetState extends State<PropertyWidget> {
               Card(
                 elevation: 5,
                 color: Colors.white,
-                child: Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Get.to(
-                          () => PropertyDetailPage(
-                            propertyModel: widget.propertyModel,
-                            route: widget.route,
-                          ),
-                        );
-                      },
-                      child: Stack(
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: widget.props_image,
-                            fit: BoxFit.cover,
-                            height: 150,
-                            width: double.infinity,
-                            errorWidget: (context, url, error) => Image.asset(
-                              'assets/images/a.jpeg',
-                              fit: BoxFit.fitWidth,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                ),
+                child: Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Get.to(
+                            () => PropertyDetailPage(
+                              propertyModel: widget.propertyModel,
+                              route: widget.route,
                             ),
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                          (isReportLoading)
-                              ? Positioned(
-                                  top: 70,
-                                  left: width * 0.45,
-                                  child: Center(
-                                    child: LoadingAnimationWidget.inkDrop(
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
-                    ListTile(
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: InkWell(
-                          onTap: () {
-                            Get.to(
-                              () => PropertyDetailPage(
-                                propertyModel: widget.propertyModel,
-                                route: widget.route,
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl: widget.props_image,
+                              fit: BoxFit.cover,
+                              height: 150,
+                              width: double.infinity,
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/a.jpeg',
+                                fit: BoxFit.fitWidth,
                               ),
-                            );
-                          },
-                          child: Text(
-                            widget.props_name,
-                            style: const TextStyle(
-                              fontFamily: 'Passion One',
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            (isReportLoading)
+                                ? Positioned(
+                                    top: 70,
+                                    left: width * 0.45,
+                                    child: Center(
+                                      child: LoadingAnimationWidget.inkDrop(
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                          ],
+                        ),
+                      ),
+                      ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                () => PropertyDetailPage(
+                                  propertyModel: widget.propertyModel,
+                                  route: widget.route,
+                                ),
+                              );
+                            },
+                            child: Text(
+                              widget.props_name,
+                              style: const TextStyle(
+                                fontFamily: 'Passion One',
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: (widget.props_type.toLowerCase() == "buy")
-                                  ? Colors.blue.shade900
-                                  : Colors.blue.shade900,
-                              borderRadius: BorderRadius.circular(3),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 10,
                             ),
-                            child: Text(
-                              widget.props_type,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 3),
+                              decoration: BoxDecoration(
+                                color:
+                                    (widget.props_type.toLowerCase() == "buy")
+                                        ? Colors.blue.shade900
+                                        : Colors.blue.shade900,
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Text(
+                                widget.props_type,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              CurrencyFormatter.getCurrencyFormatter(
+                                amount: "${widget.props_price}",
+                              ),
                               style: const TextStyle(
-                                color: Colors.white,
+                                fontFamily: 'BlackOpsOne',
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Text(
-                            CurrencyFormatter.getCurrencyFormatter(
-                              amount: "${widget.props_price}",
+                            const SizedBox(
+                              height: 15,
                             ),
-                            style: const TextStyle(
-                              fontFamily: 'BlackOpsOne',
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
 
-                          //Rooms, toilet etc
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  const Icon(
-                                    Icons.bed_sharp,
-                                    size: 14,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '${widget.props_bedroom} Bedroom',
-                                    style: const TextStyle(
-                                      fontSize: 8,
+                            //Rooms, toilet etc
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const Icon(
+                                      Icons.bed_sharp,
+                                      size: 14,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  const Icon(
-                                    Icons.bathtub_rounded,
-                                    size: 14,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '${widget.props_bathroom} Bathroom',
-                                    style: const TextStyle(
-                                      fontSize: 8,
+                                    const SizedBox(
+                                      width: 5,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.event_seat_outlined,
-                                    size: 14,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '${widget.props_toilet} Toilet',
-                                    style: const TextStyle(
-                                      fontSize: 8,
+                                    Text(
+                                      '${widget.props_bedroom} Bedroom',
+                                      style: const TextStyle(
+                                        fontSize: 8,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const Icon(
+                                      Icons.bathtub_rounded,
+                                      size: 14,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      '${widget.props_bathroom} Bathroom',
+                                      style: const TextStyle(
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.event_seat_outlined,
+                                      size: 14,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      '${widget.props_toilet} Toilet',
+                                      style: const TextStyle(
+                                        fontSize: 8,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                          ],
+                        ),
+                        trailing: (widget.adminStatus)
+                            ? const SizedBox(
+                                width: 5,
+                              )
+                            : InkWell(
+                                onTap: () async {
+                                  setState(() {
+                                    widget.propertyModel!.favourite =
+                                        !widget.isFav;
+                                  });
+
+                                  var status = await propsController.toggleLike(
+                                    user_id,
+                                    widget.propertyModel!.propsId,
+                                    widget.propertyModel!,
+                                    widget.route,
+                                    user_status,
+                                  );
+
+                                  setState(() {
+                                    widget.propertyModel!.favourite = status;
+                                    if (widget.route == 'default') {
+                                      int index = propsController.propertyList
+                                          .indexOf(widget.propertyModel);
+                                      propsController.propertyList[index]
+                                          .favourite = status;
+                                    } else if (widget.route == 'search') {
+                                      int index = propsController
+                                          .searchPropertyList
+                                          .indexOf(widget.propertyModel);
+                                      propsController.searchPropertyList[index]
+                                          .favourite = status;
+                                    } else if (widget.route == 'fav') {
+                                      int index = propsController
+                                          .favPropertyList
+                                          .indexOf(widget.propertyModel);
+
+                                      propsController.favPropertyList[index]
+                                          .favourite = status;
+
+                                      if (status == false) {
+                                        var propsId = propsController
+                                            .favPropertyList[index].propsId;
+
+                                        var newPropId = propsController
+                                            .propertyList
+                                            .indexWhere(
+                                                ((p) => p.propsId == propsId));
+
+                                        if (newPropId != -1) {
+                                          propsController
+                                              .propertyList[newPropId]
+                                              .favourite = status;
+                                        }
+
+                                        //remove from favPropertyList
+                                        propsController.favPropertyList
+                                            .removeAt(index);
+                                      }
+                                    } else if (widget.route == 'dashboard') {
+                                      int index = propsController
+                                          .disPropertyList
+                                          .indexOf(widget.propertyModel);
+                                      propsController.disPropertyList[index]
+                                          .favourite = status;
+
+                                      if (status == false || status == true) {
+                                        var propsId = propsController
+                                            .disPropertyList[index].propsId;
+
+                                        var newPropId = propsController
+                                            .propertyList
+                                            .indexWhere(
+                                                ((p) => p.propsId == propsId));
+
+                                        if (newPropId != -1) {
+                                          propsController
+                                              .propertyList[newPropId]
+                                              .favourite = status;
+                                        }
+
+                                        //update myPropertyList
+                                      }
+                                    }
+                                  });
+                                },
+                                child: (widget.propertyModel?.favourite == true)
+                                    ? Icon(
+                                        Icons.favorite_outlined,
+                                        color: Colors.blue.shade900,
+                                      )
+                                    : const Icon(
+                                        Icons.favorite_outlined,
+                                        color: Colors.black38,
+                                      ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                        ],
                       ),
-                      trailing: (widget.adminStatus)
-                          ? const SizedBox(
-                              width: 5,
-                            )
-                          : InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  widget.propertyModel!.favourite =
-                                      !widget.isFav;
-                                });
-
-                                var status = await propsController.toggleLike(
-                                  user_id,
-                                  widget.propertyModel!.propsId,
-                                  widget.propertyModel!,
-                                  widget.route,
-                                  user_status,
-                                );
-
-                                setState(() {
-                                  widget.propertyModel!.favourite = status;
-                                  if (widget.route == 'default') {
-                                    int index = propsController.propertyList
-                                        .indexOf(widget.propertyModel);
-                                    propsController
-                                        .propertyList[index].favourite = status;
-                                  } else if (widget.route == 'search') {
-                                    int index = propsController
-                                        .searchPropertyList
-                                        .indexOf(widget.propertyModel);
-                                    propsController.searchPropertyList[index]
-                                        .favourite = status;
-                                  } else if (widget.route == 'fav') {
-                                    int index = propsController.favPropertyList
-                                        .indexOf(widget.propertyModel);
-
-                                    propsController.favPropertyList[index]
-                                        .favourite = status;
-
-                                    if (status == false) {
-                                      var propsId = propsController
-                                          .favPropertyList[index].propsId;
-
-                                      var newPropId = propsController
-                                          .propertyList
-                                          .indexWhere(
-                                              ((p) => p.propsId == propsId));
-
-                                      if (newPropId != -1) {
-                                        propsController.propertyList[newPropId]
-                                            .favourite = status;
-                                      }
-
-                                      //remove from favPropertyList
-                                      propsController.favPropertyList
-                                          .removeAt(index);
-                                    }
-                                  } else if (widget.route == 'dashboard') {
-                                    int index = propsController.disPropertyList
-                                        .indexOf(widget.propertyModel);
-                                    propsController.disPropertyList[index]
-                                        .favourite = status;
-
-                                    if (status == false || status == true) {
-                                      var propsId = propsController
-                                          .disPropertyList[index].propsId;
-
-                                      var newPropId = propsController
-                                          .propertyList
-                                          .indexWhere(
-                                              ((p) => p.propsId == propsId));
-
-                                      if (newPropId != -1) {
-                                        propsController.propertyList[newPropId]
-                                            .favourite = status;
-                                      }
-
-                                      //update myPropertyList
-                                    }
-                                  }
-                                });
-                              },
-                              child: (widget.propertyModel?.favourite == true)
-                                  ? Icon(
-                                      Icons.favorite_outlined,
-                                      color: Colors.blue.shade900,
-                                    )
-                                  : const Icon(
-                                      Icons.favorite_outlined,
-                                      color: Colors.black38,
-                                    ),
-                            ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Positioned(

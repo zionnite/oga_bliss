@@ -192,53 +192,56 @@ class _EarningHistoryState extends State<EarningHistory> {
                 return Column(
                   children: [
                     Card(
-                      child: ListTile(
-                        leading: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            image: DecorationImage(
-                              image: NetworkImage(data.downlineImage!),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        title: Text(
-                          data.downlineFullName!,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Row(
-                          children: [
-                            Text(
-                              '${data.point!} Point',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
+                      child: Container(
+                        color: Colors.white,
+                        child: ListTile(
+                          leading: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              image: DecorationImage(
+                                image: NetworkImage(data.downlineImage!),
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(
-                              width: 5,
+                          ),
+                          title: Text(
+                            data.downlineFullName!,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
                             ),
-                            (data.status == 'not_claim')
-                                ? const Text(
-                                    'Pending',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.green,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Row(
+                            children: [
+                              Text(
+                                '${data.point!} Point',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              (data.status == 'not_claim')
+                                  ? const Text(
+                                      'Pending',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.green,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Claimed',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.red,
+                                      ),
                                     ),
-                                  )
-                                : const Text(
-                                    'Claimed',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

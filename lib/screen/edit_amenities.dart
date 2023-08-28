@@ -601,6 +601,7 @@ class _EditAmenitiesState extends State<EditAmenities> {
       physics: const ClampingScrollPhysics(),
       type: StepperType.vertical,
       currentStep: _activeStepIndex,
+      connectorColor: MaterialStateProperty.all<Color>(Colors.blue),
       steps: stepList(),
       onStepContinue: () async {
         if (_activeStepIndex < (stepList().length - 1)) {
@@ -679,7 +680,7 @@ class _EditAmenitiesState extends State<EditAmenities> {
                 propsController.getDisProduct(widget.model.propsId, user_id);
                 propsController.disPropertyList.refresh();
               });
-            }    
+            }
           } else {
             // print('form not filled');
           }

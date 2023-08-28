@@ -136,6 +136,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
       ),
       home: SplashPage(),
     );

@@ -296,6 +296,10 @@ class _ManagePropertyState extends State<ManageProperty> {
         appBar: AppBar(
           backgroundColor: backgroundColorPrimary,
           centerTitle: false,
+          iconTheme: const IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          foregroundColor: Colors.white,
           title: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -313,9 +317,11 @@ class _ManagePropertyState extends State<ManageProperty> {
               ),
             ],
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: Colors.white,
-            tabs: [
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey.shade400,
+            tabs: const [
               Tab(
                 icon: Icon(Icons.star),
                 text: 'All',

@@ -90,6 +90,11 @@ class _FilterByLocationState extends State<FilterByLocation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backgroundColorPrimary,
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        foregroundColor: Colors.white,
+        centerTitle: false,
       ),
       body: Obx(
         () => (propsController.isLocationProcessing == 'null')

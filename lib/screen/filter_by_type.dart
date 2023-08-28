@@ -98,6 +98,11 @@ class _FilterByTypeState extends State<FilterByType> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backgroundColorPrimary,
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        foregroundColor: Colors.white,
+        centerTitle: false,
       ),
       body: Obx(
         () => (propsController.isTypeProcessing == 'null')
