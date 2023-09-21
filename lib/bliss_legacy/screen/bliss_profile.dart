@@ -503,20 +503,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ]),
-                Positioned(
-                  top: 60,
-                  right: 15,
-                  child: IconButton(
-                    onPressed: () {
-                      logoutUser();
-                    },
-                    icon: const Icon(
-                      Icons.logout_sharp,
-                      color: Colors.white,
-                      size: 25,
-                    ),
-                  ),
-                ),
               ],
             ),
             propertyBtn(

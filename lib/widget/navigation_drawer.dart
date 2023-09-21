@@ -208,6 +208,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       () => const BlissEarning(),
                     ),
                   ),
+                  buildMenuItem(
+                    text: 'Logout',
+                    icon: Icons.egg_rounded,
+                    onClicked: () => logoutUser(),
+                  ),
                   // extraWidget(),
                   const SizedBox(height: 24),
                   (admin_status == false)
@@ -455,5 +460,36 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         ));
         break;
     }
+  }
+
+  void logoutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("isUserLogin");
+    prefs.remove("user_id");
+    prefs.remove("user_name");
+    prefs.remove("full_name");
+    prefs.remove("email");
+    prefs.remove("image_name");
+    prefs.remove("user_status");
+    prefs.remove("phone");
+    prefs.remove("age");
+    prefs.remove("sex");
+    prefs.remove("address");
+    prefs.remove("date_created");
+    prefs.remove("account_name");
+    prefs.remove("account_number");
+    prefs.remove("bank_name");
+    prefs.remove("bank_code");
+    prefs.remove("current_balance");
+    prefs.remove("prop_counter");
+    prefs.remove("admin_status");
+    prefs.remove("isbank_verify");
+    prefs.remove("login_status");
+    prefs.remove("isGuestLogin");
+
+    Get.offAll(
+      () => const LoginPage(),
+      transition: Transition.rightToLeftWithFade,
+    );
   }
 }

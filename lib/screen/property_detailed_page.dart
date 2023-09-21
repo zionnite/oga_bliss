@@ -16,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../controller/favourite_controller.dart';
 import '../controller/property_controller.dart';
-import '../widget/amenities_widget.dart';
 import '../widget/property_btn.dart';
 
 class PropertyDetailPage extends StatefulWidget {
@@ -554,107 +553,116 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               const SizedBox(
                 height: 15,
               ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                  ),
-                  child: const Text(
-                    '-CONDITION-',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Passion One',
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                  ),
-                  child: Text(
-                    props.propsCondition.toString(),
-                    style: const TextStyle(
-                      fontSize: 17,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                  ),
-                  child: const Text(
-                    '-SPECIAL PREFERENCE-',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Passion One',
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                  ),
-                  child: Text(
-                    props.propsSpecialPref.toString(),
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                  ),
-                  child: const Text(
-                    '-Caution Fee-',
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Passion One',
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                  ),
-                  child: Text(
-                    CurrencyFormatter.getCurrencyFormatter(
-                      amount: props.propsCautionFee.toString(),
-                    ),
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
+              (props.propsPurpose == 'rent')
+                  ? SizedBox(
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                              ),
+                              child: const Text(
+                                '-CONDITION-',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontFamily: 'Passion One',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                              ),
+                              child: Text(
+                                props.propsCondition.toString(),
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                              ),
+                              child: const Text(
+                                '-SPECIAL PREFERENCE-',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontFamily: 'Passion One',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                              ),
+                              child: Text(
+                                props.propsSpecialPref.toString(),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                              ),
+                              child: const Text(
+                                '-Caution Fee-',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontFamily: 'Passion One',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                              ),
+                              child: Text(
+                                CurrencyFormatter.getCurrencyFormatter(
+                                  amount: props.propsCautionFee.toString(),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(),
+
               (props.propsNegotiable == 'yes')
                   ? Align(
                       alignment: Alignment.topLeft,
@@ -823,213 +831,214 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Divider(
-                  height: 1,
-                  color: Colors.black54,
-                ),
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: HeaderTitle(
-                  title: 'AMENITIES',
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 18.0, right: 8.0),
-                  child: Column(
-                    children: [
-                      AmenitiesWidget(
-                        isYes: props.propsAirCondition.toString(),
-                        name: 'Air Conditioning',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsCableTv.toString(),
-                        name: 'Cable Tv',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsComputer.toString(),
-                        name: 'Computer',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsDvd.toString(),
-                        name: 'DVD',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsGrill.toString(),
-                        name: 'Grill',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsHiFi.toString(),
-                        name: 'Hi-Fi',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsJuicer.toString(),
-                        name: 'Juicer',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsGym.toString(),
-                        name: 'Gym',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsBalcony.toString(),
-                        name: 'Balcony',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsCleaningAfterExit.toString(),
-                        name: 'Cleaning after exit',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsCot.toString(),
-                        name: 'Cot',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsFan.toString(),
-                        name: 'Fan',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsHairdryer.toString(),
-                        name: 'Hairdryer',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsInternet.toString(),
-                        name: 'Internet',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsLift.toString(),
-                        name: 'Lift',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsFireplace.toString(),
-                        name: 'Fireplace',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsBedding.toString(),
-                        name: 'Bedding',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsCofeePot.toString(),
-                        name: 'Cofee pot',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsDishwasher.toString(),
-                        name: 'Dishwasher',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsFridge.toString(),
-                        name: 'Fridge',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsHeater.toString(),
-                        name: 'Heater',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsIron.toString(),
-                        name: 'Iron',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsMicrowave.toString(),
-                        name: 'Microwave',
-                      ),
-                      AmenitiesWidget(
-                        isYes: props.propsHotTub.toString(),
-                        name: 'Hot Tub',
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Divider(
-                  height: 1,
-                  color: Colors.black54,
-                ),
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: HeaderTitle(
-                  title: 'FACILITIES',
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  children: [
-                    PropertyKeyAndValue(
-                      propsKey: 'Shopping Mall',
-                      propsValue: props.propsShoppingMall.toString(),
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Hospital',
-                      propsValue: props.propsHospital.toString(),
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'School',
-                      propsValue: props.propsSchool.toString(),
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Petrol Pump',
-                      propsValue: props.propsPetrolPump.toString(),
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Airport',
-                      propsValue: props.propsAirport.toString(),
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Church ',
-                      propsValue: props.propsChurch.toString(),
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Mosque ',
-                      propsValue: props.propsMosque.toString(),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Divider(
-                  height: 1,
-                  color: Colors.black54,
-                ),
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: HeaderTitle(
-                  title: 'VALUATION',
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Column(
-                  children: [
-                    PropertyKeyAndValue(
-                      propsKey: 'Crime',
-                      propsValue: '${props.propsCrime.toString()}%',
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Traffic',
-                      propsValue: '${props.propsTraffic.toString()}%',
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Pollution',
-                      propsValue: '${props.propsPollution.toString()}%',
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Education',
-                      propsValue: '${props.propsEducation.toString()}%',
-                    ),
-                    PropertyKeyAndValue(
-                      propsKey: 'Health',
-                      propsValue: '${props.propsHealth.toString()}%',
-                    ),
-                  ],
-                ),
-              ),
+              // const Padding(
+              //   padding: EdgeInsets.all(18.0),
+              //   child: Divider(
+              //     height: 1,
+              //     color: Colors.black54,
+              //   ),
+              // ),
+              // const Align(
+              //   alignment: Alignment.topLeft,
+              //   child: HeaderTitle(
+              //     title: 'AMENITIES',
+              //   ),
+              // ),
+              // Align(
+              //   alignment: Alignment.topLeft,
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(left: 18.0, right: 8.0),
+              //     child: Column(
+              //       children: [
+              //         AmenitiesWidget(
+              //           isYes: props.propsAirCondition.toString(),
+              //           name: 'Air Conditioning',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsCableTv.toString(),
+              //           name: 'Cable Tv',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsComputer.toString(),
+              //           name: 'Computer',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsDvd.toString(),
+              //           name: 'DVD',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsGrill.toString(),
+              //           name: 'Grill',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsHiFi.toString(),
+              //           name: 'Hi-Fi',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsJuicer.toString(),
+              //           name: 'Juicer',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsGym.toString(),
+              //           name: 'Gym',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsBalcony.toString(),
+              //           name: 'Balcony',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsCleaningAfterExit.toString(),
+              //           name: 'Cleaning after exit',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsCot.toString(),
+              //           name: 'Cot',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsFan.toString(),
+              //           name: 'Fan',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsHairdryer.toString(),
+              //           name: 'Hairdryer',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsInternet.toString(),
+              //           name: 'Internet',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsLift.toString(),
+              //           name: 'Lift',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsFireplace.toString(),
+              //           name: 'Fireplace',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsBedding.toString(),
+              //           name: 'Bedding',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsCofeePot.toString(),
+              //           name: 'Cofee pot',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsDishwasher.toString(),
+              //           name: 'Dishwasher',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsFridge.toString(),
+              //           name: 'Fridge',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsHeater.toString(),
+              //           name: 'Heater',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsIron.toString(),
+              //           name: 'Iron',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsMicrowave.toString(),
+              //           name: 'Microwave',
+              //         ),
+              //         AmenitiesWidget(
+              //           isYes: props.propsHotTub.toString(),
+              //           name: 'Hot Tub',
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              // const Padding(
+              //   padding: EdgeInsets.all(18.0),
+              //   child: Divider(
+              //     height: 1,
+              //     color: Colors.black54,
+              //   ),
+              // ),
+              // const Align(
+              //   alignment: Alignment.topLeft,
+              //   child: HeaderTitle(
+              //     title: 'FACILITIES',
+              //   ),
+              // ),
+              // Align(
+              //   alignment: Alignment.topLeft,
+              //   child: Column(
+              //     children: [
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Shopping Mall',
+              //         propsValue: props.propsShoppingMall.toString(),
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Hospital',
+              //         propsValue: props.propsHospital.toString(),
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'School',
+              //         propsValue: props.propsSchool.toString(),
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Petrol Pump',
+              //         propsValue: props.propsPetrolPump.toString(),
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Airport',
+              //         propsValue: props.propsAirport.toString(),
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Church ',
+              //         propsValue: props.propsChurch.toString(),
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Mosque ',
+              //         propsValue: props.propsMosque.toString(),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // const Padding(
+              //   padding: EdgeInsets.all(18.0),
+              //   child: Divider(
+              //     height: 1,
+              //     color: Colors.black54,
+              //   ),
+              // ),
+              // const Align(
+              //   alignment: Alignment.topLeft,
+              //   child: HeaderTitle(
+              //     title: 'VALUATION',
+              //   ),
+              // ),
+              // Align(
+              //   alignment: Alignment.topLeft,
+              //   child: Column(
+              //     children: [
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Crime',
+              //         propsValue: '${props.propsCrime.toString()}%',
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Traffic',
+              //         propsValue: '${props.propsTraffic.toString()}%',
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Pollution',
+              //         propsValue: '${props.propsPollution.toString()}%',
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Education',
+              //         propsValue: '${props.propsEducation.toString()}%',
+              //       ),
+              //       PropertyKeyAndValue(
+              //         propsKey: 'Health',
+              //         propsValue: '${props.propsHealth.toString()}%',
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
               const Padding(
                 padding: EdgeInsets.all(18.0),
                 child: Divider(
