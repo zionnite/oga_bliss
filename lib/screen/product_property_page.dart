@@ -16,11 +16,8 @@ import '../util/common.dart';
 import '../widget/property_app_bar.dart';
 import '../widget/property_tile_widget.dart';
 import '../widget/show_not_found.dart';
-import 'edit_amenities.dart';
 import 'edit_basic_detail.dart';
 import 'edit_extra_detail.dart';
-import 'edit_facilities.dart';
-import 'edit_valuation.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
@@ -263,7 +260,7 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         } else if (val == 'edit') {
           Get.bottomSheet(
             Container(
-              height: 520,
+              height: 320,
               color: Colors.white,
               child: ListView(
                 children: [
@@ -299,33 +296,33 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
                     card_margin: const EdgeInsets.all(10),
                     container_margin: const EdgeInsets.all(10),
                   ),
-                  propertyBtn(
-                    onTap: () {
-                      Get.to(() => EditAmenities(model: props));
-                    },
-                    title: 'Edit Amenities',
-                    bgColor: Colors.orange,
-                    card_margin: const EdgeInsets.all(10),
-                    container_margin: const EdgeInsets.all(10),
-                  ),
-                  propertyBtn(
-                    onTap: () {
-                      Get.to(() => EditFacilities(model: props));
-                    },
-                    title: 'Edit Facilities',
-                    bgColor: Colors.black,
-                    card_margin: const EdgeInsets.all(10),
-                    container_margin: const EdgeInsets.all(10),
-                  ),
-                  propertyBtn(
-                    onTap: () {
-                      Get.to(() => EditValuation(model: props));
-                    },
-                    title: 'Edit Valuation',
-                    bgColor: Colors.red,
-                    card_margin: const EdgeInsets.all(10),
-                    container_margin: const EdgeInsets.all(10),
-                  ),
+                  // propertyBtn(
+                  //   onTap: () {
+                  //     Get.to(() => EditAmenities(model: props));
+                  //   },
+                  //   title: 'Edit Amenities',
+                  //   bgColor: Colors.orange,
+                  //   card_margin: const EdgeInsets.all(10),
+                  //   container_margin: const EdgeInsets.all(10),
+                  // ),
+                  // propertyBtn(
+                  //   onTap: () {
+                  //     Get.to(() => EditFacilities(model: props));
+                  //   },
+                  //   title: 'Edit Facilities',
+                  //   bgColor: Colors.black,
+                  //   card_margin: const EdgeInsets.all(10),
+                  //   container_margin: const EdgeInsets.all(10),
+                  // ),
+                  // propertyBtn(
+                  //   onTap: () {
+                  //     Get.to(() => EditValuation(model: props));
+                  //   },
+                  //   title: 'Edit Valuation',
+                  //   bgColor: Colors.red,
+                  //   card_margin: const EdgeInsets.all(10),
+                  //   container_margin: const EdgeInsets.all(10),
+                  // ),
                   propertyBtn(
                     onTap: () {
                       Get.to(() => EditOwnership(model: props));
@@ -356,8 +353,16 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
         } else if (val == 'already') {
           showSnackBar(
             title: 'Property',
-            msg: 'Your Property status its ${props.propsLiveStatus}',
+            msg: 'Your Property status it\'s ${props.propsLiveStatus}',
             backgroundColor: Colors.blue,
+          );
+        } else if (val == 'dont_edit') {
+          showSnackBar(
+            title: 'Oops',
+            msg:
+                'Your Property status it\'s live, please contact the site admin to help edit the property details',
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 15),
           );
         }
       },
@@ -401,15 +406,25 @@ class _ProductPropertyPageState extends State<ProductPropertyPage> {
               ),
             ),
           ),
-          const PopupMenuItem(
-            value: "edit",
-            child: Text(
-              'Edit',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
+          (props.propsLiveStatus != 'approved')
+              ? const PopupMenuItem(
+                  value: "edit",
+                  child: Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              : const PopupMenuItem(
+                  value: "dont_edit",
+                  child: Text(
+                    'Edit',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
           const PopupMenuItem(
             value: "delete",
             child: Text(

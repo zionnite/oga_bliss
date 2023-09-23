@@ -4,6 +4,7 @@ import 'package:oga_bliss/bliss_legacy/screen/bliss_downline.dart';
 import 'package:oga_bliss/bliss_legacy/screen/bliss_earning.dart';
 import 'package:oga_bliss/bliss_legacy/screen/bliss_plan.dart';
 import 'package:oga_bliss/controller/users_controller.dart';
+import 'package:oga_bliss/screen/add_prop_page.dart';
 import 'package:oga_bliss/screen/alert_page.dart';
 import 'package:oga_bliss/screen/book_specification.dart';
 import 'package:oga_bliss/screen/favourite.dart';
@@ -208,10 +209,28 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                       () => const BlissEarning(),
                     ),
                   ),
+
                   buildMenuItem(
                     text: 'Logout',
-                    icon: Icons.egg_rounded,
-                    onClicked: () => logoutUser(),
+                    icon: Icons.logout_sharp,
+                    onClicked: () {
+                      // Navigator.pop(context);
+                      PanaraConfirmDialog.show(
+                        context,
+                        title: "Are You Sure?",
+                        message:
+                            "Do you really want to Logout from your account?",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "Cancel",
+                        onTapCancel: () {
+                          Navigator.pop(context);
+                        },
+                        onTapConfirm: () => logoutUser(),
+                        panaraDialogType: PanaraDialogType.normal,
+                        barrierDismissible:
+                            false, // optional parameter (default is true)
+                      );
+                    },
                   ),
                   // extraWidget(),
                   const SizedBox(height: 24),
@@ -341,6 +360,13 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   Widget usersWidget() {
     return Column(
       children: [
+        buildMenuItem(
+          text: 'Upload Property',
+          icon: Icons.deck_outlined,
+          onClicked: () => Get.to(
+            () => const AddPropertyPage(),
+          ),
+        ),
         buildMenuItem(
           text: 'My Property',
           icon: Icons.shopping_bag,

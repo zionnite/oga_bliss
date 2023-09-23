@@ -48,7 +48,7 @@ showSnackBar({
   );
 }
 
-const int CURRENT_APP_VERSION = 3;
+const int CURRENT_APP_VERSION = 4;
 const String baseDomain = 'https://ogabliss.com/';
 // const String baseDomain = 'http://localhost:8888/ogalandlord/';
 const String baseUrl = '${baseDomain}Api/';

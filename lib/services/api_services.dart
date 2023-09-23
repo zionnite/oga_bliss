@@ -141,6 +141,7 @@ class ApiServices {
   static const String _get_product_promoting = 'get_product_promoting';
   static const String _get_link_activity = 'get_link_activity';
   static const String _upload_multi_image = 'upload_multi_image';
+  static const String _upload_property_document = 'upload_property_document';
 
   static Future getAllProducts(var page_num, var userId) async {
     try {
@@ -866,7 +867,7 @@ class ApiServices {
     }
   }
 
-  static Future<bool> addProduct({
+  static Future<bool?> addProduct({
     required String propsName,
     required String props_purpose,
     required String props_type,
@@ -879,162 +880,299 @@ class ApiServices {
     required String propsPrice,
     required String propsDesc,
     required String propsYearBuilt,
-    required String props_mode,
+    // required String props_mode,
     required String propsYoutubeId,
-    required bool air_condition,
-    required bool balcony,
-    required bool bedding,
-    required bool cable_tv,
-    required bool cleaning_after_exist,
-    required bool coffee_pot,
-    required bool computer,
-    required bool cot,
-    required bool dishwasher,
-    required bool dvd,
-    required bool fan,
-    required bool fridge,
-    required bool grill,
-    required bool hairdryer,
-    required bool heater,
-    required bool hi_fi,
-    required bool internet,
-    required bool iron,
-    required bool juicer,
-    required bool lift,
-    required bool microwave,
-    required bool gym,
-    required bool fireplace,
-    required bool hot_tub,
+    // required bool air_condition,
+    // required bool balcony,
+    // required bool bedding,
+    // required bool cable_tv,
+    // required bool cleaning_after_exist,
+    // required bool coffee_pot,
+    // required bool computer,
+    // required bool cot,
+    // required bool dishwasher,
+    // required bool dvd,
+    // required bool fan,
+    // required bool fridge,
+    // required bool grill,
+    // required bool hairdryer,
+    // required bool heater,
+    // required bool hi_fi,
+    // required bool internet,
+    // required bool iron,
+    // required bool juicer,
+    // required bool lift,
+    // required bool microwave,
+    // required bool gym,
+    // required bool fireplace,
+    // required bool hot_tub,
     required String propsCondition,
     required String propsCautionFee,
     required String selectedPref,
     //required File image,
+    required List<File> image,
     //
-    required String shopping,
-    required String hospital,
-    required String petrol,
-    required String airport,
-    required String church,
-    required String mosque,
-    required String school,
+    // required String shopping,
+    // required String hospital,
+    // required String petrol,
+    // required String airport,
+    // required String church,
+    // required String mosque,
+    // required String school,
     //
-    required String crime,
-    required String traffic,
-    required String pollution,
-    required String education,
-    required String health,
+    // required String crime,
+    // required String traffic,
+    // required String pollution,
+    // required String education,
+    // required String health,
 
     //
-    // required String docName,
-    // required PlatformFile docFile,
+    required String? docName,
+    required PlatformFile? docFile,
+    required String? docName_2,
+    required PlatformFile? docFile_2,
+    required String? docName_3,
+    required PlatformFile? docFile_3,
+    required String? docName_4,
+    required PlatformFile? docFile_4,
     required String ownerStatus,
     required String ownerName,
     required String ownerPhone,
     required String ownerEmail,
     required String slightNegotiate,
     required String user_id,
+    List? docFiles,
   }) async {
-    String? newMode;
-    if (props_mode == 'propertyModeEnum.New') {
-      newMode = 'New';
-    } else if (props_mode == 'propertyModeEnum.Furnished') {
-      newMode = 'Furnished';
-    } else {
-      newMode = 'Serviced';
-    }
-
     try {
       final uri = Uri.parse('$_mybaseUrl$_add_product/$user_id');
-      var request = http.MultipartRequest('POST', uri);
-      request.fields['propsName'] = propsName;
-      request.fields['props_purpose'] = props_purpose;
-      request.fields['props_type'] = props_type;
-      request.fields['sub_props_type'] = sub_props_type;
-      request.fields['propsBed'] = propsBed;
-      request.fields['propsBath'] = propsBath;
-      request.fields['propsToilet'] = propsToilet;
-      request.fields['state_id'] = state_id;
-      request.fields['area_id'] = area_id;
-      request.fields['propsPrice'] = propsPrice;
-      request.fields['propsDesc'] = propsDesc;
-      request.fields['propsYearBuilt'] = propsYearBuilt;
-      request.fields['props_mode'] = newMode;
-      request.fields['propsYoutubeId'] = propsYoutubeId;
-      request.fields['air_condition'] = air_condition.toString();
-      request.fields['balcony'] = balcony.toString();
-      request.fields['bedding'] = bedding.toString();
-      request.fields['cable_tv'] = cable_tv.toString();
-      request.fields['cleaning_after_exist'] = cleaning_after_exist.toString();
-      request.fields['coffee_pot'] = coffee_pot.toString();
-      request.fields['computer'] = computer.toString();
-      request.fields['cot'] = cot.toString();
-      request.fields['dishwasher'] = dishwasher.toString();
-      request.fields['dvd'] = dvd.toString();
-      request.fields['fan'] = fan.toString();
-      request.fields['fridge'] = fridge.toString();
-      request.fields['grill'] = grill.toString();
-      request.fields['hairdryer'] = hairdryer.toString();
-      request.fields['heater'] = heater.toString();
-      request.fields['hi_fi'] = hi_fi.toString();
-      request.fields['internet'] = internet.toString();
-      request.fields['iron'] = iron.toString();
-      request.fields['juicer'] = juicer.toString();
-      request.fields['lift'] = lift.toString();
-      request.fields['microwave'] = microwave.toString();
-      request.fields['gym'] = gym.toString();
-      request.fields['fireplace'] = fireplace.toString();
-      request.fields['hot_tub'] = hot_tub.toString();
-      request.fields['propsCondition'] = propsCondition;
-      request.fields['propsCautionFee'] = propsCautionFee;
-      request.fields['selectedPref'] = selectedPref;
-      //
-      request.fields['shopping_mall'] = shopping.toString();
-      request.fields['hospital'] = hospital.toString();
-      request.fields['petrol_pump'] = petrol.toString();
-      request.fields['airport'] = airport.toString();
-      request.fields['church'] = church.toString();
-      request.fields['mosque'] = mosque.toString();
-      request.fields['school'] = school.toString();
 
-      //
-      request.fields['crime'] = crime.toString();
-      request.fields['traffic'] = traffic.toString();
-      request.fields['pollution'] = pollution.toString();
-      request.fields['education'] = education.toString();
-      request.fields['health'] = health.toString();
-      //
-      //request.fields['doc_name'] = docName.toString();
+      var response = await http.post(uri, body: {
+        'propsName': propsName,
+        'props_purpose': props_purpose,
+        'props_type': props_type,
+        'sub_props_type': sub_props_type,
+        'propsBed': propsBed,
+        'propsBath': propsBath,
+        'propsToilet': propsToilet,
+        'state_id': state_id,
+        'area_id': area_id,
+        'propsPrice': propsPrice,
+        'propsDesc': propsDesc,
+        'propsYearBuilt': propsYearBuilt,
+        'propsYoutubeId': propsYoutubeId,
+        'propsCondition': propsCondition,
+        'propsCautionFee': propsCautionFee,
+        'selectedPref': selectedPref,
+        'owner_status': ownerStatus.toString(),
+        'owner_name': ownerName.toString(),
+        'owner_phone': ownerPhone.toString(),
+        'owner_email': ownerEmail.toString(),
+        'slight_negotiate': slightNegotiate.toString(),
+      });
+      if (response.statusCode == 200) {
+        var body = response.body;
 
-      request.fields['owner_status'] = ownerStatus.toString();
-      request.fields['owner_name'] = ownerName.toString();
-      request.fields['owner_phone'] = ownerPhone.toString();
-      request.fields['owner_email'] = ownerEmail.toString();
-      request.fields['slight_negotiate'] = slightNegotiate.toString();
+        final j = json.decode(body) as Map<String, dynamic>;
+        bool status = j['status'];
 
-      // var productImage =
-      //     await http.MultipartFile.fromPath('property_image', image.path);
-      // var productDoc =
-      //     await http.MultipartFile.fromPath('doc_file', docFile.path!);
-      // request.files.add(productImage);
-      // request.files.add(productDoc);
+        if (status == true) {
+          var propsId = j['prod_id'];
+          if (image.isNotEmpty) {
+            final uploadProps = await uploadMultiImageTwo(
+                userId: user_id, propsId: propsId, imgFiles: image);
 
-      var respond = await request.send();
+            if (uploadProps) {
+              //upload images
+              if (docFile != null) {
+                var upload = await uploadPropertyDocument(
+                    userId: user_id,
+                    propsId: propsId,
+                    docName: docName!,
+                    file: docFile!);
+                if (upload == false) {
+                  // showSnackBar(
+                  //   title: 'Oops!',
+                  //   msg: 'Document 1 could not be uploaded',
+                  //   backgroundColor: Colors.red,
+                  // );
+                }
+              }
+              if (docFile_2 != null) {
+                var upload = await uploadPropertyDocument(
+                    userId: user_id,
+                    propsId: propsId,
+                    docName: docName_2!,
+                    file: docFile_2!);
+                if (upload == false) {
+                  // showSnackBar(
+                  //   title: 'Oops!',
+                  //   msg: 'Document 2 could not be uploaded',
+                  //   backgroundColor: Colors.red,
+                  // );
+                }
+              }
+              if (docFile_3 != null) {
+                var upload = await uploadPropertyDocument(
+                    userId: user_id,
+                    propsId: propsId,
+                    docName: docName_3!,
+                    file: docFile_3!);
+                if (upload == false) {
+                  // showSnackBar(
+                  //   title: 'Oops!',
+                  //   msg: 'Document 3 could not be uploaded',
+                  //   backgroundColor: Colors.red,
+                  // );
+                }
+              }
+              if (docFile_4 != null) {
+                var upload = await uploadPropertyDocument(
+                    userId: user_id,
+                    propsId: propsId,
+                    docName: docName_4!,
+                    file: docFile_4!);
 
-      if (respond.statusCode == 200) {
-        // respond.stream.transform(utf8.decoder).listen((value) {
-        //   final j = json.decode(value) as Map<String, dynamic>;
-        //   var status = j['status'];
-        //
-        //   return status;
-        // });
-        return true;
+                if (upload == false) {
+                  // showSnackBar(
+                  //   title: 'Oops!',
+                  //   msg: 'Document 4 could not be uploaded',
+                  //   backgroundColor: Colors.red,
+                  // );
+                }
+              }
+
+              return true;
+            }
+            if (docFile != null) {
+              var upload = await uploadPropertyDocument(
+                  userId: user_id,
+                  propsId: propsId,
+                  docName: docName!,
+                  file: docFile!);
+              if (upload == false) {
+                // showSnackBar(
+                //   title: 'Oops!',
+                //   msg: 'Document 1 could not be uploaded',
+                //   backgroundColor: Colors.red,
+                // );
+              }
+            }
+            if (docFile_2 != null) {
+              var upload = await uploadPropertyDocument(
+                  userId: user_id,
+                  propsId: propsId,
+                  docName: docName_2!,
+                  file: docFile_2!);
+              if (upload == false) {
+                // showSnackBar(
+                //   title: 'Oops!',
+                //   msg: 'Document 2 could not be uploaded',
+                //   backgroundColor: Colors.red,
+                // );
+              }
+            }
+            if (docFile_3 != null) {
+              var upload = await uploadPropertyDocument(
+                  userId: user_id,
+                  propsId: propsId,
+                  docName: docName_3!,
+                  file: docFile_3!);
+              if (upload == false) {
+                // showSnackBar(
+                //   title: 'Oops!',
+                //   msg: 'Document 3 could not be uploaded',
+                //   backgroundColor: Colors.red,
+                // );
+              }
+            }
+            if (docFile_4 != null) {
+              var upload = await uploadPropertyDocument(
+                  userId: user_id,
+                  propsId: propsId,
+                  docName: docName_4!,
+                  file: docFile_4!);
+
+              if (upload == false) {
+                // showSnackBar(
+                //   title: 'Oops!',
+                //   msg: 'Document 4 could not be uploaded',
+                //   backgroundColor: Colors.red,
+                // );
+              }
+            }
+
+            return false;
+          }
+
+          if (docFile != null) {
+            var upload = await uploadPropertyDocument(
+                userId: user_id,
+                propsId: propsId,
+                docName: docName!,
+                file: docFile!);
+            if (upload == false) {
+              // showSnackBar(
+              //   title: 'Oops!',
+              //   msg: 'Document 1 could not be uploaded',
+              //   backgroundColor: Colors.red,
+              // );
+            }
+          }
+          if (docFile_2 != null) {
+            var upload = await uploadPropertyDocument(
+                userId: user_id,
+                propsId: propsId,
+                docName: docName_2!,
+                file: docFile_2!);
+            if (upload == false) {
+              // showSnackBar(
+              //   title: 'Oops!',
+              //   msg: 'Document 2 could not be uploaded',
+              //   backgroundColor: Colors.red,
+              // );
+            }
+          }
+          if (docFile_3 != null) {
+            var upload = await uploadPropertyDocument(
+                userId: user_id,
+                propsId: propsId,
+                docName: docName_3!,
+                file: docFile_3!);
+            if (upload == false) {
+              // showSnackBar(
+              //   title: 'Oops!',
+              //   msg: 'Document 3 could not be uploaded',
+              //   backgroundColor: Colors.red,
+              // );
+            }
+          }
+          if (docFile_4 != null) {
+            var upload = await uploadPropertyDocument(
+                userId: user_id,
+                propsId: propsId,
+                docName: docName_4!,
+                file: docFile_4!);
+
+            if (upload == false) {
+              // showSnackBar(
+              //   title: 'Oops!',
+              //   msg: 'Document 4 could not be uploaded',
+              //   backgroundColor: Colors.red,
+              // );
+            }
+          }
+
+          if (docFiles!.isNotEmpty) {}
+
+          return true;
+        }
+        return status;
       } else {
-        showSnackBar(
+        return showSnackBar(
           title: 'Oops!',
           msg: 'could not connect to server',
           backgroundColor: Colors.red,
         );
-        return false;
       }
     } catch (ex) {
       print(ex.toString());
@@ -3648,15 +3786,15 @@ class ApiServices {
     }
   }
 
-  static Future uploadMultiImage(
-      {required String userId,
-      required String propsId,
-      required List<File> imgFiles,}) async {
+  static Future uploadMultiImage({
+    required String userId,
+    required String propsId,
+    required List<File> imgFiles,
+  }) async {
     List<MultipartFile> fileList = [];
     FormData formData = FormData();
     final String url = '$_mybaseUrl$_upload_multi_image/$userId/$propsId';
     for (final file in imgFiles) {
-
       String filePath = file.path;
       String fileName = file.path.split('/').last;
 
@@ -3687,6 +3825,41 @@ class ApiServices {
     } catch (e) {
       return false;
       // print('upload error ${e.toString()}');
+    }
+  }
+
+  static Future uploadMultiImageTwo({
+    required String userId,
+    required String propsId,
+    required List<File> imgFiles,
+  }) async {
+    List<MultipartFile> fileList = [];
+    FormData formData = FormData();
+    final String url = '$_mybaseUrl$_upload_multi_image/$userId/$propsId';
+    for (final file in imgFiles) {
+      String filePath = file.path;
+      String fileName = file.path.split('/').last;
+
+      formData.files.addAll([
+        MapEntry("image_file[]",
+            await MultipartFile.fromFile(filePath, filename: fileName)),
+      ]);
+    }
+
+    try {
+      final dio = Dio();
+      final response = await dio.post(url, data: formData);
+
+      var body = response.data;
+      final j = json.decode(body) as Map<String, dynamic>;
+      String status = j['status'];
+
+      if (status == 'success') {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 
@@ -3732,6 +3905,81 @@ class ApiServices {
         // return false;
         print('upload error ${e.toString()}');
       }
+    }
+  }
+
+  static Future uploadPropertyDocument({
+    required String userId,
+    required String propsId,
+    required String docName,
+    required PlatformFile file,
+  }) async {
+    print('Image uploaded started');
+
+    final String url = '$_mybaseUrl$_upload_property_document/$userId/$propsId';
+
+    // ======
+    String filePath = file.path!;
+    String fileName = file.path!.split('/').last;
+
+    print('file name ${fileName}');
+
+    try {
+      FormData formData = FormData.fromMap({
+        "doc_file": await MultipartFile.fromFile(filePath, filename: fileName),
+        "doc_name": docName,
+      });
+      final dio = Dio();
+      final response = await dio.post(url, data: formData);
+
+      var body = response.data;
+      print('image body ${body}');
+      final j = json.decode(body) as Map<String, dynamic>;
+      bool status = j['status'];
+
+      if (status == true) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      // return false;
+      print('upload error ${e.toString()}');
+    }
+  }
+
+  static Future uploadMultiPropsDocTwo({
+    required String userId,
+    required String propsId,
+    required List imgFiles,
+  }) async {
+    List<MultipartFile> fileList = [];
+    FormData formData = FormData();
+    final String url = '$_mybaseUrl$_upload_multi_image/$userId/$propsId';
+    for (final file in imgFiles) {
+      String filePath = file.path;
+      String fileName = file.path.split('/').last;
+
+      formData.files.addAll([
+        MapEntry("image_file[]",
+            await MultipartFile.fromFile(filePath, filename: fileName)),
+      ]);
+    }
+
+    try {
+      final dio = Dio();
+      final response = await dio.post(url, data: formData);
+
+      var body = response.data;
+      final j = json.decode(body) as Map<String, dynamic>;
+      String status = j['status'];
+
+      if (status == 'success') {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 }

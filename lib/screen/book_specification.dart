@@ -31,7 +31,7 @@ class _BookSpecificationState extends State<BookSpecification> {
         body: SingleChildScrollView(
       child: Column(
         children: [
-          const PropertyAppBar(title: 'Book Inspection'),
+          const PropertyAppBar(title: 'Book Specification'),
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(

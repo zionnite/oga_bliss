@@ -302,53 +302,59 @@ class PropertyController extends GetxController {
     required String propsPrice,
     required String propsDesc,
     required String propsYearBuilt,
-    required String props_mode,
+    // required String props_mode,
     required String propsYoutubeId,
-    required bool air_condition,
-    required bool balcony,
-    required bool bedding,
-    required bool cable_tv,
-    required bool cleaning_after_exist,
-    required bool coffee_pot,
-    required bool computer,
-    required bool cot,
-    required bool dishwasher,
-    required bool dvd,
-    required bool fan,
-    required bool fridge,
-    required bool grill,
-    required bool hairdryer,
-    required bool heater,
-    required bool hi_fi,
-    required bool internet,
-    required bool iron,
-    required bool juicer,
-    required bool lift,
-    required bool microwave,
-    required bool gym,
-    required bool fireplace,
-    required bool hot_tub,
+    // required bool air_condition,
+    // required bool balcony,
+    // required bool bedding,
+    // required bool cable_tv,
+    // required bool cleaning_after_exist,
+    // required bool coffee_pot,
+    // required bool computer,
+    // required bool cot,
+    // required bool dishwasher,
+    // required bool dvd,
+    // required bool fan,
+    // required bool fridge,
+    // required bool grill,
+    // required bool hairdryer,
+    // required bool heater,
+    // required bool hi_fi,
+    // required bool internet,
+    // required bool iron,
+    // required bool juicer,
+    // required bool lift,
+    // required bool microwave,
+    // required bool gym,
+    // required bool fireplace,
+    // required bool hot_tub,
     required String propsCondition,
     required String propsCautionFee,
     required String selectedPref,
-    //required File image,
+    required List<File> image,
     //
-    required String shopping,
-    required String hospital,
-    required String petrol,
-    required String airport,
-    required String church,
-    required String mosque,
-    required String school,
+    // required String shopping,
+    // required String hospital,
+    // required String petrol,
+    // required String airport,
+    // required String church,
+    // required String mosque,
+    // required String school,
     //
-    required String crime,
-    required String traffic,
-    required String pollution,
-    required String education,
-    required String health,
+    // required String crime,
+    // required String traffic,
+    // required String pollution,
+    // required String education,
+    // required String health,
     //
-    // required String docName,
-    // required PlatformFile docFile,
+    required String? docName,
+    required PlatformFile? docFile,
+    required String? docName_2,
+    required PlatformFile? docFile_2,
+    required String? docName_3,
+    required PlatformFile? docFile_3,
+    required String? docName_4,
+    required PlatformFile? docFile_4,
     required String ownerStatus,
     required String ownerName,
     required String ownerPhone,
@@ -356,7 +362,30 @@ class PropertyController extends GetxController {
     required String slightNegotiate,
     required String user_id,
   }) async {
-    bool status = await ApiServices.addProduct(
+    List docFiles = [];
+    if (docFile != null) {
+      docFiles.add({
+        'docName': docName,
+        'docFile': docFile,
+      });
+    } else if (docFile_2 != null) {
+      docFiles.add({
+        'docName': docName_2,
+        'docFile': docFile_2,
+      });
+    } else if (docFile_3 != null) {
+      docFiles.add({
+        'docName': docName_3,
+        'docFile': docFile_3,
+      });
+    } else if (docFile_4 != null) {
+      docFiles.add({
+        'docName': docName_4,
+        'docFile': docFile_4,
+      });
+    }
+
+    bool? status = await ApiServices.addProduct(
       propsName: propsName,
       props_purpose: props_purpose,
       props_type: props_type,
@@ -369,73 +398,90 @@ class PropertyController extends GetxController {
       propsPrice: propsPrice,
       propsDesc: propsDesc,
       propsYearBuilt: propsYearBuilt,
-      props_mode: props_mode,
+      // props_mode: props_mode,
       propsYoutubeId: propsYoutubeId,
-      air_condition: air_condition,
-      balcony: balcony,
-      bedding: bedding,
-      cable_tv: cable_tv,
-      cleaning_after_exist: cleaning_after_exist,
-      coffee_pot: coffee_pot,
-      computer: computer,
-      cot: cot,
-      dishwasher: dishwasher,
-      dvd: dvd,
-      fan: fan,
-      fridge: fridge,
-      grill: grill,
-      hairdryer: hairdryer,
-      heater: heater,
-      hi_fi: hi_fi,
-      internet: internet,
-      iron: iron,
-      juicer: juicer,
-      lift: lift,
-      microwave: microwave,
-      gym: gym,
-      fireplace: fireplace,
-      hot_tub: hot_tub,
+      // air_condition: air_condition,
+      // balcony: balcony,
+      // bedding: bedding,
+      // cable_tv: cable_tv,
+      // cleaning_after_exist: cleaning_after_exist,
+      // coffee_pot: coffee_pot,
+      // computer: computer,
+      // cot: cot,
+      // dishwasher: dishwasher,
+      // dvd: dvd,
+      // fan: fan,
+      // fridge: fridge,
+      // grill: grill,
+      // hairdryer: hairdryer,
+      // heater: heater,
+      // hi_fi: hi_fi,
+      // internet: internet,
+      // iron: iron,
+      // juicer: juicer,
+      // lift: lift,
+      // microwave: microwave,
+      // gym: gym,
+      // fireplace: fireplace,
+      // hot_tub: hot_tub,
       propsCondition: propsCondition,
       propsCautionFee: propsCautionFee,
       selectedPref: selectedPref,
-      //image: image,
+      image: image,
       //
-      shopping: shopping,
-      hospital: hospital,
-      petrol: petrol,
-      airport: airport,
-      church: church,
-      mosque: mosque,
-      school: school,
+      // shopping: shopping,
+      // hospital: hospital,
+      // petrol: petrol,
+      // airport: airport,
+      // church: church,
+      // mosque: mosque,
+      // school: school,
       //
-      crime: crime,
-      traffic: traffic,
-      pollution: pollution,
-      education: education,
-      health: health,
+      // crime: crime,
+      // traffic: traffic,
+      // pollution: pollution,
+      // education: education,
+      // health: health,
       //
-      // docName: docName,
-      // docFile: docFile,
+      docName: docName!,
+      docFile: docFile,
+
+      docName_2: docName_2!,
+      docFile_2: docFile_2,
+
+      docName_3: docName_3!,
+      docFile_3: docFile_3,
+
+      docName_4: docName_4!,
+      docFile_4: docFile_4,
+
       ownerStatus: ownerStatus,
       ownerName: ownerName,
       ownerPhone: ownerPhone,
       ownerEmail: ownerEmail,
       slightNegotiate: slightNegotiate,
       user_id: user_id,
+      docFiles: docFiles,
     );
 
     bool statusType;
     String? msg;
-    if (status == true) {
-      msg = 'Product Created';
-      statusType = true;
-      showSnackBar(
-          title: 'Create Product', msg: msg, backgroundColor: Colors.blue);
-    } else {
+    if (status == false) {
       msg = 'Database Busy, Could not perform operation, Pls Try Again Later!';
       statusType = false;
       showSnackBar(
-          title: 'Create Product', msg: msg, backgroundColor: Colors.red);
+        title: 'Create Product',
+        msg: msg,
+        backgroundColor: Colors.red,
+      );
+    } else {
+      msg = 'Product Created';
+      statusType = true;
+      showSnackBar(
+        title: 'Create Product',
+        msg: msg,
+        backgroundColor: Colors.blue,
+      );
     }
 
     return statusType;

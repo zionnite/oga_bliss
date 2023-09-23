@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:currency_symbols/currency_symbols.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,9 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
 
   //
   TextEditingController docFileNameController = TextEditingController();
+  TextEditingController docFileNameController_2 = TextEditingController();
+  TextEditingController docFileNameController_3 = TextEditingController();
+  TextEditingController docFileNameController_4 = TextEditingController();
   TextEditingController owenerNameController = TextEditingController();
   TextEditingController owenerPhoneController = TextEditingController();
   TextEditingController owenerEmailController = TextEditingController();
@@ -172,22 +176,34 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
   List<String> specialPref = [];
   String selectedPref = '';
 
-  File? _image;
+  List<File> _image = [];
+
+  // Future _pickImage(ImageSource source) async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: source);
+  //     if (image == null) return;
+  //     File? img = File(image.path);
+  //     //img = await _cropImage(imageFile: img);
+  //     setState(() {
+  //       _image = img;
+  //       // Navigator.of(context).pop();
+  //     });
+  //   } on PlatformException catch (e) {
+  //     // print(e);
+  //     // Navigator.of(context).pop();
+  //   }
+  // }
 
   Future _pickImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
-      File? img = File(image.path);
-      //img = await _cropImage(imageFile: img);
-      setState(() {
-        _image = img;
-        // Navigator.of(context).pop();
-      });
-    } on PlatformException catch (e) {
-      // print(e);
-      // Navigator.of(context).pop();
+    final ImagePicker picker = ImagePicker();
+    final imageFiles = await picker.pickMultiImage();
+    if (imageFiles.isNotEmpty) {
+      for (final image in imageFiles) {
+        _image.add(File(image.path));
+      }
     }
+    setState(() {});
+    return _image;
   }
 
   PlatformFile? _doc_file;
@@ -203,6 +219,57 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       setState(() {
         _doc_file = result.files.first;
         _doc_ext = _doc_file!.extension;
+      });
+    } on PlatformException catch (e) {}
+  }
+
+  PlatformFile? _doc_file_2;
+  String? _doc_ext_2;
+  Future _getDocFile_2() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
+      );
+      if (result == null) return;
+
+      setState(() {
+        _doc_file_2 = result.files.first;
+        _doc_ext_2 = _doc_file_2!.extension;
+      });
+    } on PlatformException catch (e) {}
+  }
+
+  PlatformFile? _doc_file_3;
+  String? _doc_ext_3;
+  Future _getDocFile_3() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
+      );
+      if (result == null) return;
+
+      setState(() {
+        _doc_file_3 = result.files.first;
+        _doc_ext_3 = _doc_file_3!.extension;
+      });
+    } on PlatformException catch (e) {}
+  }
+
+  PlatformFile? _doc_file_4;
+  String? _doc_ext_4;
+  Future _getDocFile_4() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
+      );
+      if (result == null) return;
+
+      setState(() {
+        _doc_file_4 = result.files.first;
+        _doc_ext_4 = _doc_file_4!.extension;
       });
     } on PlatformException catch (e) {}
   }
@@ -251,17 +318,11 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         Step(
           state: _activeStepIndex <= 0 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 0,
-          title: Column(
+          title: const Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Basic Information'),
-              Text(
-                'all fields are required & must be filled out'.toUpperCase(),
-                style: const TextStyle(
-                  color: Colors.red,
-                ),
-              ),
+              Text('Basic Information'),
             ],
           ),
           content: Container(
@@ -548,752 +609,1262 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
                     });
                   },
                 ),
-              ],
-            ),
-          ),
-        ),
-        Step(
-            state:
-                _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
-            isActive: _activeStepIndex >= 1,
-            title: const Text('Property  Mode'),
-            content: Container(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text('What is the Property Mode?'),
-                      MyRadioBtnField(
-                        title: '${propertyModeEnum.New.name} Property',
-                        value: propertyModeEnum.New,
-                        selectedProperty: _props_mode,
-                        onChanged: (val) {
-                          setState(() {
-                            _props_mode = val;
-                          });
-                        },
-                      ),
-                      MyRadioBtnField(
-                        title: '${propertyModeEnum.Furnished.name} Property',
-                        value: propertyModeEnum.Furnished,
-                        selectedProperty: _props_mode,
-                        onChanged: (val) {
-                          setState(() {
-                            _props_mode = val;
-                          });
-                        },
-                      ),
-                      MyRadioBtnField(
-                        title: '${propertyModeEnum.Serviced.name} Property',
-                        value: propertyModeEnum.Serviced,
-                        selectedProperty: _props_mode,
-                        onChanged: (val) {
-                          setState(() {
-                            _props_mode = val;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  MyTextField(
-                    myTextFormController: propsYoutubeId,
-                    fieldName: 'Youtube Video Id',
-                  ),
-                ],
-              ),
-            )),
-        Step(
-            state:
-                _activeStepIndex <= 2 ? StepState.editing : StepState.complete,
-            isActive: _activeStepIndex >= 2,
-            title: const Text('Amenities'),
-            content: Container(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Text(
-                      'Kindly select the type that applies to your property'),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: air_condition,
-                        onChanged: (value) {
-                          setState(() {
-                            air_condition = value;
-                          });
-                        },
-                      ),
-                      const Text('Air Condition'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: balcony,
-                        onChanged: (value) {
-                          setState(() {
-                            balcony = value;
-                          });
-                        },
-                      ),
-                      const Text('Balcony'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: bedding,
-                        onChanged: (value) {
-                          setState(() {
-                            bedding = value;
-                          });
-                        },
-                      ),
-                      const Text('Bedding'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: cable_tv,
-                        onChanged: (value) {
-                          setState(() {
-                            cable_tv = value;
-                          });
-                        },
-                      ),
-                      const Text('Cable Tv'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: cleaning_after_exist,
-                        onChanged: (value) {
-                          setState(() {
-                            cleaning_after_exist = value;
-                          });
-                        },
-                      ),
-                      const Text('Cleaning After Exist'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: coffee_pot,
-                        onChanged: (value) {
-                          setState(() {
-                            coffee_pot = value;
-                          });
-                        },
-                      ),
-                      const Text('Coffee Pot'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: computer,
-                        onChanged: (value) {
-                          setState(() {
-                            computer = value;
-                          });
-                        },
-                      ),
-                      const Text('Computer'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: cot,
-                        onChanged: (value) {
-                          setState(() {
-                            cot = value;
-                          });
-                        },
-                      ),
-                      const Text('Cot'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: dishwasher,
-                        onChanged: (value) {
-                          setState(() {
-                            dishwasher = value;
-                          });
-                        },
-                      ),
-                      const Text('Dish Washer'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: dvd,
-                        onChanged: (value) {
-                          setState(() {
-                            dvd = value;
-                          });
-                        },
-                      ),
-                      const Text('DVD'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: fridge,
-                        onChanged: (value) {
-                          setState(() {
-                            fridge = value;
-                          });
-                        },
-                      ),
-                      const Text('Fridge'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: grill,
-                        onChanged: (value) {
-                          setState(() {
-                            grill = value;
-                          });
-                        },
-                      ),
-                      const Text('Grill'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: hairdryer,
-                        onChanged: (value) {
-                          setState(() {
-                            hairdryer = value;
-                          });
-                        },
-                      ),
-                      const Text('Hair Dryer'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: heater,
-                        onChanged: (value) {
-                          setState(() {
-                            heater = value;
-                          });
-                        },
-                      ),
-                      const Text('Heater'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: hi_fi,
-                        onChanged: (value) {
-                          setState(() {
-                            hi_fi = value;
-                          });
-                        },
-                      ),
-                      const Text('Hi-Fi'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: internet,
-                        onChanged: (value) {
-                          setState(() {
-                            internet = value;
-                          });
-                        },
-                      ),
-                      const Text('Internet'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: iron,
-                        onChanged: (value) {
-                          setState(() {
-                            iron = value;
-                          });
-                        },
-                      ),
-                      const Text('Iron'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: juicer,
-                        onChanged: (value) {
-                          setState(() {
-                            juicer = value;
-                          });
-                        },
-                      ),
-                      const Text('Juicer'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: lift,
-                        onChanged: (value) {
-                          setState(() {
-                            lift = value;
-                          });
-                        },
-                      ),
-                      const Text('Lift'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: microwave,
-                        onChanged: (value) {
-                          setState(() {
-                            microwave = value;
-                          });
-                        },
-                      ),
-                      const Text('Microwave'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: gym,
-                        onChanged: (value) {
-                          setState(() {
-                            gym = value;
-                          });
-                        },
-                      ),
-                      const Text('Gym'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: fireplace,
-                        onChanged: (value) {
-                          setState(() {
-                            fireplace = value;
-                          });
-                        },
-                      ),
-                      const Text('Fireplace'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      MySlideCheckBox(
-                        isSwitched: hot_tub,
-                        onChanged: (value) {
-                          setState(() {
-                            hot_tub = value;
-                          });
-                        },
-                      ),
-                      const Text('Hot Tub'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-            )),
-        Step(
-          state: _activeStepIndex <= 3 ? StepState.editing : StepState.complete,
-          isActive: _activeStepIndex >= 3,
-          title: const Text('Property Extra Details'),
-          content: Container(
-            child: Column(
-              children: [
                 const SizedBox(
                   height: 8,
                 ),
                 MyTextField(
-                  myTextFormController: propsCondition,
-                  fieldName: 'What are your conditions',
+                  myTextFormController: propsYoutubeId,
+                  fieldName: 'Youtube Video Id',
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // MyTextField(
-                //   myTextFormController: propsCautionFee,
-                //   fieldName: 'Caution / Damage Fee',
-                // ),
-                MyMoneyField(
-                  myTextFormController: propsCautionFee,
-                  fieldName: 'Caution / Damage Fee',
-                  prefix: Icons.attach_money,
-                  onChange: (string) {
-                    if (propsCautionFee.text.isNotEmpty) {
-                      string = '${_formatNumber(string.replaceAll(',', ''))}';
-                      propsCautionFee.value = TextEditingValue(
-                        text: string,
-                        selection:
-                            TextSelection.collapsed(offset: string.length),
-                      );
-                    } else {
-                      setState(() {
-                        string = '0';
-                      });
-                    }
-                    setState(() {
-                      disCautionFee = string;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                FlutterInputChips(
-                  initialValue: const [],
-                  // maxChips: 5,
-                  onChanged: (v) {
-                    setState(() {
-                      specialPref = v;
-                      selectedPref = specialPref.join(',');
-                    });
-                  },
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  inputDecoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Special Preference",
-                  ),
-                  chipTextStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  chipSpacing: 8,
-                  chipDeleteIconColor: Colors.white,
-                  chipBackgroundColor: Colors.blue,
-                ),
-                const Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'use comma (,) to enter list of preference,',
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                const Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'or type \'none,\' if there is no preference ',
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Step(
-          state: _activeStepIndex <= 4 ? StepState.editing : StepState.complete,
-          isActive: _activeStepIndex >= 4,
-          title: const Text('Distance to these Facilities'),
-          content: Container(
-            child: Column(
-              children: [
                 const SizedBox(
                   height: 8,
                 ),
-                MyTextField(
-                  myTextFormController: shoppingController,
-                  fieldName: 'Shopping Mall',
-                  hintName: 'e.g 5km Or 20min',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextField(
-                  myTextFormController: hospitalController,
-                  fieldName: 'Hospital',
-                  hintName: 'e.g 5km Or 20min',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextField(
-                  myTextFormController: schoolController,
-                  fieldName: 'School',
-                  hintName: 'e.g 5km Or 20min',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextField(
-                  myTextFormController: petrolController,
-                  fieldName: 'Petrol Pump',
-                  hintName: 'e.g 5km Or 20min',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextField(
-                  myTextFormController: airportController,
-                  fieldName: 'Airport',
-                  hintName: 'e.g 5km Or 20min',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextField(
-                  myTextFormController: churchController,
-                  fieldName: 'Church',
-                  hintName: 'e.g 5km Or 20min',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyTextField(
-                  myTextFormController: mosqueController,
-                  fieldName: 'Mosque',
-                  hintName: 'e.g 5km Or 20min',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+
+                (props_purpose == 'rent')
+                    ? Container(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            MyTextField(
+                              myTextFormController: propsCondition,
+                              fieldName: 'What are your conditions',
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            // MyTextField(
+                            //   myTextFormController: propsCautionFee,
+                            //   fieldName: 'Caution / Damage Fee',
+                            // ),
+                            MyMoneyField(
+                              myTextFormController: propsCautionFee,
+                              fieldName: 'Caution / Damage Fee',
+                              prefix: Icons.attach_money,
+                              onChange: (string) {
+                                if (propsCautionFee.text.isNotEmpty) {
+                                  string =
+                                      '${_formatNumber(string.replaceAll(',', ''))}';
+                                  propsCautionFee.value = TextEditingValue(
+                                    text: string,
+                                    selection: TextSelection.collapsed(
+                                        offset: string.length),
+                                  );
+                                } else {
+                                  setState(() {
+                                    string = '0';
+                                  });
+                                }
+                                setState(() {
+                                  disCautionFee = string;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            FlutterInputChips(
+                              initialValue: const [],
+                              // maxChips: 5,
+                              onChanged: (v) {
+                                setState(() {
+                                  specialPref = v;
+                                  selectedPref = specialPref.join(',');
+                                });
+                              },
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              inputDecoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Special Preference",
+                              ),
+                              chipTextStyle: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                              chipSpacing: 8,
+                              chipDeleteIconColor: Colors.white,
+                              chipBackgroundColor: Colors.blue,
+                            ),
+                            const Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                'use comma (,) to enter list of preference,',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                            const Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                'or type \'none,\' if there is no preference ',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           ),
         ),
-        Step(
-          state: _activeStepIndex <= 5 ? StepState.editing : StepState.complete,
-          isActive: _activeStepIndex >= 5,
-          title: const Text('Property Valuation'),
-          content: Container(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 8,
-                ),
-                MyNumField(
-                  myTextFormController: crimeController,
-                  fieldName: 'Crime',
-                  hintText: 'e.g 10%',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyNumField(
-                  myTextFormController: trafficController,
-                  fieldName: 'Traffic',
-                  hintText: 'e.g 60%',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyNumField(
-                  myTextFormController: pollutionController,
-                  fieldName: 'Pollution',
-                  hintText: 'e.g 10%',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyNumField(
-                  myTextFormController: educationController,
-                  fieldName: 'Education',
-                  hintText: 'e.g 80%',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                MyNumField(
-                  myTextFormController: healthController,
-                  fieldName: 'Health',
-                  hintText: 'e.g 90%',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
-        ),
+        // Step(
+        //     state:
+        //         _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
+        //     isActive: _activeStepIndex >= 1,
+        //     title: const Text('Property  Mode'),
+        //     content: Container(
+        //       child: Column(
+        //         children: [
+        //           const SizedBox(
+        //             height: 8,
+        //           ),
+        //           Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             mainAxisAlignment: MainAxisAlignment.start,
+        //             children: [
+        //               const Text('What is the Property Mode?'),
+        //               MyRadioBtnField(
+        //                 title: '${propertyModeEnum.New.name} Property',
+        //                 value: propertyModeEnum.New,
+        //                 selectedProperty: _props_mode,
+        //                 onChanged: (val) {
+        //                   setState(() {
+        //                     _props_mode = val;
+        //                   });
+        //                 },
+        //               ),
+        //               MyRadioBtnField(
+        //                 title: '${propertyModeEnum.Furnished.name} Property',
+        //                 value: propertyModeEnum.Furnished,
+        //                 selectedProperty: _props_mode,
+        //                 onChanged: (val) {
+        //                   setState(() {
+        //                     _props_mode = val;
+        //                   });
+        //                 },
+        //               ),
+        //               MyRadioBtnField(
+        //                 title: '${propertyModeEnum.Serviced.name} Property',
+        //                 value: propertyModeEnum.Serviced,
+        //                 selectedProperty: _props_mode,
+        //                 onChanged: (val) {
+        //                   setState(() {
+        //                     _props_mode = val;
+        //                   });
+        //                 },
+        //               ),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 8,
+        //           ),
+        //           MyTextField(
+        //             myTextFormController: propsYoutubeId,
+        //             fieldName: 'Youtube Video Id',
+        //           ),
+        //         ],
+        //       ),
+        //     )),
+        // Step(
+        //     state:
+        //         _activeStepIndex <= 2 ? StepState.editing : StepState.complete,
+        //     isActive: _activeStepIndex >= 2,
+        //     title: const Text('Amenities'),
+        //     content: Container(
+        //       child: Column(
+        //         children: [
+        //           const SizedBox(
+        //             height: 8,
+        //           ),
+        //           const Text(
+        //               'Kindly select the type that applies to your property'),
+        //           const SizedBox(
+        //             height: 15,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: air_condition,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     air_condition = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Air Condition'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: balcony,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     balcony = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Balcony'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: bedding,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     bedding = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Bedding'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: cable_tv,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     cable_tv = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Cable Tv'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: cleaning_after_exist,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     cleaning_after_exist = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Cleaning After Exist'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: coffee_pot,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     coffee_pot = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Coffee Pot'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: computer,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     computer = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Computer'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: cot,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     cot = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Cot'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: dishwasher,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     dishwasher = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Dish Washer'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: dvd,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     dvd = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('DVD'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: fridge,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     fridge = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Fridge'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: grill,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     grill = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Grill'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: hairdryer,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     hairdryer = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Hair Dryer'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: heater,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     heater = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Heater'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: hi_fi,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     hi_fi = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Hi-Fi'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: internet,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     internet = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Internet'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: iron,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     iron = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Iron'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: juicer,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     juicer = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Juicer'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: lift,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     lift = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Lift'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: microwave,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     microwave = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Microwave'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: gym,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     gym = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Gym'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: fireplace,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     fireplace = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Fireplace'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //           Row(
+        //             children: [
+        //               MySlideCheckBox(
+        //                 isSwitched: hot_tub,
+        //                 onChanged: (value) {
+        //                   setState(() {
+        //                     hot_tub = value;
+        //                   });
+        //                 },
+        //               ),
+        //               const Text('Hot Tub'),
+        //             ],
+        //           ),
+        //           const SizedBox(
+        //             height: 10,
+        //           ),
+        //         ],
+        //       ),
+        //     )),
 
         // Step(
-        //   state: _activeStepIndex <= 6 ? StepState.editing : StepState.complete,
-        //   isActive: _activeStepIndex >= 6,
-        //   title: const Text('Property Image'),
+        //   state: _activeStepIndex <= 3 ? StepState.editing : StepState.complete,
+        //   isActive: _activeStepIndex >= 3,
+        //   title: const Text('Property Extra Details'),
         //   content: Container(
         //     child: Column(
         //       children: [
         //         const SizedBox(
         //           height: 8,
         //         ),
-        //         InkWell(
-        //           onTap: () {
-        //             _pickImage(ImageSource.gallery);
+        //         MyTextField(
+        //           myTextFormController: propsCondition,
+        //           fieldName: 'What are your conditions',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         // MyTextField(
+        //         //   myTextFormController: propsCautionFee,
+        //         //   fieldName: 'Caution / Damage Fee',
+        //         // ),
+        //         MyMoneyField(
+        //           myTextFormController: propsCautionFee,
+        //           fieldName: 'Caution / Damage Fee',
+        //           prefix: Icons.attach_money,
+        //           onChange: (string) {
+        //             if (propsCautionFee.text.isNotEmpty) {
+        //               string = '${_formatNumber(string.replaceAll(',', ''))}';
+        //               propsCautionFee.value = TextEditingValue(
+        //                 text: string,
+        //                 selection:
+        //                     TextSelection.collapsed(offset: string.length),
+        //               );
+        //             } else {
+        //               setState(() {
+        //                 string = '0';
+        //               });
+        //             }
+        //             setState(() {
+        //               disCautionFee = string;
+        //             });
         //           },
-        //           child: Card(
-        //             child: Container(
-        //               padding: const EdgeInsets.only(top: 0),
-        //               width: double.infinity,
-        //               child: const Padding(
-        //                 padding: EdgeInsets.all(15.0),
-        //                 child: Row(
-        //                   crossAxisAlignment: CrossAxisAlignment.center,
-        //                   mainAxisAlignment: MainAxisAlignment.center,
-        //                   children: [
-        //                     Icon(
-        //                       Icons.image,
-        //                       color: Colors.blue,
-        //                     ),
-        //                     Text(
-        //                       'Select Image',
-        //                       textAlign: TextAlign.center,
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ),
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         FlutterInputChips(
+        //           initialValue: const [],
+        //           // maxChips: 5,
+        //           onChanged: (v) {
+        //             setState(() {
+        //               specialPref = v;
+        //               selectedPref = specialPref.join(',');
+        //             });
+        //           },
+        //           padding: const EdgeInsets.all(10),
+        //           decoration: BoxDecoration(
+        //             border: Border.all(color: Colors.grey),
+        //             borderRadius: BorderRadius.circular(3),
+        //           ),
+        //           inputDecoration: const InputDecoration(
+        //             border: InputBorder.none,
+        //             hintText: "Special Preference",
+        //           ),
+        //           chipTextStyle: const TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             color: Colors.white,
+        //           ),
+        //           chipSpacing: 8,
+        //           chipDeleteIconColor: Colors.white,
+        //           chipBackgroundColor: Colors.blue,
+        //         ),
+        //         const Align(
+        //           alignment: Alignment.bottomLeft,
+        //           child: Text(
+        //             'use comma (,) to enter list of preference,',
+        //             style: TextStyle(
+        //               color: Colors.red,
         //             ),
         //           ),
         //         ),
-        //         Center(
-        //           child: Container(
-        //             height: 200.0,
-        //             width: double.infinity,
-        //             decoration: BoxDecoration(
-        //               shape: BoxShape.rectangle,
-        //               color: Colors.grey.shade200,
+        //         const Align(
+        //           alignment: Alignment.bottomLeft,
+        //           child: Text(
+        //             'or type \'none,\' if there is no preference ',
+        //             style: TextStyle(
+        //               color: Colors.red,
         //             ),
-        //             child: Center(
-        //               child: _image == null
-        //                   ? const Text(
-        //                       'No image selected',
-        //                       style: TextStyle(fontSize: 20),
-        //                     )
-        //                   : Image(
-        //                       width: double.infinity,
-        //                       height: 200,
-        //                       image: FileImage(_image!),
-        //                     ),
-        //             ),
-        //           ),
-        //         ),
-        //         const Text(
-        //           'you can add more picture later to your property',
-        //           style: TextStyle(
-        //             color: Colors.red,
         //           ),
         //         ),
         //         const SizedBox(
-        //           height: 15,
+        //           height: 20,
         //         ),
         //       ],
         //     ),
         //   ),
         // ),
-        //
-        //
+        // Step(
+        //   state: _activeStepIndex <= 4 ? StepState.editing : StepState.complete,
+        //   isActive: _activeStepIndex >= 4,
+        //   title: const Text('Distance to these Facilities'),
+        //   content: Container(
+        //     child: Column(
+        //       children: [
+        //         const SizedBox(
+        //           height: 8,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: shoppingController,
+        //           fieldName: 'Shopping Mall',
+        //           hintName: 'e.g 5km Or 20min',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: hospitalController,
+        //           fieldName: 'Hospital',
+        //           hintName: 'e.g 5km Or 20min',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: schoolController,
+        //           fieldName: 'School',
+        //           hintName: 'e.g 5km Or 20min',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: petrolController,
+        //           fieldName: 'Petrol Pump',
+        //           hintName: 'e.g 5km Or 20min',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: airportController,
+        //           fieldName: 'Airport',
+        //           hintName: 'e.g 5km Or 20min',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: churchController,
+        //           fieldName: 'Church',
+        //           hintName: 'e.g 5km Or 20min',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyTextField(
+        //           myTextFormController: mosqueController,
+        //           fieldName: 'Mosque',
+        //           hintName: 'e.g 5km Or 20min',
+        //         ),
+        //         const SizedBox(
+        //           height: 20,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        // Step(
+        //   state: _activeStepIndex <= 5 ? StepState.editing : StepState.complete,
+        //   isActive: _activeStepIndex >= 5,
+        //   title: const Text('Property Valuation'),
+        //   content: Container(
+        //     child: Column(
+        //       children: [
+        //         const SizedBox(
+        //           height: 8,
+        //         ),
+        //         MyNumField(
+        //           myTextFormController: crimeController,
+        //           fieldName: 'Crime',
+        //           hintText: 'e.g 10%',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyNumField(
+        //           myTextFormController: trafficController,
+        //           fieldName: 'Traffic',
+        //           hintText: 'e.g 60%',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyNumField(
+        //           myTextFormController: pollutionController,
+        //           fieldName: 'Pollution',
+        //           hintText: 'e.g 10%',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyNumField(
+        //           myTextFormController: educationController,
+        //           fieldName: 'Education',
+        //           hintText: 'e.g 80%',
+        //         ),
+        //         const SizedBox(
+        //           height: 10,
+        //         ),
+        //         MyNumField(
+        //           myTextFormController: healthController,
+        //           fieldName: 'Health',
+        //           hintText: 'e.g 90%',
+        //         ),
+        //         const SizedBox(
+        //           height: 20,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+
+        Step(
+          state: _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 1,
+          title: const Text('Property Image'),
+          content: Container(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                InkWell(
+                  onTap: () {
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Card(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 0),
+                      width: double.infinity,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Upload Image',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                (_image.isNotEmpty)
+                    ? CarouselSlider(
+                        options: CarouselOptions(
+                          height: 300.0,
+                          enableInfiniteScroll: false,
+                        ),
+                        items: _image.map((disImages) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 5.0,
+                                ),
+                                // decoration: const BoxDecoration(
+                                //   color: Colors.amber,
+                                // ),
+                                child: Stack(
+                                  children: [
+                                    Image.file(
+                                      disImages,
+                                      fit: BoxFit.cover,
+                                      width: 400,
+                                      height: 300,
+                                    ),
+                                    Positioned(
+                                      right: 0,
+                                      child: InkWell(
+                                        onTap: () {
+                                          _image.remove(disImages);
+                                          setState(() {});
+                                        },
+                                        child: const Icon(
+                                          Icons.cancel,
+                                          size: 35,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
+                      )
+                    : Container(),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Step(
+          state: _activeStepIndex <= 2 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 2,
+          title: const Text('Property Document'),
+          content: Container(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                MyTextField(
+                  myTextFormController: docFileNameController,
+                  fieldName: 'Document Name 1',
+                  hintName: 'e.g C.F.O, Governor Permit,etc',
+                ),
+                InkWell(
+                  onTap: _getDocFile,
+                  child: Card(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 0),
+                      width: double.infinity,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Upload Document 1',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    height: (_doc_file != null) ? 200.0 : 0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: _doc_file == null
+                              ? const Text(
+                                  'No Document selected',
+                                  style: TextStyle(fontSize: 20),
+                                )
+                              : (_doc_ext == 'pdf')
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Image.asset(
+                                            'assets/images/pdf.png',
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        // Text(_doc_file!.name)
+                                      ],
+                                    )
+                                  : Image.file(
+                                      File(_doc_file!.path!),
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _doc_file = null;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.cancel,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+
+                //document 2
+                MyTextField(
+                  myTextFormController: docFileNameController_2,
+                  fieldName: 'Document Name 2',
+                  hintName: 'e.g C.F.O, Governor Permit,etc',
+                ),
+                InkWell(
+                  onTap: _getDocFile_2,
+                  child: Card(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 0),
+                      width: double.infinity,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Upload Document 2',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    height: (_doc_file_2 != null) ? 200.0 : 0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: _doc_file_2 == null
+                              ? const Text(
+                                  'No Document selected',
+                                  style: TextStyle(fontSize: 20),
+                                )
+                              : (_doc_ext_2 == 'pdf')
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Image.asset(
+                                            'assets/images/pdf.png',
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        // Text(_doc_file!.name)
+                                      ],
+                                    )
+                                  : Image.file(
+                                      File(_doc_file_2!.path!),
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _doc_file_2 = null;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.cancel,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+
+                //document 3
+                MyTextField(
+                  myTextFormController: docFileNameController_3,
+                  fieldName: 'Document Name 3',
+                  hintName: 'e.g C.F.O, Governor Permit,etc',
+                ),
+                InkWell(
+                  onTap: _getDocFile_3,
+                  child: Card(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 0),
+                      width: double.infinity,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Upload Document 3',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    height: (_doc_file_3 != null) ? 200.0 : 0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: _doc_file_3 == null
+                              ? const Text(
+                                  'No Document selected',
+                                  style: TextStyle(fontSize: 20),
+                                )
+                              : (_doc_ext_3 == 'pdf')
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Image.asset(
+                                            'assets/images/pdf.png',
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        // Text(_doc_file!.name)
+                                      ],
+                                    )
+                                  : Image.file(
+                                      File(_doc_file_3!.path!),
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _doc_file_3 = null;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.cancel,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+
+                //document 4
+                MyTextField(
+                  myTextFormController: docFileNameController_4,
+                  fieldName: 'Document Name 4',
+                  hintName: 'e.g C.F.O, Governor Permit,etc',
+                ),
+                InkWell(
+                  onTap: _getDocFile_4,
+                  child: Card(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 0),
+                      width: double.infinity,
+                      child: const Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: Colors.blue,
+                            ),
+                            Text(
+                              'Upload Document 4',
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    height: (_doc_file_4 != null) ? 200.0 : 0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: _doc_file_4 == null
+                              ? const Text(
+                                  'No Document selected',
+                                  style: TextStyle(fontSize: 20),
+                                )
+                              : (_doc_ext_4 == 'pdf')
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Image.asset(
+                                            'assets/images/pdf.png',
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        // Text(_doc_file!.name)
+                                      ],
+                                    )
+                                  : Image.file(
+                                      File(_doc_file_4!.path!),
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _doc_file_4 = null;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.cancel,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
+          ),
+        ),
+
         // Step(
         //   state: _activeStepIndex <= 7 ? StepState.editing : StepState.complete,
         //   isActive: _activeStepIndex >= 7,
@@ -1391,8 +1962,8 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         // ),
 
         Step(
-          state: _activeStepIndex <= 6 ? StepState.editing : StepState.complete,
-          isActive: _activeStepIndex >= 6,
+          state: _activeStepIndex <= 2 ? StepState.editing : StepState.complete,
+          isActive: _activeStepIndex >= 2,
           title: const Text('Property Ownership'),
           content: Container(
             child: Column(
@@ -1451,7 +2022,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
         ),
         Step(
           state: StepState.complete,
-          isActive: _activeStepIndex >= 7,
+          isActive: _activeStepIndex >= 3,
           title: const Text('Confirm'),
           content: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1473,7 +2044,7 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const PropertyAppBar(title: 'Add Property'),
+            const PropertyAppBar(title: 'Upload Property'),
             (isLoading)
                 ? Center(
                     child: Container(
@@ -1531,55 +2102,65 @@ class _AddPropertyPageState extends State<AddPropertyPage> {
             propsPrice: disAmount,
             propsDesc: propsDesc.text,
             propsYearBuilt: selectedYearBuilt ?? "",
-            props_mode: _props_mode.toString() ?? "",
+            // props_mode: _props_mode.toString() ?? "",
             propsYoutubeId: propsYoutubeId.text,
-            air_condition: air_condition,
-            balcony: balcony,
-            bedding: bedding,
-            cable_tv: cable_tv,
-            cleaning_after_exist: cleaning_after_exist,
-            coffee_pot: coffee_pot,
-            computer: computer,
-            cot: cot,
-            dishwasher: dishwasher,
-            dvd: dvd,
-            fan: fan,
-            fridge: fridge,
-            grill: grill,
-            hairdryer: hairdryer,
-            heater: heater,
-            hi_fi: hi_fi,
-            internet: internet,
-            iron: iron,
-            juicer: juicer,
-            lift: lift,
-            microwave: microwave,
-            gym: gym,
-            fireplace: fireplace,
-            hot_tub: hot_tub,
+            // air_condition: air_condition,
+            // balcony: balcony,
+            // bedding: bedding,
+            // cable_tv: cable_tv,
+            // cleaning_after_exist: cleaning_after_exist,
+            // coffee_pot: coffee_pot,
+            // computer: computer,
+            // cot: cot,
+            // dishwasher: dishwasher,
+            // dvd: dvd,
+            // fan: fan,
+            // fridge: fridge,
+            // grill: grill,
+            // hairdryer: hairdryer,
+            // heater: heater,
+            // hi_fi: hi_fi,
+            // internet: internet,
+            // iron: iron,
+            // juicer: juicer,
+            // lift: lift,
+            // microwave: microwave,
+            // gym: gym,
+            // fireplace: fireplace,
+            // hot_tub: hot_tub,
             propsCondition: propsCondition.text,
             propsCautionFee: disCautionFee,
             selectedPref: selectedPref,
-            //image: _image!,
+            image: _image! ?? [],
             //
-            shopping: shoppingController.text,
-            hospital: hospitalController.text,
-            petrol: petrolController.text,
-            airport: airportController.text,
-            church: churchController.text,
-            mosque: mosqueController.text,
-            school: schoolController.text,
+            // shopping: shoppingController.text,
+            // hospital: hospitalController.text,
+            // petrol: petrolController.text,
+            // airport: airportController.text,
+            // church: churchController.text,
+            // mosque: mosqueController.text,
+            // school: schoolController.text,
             //
 
-            crime: crimeController.text,
-            traffic: trafficController.text,
-            pollution: pollutionController.text,
-            education: educationController.text,
-            health: healthController.text,
+            // crime: crimeController.text,
+            // traffic: trafficController.text,
+            // pollution: pollutionController.text,
+            // education: educationController.text,
+            // health: healthController.text,
 
             //
-            // docName: docFileNameController.text,
-            // docFile: _doc_file!,
+            docName: docFileNameController.text,
+            docFile: _doc_file ?? null,
+
+            docName_2: docFileNameController_2.text,
+            docFile_2: _doc_file_2 ?? null,
+
+            docName_3: docFileNameController_3.text,
+            docFile_3: _doc_file_3 ?? null,
+
+            docName_4: docFileNameController_4.text,
+            docFile_4: _doc_file_4 ?? null,
+
             ownerStatus: props_ownership ?? "",
             ownerName: owenerNameController.text,
             ownerPhone: owenerPhoneController.text,
